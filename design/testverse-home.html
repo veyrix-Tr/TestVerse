@@ -1,0 +1,785 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Testverse by Studyverse — NEET &amp; JEE live tests and test series</title>
+<meta name="description" content="A complete test plan for NEET, JEE Main and JEE Advanced: 6 part tests, 3 half-syllabus tests and 2 full-syllabus tests, plus all-India live tests. Real CBT screen, rank and full analysis. By Studyverse.">
+<meta property="og:title" content="Testverse by Studyverse">
+<meta property="og:description" content="11 tests that take you from part syllabus to the full exam. NEET, JEE Main and JEE Advanced.">
+<meta name="theme-color" content="#16294A">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22 width=%22512%22 height=%22512%22%3E%3Cdefs%3E%3ClinearGradient id=%22tvg0%22 x1=%220%22 y1=%220%22 x2=%221%22 y2=%221%22%3E%3Cstop offset=%220%22 stop-color=%22#EDBE55%22/%3E%3Cstop offset=%220.55%22 stop-color=%22#D49A2A%22/%3E%3Cstop offset=%221%22 stop-color=%22#B5801C%22/%3E%3C/linearGradient%3E%3CradialGradient id=%22tvbg%22 cx=%220.3%22 cy=%220.2%22 r=%221%22%3E%3Cstop offset=%220%22 stop-color=%22#1B3254%22/%3E%3Cstop offset=%221%22 stop-color=%22#0C1A30%22/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width=%22512%22 height=%22512%22 rx=%22112%22 fill=%22url(#tvbg)%22/%3E%3Cg transform=%22translate(256,256) scale(0.78) translate(-600,-382.5)%22%3E%3Cg transform=%22translate(350.0,130) scale(1.25)%22%3E%3Cpath d=%22M40,60 H360 V130 H254 V360 H158 V130 H40 Z%22 fill=%22#F1EAD8%22/%3E%0A%3Cpath d=%22M163,360 Q190,196 278,80 L258,66 L322,44 L320,112 L300,97 Q226,214 207,360 Z%22 fill=%22url(#tvg0)%22 stroke=%22#13243E%22 stroke-width=%2210%22 stroke-linejoin=%22round%22 paint-order=%22stroke%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root {
+  color-scheme: light;
+  --bg: #FFFFFF;
+  --soft: #F5F6FB;
+  --ink: #1B1F3B;
+  --muted: #565B7A;
+  --line: #DEE1EE;
+  --navy: #16294A;
+  --navy-2: #1F3961;
+  --navy-line: #46628F;
+  --on-navy: #FFFFFF;
+  --on-navy-muted: #D7DCF0;
+  --gold: #F2C14E;
+  --gold-ink: #8A5F00;
+  --blue: #3D4FD9;
+  --blue-ink: #2E3EB8;
+  --blue-soft: #E4E7FB;
+  --green: #1E7A46;
+  --orange: #B45309;
+  --purple: #5B2D91;
+  --card: #FFFFFF;
+  --footer: #10162F;
+  --shadow: 0 24px 60px rgba(5, 10, 30, 0.35);
+  --display: "Lexend", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --bg: #0F1426;
+    --soft: #161D35;
+    --ink: #E8EBF7;
+    --muted: #A9B0CF;
+    --line: #2A3355;
+    --navy: #0F1E36;
+    --navy-2: #1A3156;
+    --navy-line: #3A557F;
+    --gold-ink: #F2C14E;
+    --blue: #8F9CFF;
+    --blue-ink: #B3BCFF;
+    --blue-soft: #222C5A;
+    --green: #4CC07F;
+    --orange: #F0A060;
+    --purple: #A27BD8;
+    --card: #141B33;
+    --footer: #0A0E1C;
+    --shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  }
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+a { color: var(--blue); }
+a:hover { color: var(--blue-ink); }
+:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; border-radius: 6px; }
+[hidden] { display: none !important; }
+.wrap { max-width: 1240px; margin: 0 auto; padding: 0 28px; }
+h1, h2, h3 { font-family: var(--display); margin: 0; line-height: 1.15; }
+p { margin: 0; }
+
+/* Buttons */
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 22px; border-radius: 12px; font: 600 16px/1 var(--body); text-decoration: none; cursor: pointer; border: 1px solid transparent; white-space: nowrap; }
+.btn-gold { background: var(--gold); color: #1B1F3B; }
+.btn-gold:hover { background: #F6CF6E; color: #1B1F3B; }
+.btn-ghost { border-color: var(--navy-line); color: var(--on-navy); background: transparent; }
+.btn-ghost:hover { background: var(--navy-2); color: var(--on-navy); }
+.btn-dark { background: var(--navy); color: var(--on-navy); }
+.btn-dark:hover { background: var(--navy-2); color: var(--on-navy); }
+.btn-line { border-color: var(--line); color: var(--ink); background: var(--card); min-height: 42px; padding: 0 14px; font-size: 14px; border-radius: 10px; }
+.btn-line:hover { border-color: var(--blue); color: var(--ink); }
+.btn-lg { min-height: 54px; padding: 0 26px; font-size: 17px; }
+
+/* Exam switch */
+.exam-switch { display: inline-flex; flex-wrap: wrap; gap: 6px; padding: 5px; border-radius: 14px; }
+.exam-switch button { font: 600 15px/1 var(--body); min-height: 44px; padding: 0 18px; border-radius: 10px; cursor: pointer; border: 1px solid transparent; }
+.on-navy .exam-switch { background: var(--navy-2); }
+.on-navy .exam-switch button { background: transparent; color: var(--on-navy-muted); }
+.on-navy .exam-switch button:hover { color: var(--on-navy); }
+.on-navy .exam-switch button[aria-pressed="true"] { background: var(--gold); color: #1B1F3B; }
+.on-light .exam-switch { background: var(--soft); border: 1px solid var(--line); }
+.on-light .exam-switch button { background: transparent; color: var(--muted); }
+.on-light .exam-switch button[aria-pressed="true"] { background: var(--navy); color: var(--on-navy); }
+
+/* Header */
+.site-header { background: var(--navy); color: var(--on-navy); position: relative; z-index: 5; }
+.site-header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: 16px; padding-bottom: 16px; }
+.brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--on-navy); }
+.brand:hover { color: var(--on-navy); }
+.brand-name { font-family: var(--display); font-weight: 700; font-size: 22px; }
+.brand-by { font-size: 12px; letter-spacing: 0.06em; color: #C9D0EC; }
+.brand-by span { color: var(--gold); }
+.nav { display: flex; gap: 26px; }
+.nav a { color: var(--on-navy-muted); text-decoration: none; font-size: 15px; }
+.nav a:hover { color: var(--on-navy); }
+.header-actions { display: flex; gap: 10px; align-items: center; }
+.header-actions .btn { min-height: 44px; padding: 0 16px; font-size: 15px; }
+.menu-btn { display: none; background: transparent; border: 1px solid var(--navy-line); color: var(--on-navy); border-radius: 10px; min-height: 44px; min-width: 44px; cursor: pointer; }
+.mobile-nav { display: none; }
+
+/* Hero */
+.hero { background: var(--navy); color: var(--on-navy); padding: 40px 0 72px; }
+.hero .wrap { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); gap: 56px; align-items: center; }
+.hero-switch-label { font-size: 14px; color: #C9D0EC; margin-bottom: 8px; }
+.hero h1 { font-size: clamp(38px, 5.2vw, 58px); font-weight: 700; letter-spacing: -0.01em; max-width: 15ch; margin-top: 26px; }
+.hero-lede { font-size: 19px; color: var(--on-navy-muted); max-width: 34em; margin-top: 22px; }
+.hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+.hero-note { margin-top: 18px; font-size: 14px; color: #C9D0EC; }
+.hero-note a { color: var(--gold); }
+
+/* Live card in hero */
+.live-card { background: var(--card); color: var(--ink); border-radius: 18px; box-shadow: var(--shadow); overflow: hidden; max-width: 540px; width: 100%; justify-self: end; }
+.live-top { background: var(--navy-2); color: #FFFFFF; padding: 18px 20px; display: grid; gap: 4px; }
+.live-top small { font-size: 14px; color: var(--gold); font-weight: 600; }
+.live-top strong { font-family: var(--display); font-size: 20px; font-weight: 600; }
+.countdown { display: flex; gap: 10px; margin-top: 10px; }
+.countdown div { background: var(--navy); border-radius: 10px; padding: 8px 10px; min-width: 64px; text-align: center; }
+.countdown b { display: block; font-family: var(--display); font-size: 26px; font-variant-numeric: tabular-nums; color: #FFFFFF; }
+.countdown span { font-size: 12px; color: #C9D0EC; }
+.live-card ul { list-style: none; margin: 0; padding: 6px 20px 8px; }
+.live-card li { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--line); align-items: center; }
+.live-card li:last-child { border-bottom: 0; }
+.date { text-align: center; border: 1px solid var(--line); border-radius: 10px; padding: 6px 0; line-height: 1.15; }
+.date b { display: block; font-family: var(--display); font-size: 22px; }
+.date span { font-size: 12px; color: var(--muted); }
+.live-card li strong { display: block; font-size: 15px; }
+.live-card li em { font-style: normal; font-size: 13px; color: var(--muted); }
+.live-foot { padding: 0 20px 20px; }
+.live-foot .btn { width: 100%; }
+.pick { padding: 28px 24px; display: grid; gap: 14px; justify-items: start; }
+.pick h2 { font-size: 22px; font-weight: 600; }
+.pick p { color: var(--muted); }
+.pick-buttons { display: grid; gap: 10px; width: 100%; }
+.pick-buttons button { font: 600 17px/1.2 var(--body); text-align: left; min-height: 60px; padding: 0 18px; border-radius: 12px; border: 1px solid var(--line); background: var(--card); color: var(--ink); cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+.pick-buttons button:hover { border-color: var(--blue); }
+.pick-buttons button span { font-size: 13px; font-weight: 500; color: var(--muted); }
+
+/* Sections */
+.section { padding: 96px 0 0; }
+.section-head { max-width: 46rem; margin-bottom: 36px; }
+.section-head h2 { font-size: clamp(30px, 3.6vw, 40px); font-weight: 700; }
+.section-head p { margin-top: 12px; font-size: 18px; color: var(--muted); }
+.section-head-row { display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between; align-items: flex-end; margin-bottom: 36px; }
+.section-head-row .section-head { margin-bottom: 0; }
+
+/* Why us */
+.why { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; border-top: 2px solid var(--ink); padding-top: 24px; }
+.why h3 { font-size: 20px; font-weight: 600; margin-bottom: 8px; }
+.why p { font-size: 15px; color: var(--muted); }
+
+/* Test plan track */
+.plan { background: var(--soft); border-radius: 24px; padding: 36px; display: grid; gap: 28px; }
+.track { display: grid; grid-template-columns: 6fr 3fr 2fr; gap: 14px; }
+.stage { display: grid; gap: 12px; align-content: start; }
+.stage-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.stage-head h3 { font-size: 18px; font-weight: 600; }
+.stage-head span { font-size: 14px; color: var(--muted); }
+.dots { display: grid; gap: 8px; }
+.stage-part .dots { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.stage-half .dots { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.stage-full .dots { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.dots span { height: 52px; border-radius: 10px; display: grid; place-items: center; font-family: var(--display); font-weight: 600; font-size: 15px; }
+.stage-part .dots span { background: var(--blue-soft); color: var(--blue-ink); }
+.stage-half .dots span { background: var(--navy-2); color: #FFFFFF; }
+.stage-full .dots span { background: var(--gold); color: #1B1F3B; }
+.stage p { font-size: 14px; color: var(--muted); }
+.stage .spec { font-size: 13px; color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; justify-self: start; }
+.plan-foot { display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; align-items: center; border-top: 1px solid var(--line); padding-top: 22px; }
+.plan-foot p { color: var(--muted); max-width: 44em; }
+.plan-empty { text-align: center; padding: 48px 20px; display: grid; gap: 10px; justify-items: center; background: var(--soft); border-radius: 24px; }
+.plan-empty p { color: var(--muted); }
+
+/* CBT + analysis */
+.split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: center; }
+.split h2 { font-size: clamp(28px, 3.2vw, 36px); font-weight: 700; }
+.split p.lead { margin-top: 12px; font-size: 17px; color: var(--muted); }
+.checks { list-style: none; margin: 22px 0 0; padding: 0; display: grid; gap: 12px; }
+.checks li { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 10px; font-size: 16px; }
+.checks svg { width: 22px; height: 22px; stroke: var(--green); margin-top: 1px; }
+.screen { background: var(--card); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; box-shadow: 0 12px 36px rgba(27, 31, 59, 0.10); margin: 0; }
+.screen-bar { background: var(--navy); color: #FFFFFF; padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; gap: 12px; }
+.screen-bar b { color: var(--gold); font-size: 18px; font-variant-numeric: tabular-nums; }
+.screen-tabs { display: flex; flex-wrap: wrap; gap: 4px; padding: 0 14px; border-bottom: 1px solid var(--line); font-size: 14px; }
+.screen-tabs span { padding: 12px 10px; color: var(--muted); }
+.screen-tabs span:first-child { color: var(--ink); font-weight: 600; box-shadow: inset 0 -3px 0 var(--blue); }
+.screen-body { padding: 18px; display: grid; gap: 14px; }
+.palette { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 6px; }
+.palette span { height: 30px; border-radius: 6px; background: var(--soft); display: grid; place-items: center; font-size: 12px; font-weight: 600; color: var(--muted); }
+.palette .a { background: var(--green); color: #FFFFFF; }
+.palette .n { background: transparent; border: 2px solid var(--orange); color: var(--orange); }
+.palette .m { background: var(--purple); color: #FFFFFF; border-radius: 50%; }
+.palette .c { background: transparent; border: 3px solid var(--blue); color: var(--ink); }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px; color: var(--muted); }
+.legend i { display: inline-block; width: 11px; height: 11px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+
+.analysis { background: var(--soft); border-radius: 24px; padding: 40px; }
+.report { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 22px; display: grid; gap: 16px; margin: 0; }
+.report-top { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.report-top div { background: var(--soft); border-radius: 12px; padding: 12px; }
+.report-top b { display: block; font-family: var(--display); font-size: 22px; }
+.report-top span { font-size: 13px; color: var(--muted); }
+.bars { display: grid; gap: 10px; }
+.bar { display: grid; grid-template-columns: 100px minmax(0, 1fr) 44px; gap: 10px; align-items: center; font-size: 14px; }
+.bar > div { height: 10px; background: var(--soft); border-radius: 999px; overflow: hidden; }
+.bar i { display: block; height: 10px; border-radius: 999px; }
+.bar b { text-align: right; font-weight: 600; }
+.report small { font-size: 12px; color: var(--muted); }
+
+/* Steps */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 2px solid var(--ink); }
+.step { padding: 22px 22px 0 0; display: grid; gap: 8px; align-content: start; }
+.step b { font-family: var(--display); font-size: 15px; color: var(--muted); font-weight: 600; }
+.step h3 { font-size: 20px; font-weight: 600; }
+.step p { font-size: 15px; color: var(--muted); }
+
+/* Referral */
+.ref-banner { background: var(--gold); color: #1B1F3B; font-size: 15px; }
+.ref-banner .wrap { padding-top: 10px; padding-bottom: 10px; }
+.refer { border: 2px solid var(--gold); border-radius: 24px; padding: 36px; display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 36px; align-items: center; }
+.refer h2 { font-size: clamp(28px, 3.2vw, 36px); font-weight: 700; }
+.refer p { margin-top: 12px; font-size: 17px; color: var(--muted); }
+.refer-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; counter-reset: r; }
+.refer-steps li { counter-increment: r; display: grid; grid-template-columns: 40px minmax(0, 1fr); column-gap: 14px; }
+.refer-steps li::before { content: counter(r); grid-row: span 2; width: 40px; height: 40px; border-radius: 50%; background: var(--navy); color: #FFFFFF; display: grid; place-items: center; font-family: var(--display); font-weight: 600; }
+.refer-steps b { font-size: 17px; }
+.refer-steps span { color: var(--muted); font-size: 15px; }
+@media (max-width: 1000px) { .refer { grid-template-columns: 1fr; padding: 28px; } }
+
+/* Parents + courses */
+.duo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.duo > div { border-radius: 20px; padding: 32px; display: grid; gap: 12px; align-content: start; }
+.duo h2 { font-size: 28px; font-weight: 700; }
+.parents { border: 1px solid var(--line); }
+.parents p { color: var(--muted); }
+.courses { background: var(--navy); color: var(--on-navy); }
+.courses p { color: var(--on-navy-muted); }
+.courses .btn { justify-self: start; margin-top: 6px; }
+
+/* FAQ */
+.faq { max-width: 860px; }
+.faq details { border-bottom: 1px solid var(--line); }
+.faq summary { list-style: none; cursor: pointer; padding: 18px 40px 18px 0; font-size: 17px; font-weight: 600; position: relative; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; position: absolute; right: 4px; top: 14px; font-size: 24px; font-weight: 400; color: var(--muted); }
+.faq details[open] summary::after { content: "\2212"; }
+.faq details p { padding: 0 0 18px; color: var(--muted); font-size: 15px; max-width: 46em; }
+
+/* Final CTA */
+.final { margin: 96px auto 80px; }
+.final-card { background: var(--navy); color: var(--on-navy); border-radius: 24px; padding: 56px 36px; text-align: center; display: grid; gap: 18px; justify-items: center; }
+.final-card h2 { font-size: clamp(30px, 4vw, 42px); font-weight: 700; max-width: 18ch; }
+.final-card p { color: var(--on-navy-muted); font-size: 18px; }
+
+/* Footer */
+.site-footer { background: var(--footer); color: #C9D0EC; }
+.site-footer .wrap { padding-top: 40px; padding-bottom: 40px; display: flex; flex-wrap: wrap; gap: 32px; justify-content: space-between; font-size: 14px; }
+.site-footer .about { max-width: 360px; display: grid; gap: 8px; }
+.site-footer .cols { display: flex; flex-wrap: wrap; gap: 48px; }
+.site-footer .col { display: grid; gap: 8px; align-content: start; }
+.site-footer .col strong { color: #FFFFFF; }
+.site-footer a { color: #C9D0EC; text-decoration: none; }
+.site-footer a:hover { color: #FFFFFF; text-decoration: underline; }
+.copyright { border-top: 1px solid #222A48; }
+.copyright .wrap { padding-top: 16px; padding-bottom: 20px; font-size: 13px; }
+
+/* Responsive */
+@media (max-width: 1000px) {
+  .hero .wrap, .split { grid-template-columns: 1fr; gap: 40px; }
+  .live-card { justify-self: start; }
+  .why { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .track { grid-template-columns: 1fr; gap: 24px; }
+  .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 28px; }
+  .analysis, .plan { padding: 28px; }
+}
+@media (max-width: 760px) {
+  .wrap { padding: 0 18px; }
+  .nav, .header-actions .login { display: none; }
+  .menu-btn { display: inline-grid; place-items: center; }
+  .mobile-nav { background: var(--navy); border-top: 1px solid var(--navy-line); }
+  .mobile-nav.open { display: block; }
+  .mobile-nav a { display: block; padding: 14px 18px; color: var(--on-navy); text-decoration: none; border-bottom: 1px solid var(--navy-2); }
+  .brand-by { display: none; }
+  .hero { padding: 28px 0 56px; }
+  .hero-lede { font-size: 17px; }
+  .exam-switch { display: flex; width: 100%; }
+  .exam-switch button { flex: 1 1 0; padding: 0 8px; font-size: 14px; }
+  .why, .duo, .steps { grid-template-columns: 1fr; }
+  .duo > div { padding: 24px; }
+  .step { padding-right: 0; }
+  .section { padding-top: 72px; }
+  .report-top { grid-template-columns: 1fr; }
+  .stage-part .dots { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .countdown div { min-width: 56px; }
+}
+.tv-logo { display: block; width: auto; aspect-ratio: 1784 / 409; flex: 0 0 auto; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position: absolute" aria-hidden="true" focusable="false"><defs><linearGradient id="tvg0" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#EDBE55"/><stop offset="0.55" stop-color="#D49A2A"/><stop offset="1" stop-color="#B5801C"/></linearGradient><radialGradient id="tvbg" cx="0.3" cy="0.2" r="1"><stop offset="0" stop-color="#1B3254"/><stop offset="1" stop-color="#0C1A30"/></radialGradient></defs><symbol id="tv-logo" viewBox="0 0 1784 409"><g transform="translate(-400,-178)"><g transform="translate(350.0,130) scale(1.25)"><path d="M40,60 H360 V130 H254 V360 H158 V130 H40 Z" fill="#F1EAD8"/>
+<path d="M163,360 Q190,196 278,80 L258,66 L322,44 L320,112 L300,97 Q226,214 207,360 Z" fill="url(#tvg0)" stroke="#13243E" stroke-width="10" stroke-linejoin="round" paint-order="stroke"/></g></g><g transform="translate(490,53) scale(1.26) translate(-86,-674)"><path transform="translate(82.15625,808.125)" d="M106.3125 -131.625V-105.9375H71.4375V0.0H39.375V-105.9375H4.5V-131.625Z M157.0 -105.9375V-79.3125H199.9375V-54.5625H157.0V-25.6875H205.5625V0.0H124.9375V-131.625H205.5625V-105.9375Z M225.125 -39.375H259.25Q260.0 -32.0625 264.3125 -28.21875Q268.625 -24.375 275.5625 -24.375Q282.6875 -24.375 286.8125 -27.65625Q290.9375 -30.9375 290.9375 -36.75Q290.9375 -41.625 287.65625 -44.8125Q284.375 -48.0 279.59375 -50.0625Q274.8125 -52.125 266.0 -54.75Q253.25 -58.6875 245.1875 -62.625Q237.125 -66.5625 231.3125 -74.25Q225.5 -81.9375 225.5 -94.3125Q225.5 -112.6875 238.8125 -123.09375Q252.125 -133.5 273.5 -133.5Q295.25 -133.5 308.5625 -123.09375Q321.875 -112.6875 322.8125 -94.125H288.125Q287.75 -100.5 283.4375 -104.15625Q279.125 -107.8125 272.375 -107.8125Q266.5625 -107.8125 263.0 -104.71875Q259.4375 -101.625 259.4375 -95.8125Q259.4375 -89.4375 265.4375 -85.875Q271.4375 -82.3125 284.1875 -78.1875Q296.9375 -73.875 304.90625 -69.9375Q312.875 -66.0 318.6875 -58.5Q324.5 -51.0 324.5 -39.1875Q324.5 -27.9375 318.78125 -18.75Q313.0625 -9.5625 302.1875 -4.125Q291.3125 1.3125 276.5 1.3125Q262.0625 1.3125 250.625 -3.375Q239.1875 -8.0625 232.34375 -17.25Q225.5 -26.4375 225.125 -39.375Z M441.375 -131.625V-105.9375H406.5V0.0H374.4375V-105.9375H339.5625V-131.625Z" fill="#F1EAD8"/><path transform="translate(530.53125,808.125)" d="M135.1875 -131.625 88.5 0.0H48.375L1.6875 -131.625H35.8125L68.4375 -32.25L101.25 -131.625Z M183.0625 -105.9375V-79.3125H226.0V-54.5625H183.0625V-25.6875H231.625V0.0H151.0V-131.625H231.625V-105.9375Z M322.0625 0.0 294.6875 -49.6875H287.0V0.0H254.9375V-131.625H308.75Q324.3125 -131.625 335.28125 -126.1875Q346.25 -120.75 351.6875 -111.28125Q357.125 -101.8125 357.125 -90.1875Q357.125 -77.0625 349.71875 -66.75Q342.3125 -56.4375 327.875 -52.125L358.25 0.0ZM287.0 -72.375H306.875Q315.6875 -72.375 320.09375 -76.6875Q324.5 -81.0 324.5 -88.875Q324.5 -96.375 320.09375 -100.6875Q315.6875 -105.0 306.875 -105.0H287.0Z M375.9375 -39.375H410.0625Q410.8125 -32.0625 415.125 -28.21875Q419.4375 -24.375 426.375 -24.375Q433.5 -24.375 437.625 -27.65625Q441.75 -30.9375 441.75 -36.75Q441.75 -41.625 438.46875 -44.8125Q435.1875 -48.0 430.40625 -50.0625Q425.625 -52.125 416.8125 -54.75Q404.0625 -58.6875 396.0 -62.625Q387.9375 -66.5625 382.125 -74.25Q376.3125 -81.9375 376.3125 -94.3125Q376.3125 -112.6875 389.625 -123.09375Q402.9375 -133.5 424.3125 -133.5Q446.0625 -133.5 459.375 -123.09375Q472.6875 -112.6875 473.625 -94.125H438.9375Q438.5625 -100.5 434.25 -104.15625Q429.9375 -107.8125 423.1875 -107.8125Q417.375 -107.8125 413.8125 -104.71875Q410.25 -101.625 410.25 -95.8125Q410.25 -89.4375 416.25 -85.875Q422.25 -82.3125 435.0 -78.1875Q447.75 -73.875 455.71875 -69.9375Q463.6875 -66.0 469.5 -58.5Q475.3125 -51.0 475.3125 -39.1875Q475.3125 -27.9375 469.59375 -18.75Q463.875 -9.5625 453.0 -4.125Q442.125 1.3125 427.3125 1.3125Q412.875 1.3125 401.4375 -3.375Q390.0 -8.0625 383.15625 -17.25Q376.3125 -26.4375 375.9375 -39.375Z M529.5625 -105.9375V-79.3125H572.5V-54.5625H529.5625V-25.6875H578.125V0.0H497.5V-131.625H578.125V-105.9375Z" fill="#D49A2A"/></g><g transform="translate(490,259) scale(1.5) translate(-346,-869)"><path transform="translate(342.03562500000004,916.5)" d="M24.28875 -35.7Q28.9425 -35.7 32.70375 -33.46875Q36.465 -31.2375 38.6325 -27.125625Q40.8 -23.01375 40.8 -17.7225Q40.8 -12.43125 38.6325 -8.255625Q36.465 -4.08 32.671875 -1.753125Q28.87875 0.57375 24.28875 0.57375Q20.208750000000002 0.57375 17.053125 -1.02Q13.8975 -2.61375 12.04875 -5.1V0.0H4.78125V-47.175000000000004H12.04875V-29.89875Q13.8975 -32.448750000000004 17.116875 -34.074375Q20.33625 -35.7 24.28875 -35.7ZM22.695 -29.38875Q19.95375 -29.38875 17.499375 -27.986250000000002Q15.045 -26.583750000000002 13.546875 -23.90625Q12.04875 -21.22875 12.04875 -17.595Q12.04875 -13.96125 13.546875 -11.251875Q15.045 -8.5425 17.499375 -7.140000000000001Q19.95375 -5.7375 22.695 -5.7375Q25.5 -5.7375 27.954375 -7.171875Q30.40875 -8.60625 31.906875 -11.3475Q33.405 -14.088750000000001 33.405 -17.7225Q33.405 -21.35625 31.906875 -24.001875Q30.40875 -26.6475 27.954375 -28.018125Q25.5 -29.38875 22.695 -29.38875Z M84.72375 -35.12625 63.17625 16.51125H55.65375L62.79375 -0.57375L48.96000000000001 -35.12625H57.056250000000006L66.9375 -8.35125L77.20125 -35.12625Z  M115.89750000000001 -12.24H123.675Q123.93 -9.37125 125.93812500000001 -7.5225Q127.94625 -5.67375 131.58 -5.67375Q135.34125 -5.67375 137.445 -7.4906250000000005Q139.54875 -9.307500000000001 139.54875 -12.17625Q139.54875 -14.4075 138.241875 -15.809999999999999Q136.935 -17.2125 134.99062500000002 -17.9775Q133.04625000000001 -18.7425 129.60375 -19.635Q125.26875 -20.7825 122.559375 -21.961875Q119.85000000000001 -23.14125 117.9375 -25.627499999999998Q116.025 -28.11375 116.025 -32.2575Q116.025 -36.0825 117.9375 -38.95125Q119.85000000000001 -41.82 123.2925 -43.35Q126.735 -44.88 131.26125000000002 -44.88Q137.7 -44.88 141.811875 -41.660625Q145.92375 -38.441250000000004 146.37 -32.83125H138.3375Q138.14625 -35.253750000000004 136.04250000000002 -36.975Q133.93875 -38.69625 130.49625 -38.69625Q127.3725 -38.69625 125.39625000000001 -37.1025Q123.42 -35.50875 123.42 -32.5125Q123.42 -30.4725 124.66312500000001 -29.165625Q125.90625 -27.85875 127.81875 -27.09375Q129.73125 -26.32875 133.04625000000001 -25.43625Q137.445 -24.225 140.218125 -23.01375Q142.99125 -21.802500000000002 144.93562500000002 -19.284375Q146.88 -16.76625 146.88 -12.55875Q146.88 -9.18 145.063125 -6.18375Q143.24625 -3.1875 139.77187500000002 -1.370625Q136.2975 0.44625000000000004 131.58 0.44625000000000004Q127.1175 0.44625000000000004 123.54750000000001 -1.115625Q119.9775 -2.6775 117.9375 -5.546250000000001Q115.89750000000001 -8.415000000000001 115.89750000000001 -12.24Z M169.065 -29.1975V-9.75375Q169.065 -7.7775 169.989375 -6.916875Q170.91375 -6.05625 173.145 -6.05625H177.60750000000002V0.0H171.87Q166.96125 0.0 164.34750000000003 -2.295Q161.73375000000001 -4.59 161.73375000000001 -9.75375V-29.1975H157.59V-35.12625H161.73375000000001V-43.86H169.065V-35.12625H177.60750000000002V-29.1975Z M221.2125 -35.12625V0.0H213.945V-4.14375Q212.22375 -1.97625 209.450625 -0.733125Q206.6775 0.51 203.55375 0.51Q199.41 0.51 196.12687499999998 -1.2112500000000002Q192.84375 -2.9325 190.963125 -6.311249999999999Q189.0825 -9.69 189.0825 -14.47125V-35.12625H196.28625V-15.555Q196.28625 -10.8375 198.64499999999998 -8.319375Q201.00375 -5.8012500000000005 205.08375 -5.8012500000000005Q209.16375 -5.8012500000000005 211.554375 -8.319375Q213.945 -10.8375 213.945 -15.555V-35.12625Z M250.09125 -35.7Q253.53375 -35.7 256.880625 -34.201875Q260.2275 -32.70375 262.20375 -30.2175V-47.175000000000004H269.535V0.0H262.20375V-5.29125Q260.41875 -2.74125 257.263125 -1.08375Q254.10750000000002 0.57375 250.0275 0.57375Q245.4375 0.57375 241.644375 -1.753125Q237.85125 -4.08 235.651875 -8.255625Q233.4525 -12.43125 233.4525 -17.7225Q233.4525 -23.01375 235.651875 -27.09375Q237.85125 -31.173750000000002 241.644375 -33.436875Q245.4375 -35.7 250.09125 -35.7ZM251.5575 -29.38875Q248.7525 -29.38875 246.32999999999998 -28.018125Q243.9075 -26.6475 242.409375 -24.001875Q240.91125 -21.35625 240.91125 -17.7225Q240.91125 -14.088750000000001 242.409375 -11.3475Q243.9075 -8.60625 246.361875 -7.171875Q248.81625 -5.7375 251.5575 -5.7375Q254.3625 -5.7375 256.78499999999997 -7.140000000000001Q259.2075 -8.5425 260.705625 -11.251875Q262.20375 -13.96125 262.20375 -17.595Q262.20375 -21.22875 260.705625 -23.90625Q259.2075 -26.583750000000002 256.78499999999997 -27.986250000000002Q254.3625 -29.38875 251.5575 -29.38875Z M315.8175 -35.12625 294.27 16.51125H286.7475L293.8875 -0.57375L280.05375 -35.12625H288.15L298.03125 -8.35125L308.295 -35.12625Z M339.97875 -6.5025 349.92375 -35.12625H357.6375L344.25 0.0H335.58L322.25624999999997 -35.12625H330.03375Z M400.15874999999994 -14.85375H373.32Q373.63874999999996 -10.64625 376.44374999999997 -8.09625Q379.24875 -5.54625 383.32874999999996 -5.54625Q389.19374999999997 -5.54625 391.61625 -10.455H399.4575Q397.86375 -5.61 393.688125 -2.5181250000000004Q389.5125 0.57375 383.32874999999996 0.57375Q378.29249999999996 0.57375 374.30812499999996 -1.689375Q370.32374999999996 -3.9525 368.06062499999996 -8.064375Q365.79749999999996 -12.17625 365.79749999999996 -17.595Q365.79749999999996 -23.01375 367.99687499999993 -27.125625Q370.19624999999996 -31.2375 374.18062499999996 -33.46875Q378.16499999999996 -35.7 383.32874999999996 -35.7Q388.30125 -35.7 392.18999999999994 -33.5325Q396.07874999999996 -31.365000000000002 398.24625 -27.444375Q400.41375 -23.52375 400.41375 -18.423750000000002Q400.41375 -16.4475 400.15874999999994 -14.85375ZM392.8275 -20.71875Q392.76374999999996 -24.735 389.95874999999995 -27.1575Q387.15374999999995 -29.580000000000002 383.01 -29.580000000000002Q379.24875 -29.580000000000002 376.57124999999996 -27.189375000000002Q373.89374999999995 -24.798750000000002 373.38374999999996 -20.71875Z M430.43999999999994 -35.7V-28.177500000000002H428.59124999999995Q424.31999999999994 -28.177500000000002 422.1206249999999 -26.01Q419.92124999999993 -23.8425 419.92124999999993 -18.4875V0.0H412.65374999999995V-35.12625H419.92124999999993V-30.02625Q421.51499999999993 -32.70375 424.1606249999999 -34.201875Q426.8062499999999 -35.7 430.43999999999994 -35.7Z M440.3212499999999 -10.77375H447.84374999999994Q448.0349999999999 -8.5425 449.9793749999999 -7.0443750000000005Q451.9237499999999 -5.54625 454.85624999999993 -5.54625Q457.91624999999993 -5.54625 459.6056249999999 -6.725625Q461.29499999999996 -7.905 461.29499999999996 -9.75375Q461.29499999999996 -11.73 459.41437499999995 -12.686250000000001Q457.53374999999994 -13.6425 453.4537499999999 -14.790000000000001Q449.5012499999999 -15.873750000000001 447.01499999999993 -16.89375Q444.52874999999995 -17.91375 442.71187499999996 -20.0175Q440.8949999999999 -22.12125 440.8949999999999 -25.56375Q440.8949999999999 -28.368750000000002 442.5524999999999 -30.695625Q444.2099999999999 -33.0225 447.30187499999994 -34.36125Q450.39374999999995 -35.7 454.4099999999999 -35.7Q460.4024999999999 -35.7 464.0681249999999 -32.671875Q467.73374999999993 -29.64375 467.9887499999999 -24.41625H460.72124999999994Q460.5299999999999 -26.775000000000002 458.8087499999999 -28.177500000000002Q457.0874999999999 -29.580000000000002 454.1549999999999 -29.580000000000002Q451.28624999999994 -29.580000000000002 449.7562499999999 -28.496250000000003Q448.22624999999994 -27.4125 448.22624999999994 -25.6275Q448.22624999999994 -24.225 449.2462499999999 -23.26875Q450.26624999999996 -22.3125 451.73249999999996 -21.770625000000003Q453.1987499999999 -21.22875 456.06749999999994 -20.4Q459.8924999999999 -19.38 462.34687499999995 -18.328125Q464.8012499999999 -17.27625 466.58624999999995 -15.236250000000002Q468.3712499999999 -13.196250000000001 468.43499999999995 -9.8175Q468.43499999999995 -6.82125 466.7774999999999 -4.4625Q465.11999999999995 -2.1037500000000002 462.09187499999996 -0.7650000000000001Q459.0637499999999 0.57375 454.98374999999993 0.57375Q450.8399999999999 0.57375 447.55687499999993 -0.924375Q444.27374999999995 -2.4225 442.3612499999999 -5.004375Q440.4487499999999 -7.58625 440.3212499999999 -10.77375Z M513.3149999999999 -14.85375H486.47624999999994Q486.7949999999999 -10.64625 489.5999999999999 -8.09625Q492.4049999999999 -5.54625 496.4849999999999 -5.54625Q502.3499999999999 -5.54625 504.7724999999999 -10.455H512.6137499999999Q511.0199999999999 -5.61 506.8443749999999 -2.5181250000000004Q502.66874999999993 0.57375 496.4849999999999 0.57375Q491.4487499999999 0.57375 487.4643749999999 -1.689375Q483.4799999999999 -3.9525 481.2168749999999 -8.064375Q478.9537499999999 -12.17625 478.9537499999999 -17.595Q478.9537499999999 -23.01375 481.15312499999993 -27.125625Q483.3524999999999 -31.2375 487.3368749999999 -33.46875Q491.3212499999999 -35.7 496.4849999999999 -35.7Q501.4574999999999 -35.7 505.34624999999994 -33.5325Q509.2349999999999 -31.365000000000002 511.4024999999999 -27.444375Q513.5699999999999 -23.52375 513.5699999999999 -18.423750000000002Q513.5699999999999 -16.4475 513.3149999999999 -14.85375ZM505.98374999999993 -20.71875Q505.9199999999999 -24.735 503.1149999999999 -27.1575Q500.3099999999999 -29.580000000000002 496.16624999999993 -29.580000000000002Q492.4049999999999 -29.580000000000002 489.7274999999999 -27.189375000000002Q487.0499999999999 -24.798750000000002 486.5399999999999 -20.71875Z" fill="#F1EAD8"/></g></symbol></svg>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="Testverse by Studyverse, home">
+      <svg class="tv-logo" style="height: 44px" viewBox="0 0 1784 409" role="img" aria-label="Testverse by Studyverse"><use href="#tv-logo"/></svg>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="#plan">Test plan</a>
+      <a href="#why">Why Testverse</a>
+      <a href="#analysis">Analysis</a>
+      <a href="#refer">Refer &amp; earn</a>
+    </nav>
+    <div class="header-actions">
+      <a class="btn btn-ghost login" href="/login">Log in</a>
+      <a class="btn btn-gold" href="/signup">Sign up</a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+  <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile">
+    <a href="#plan">Test plan</a>
+    <a href="#why">Why Testverse</a>
+    <a href="#analysis">Analysis</a>
+    <a href="#refer">Refer &amp; earn</a>
+    <a href="/login">Log in</a>
+  </nav>
+</header>
+
+<div class="ref-banner" data-ref-banner hidden>
+  <div class="wrap"><span>Your friend's referral code <b data-ref-code></b> will be applied at checkout: <b>[REFERRAL DISCOUNT]</b> off your test series.</span></div>
+</div>
+
+<main>
+
+<section class="hero on-navy">
+  <div class="wrap">
+    <div>
+      <div class="hero-switch-label" id="hero-switch-label">I'm preparing for</div>
+      <div class="exam-switch" role="group" aria-labelledby="hero-switch-label" data-switch></div>
+      <h1>A complete test plan, from your first chapter to the final exam.</h1>
+      <p class="hero-lede">6 part tests, 3 half-syllabus tests and 2 full-syllabus tests, set by experienced faculty and run on a real CBT screen. Plus all-India live tests, so you know exactly where you stand.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-gold btn-lg" href="checkout.html" data-signup>Get the test series</a>
+        <a class="btn btn-ghost btn-lg" href="#plan">See what's included</a>
+      </div>
+      <p class="hero-note">In a Studyverse course? <a href="/login">Log in with the same account.</a></p>
+    </div>
+
+    <aside class="live-card">
+      <div class="pick" data-when="none">
+        <h2>Which exam are you preparing for?</h2>
+        <p>Choose one to see its live tests and test plan.</p>
+        <div class="pick-buttons">
+          <button type="button" data-pick="neet">NEET <span>Physics, Chemistry, Biology</span></button>
+          <button type="button" data-pick="jee-main">JEE Main <span>Physics, Chemistry, Maths</span></button>
+          <button type="button" data-pick="jee-advanced">JEE Advanced <span>Paper 1 and Paper 2</span></button>
+        </div>
+      </div>
+      <div data-when="some" hidden>
+        <div class="live-top">
+          <small>Next all-India live test</small>
+          <strong data-live-title></strong>
+          <div class="countdown" aria-label="Time until the live test starts">
+            <div><b data-u="d">--</b><span>days</span></div>
+            <div><b data-u="h">--</b><span>hours</span></div>
+            <div><b data-u="m">--</b><span>min</span></div>
+            <div><b data-u="s">--</b><span>sec</span></div>
+          </div>
+        </div>
+        <ul data-live-list></ul>
+        <div class="live-foot"><a class="btn btn-dark" href="/live-tests" data-live-link>See the full live test calendar</a></div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section id="why" class="section" aria-labelledby="why-title">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 id="why-title">Why students choose Testverse</h2>
+      <p>Lots of apps have a test series. Here's what's different about ours.</p>
+    </div>
+    <div class="why">
+      <div>
+        <h3>A plan, not a pile of tests</h3>
+        <p>11 tests in a set order: part tests as you finish chapters, half-syllabus tests to join them up, then two full papers to rehearse the real exam. You always know which test comes next.</p>
+      </div>
+      <div>
+        <h3>Papers set by real faculty</h3>
+        <p>Every paper is set and checked by Studyverse faculty [with X+ years of NEET and JEE teaching], matched to the current exam pattern and level.</p>
+      </div>
+      <div>
+        <h3>Analysis that tells you what to fix</h3>
+        <p>Not just a score. Chapter-wise accuracy, time per question, marks lost to guessing, and a full solution for every question.</p>
+      </div>
+      <div>
+        <h3>A teacher when you need one</h3>
+        <p>If your scores stop improving, a Studyverse teacher can review your test data with you. Same account, so nothing starts from zero.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="plan" class="section on-light" aria-labelledby="plan-title">
+  <div class="wrap">
+    <div class="section-head-row">
+      <div class="section-head">
+        <h2 id="plan-title">Your test plan<span data-exam-suffix></span></h2>
+        <p>What you get when you buy the test series: 11 tests that take you step by step from part syllabus to the full exam.</p>
+      </div>
+      <div class="exam-switch" role="group" aria-label="Choose exam" data-switch></div>
+    </div>
+
+    <div class="plan-empty" data-when="none">
+      <h3>Choose your exam to see its test plan</h3>
+      <p>NEET, JEE Main and JEE Advanced each have their own tests and pattern.</p>
+    </div>
+
+    <div class="plan" data-when="some" hidden>
+      <div class="track">
+        <div class="stage stage-part">
+          <div class="stage-head"><h3>Part tests</h3><span>6 tests</span></div>
+          <div class="dots" aria-hidden="true"><span>P1</span><span>P2</span><span>P3</span><span>P4</span><span>P5</span><span>P6</span></div>
+          <p>Each covers a part of the syllabus, in the order most students study it. Take one as soon as you finish those chapters.</p>
+          <span class="spec" data-spec="part"></span>
+        </div>
+        <div class="stage stage-half">
+          <div class="stage-head"><h3>Half-syllabus tests</h3><span>3 tests</span></div>
+          <div class="dots" aria-hidden="true"><span>H1</span><span>H2</span><span>H3</span></div>
+          <p>Half the syllabus in one paper, in the full exam pattern.</p>
+          <span class="spec" data-spec="half"></span>
+        </div>
+        <div class="stage stage-full">
+          <div class="stage-head"><h3>Full-syllabus tests</h3><span>2 tests</span></div>
+          <div class="dots" aria-hidden="true"><span>F1</span><span>F2</span></div>
+          <p>The complete syllabus, exactly like the real exam.</p>
+          <span class="spec" data-spec="full"></span>
+        </div>
+      </div>
+      <div class="plan-foot">
+        <p>Take any test whenever you're ready. Every test has the same CBT screen, real marking, and full analysis with solutions. Coupon and referral codes are accepted at checkout.</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 14px; align-items: center"><span style="font-family: var(--display); font-size: 22px; font-weight: 700">[PRICE]</span><a class="btn btn-dark" href="checkout.html" data-signup>Get the test series</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="cbt-title">
+  <div class="wrap split">
+    <div>
+      <h2 id="cbt-title">The same screen you'll see on exam day</h2>
+      <p class="lead">Practising on paper doesn't prepare you for a computer-based test under time pressure. Every test here runs on an NTA-style CBT screen.</p>
+      <ul class="checks">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg><span>Countdown timer and subject-wise sections</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg><span>Question palette: answered, not answered, not visited, marked for review</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg><span>Mark for review, clear response, save and next</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg><span>The real marking scheme, including negative marking</span></li>
+      </ul>
+    </div>
+    <figure class="screen" aria-label="Illustration of the CBT question palette">
+      <div class="screen-bar"><span data-screen-title>Full Syllabus Test 1</span><b>02:41:18</b></div>
+      <div class="screen-tabs" data-screen-tabs></div>
+      <div class="screen-body">
+        <div class="palette" aria-hidden="true">
+          <span class="a">1</span><span class="a">2</span><span class="m">3</span><span class="a">4</span><span class="n">5</span><span class="a">6</span><span class="a">7</span><span class="m">8</span><span class="a">9</span>
+          <span class="n">10</span><span class="a">11</span><span class="c">12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span>
+          <span>19</span><span>20</span><span>21</span><span>22</span><span>23</span><span>24</span><span>25</span><span>26</span><span>27</span>
+        </div>
+        <div class="legend">
+          <span><i style="background: var(--green)"></i>Answered</span>
+          <span><i style="border: 2px solid var(--orange)"></i>Not answered</span>
+          <span><i style="background: var(--soft); border: 1px solid var(--line)"></i>Not visited</span>
+          <span><i style="background: var(--purple); border-radius: 50%"></i>Marked for review</span>
+        </div>
+      </div>
+    </figure>
+  </div>
+</section>
+
+<section id="analysis" class="section" aria-labelledby="analysis-title">
+  <div class="wrap">
+    <div class="analysis split">
+      <div>
+        <h2 id="analysis-title">Know exactly where your marks went</h2>
+        <p class="lead">After every test you get:</p>
+        <ul class="checks">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg><span>Score, accuracy and, for live tests, your all-India rank</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg><span>Subject-wise and chapter-wise performance</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg><span>Time spent per question, and marks lost to negative marking</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg><span>Every question with your answer, the correct answer and the full solution</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg><span>Your progress across all 11 tests in the plan</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg><span>Stuck on a question? Request a video solution from our faculty, even for a photo of a question from your book</span></li>
+        </ul>
+      </div>
+      <figure class="report" aria-label="Example result summary">
+        <div class="report-top">
+          <div><b data-r="score">459 / 720</b><span>Score</span></div>
+          <div><b>1,284</b><span>All-India rank</span></div>
+          <div><b data-r="acc">75%</b><span>Accuracy</span></div>
+        </div>
+        <div class="bars" data-bars></div>
+        <small>Example result for illustration.</small>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="how-title">
+  <div class="wrap">
+    <div class="section-head"><h2 id="how-title">How it works</h2></div>
+    <ol class="steps">
+      <li class="step"><b>Step 1</b><h3>Sign up and pick your exam</h3><p>You'll only see the tests for NEET, JEE Main or JEE Advanced, whichever you choose.</p></li>
+      <li class="step"><b>Step 2</b><h3>Follow the test plan</h3><p>Start with Part Test 1, or register for the next all-India live test.</p></li>
+      <li class="step"><b>Step 3</b><h3>Take it on the CBT screen</h3><p>Real timing, real marking, the same screen as the exam.</p></li>
+      <li class="step"><b>Step 4</b><h3>Check your analysis</h3><p>See where you lost marks and go through every solution before the next test.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section id="refer" class="section" aria-labelledby="refer-title">
+  <div class="wrap">
+    <div class="refer">
+      <div>
+        <h2 id="refer-title">Invite friends, earn credits</h2>
+        <p>Every student gets a personal referral code after buying a test series. Share it with friends preparing for the same exam.</p>
+      </div>
+      <ol class="refer-steps">
+        <li><b>Share your code</b><span>Send your link on WhatsApp or Instagram from your account.</span></li>
+        <li><b>Your friend saves</b><span>They get [REFERRAL DISCOUNT] off their test series.</span></li>
+        <li><b>You earn credits</b><span>You get [REFERRAL CREDIT] in credits when they buy, to use on your next purchase.</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section id="parents" class="section">
+  <div class="wrap duo">
+    <div class="parents">
+      <h2>For parents</h2>
+      <p>Your child can send you a private progress link on WhatsApp: tests taken, scores, all-India rank, and the subjects that need attention. In English or Hindi. They can switch the link off at any time.</p>
+    </div>
+    <div class="courses">
+      <h2>Want a teacher too?</h2>
+      <p>Studyverse courses add live classes and faculty who teach from your own test results. Same account, so all your tests and ranks come with you.</p>
+      <a class="btn btn-gold" href="/courses">Explore Studyverse courses</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="faq-title">
+  <div class="wrap faq">
+    <div class="section-head"><h2 id="faq-title">Questions</h2></div>
+    <details><summary>Which exams are covered?</summary><p>NEET (UG), JEE Main and JEE Advanced. Each has its own 11-test plan in its current exam pattern.</p></details>
+    <details><summary>What's in the test plan?</summary><p>6 part tests, 3 half-syllabus tests and 2 full-syllabus tests for your exam. You can take them whenever you're ready, in any order, though we suggest following the plan.</p></details>
+    <details><summary>What's the difference between the test plan and live tests?</summary><p>Test plan tests are available any time. Live tests happen at a fixed time for every student, and you get an all-India rank.</p></details>
+    <details><summary>What if I miss a live test?</summary><p>You can still take it afterwards. You'll get your score and analysis, but it won't count towards the all-India rank.</p></details>
+    <details><summary>How much does it cost?</summary><p>All-India live tests are free for everyone. The 11-test series is [PRICE] per exam.</p></details>
+    <details><summary>Can I use a coupon or referral code?</summary><p>Yes. Enter a coupon code or a friend's referral code at checkout, one code per order. Any credits you've earned can be used on top.</p></details>
+    <details><summary>I study in a Studyverse course. Do I need a new account?</summary><p>No. Log in with your Studyverse account. You get exactly the same tests and features.</p></details>
+    <details><summary>What if a question has a mistake?</summary><p>Use "Report a problem" on that question in your result. Our team checks it, and if an answer key was wrong, your score is corrected automatically.</p></details>
+  </div>
+</section>
+
+<section class="wrap final">
+  <div class="final-card">
+    <h2>Find out where you stand before the exam does.</h2>
+    <p>Get the 11-test series for your exam today.</p>
+    <a class="btn btn-gold btn-lg" href="checkout.html" data-signup>Get the test series</a>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="about">
+      <svg class="tv-logo" style="height: 40px" viewBox="0 0 1784 409" role="img" aria-label="Testverse by Studyverse"><use href="#tv-logo"/></svg>
+      <span>Test plans and all-India live tests for NEET and JEE, made by Studyverse faculty. Built Entirely Around You.</span>
+    </div>
+    <div class="cols">
+      <div class="col"><strong>Exams</strong><a href="#neet">NEET</a><a href="#jee-main">JEE Main</a><a href="#jee-advanced">JEE Advanced</a></div>
+      <div class="col"><strong>Tests</strong><a href="#plan">Test plan</a><a href="/live-tests">Live tests</a><a href="https://www.youtube.com/@[your-channel]" target="_blank" rel="noopener">Video library on YouTube</a></div>
+      <div class="col"><strong>Studyverse</strong><a href="/courses">Courses</a><a href="/contact">Contact</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a></div>
+    </div>
+  </div>
+  <div class="copyright"><div class="wrap">© 2026 Studyverse. All rights reserved.</div></div>
+</footer>
+
+<script>
+(function () {
+  /* ---------- Edit test details here ---------- */
+  var EXAMS = {
+    'neet': {
+      label: 'NEET',
+      subjects: ['Physics', 'Chemistry', 'Botany', 'Zoology'],
+      specs: {
+        part: '[N] questions, [time] each',
+        half: '180 questions, 3 hours, 720 marks',
+        full: '180 questions, 3 hours, 720 marks'
+      },
+      sample: { score: '459 / 720', acc: '75%', bars: [['Physics', 65], ['Chemistry', 73], ['Botany', 81], ['Zoology', 81]] },
+      live: [
+        { start: '2026-11-01T14:00:00+05:30', day: '1', when: 'Nov, Sun', name: 'NEET Full Syllabus Live Test', meta: '2:00 PM, 180 questions, 3 hours' },
+        { start: '2026-11-15T14:00:00+05:30', day: '15', when: 'Nov, Sun', name: 'NEET Half Syllabus Live Test', meta: '2:00 PM, 180 questions, 3 hours' },
+        { start: '2026-11-29T14:00:00+05:30', day: '29', when: 'Nov, Sun', name: 'NEET Full Syllabus Live Test', meta: '2:00 PM, 180 questions, 3 hours' }
+      ]
+    },
+    'jee-main': {
+      label: 'JEE Main',
+      subjects: ['Physics', 'Chemistry', 'Mathematics'],
+      specs: {
+        part: '[N] questions, [time] each',
+        half: '75 questions, 3 hours, 300 marks',
+        full: '75 questions, 3 hours, 300 marks'
+      },
+      sample: { score: '182 / 300', acc: '68%', bars: [['Physics', 64], ['Chemistry', 79], ['Mathematics', 58]] },
+      live: [
+        { start: '2026-11-08T09:00:00+05:30', day: '8', when: 'Nov, Sun', name: 'JEE Main Full Syllabus Live Test', meta: '9:00 AM, 75 questions, 3 hours' },
+        { start: '2026-11-22T09:00:00+05:30', day: '22', when: 'Nov, Sun', name: 'JEE Main Half Syllabus Live Test', meta: '9:00 AM, 75 questions, 3 hours' }
+      ]
+    },
+    'jee-advanced': {
+      label: 'JEE Advanced',
+      subjects: ['Physics', 'Chemistry', 'Mathematics'],
+      specs: {
+        part: '[N] questions, [time] each',
+        half: 'Paper 1 + Paper 2, 3 hours each',
+        full: 'Paper 1 + Paper 2, 3 hours each'
+      },
+      sample: { score: '[score] / [max]', acc: '61%', bars: [['Physics', 57], ['Chemistry', 70], ['Mathematics', 52]] },
+      live: [
+        { start: '2026-11-22T09:00:00+05:30', day: '22', when: 'Nov, Sun', name: 'JEE Advanced Full Syllabus Live Test', meta: 'Paper 1 at 9:00 AM, Paper 2 at 2:30 PM' }
+      ]
+    }
+  };
+  /* -------------------------------------------- */
+
+  var KEY = 'sv-exam';
+  var REF = (new URLSearchParams(location.search).get('ref') || '').trim().toUpperCase();
+  function updateSignupLinks() {
+    var q = [];
+    if (current) q.push('exam=' + current);
+    if (REF) q.push('ref=' + encodeURIComponent(REF));
+    document.querySelectorAll('[data-signup]').forEach(function (a) { a.href = 'checkout.html' + (q.length ? '?' + q.join('&') : ''); });
+  }
+  if (REF) {
+    document.querySelector('[data-ref-code]').textContent = REF;
+    document.querySelector('[data-ref-banner]').hidden = false;
+  }
+  var current = null;
+  var timer = null;
+
+  function save(id) { try { localStorage.setItem(KEY, id); } catch (e) {} }
+  function load() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  // Build both exam switches
+  document.querySelectorAll('[data-switch]').forEach(function (box) {
+    Object.keys(EXAMS).forEach(function (id) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = EXAMS[id].label;
+      b.dataset.exam = id;
+      b.setAttribute('aria-pressed', 'false');
+      b.addEventListener('click', function () { choose(id, true); });
+      box.appendChild(b);
+    });
+  });
+  document.querySelectorAll('[data-pick]').forEach(function (b) {
+    b.addEventListener('click', function () { choose(b.dataset.pick, true); });
+  });
+
+  function choose(id, remember) {
+    if (!EXAMS[id]) return;
+    current = id;
+    var ex = EXAMS[id];
+    if (remember) {
+      save(id);
+      try { history.replaceState(null, '', '#' + id); } catch (e) { /* not allowed in some previews */ }
+    }
+
+    document.querySelectorAll('[data-exam]').forEach(function (b) {
+      b.setAttribute('aria-pressed', b.dataset.exam === id ? 'true' : 'false');
+    });
+    document.querySelectorAll('[data-when="none"]').forEach(function (el) { el.hidden = true; });
+    document.querySelectorAll('[data-when="some"]').forEach(function (el) { el.hidden = false; });
+
+    // Test plan
+    document.querySelector('[data-exam-suffix]').textContent = ' for ' + ex.label;
+    ['part', 'half', 'full'].forEach(function (k) {
+      document.querySelector('[data-spec="' + k + '"]').textContent = ex.specs[k];
+    });
+    updateSignupLinks();
+
+    // Live tests
+    var next = ex.live[0];
+    document.querySelector('[data-live-title]').textContent = next.name;
+    document.querySelector('[data-live-list]').innerHTML = ex.live.map(function (t) {
+      return '<li><div class="date"><b>' + esc(t.day) + '</b><span>' + esc(t.when) + '</span></div><div><strong>' + esc(t.name) + '</strong><em>' + esc(t.meta) + '</em></div></li>';
+    }).join('');
+    document.querySelector('[data-live-link]').href = '/live-tests?exam=' + id;
+    startCountdown(next.start);
+
+    // CBT screen and sample report
+    document.querySelector('[data-screen-title]').textContent = ex.label + ' Full Syllabus Test 1';
+    document.querySelector('[data-screen-tabs]').innerHTML = ex.subjects.map(function (s) { return '<span>' + esc(s) + '</span>'; }).join('');
+    document.querySelector('[data-r="score"]').textContent = ex.sample.score;
+    document.querySelector('[data-r="acc"]').textContent = ex.sample.acc;
+    renderBars(ex.sample.bars);
+  }
+
+  function renderBars(bars) {
+    var color = function (v) { return v >= 75 ? 'var(--green)' : (v >= 65 ? 'var(--blue)' : 'var(--orange)'); };
+    document.querySelector('[data-bars]').innerHTML = bars.map(function (b) {
+      return '<div class="bar"><span>' + esc(b[0]) + '</span><div><i style="width:' + b[1] + '%;background:' + color(b[1]) + '"></i></div><b>' + b[1] + '%</b></div>';
+    }).join('');
+  }
+
+  function startCountdown(iso) {
+    if (timer) clearInterval(timer);
+    var target = new Date(iso).getTime();
+    var u = {
+      d: document.querySelector('[data-u="d"]'), h: document.querySelector('[data-u="h"]'),
+      m: document.querySelector('[data-u="m"]'), s: document.querySelector('[data-u="s"]')
+    };
+    var tick = function () {
+      var left = Math.max(0, Math.floor((target - Date.now()) / 1000));
+      u.d.textContent = Math.floor(left / 86400);
+      u.h.textContent = pad(Math.floor(left % 86400 / 3600));
+      u.m.textContent = pad(Math.floor(left % 3600 / 60));
+      u.s.textContent = pad(left % 60);
+    };
+    tick();
+    timer = setInterval(tick, 1000);
+  }
+
+  updateSignupLinks();
+
+  // Default view before an exam is chosen: NEET subjects on the illustration only
+  document.querySelector('[data-screen-tabs]').innerHTML = EXAMS['neet'].subjects.map(function (s) { return '<span>' + s + '</span>'; }).join('');
+  renderBars(EXAMS['neet'].sample.bars);
+
+  // Footer exam links and links shared as #neet etc.
+  function fromHash() { var h = location.hash.replace('#', ''); if (EXAMS[h]) { choose(h, true); return true; } return false; }
+  window.addEventListener('hashchange', function () {
+    if (fromHash()) document.getElementById('plan').scrollIntoView();
+  });
+  if (!fromHash()) {
+    var saved = load();
+    if (saved && EXAMS[saved]) choose(saved, false);
+  }
+
+  // Mobile menu
+  var btn = document.querySelector('.menu-btn');
+  var nav = document.getElementById('mobile-nav');
+  btn.addEventListener('click', function () {
+    var open = nav.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  });
+  nav.addEventListener('click', function (e) {
+    if (e.target.tagName === 'A') { nav.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
+  });
+})();
+</script>
+</body>
+</html>

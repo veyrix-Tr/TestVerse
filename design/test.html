@@ -1,0 +1,906 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Test — Testverse</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#16294A">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22 width=%22512%22 height=%22512%22%3E%3Cdefs%3E%3ClinearGradient id=%22tvg0%22 x1=%220%22 y1=%220%22 x2=%221%22 y2=%221%22%3E%3Cstop offset=%220%22 stop-color=%22#EDBE55%22/%3E%3Cstop offset=%220.55%22 stop-color=%22#D49A2A%22/%3E%3Cstop offset=%221%22 stop-color=%22#B5801C%22/%3E%3C/linearGradient%3E%3CradialGradient id=%22tvbg%22 cx=%220.3%22 cy=%220.2%22 r=%221%22%3E%3Cstop offset=%220%22 stop-color=%22#1B3254%22/%3E%3Cstop offset=%221%22 stop-color=%22#0C1A30%22/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width=%22512%22 height=%22512%22 rx=%22112%22 fill=%22url(#tvbg)%22/%3E%3Cg transform=%22translate(256,256) scale(0.78) translate(-600,-382.5)%22%3E%3Cg transform=%22translate(350.0,130) scale(1.25)%22%3E%3Cpath d=%22M40,60 H360 V130 H254 V360 H158 V130 H40 Z%22 fill=%22#F1EAD8%22/%3E%0A%3Cpath d=%22M163,360 Q190,196 278,80 L258,66 L322,44 L320,112 L300,97 Q226,214 207,360 Z%22 fill=%22url(#tvg0)%22 stroke=%22#13243E%22 stroke-width=%2210%22 stroke-linejoin=%22round%22 paint-order=%22stroke%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Sans+Devanagari:wght@400;500;600&display=swap">
+<!-- KaTeX renders formulas written as $...$ in questions. If it fails to load, formulas show as plain text. -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+:root {
+  color-scheme: light;
+  --bg: #F5F6FB; --card: #FFFFFF; --soft: #F1F3F9; --ink: #1B1F3B; --muted: #565B7A; --line: #DEE1EE; --field: #C7CBE3;
+  --navy: #16294A; --navy-2: #1F3961; --navy-line: #3A557F;
+  --gold: #F2C14E; --gold-soft: #FFF6E0; --gold-line: #EED9A4; --gold-ink: #6B4A00;
+  --blue: #3D4FD9; --blue-ink: #2E3EB8; --blue-soft: #E4E7FB;
+  --green: #1E7A46; --green-soft: #DDF1E4; --green-ink: #155C34;
+  --orange: #B45309; --orange-soft: #FDEBD3; --orange-ink: #8A3C00;
+  --purple: #5B2D91; --purple-soft: #EFE7F8;
+  --red: #B42318; --red-soft: #FDECEA;
+  --grey-soft: #ECEEF7;
+  --display: "Lexend", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Noto Sans Devanagari", "Segoe UI", system-ui, sans-serif;
+  --qsize: 17px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --bg: #0F1426; --card: #141B33; --soft: #1A2240; --ink: #E8EBF7; --muted: #A9B0CF; --line: #2A3355; --field: #3A4470;
+    --navy: #0F1E36; --navy-2: #1A3156;
+    --gold-soft: #241F12; --gold-line: #4A3F1E; --gold-ink: #EBD9A8;
+    --blue: #8F9CFF; --blue-ink: #B3BCFF; --blue-soft: #222C5A;
+    --green: #4CC07F; --green-soft: #14321F; --green-ink: #8FE0B0;
+    --orange: #F0A060; --orange-soft: #3A2414; --orange-ink: #F6B98A;
+    --purple: #B794E8; --purple-soft: #2A1E40;
+    --red: #FF8A80; --red-soft: #3A1714;
+    --grey-soft: #222A48;
+  }
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+a { color: var(--blue); }
+:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; border-radius: 6px; }
+[hidden] { display: none !important; }
+h1, h2, h3 { font-family: var(--display); margin: 0; line-height: 1.2; }
+p { margin: 0; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; padding: 0 16px; border-radius: 10px; font: 600 14px/1 var(--body); cursor: pointer; border: 1px solid transparent; text-decoration: none; white-space: nowrap; }
+.btn-primary { background: var(--blue); color: #FFFFFF; }
+.btn-green { background: #1E7A46; color: #FFFFFF; }
+.btn-purple { background: #5B2D91; color: #FFFFFF; }
+.btn-dark { background: var(--navy); color: #FFFFFF; }
+.btn-gold { background: var(--gold); color: #1B1F3B; }
+.btn-outline { background: var(--card); color: var(--ink); border-color: var(--field); }
+.btn-sm { min-height: 36px; padding: 0 12px; font-size: 13px; border-radius: 8px; }
+.btn[disabled] { opacity: 0.5; cursor: not-allowed; }
+
+.bar { background: var(--navy); color: #FFFFFF; }
+.bar .in { max-width: 1280px; margin: 0 auto; padding: 10px 20px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.brand { display: inline-flex; align-items: center; gap: 8px; color: #FFFFFF; text-decoration: none; }
+.brand b { font-family: var(--display); font-size: 18px; }
+
+/* ---------------- Instructions ---------------- */
+.wrap { max-width: 960px; margin: 0 auto; padding: 26px 20px 60px; display: grid; gap: 18px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 22px; }
+.card h2 { font-size: 18px; margin-bottom: 12px; }
+.facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.facts div { background: var(--soft); border-radius: 12px; padding: 12px; }
+.facts b { display: block; font-family: var(--display); font-size: 20px; }
+.facts span { font-size: 13px; color: var(--muted); }
+.rules { margin: 0; padding-left: 20px; display: grid; gap: 8px; }
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 10px; border-bottom: 1px solid var(--line); font-size: 14px; vertical-align: top; }
+th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); font-weight: 600; }
+.legend { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+.legend div { display: flex; gap: 10px; align-items: center; font-size: 14px; }
+.check { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; }
+.check input { width: 20px; height: 20px; margin-top: 1px; flex: 0 0 20px; }
+.notice { border-radius: 12px; padding: 12px 14px; font-size: 14px; }
+.n-warn { background: var(--orange-soft); color: var(--orange-ink); }
+.n-info { background: var(--blue-soft); color: var(--blue-ink); }
+.n-ok { background: var(--green-soft); color: var(--green-ink); }
+.n-err { background: var(--red-soft); color: var(--red); }
+.seg { display: inline-flex; background: var(--soft); border: 1px solid var(--line); border-radius: 10px; padding: 3px; gap: 2px; }
+.seg button { font: 600 13px/1 var(--body); border: 0; background: transparent; color: var(--muted); padding: 9px 12px; border-radius: 8px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--navy); color: #FFFFFF; }
+
+/* Palette chips (shared) */
+.chip { width: 40px; height: 36px; border-radius: 6px; display: inline-grid; place-items: center; font: 600 13px/1 var(--body); background: var(--grey-soft); color: var(--muted); border: 1px solid transparent; position: relative; cursor: pointer; }
+.chip.nv { background: var(--grey-soft); color: var(--muted); }
+.chip.na { background: var(--card); color: var(--orange-ink); border: 2px solid var(--orange); }
+.chip.an { background: #1E7A46; color: #FFFFFF; }
+.chip.mr { background: #5B2D91; color: #FFFFFF; border-radius: 50%; }
+.chip.am { background: #5B2D91; color: #FFFFFF; border-radius: 50%; }
+.chip.am::after { content: ""; position: absolute; right: -2px; bottom: -2px; width: 12px; height: 12px; border-radius: 50%; background: #2FBF71; border: 2px solid var(--card); }
+.chip.cur { outline: 3px solid var(--blue); outline-offset: 2px; }
+
+/* ---------------- Exam ---------------- */
+.exam { display: grid; grid-template-rows: auto auto minmax(0, 1fr); height: 100vh; height: 100dvh; }
+.exam-top .in { justify-content: space-between; }
+.cand { display: flex; flex-direction: column; gap: 1px; }
+.cand b { font-family: var(--display); font-size: 16px; }
+.cand span { font-size: 12px; color: #C9D0EC; }
+.top-tools { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.timer { display: flex; align-items: center; gap: 8px; background: var(--navy-2); padding: 7px 12px; border-radius: 10px; }
+.timer span { font-size: 12px; color: #C9D0EC; }
+.timer b { font-size: 22px; font-variant-numeric: tabular-nums; color: var(--gold); font-family: var(--display); }
+.timer.warn b { color: #FFB86B; }
+.timer.danger { background: #7A1A12; }
+.timer.danger b { color: #FFFFFF; }
+.tool { background: transparent; border: 1px solid var(--navy-line); color: #FFFFFF; border-radius: 8px; min-height: 36px; padding: 0 10px; font: 600 13px/1 var(--body); cursor: pointer; }
+.save-state { font-size: 12px; color: #C9D0EC; display: inline-flex; gap: 6px; align-items: center; }
+.save-state i { width: 8px; height: 8px; border-radius: 50%; background: #2FBF71; display: inline-block; }
+.save-state.off i { background: #FFB86B; }
+.tabs { background: var(--card); border-bottom: 1px solid var(--line); }
+.tabs .in { max-width: 1280px; margin: 0 auto; padding: 0 20px; display: flex; gap: 4px; overflow-x: auto; }
+.tabs button { font: 600 14px/1 var(--body); min-height: 46px; padding: 0 14px; border: 0; background: transparent; color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap; }
+.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--blue); }
+.tabs button small { font-weight: 500; color: var(--muted); margin-left: 4px; }
+.exam-body { max-width: 1280px; width: 100%; margin: 0 auto; padding: 14px 20px; display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; min-height: 0; }
+.qpane { background: var(--card); border: 1px solid var(--line); border-radius: 14px; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; min-height: 0; }
+.qhead { padding: 12px 18px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.qhead b { font-family: var(--display); font-size: 17px; }
+.qhead span { font-size: 13px; color: var(--muted); }
+.qbody { padding: 18px; overflow-y: auto; display: grid; gap: 16px; align-content: start; font-size: var(--qsize); user-select: none; -webkit-user-select: none; }
+.qtext { line-height: 1.65; white-space: pre-line; }
+.ar { display: grid; gap: 8px; }
+.ar div { background: var(--soft); border-radius: 10px; padding: 10px 12px; }
+.mtable { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; max-width: 560px; }
+.mtable table td, .mtable table th { font-size: calc(var(--qsize) - 2px); }
+.opts { display: grid; gap: 10px; }
+.opt { display: flex; gap: 12px; align-items: center; text-align: left; font: inherit; font-size: var(--qsize); color: var(--ink); background: var(--card); border: 2px solid var(--line); border-radius: 12px; padding: 10px 14px; min-height: 52px; cursor: pointer; }
+.opt:hover { border-color: var(--blue); }
+.opt .k { flex: 0 0 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-weight: 600; font-size: 14px; background: var(--grey-soft); }
+.opt.multi .k { border-radius: 6px; }
+.opt[aria-checked="true"] { border-color: #1E7A46; background: var(--green-soft); }
+.opt[aria-checked="true"] .k { background: #1E7A46; color: #FFFFFF; }
+.numwrap { display: grid; gap: 10px; max-width: 320px; }
+.numwrap input { font: 600 22px/1 var(--display); padding: 12px 14px; border: 2px solid var(--field); border-radius: 10px; background: var(--card); color: var(--ink); width: 100%; }
+.keypad { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.keypad button { font: 600 18px/1 var(--display); min-height: 46px; border-radius: 8px; border: 1px solid var(--field); background: var(--card); color: var(--ink); cursor: pointer; }
+.keypad button.wide { grid-column: span 3; font-size: 14px; }
+.qfoot { padding: 12px 18px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.qfoot .grp { display: flex; gap: 8px; flex-wrap: wrap; }
+.side { background: var(--card); border: 1px solid var(--line); border-radius: 14px; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; min-height: 0; }
+.side-head { padding: 12px 14px; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px; }
+.side-head div { display: flex; align-items: center; gap: 8px; }
+.side-head .chip { width: 28px; height: 26px; font-size: 12px; cursor: default; }
+.grid-wrap { padding: 12px 14px; overflow-y: auto; }
+.grid-wrap h3 { font-size: 13px; font-family: var(--body); color: var(--muted); margin: 4px 0 8px; }
+.qgrid { display: grid; grid-template-columns: repeat(auto-fill, 40px); gap: 8px; margin-bottom: 12px; }
+.side-foot { padding: 12px 14px; border-top: 1px solid var(--line); display: grid; gap: 8px; }
+.palette-toggle { display: none; }
+
+/* Dialogs */
+dialog { border: 0; border-radius: 16px; padding: 0; width: min(640px, calc(100vw - 32px)); background: var(--card); color: var(--ink); box-shadow: 0 30px 80px rgba(0,0,0,0.35); }
+dialog::backdrop { background: rgba(10,14,28,0.6); }
+.dh { padding: 16px 20px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.dh h2 { font-size: 18px; }
+.db { padding: 18px 20px; display: grid; gap: 14px; max-height: 70vh; overflow-y: auto; }
+.df { padding: 14px 20px; border-top: 1px solid var(--line); display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap; }
+.close { background: none; border: 0; color: var(--muted); font-size: 24px; cursor: pointer; min-width: 36px; min-height: 36px; }
+label.l { display: block; font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 5px; }
+.input { font: inherit; font-size: 15px; padding: 10px 12px; border: 1px solid var(--field); border-radius: 8px; background: var(--card); color: var(--ink); width: 100%; }
+textarea.input { min-height: 80px; resize: vertical; }
+.choices { display: flex; flex-wrap: wrap; gap: 8px; }
+.choices button { font: 500 13px/1 var(--body); padding: 10px 12px; border-radius: 999px; border: 1px solid var(--field); background: var(--card); color: var(--ink); cursor: pointer; }
+.choices button[aria-pressed="true"] { background: var(--navy); color: #FFFFFF; border-color: var(--navy); }
+
+/* ---------------- Result ---------------- */
+.res-wrap { max-width: 1180px; margin: 0 auto; padding: 24px 20px 60px; display: grid; gap: 18px; }
+.res-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; align-items: flex-end; }
+.res-head h1 { font-size: 26px; }
+.res-head p { color: var(--muted); }
+.kpis { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.kpi { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px; }
+.kpi.main { background: var(--navy); color: #FFFFFF; border: 0; }
+.kpi b { display: block; font-family: var(--display); font-size: 26px; }
+.kpi span { font-size: 13px; color: var(--muted); }
+.kpi.main span { color: #C9D0EC; }
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; }
+.barrow { display: grid; grid-template-columns: 120px minmax(0, 1fr) 46px; gap: 10px; align-items: center; font-size: 14px; margin-bottom: 10px; }
+.barrow > div { height: 10px; background: var(--grey-soft); border-radius: 999px; overflow: hidden; }
+.barrow i { display: block; height: 10px; border-radius: 999px; }
+.barrow b { text-align: right; }
+.tipl { margin: 0; padding-left: 18px; display: grid; gap: 8px; font-size: 14px; }
+.review { display: grid; gap: 12px; }
+.rq { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px; display: grid; gap: 12px; }
+.rq-top { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
+.pill { display: inline-block; font-size: 12px; font-weight: 600; padding: 4px 9px; border-radius: 999px; }
+.p-correct { background: var(--green-soft); color: var(--green-ink); }
+.p-wrong { background: var(--red-soft); color: var(--red); }
+.p-partial { background: var(--gold-soft); color: var(--gold-ink); }
+.p-skipped { background: var(--grey-soft); color: var(--muted); }
+.ans { display: flex; flex-wrap: wrap; gap: 8px; font-size: 14px; }
+.ans span { padding: 6px 10px; border-radius: 8px; }
+.ans .yours { border: 2px solid var(--field); }
+.ans .yours.bad { border-color: var(--orange); color: var(--orange-ink); }
+.ans .right { background: var(--green-soft); border: 2px solid #1E7A46; color: var(--green-ink); }
+.sol { background: var(--soft); border-radius: 10px; padding: 12px 14px; font-size: 15px; line-height: 1.6; white-space: pre-line; }
+.toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--navy); color: #FFFFFF; padding: 12px 18px; border-radius: 10px; font-size: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 80; max-width: calc(100vw - 32px); }
+.demo-note { font-size: 12px; color: var(--muted); text-align: center; }
+
+@media (max-width: 960px) {
+  .exam-body { grid-template-columns: 1fr; padding: 10px; }
+  .side { position: fixed; inset: auto 0 0 0; height: 70vh; border-radius: 16px 16px 0 0; z-index: 40; box-shadow: 0 -20px 50px rgba(0,0,0,0.3); transform: translateY(100%); transition: transform 0.2s; }
+  .side.open { transform: translateY(0); }
+  .palette-toggle { display: inline-flex; }
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .two { grid-template-columns: 1fr; }
+  .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .qfoot .btn { flex: 1 1 auto; }
+  .cand span { display: none; }
+  .save-state { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .side { transition: none; } }
+.tv-logo { display: block; width: auto; aspect-ratio: 1784 / 409; flex: 0 0 auto; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position: absolute" aria-hidden="true" focusable="false"><defs><linearGradient id="tvg0" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#EDBE55"/><stop offset="0.55" stop-color="#D49A2A"/><stop offset="1" stop-color="#B5801C"/></linearGradient><radialGradient id="tvbg" cx="0.3" cy="0.2" r="1"><stop offset="0" stop-color="#1B3254"/><stop offset="1" stop-color="#0C1A30"/></radialGradient></defs><symbol id="tv-logo" viewBox="0 0 1784 409"><g transform="translate(-400,-178)"><g transform="translate(350.0,130) scale(1.25)"><path d="M40,60 H360 V130 H254 V360 H158 V130 H40 Z" fill="#F1EAD8"/>
+<path d="M163,360 Q190,196 278,80 L258,66 L322,44 L320,112 L300,97 Q226,214 207,360 Z" fill="url(#tvg0)" stroke="#13243E" stroke-width="10" stroke-linejoin="round" paint-order="stroke"/></g></g><g transform="translate(490,53) scale(1.26) translate(-86,-674)"><path transform="translate(82.15625,808.125)" d="M106.3125 -131.625V-105.9375H71.4375V0.0H39.375V-105.9375H4.5V-131.625Z M157.0 -105.9375V-79.3125H199.9375V-54.5625H157.0V-25.6875H205.5625V0.0H124.9375V-131.625H205.5625V-105.9375Z M225.125 -39.375H259.25Q260.0 -32.0625 264.3125 -28.21875Q268.625 -24.375 275.5625 -24.375Q282.6875 -24.375 286.8125 -27.65625Q290.9375 -30.9375 290.9375 -36.75Q290.9375 -41.625 287.65625 -44.8125Q284.375 -48.0 279.59375 -50.0625Q274.8125 -52.125 266.0 -54.75Q253.25 -58.6875 245.1875 -62.625Q237.125 -66.5625 231.3125 -74.25Q225.5 -81.9375 225.5 -94.3125Q225.5 -112.6875 238.8125 -123.09375Q252.125 -133.5 273.5 -133.5Q295.25 -133.5 308.5625 -123.09375Q321.875 -112.6875 322.8125 -94.125H288.125Q287.75 -100.5 283.4375 -104.15625Q279.125 -107.8125 272.375 -107.8125Q266.5625 -107.8125 263.0 -104.71875Q259.4375 -101.625 259.4375 -95.8125Q259.4375 -89.4375 265.4375 -85.875Q271.4375 -82.3125 284.1875 -78.1875Q296.9375 -73.875 304.90625 -69.9375Q312.875 -66.0 318.6875 -58.5Q324.5 -51.0 324.5 -39.1875Q324.5 -27.9375 318.78125 -18.75Q313.0625 -9.5625 302.1875 -4.125Q291.3125 1.3125 276.5 1.3125Q262.0625 1.3125 250.625 -3.375Q239.1875 -8.0625 232.34375 -17.25Q225.5 -26.4375 225.125 -39.375Z M441.375 -131.625V-105.9375H406.5V0.0H374.4375V-105.9375H339.5625V-131.625Z" fill="#F1EAD8"/><path transform="translate(530.53125,808.125)" d="M135.1875 -131.625 88.5 0.0H48.375L1.6875 -131.625H35.8125L68.4375 -32.25L101.25 -131.625Z M183.0625 -105.9375V-79.3125H226.0V-54.5625H183.0625V-25.6875H231.625V0.0H151.0V-131.625H231.625V-105.9375Z M322.0625 0.0 294.6875 -49.6875H287.0V0.0H254.9375V-131.625H308.75Q324.3125 -131.625 335.28125 -126.1875Q346.25 -120.75 351.6875 -111.28125Q357.125 -101.8125 357.125 -90.1875Q357.125 -77.0625 349.71875 -66.75Q342.3125 -56.4375 327.875 -52.125L358.25 0.0ZM287.0 -72.375H306.875Q315.6875 -72.375 320.09375 -76.6875Q324.5 -81.0 324.5 -88.875Q324.5 -96.375 320.09375 -100.6875Q315.6875 -105.0 306.875 -105.0H287.0Z M375.9375 -39.375H410.0625Q410.8125 -32.0625 415.125 -28.21875Q419.4375 -24.375 426.375 -24.375Q433.5 -24.375 437.625 -27.65625Q441.75 -30.9375 441.75 -36.75Q441.75 -41.625 438.46875 -44.8125Q435.1875 -48.0 430.40625 -50.0625Q425.625 -52.125 416.8125 -54.75Q404.0625 -58.6875 396.0 -62.625Q387.9375 -66.5625 382.125 -74.25Q376.3125 -81.9375 376.3125 -94.3125Q376.3125 -112.6875 389.625 -123.09375Q402.9375 -133.5 424.3125 -133.5Q446.0625 -133.5 459.375 -123.09375Q472.6875 -112.6875 473.625 -94.125H438.9375Q438.5625 -100.5 434.25 -104.15625Q429.9375 -107.8125 423.1875 -107.8125Q417.375 -107.8125 413.8125 -104.71875Q410.25 -101.625 410.25 -95.8125Q410.25 -89.4375 416.25 -85.875Q422.25 -82.3125 435.0 -78.1875Q447.75 -73.875 455.71875 -69.9375Q463.6875 -66.0 469.5 -58.5Q475.3125 -51.0 475.3125 -39.1875Q475.3125 -27.9375 469.59375 -18.75Q463.875 -9.5625 453.0 -4.125Q442.125 1.3125 427.3125 1.3125Q412.875 1.3125 401.4375 -3.375Q390.0 -8.0625 383.15625 -17.25Q376.3125 -26.4375 375.9375 -39.375Z M529.5625 -105.9375V-79.3125H572.5V-54.5625H529.5625V-25.6875H578.125V0.0H497.5V-131.625H578.125V-105.9375Z" fill="#D49A2A"/></g><g transform="translate(490,259) scale(1.5) translate(-346,-869)"><path transform="translate(342.03562500000004,916.5)" d="M24.28875 -35.7Q28.9425 -35.7 32.70375 -33.46875Q36.465 -31.2375 38.6325 -27.125625Q40.8 -23.01375 40.8 -17.7225Q40.8 -12.43125 38.6325 -8.255625Q36.465 -4.08 32.671875 -1.753125Q28.87875 0.57375 24.28875 0.57375Q20.208750000000002 0.57375 17.053125 -1.02Q13.8975 -2.61375 12.04875 -5.1V0.0H4.78125V-47.175000000000004H12.04875V-29.89875Q13.8975 -32.448750000000004 17.116875 -34.074375Q20.33625 -35.7 24.28875 -35.7ZM22.695 -29.38875Q19.95375 -29.38875 17.499375 -27.986250000000002Q15.045 -26.583750000000002 13.546875 -23.90625Q12.04875 -21.22875 12.04875 -17.595Q12.04875 -13.96125 13.546875 -11.251875Q15.045 -8.5425 17.499375 -7.140000000000001Q19.95375 -5.7375 22.695 -5.7375Q25.5 -5.7375 27.954375 -7.171875Q30.40875 -8.60625 31.906875 -11.3475Q33.405 -14.088750000000001 33.405 -17.7225Q33.405 -21.35625 31.906875 -24.001875Q30.40875 -26.6475 27.954375 -28.018125Q25.5 -29.38875 22.695 -29.38875Z M84.72375 -35.12625 63.17625 16.51125H55.65375L62.79375 -0.57375L48.96000000000001 -35.12625H57.056250000000006L66.9375 -8.35125L77.20125 -35.12625Z  M115.89750000000001 -12.24H123.675Q123.93 -9.37125 125.93812500000001 -7.5225Q127.94625 -5.67375 131.58 -5.67375Q135.34125 -5.67375 137.445 -7.4906250000000005Q139.54875 -9.307500000000001 139.54875 -12.17625Q139.54875 -14.4075 138.241875 -15.809999999999999Q136.935 -17.2125 134.99062500000002 -17.9775Q133.04625000000001 -18.7425 129.60375 -19.635Q125.26875 -20.7825 122.559375 -21.961875Q119.85000000000001 -23.14125 117.9375 -25.627499999999998Q116.025 -28.11375 116.025 -32.2575Q116.025 -36.0825 117.9375 -38.95125Q119.85000000000001 -41.82 123.2925 -43.35Q126.735 -44.88 131.26125000000002 -44.88Q137.7 -44.88 141.811875 -41.660625Q145.92375 -38.441250000000004 146.37 -32.83125H138.3375Q138.14625 -35.253750000000004 136.04250000000002 -36.975Q133.93875 -38.69625 130.49625 -38.69625Q127.3725 -38.69625 125.39625000000001 -37.1025Q123.42 -35.50875 123.42 -32.5125Q123.42 -30.4725 124.66312500000001 -29.165625Q125.90625 -27.85875 127.81875 -27.09375Q129.73125 -26.32875 133.04625000000001 -25.43625Q137.445 -24.225 140.218125 -23.01375Q142.99125 -21.802500000000002 144.93562500000002 -19.284375Q146.88 -16.76625 146.88 -12.55875Q146.88 -9.18 145.063125 -6.18375Q143.24625 -3.1875 139.77187500000002 -1.370625Q136.2975 0.44625000000000004 131.58 0.44625000000000004Q127.1175 0.44625000000000004 123.54750000000001 -1.115625Q119.9775 -2.6775 117.9375 -5.546250000000001Q115.89750000000001 -8.415000000000001 115.89750000000001 -12.24Z M169.065 -29.1975V-9.75375Q169.065 -7.7775 169.989375 -6.916875Q170.91375 -6.05625 173.145 -6.05625H177.60750000000002V0.0H171.87Q166.96125 0.0 164.34750000000003 -2.295Q161.73375000000001 -4.59 161.73375000000001 -9.75375V-29.1975H157.59V-35.12625H161.73375000000001V-43.86H169.065V-35.12625H177.60750000000002V-29.1975Z M221.2125 -35.12625V0.0H213.945V-4.14375Q212.22375 -1.97625 209.450625 -0.733125Q206.6775 0.51 203.55375 0.51Q199.41 0.51 196.12687499999998 -1.2112500000000002Q192.84375 -2.9325 190.963125 -6.311249999999999Q189.0825 -9.69 189.0825 -14.47125V-35.12625H196.28625V-15.555Q196.28625 -10.8375 198.64499999999998 -8.319375Q201.00375 -5.8012500000000005 205.08375 -5.8012500000000005Q209.16375 -5.8012500000000005 211.554375 -8.319375Q213.945 -10.8375 213.945 -15.555V-35.12625Z M250.09125 -35.7Q253.53375 -35.7 256.880625 -34.201875Q260.2275 -32.70375 262.20375 -30.2175V-47.175000000000004H269.535V0.0H262.20375V-5.29125Q260.41875 -2.74125 257.263125 -1.08375Q254.10750000000002 0.57375 250.0275 0.57375Q245.4375 0.57375 241.644375 -1.753125Q237.85125 -4.08 235.651875 -8.255625Q233.4525 -12.43125 233.4525 -17.7225Q233.4525 -23.01375 235.651875 -27.09375Q237.85125 -31.173750000000002 241.644375 -33.436875Q245.4375 -35.7 250.09125 -35.7ZM251.5575 -29.38875Q248.7525 -29.38875 246.32999999999998 -28.018125Q243.9075 -26.6475 242.409375 -24.001875Q240.91125 -21.35625 240.91125 -17.7225Q240.91125 -14.088750000000001 242.409375 -11.3475Q243.9075 -8.60625 246.361875 -7.171875Q248.81625 -5.7375 251.5575 -5.7375Q254.3625 -5.7375 256.78499999999997 -7.140000000000001Q259.2075 -8.5425 260.705625 -11.251875Q262.20375 -13.96125 262.20375 -17.595Q262.20375 -21.22875 260.705625 -23.90625Q259.2075 -26.583750000000002 256.78499999999997 -27.986250000000002Q254.3625 -29.38875 251.5575 -29.38875Z M315.8175 -35.12625 294.27 16.51125H286.7475L293.8875 -0.57375L280.05375 -35.12625H288.15L298.03125 -8.35125L308.295 -35.12625Z M339.97875 -6.5025 349.92375 -35.12625H357.6375L344.25 0.0H335.58L322.25624999999997 -35.12625H330.03375Z M400.15874999999994 -14.85375H373.32Q373.63874999999996 -10.64625 376.44374999999997 -8.09625Q379.24875 -5.54625 383.32874999999996 -5.54625Q389.19374999999997 -5.54625 391.61625 -10.455H399.4575Q397.86375 -5.61 393.688125 -2.5181250000000004Q389.5125 0.57375 383.32874999999996 0.57375Q378.29249999999996 0.57375 374.30812499999996 -1.689375Q370.32374999999996 -3.9525 368.06062499999996 -8.064375Q365.79749999999996 -12.17625 365.79749999999996 -17.595Q365.79749999999996 -23.01375 367.99687499999993 -27.125625Q370.19624999999996 -31.2375 374.18062499999996 -33.46875Q378.16499999999996 -35.7 383.32874999999996 -35.7Q388.30125 -35.7 392.18999999999994 -33.5325Q396.07874999999996 -31.365000000000002 398.24625 -27.444375Q400.41375 -23.52375 400.41375 -18.423750000000002Q400.41375 -16.4475 400.15874999999994 -14.85375ZM392.8275 -20.71875Q392.76374999999996 -24.735 389.95874999999995 -27.1575Q387.15374999999995 -29.580000000000002 383.01 -29.580000000000002Q379.24875 -29.580000000000002 376.57124999999996 -27.189375000000002Q373.89374999999995 -24.798750000000002 373.38374999999996 -20.71875Z M430.43999999999994 -35.7V-28.177500000000002H428.59124999999995Q424.31999999999994 -28.177500000000002 422.1206249999999 -26.01Q419.92124999999993 -23.8425 419.92124999999993 -18.4875V0.0H412.65374999999995V-35.12625H419.92124999999993V-30.02625Q421.51499999999993 -32.70375 424.1606249999999 -34.201875Q426.8062499999999 -35.7 430.43999999999994 -35.7Z M440.3212499999999 -10.77375H447.84374999999994Q448.0349999999999 -8.5425 449.9793749999999 -7.0443750000000005Q451.9237499999999 -5.54625 454.85624999999993 -5.54625Q457.91624999999993 -5.54625 459.6056249999999 -6.725625Q461.29499999999996 -7.905 461.29499999999996 -9.75375Q461.29499999999996 -11.73 459.41437499999995 -12.686250000000001Q457.53374999999994 -13.6425 453.4537499999999 -14.790000000000001Q449.5012499999999 -15.873750000000001 447.01499999999993 -16.89375Q444.52874999999995 -17.91375 442.71187499999996 -20.0175Q440.8949999999999 -22.12125 440.8949999999999 -25.56375Q440.8949999999999 -28.368750000000002 442.5524999999999 -30.695625Q444.2099999999999 -33.0225 447.30187499999994 -34.36125Q450.39374999999995 -35.7 454.4099999999999 -35.7Q460.4024999999999 -35.7 464.0681249999999 -32.671875Q467.73374999999993 -29.64375 467.9887499999999 -24.41625H460.72124999999994Q460.5299999999999 -26.775000000000002 458.8087499999999 -28.177500000000002Q457.0874999999999 -29.580000000000002 454.1549999999999 -29.580000000000002Q451.28624999999994 -29.580000000000002 449.7562499999999 -28.496250000000003Q448.22624999999994 -27.4125 448.22624999999994 -25.6275Q448.22624999999994 -24.225 449.2462499999999 -23.26875Q450.26624999999996 -22.3125 451.73249999999996 -21.770625000000003Q453.1987499999999 -21.22875 456.06749999999994 -20.4Q459.8924999999999 -19.38 462.34687499999995 -18.328125Q464.8012499999999 -17.27625 466.58624999999995 -15.236250000000002Q468.3712499999999 -13.196250000000001 468.43499999999995 -9.8175Q468.43499999999995 -6.82125 466.7774999999999 -4.4625Q465.11999999999995 -2.1037500000000002 462.09187499999996 -0.7650000000000001Q459.0637499999999 0.57375 454.98374999999993 0.57375Q450.8399999999999 0.57375 447.55687499999993 -0.924375Q444.27374999999995 -2.4225 442.3612499999999 -5.004375Q440.4487499999999 -7.58625 440.3212499999999 -10.77375Z M513.3149999999999 -14.85375H486.47624999999994Q486.7949999999999 -10.64625 489.5999999999999 -8.09625Q492.4049999999999 -5.54625 496.4849999999999 -5.54625Q502.3499999999999 -5.54625 504.7724999999999 -10.455H512.6137499999999Q511.0199999999999 -5.61 506.8443749999999 -2.5181250000000004Q502.66874999999993 0.57375 496.4849999999999 0.57375Q491.4487499999999 0.57375 487.4643749999999 -1.689375Q483.4799999999999 -3.9525 481.2168749999999 -8.064375Q478.9537499999999 -12.17625 478.9537499999999 -17.595Q478.9537499999999 -23.01375 481.15312499999993 -27.125625Q483.3524999999999 -31.2375 487.3368749999999 -33.46875Q491.3212499999999 -35.7 496.4849999999999 -35.7Q501.4574999999999 -35.7 505.34624999999994 -33.5325Q509.2349999999999 -31.365000000000002 511.4024999999999 -27.444375Q513.5699999999999 -23.52375 513.5699999999999 -18.423750000000002Q513.5699999999999 -16.4475 513.3149999999999 -14.85375ZM505.98374999999993 -20.71875Q505.9199999999999 -24.735 503.1149999999999 -27.1575Q500.3099999999999 -29.580000000000002 496.16624999999993 -29.580000000000002Q492.4049999999999 -29.580000000000002 489.7274999999999 -27.189375000000002Q487.0499999999999 -24.798750000000002 486.5399999999999 -20.71875Z" fill="#F1EAD8"/></g></symbol></svg>
+
+<!-- ==================== INSTRUCTIONS ==================== -->
+<section id="v-instr" hidden>
+  <div class="bar"><div class="in">
+    <a class="brand" href="student-home.html"><svg class="tv-logo" style="height: 34px" viewBox="0 0 1784 409" role="img" aria-label="Testverse by Studyverse"><use href="#tv-logo"/></svg></a>
+    <a href="student-home.html" style="margin-left: auto; color: #C9D0EC; font-size: 14px">← Back to home</a>
+  </div></div>
+  <div class="wrap" id="instr"></div>
+</section>
+
+<!-- ==================== EXAM ==================== -->
+<section id="v-exam" class="exam" hidden>
+  <div class="bar exam-top"><div class="in">
+    <div class="cand"><b id="e-title"></b><span id="e-cand"></span></div>
+    <div class="top-tools">
+      <span class="save-state" id="save-state" aria-live="polite"><i></i><span>Saved</span></span>
+      <div class="seg" id="lang-seg" role="group" aria-label="Question language" style="background: var(--navy-2); border-color: var(--navy-line)"></div>
+      <button class="tool" type="button" id="font-dn" aria-label="Smaller text">A−</button>
+      <button class="tool" type="button" id="font-up" aria-label="Larger text">A+</button>
+      <div class="timer" id="timer" role="timer" aria-label="Time left"><span>Time left</span><b id="t-left">--:--:--</b></div>
+    </div>
+  </div></div>
+  <nav class="tabs" aria-label="Sections"><div class="in" id="sec-tabs" role="tablist"></div></nav>
+  <div class="exam-body">
+    <article class="qpane" aria-live="polite">
+      <div class="qhead"><b id="q-no"></b><span id="q-meta"></span></div>
+      <div class="qbody" id="q-body"></div>
+      <div class="qfoot">
+        <div class="grp">
+          <button class="btn btn-purple" type="button" id="b-mark">Mark for review &amp; next</button>
+          <button class="btn btn-outline" type="button" id="b-clear">Clear response</button>
+        </div>
+        <div class="grp">
+          <button class="btn btn-outline palette-toggle" type="button" id="b-palette" aria-controls="side" aria-expanded="false">Questions</button>
+          <button class="btn btn-outline" type="button" id="b-prev">Back</button>
+          <button class="btn btn-green" type="button" id="b-next">Save &amp; next</button>
+        </div>
+      </div>
+    </article>
+    <aside class="side" id="side" aria-label="Question palette">
+      <div class="side-head" id="legend"></div>
+      <div class="grid-wrap" id="pal"></div>
+      <div class="side-foot">
+        <button class="btn btn-dark" type="button" id="b-submit">Submit test</button>
+        <span class="demo-note" id="tab-note"></span>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ==================== RESULT ==================== -->
+<section id="v-result" hidden>
+  <div class="bar"><div class="in">
+    <a class="brand" href="student-home.html"><svg class="tv-logo" style="height: 34px" viewBox="0 0 1784 409" role="img" aria-label="Testverse by Studyverse"><use href="#tv-logo"/></svg></a>
+    <a href="student-home.html" style="margin-left: auto; color: #C9D0EC; font-size: 14px">← Back to home</a>
+  </div></div>
+  <div class="res-wrap" id="result"></div>
+</section>
+
+<!-- Submit confirm -->
+<dialog id="d-submit" aria-labelledby="ds-t">
+  <div class="dh"><h2 id="ds-t">Submit the test?</h2><button class="close" type="button" data-close aria-label="Close">×</button></div>
+  <div class="db" id="ds-body"></div>
+  <div class="df"><button class="btn btn-outline" type="button" data-close>Go back to the test</button><button class="btn btn-dark" type="button" id="ds-yes">Yes, submit</button></div>
+</dialog>
+
+<!-- Report problem -->
+<dialog id="d-report" aria-labelledby="dr-t">
+  <div class="dh"><h2 id="dr-t">Report a problem</h2><button class="close" type="button" data-close aria-label="Close">×</button></div>
+  <div class="db">
+    <div class="choices" id="dr-reasons" role="group" aria-label="What's wrong"></div>
+    <div><label class="l" for="dr-note">Details (optional)</label><textarea class="input" id="dr-note" placeholder="e.g. The answer should be option 3, because…"></textarea></div>
+    <p style="font-size: 13px; color: var(--muted)">Our team checks every report. If the answer key was wrong, your score is corrected automatically.</p>
+  </div>
+  <div class="df"><button class="btn btn-outline" type="button" data-close>Cancel</button><button class="btn btn-primary" type="button" id="dr-send">Send report</button></div>
+</dialog>
+
+<!-- Video request -->
+<dialog id="d-video" aria-labelledby="dv-t">
+  <div class="dh"><h2 id="dv-t">Request a video solution</h2><button class="close" type="button" data-close aria-label="Close">×</button></div>
+  <div class="db">
+    <div class="notice n-info" id="dv-q"></div>
+    <div><label class="l" for="dv-note">What's confusing you? (optional)</label><textarea class="input" id="dv-note" placeholder="e.g. I don't understand step 2"></textarea></div>
+    <p style="font-size: 13px; color: var(--muted)" id="dv-limit"></p>
+  </div>
+  <div class="df"><button class="btn btn-outline" type="button" data-close>Cancel</button><button class="btn btn-primary" type="button" id="dv-send">Send request</button></div>
+</dialog>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ==========================================================================
+     SAMPLE PAPERS. In the real app the server sends the paper for this test
+     WITHOUT answers or solutions; those are sent only after submission.
+     Question format (matches the admin upload and the question bank spec):
+       { id, type, chapter, text:{en,hi?}, options:[{en,hi?}], list1, list2,
+         assertion, reason, answer, tolerance, marks:{correct, wrong, partial}, solution }
+     type: single | multiple | integer | numerical | ar | match
+     answer: single/ar/match -> option index; multiple -> [indexes];
+             integer/numerical -> number (numerical uses tolerance)
+     ========================================================================== */
+  var AR_OPTIONS = [
+    { en: 'Both A and R are true, and R is the correct explanation of A', hi: 'A और R दोनों सत्य हैं, और R, A की सही व्याख्या है' },
+    { en: 'Both A and R are true, but R is not the correct explanation of A', hi: 'A और R दोनों सत्य हैं, परंतु R, A की सही व्याख्या नहीं है' },
+    { en: 'A is true but R is false', hi: 'A सत्य है परंतु R असत्य है' },
+    { en: 'A is false but R is true', hi: 'A असत्य है परंतु R सत्य है' }
+  ];
+  var N = { correct: 4, wrong: -1 };
+  var PAPERS = {
+    'P4': {
+      id: 'P4', title: 'NEET Part Test 4', exam: 'NEET', kind: 'series', durationMin: 20, languages: ['en', 'hi'],
+      note: 'Demo paper: 12 questions in 20 minutes. The real Part Test has 90 questions.',
+      sections: [
+        { name: 'Physics', questions: [
+          { id: 'q1', type: 'single', chapter: 'Kinetic Theory of Gases', marks: N, answer: 2,
+            text: { en: 'The rms speed of the molecules of a gas at temperature $T$ is $v$. At temperature $4T$, the rms speed becomes:', hi: 'तापमान $T$ पर किसी गैस के अणुओं की वर्ग-माध्य-मूल चाल $v$ है। तापमान $4T$ पर यह चाल हो जाएगी:' },
+            options: [{ en: '$v/2$' }, { en: '$v$' }, { en: '$2v$' }, { en: '$4v$' }],
+            solution: '$v_{rms} = \\sqrt{3RT/M}$, so $v_{rms} \\propto \\sqrt{T}$. When $T$ becomes $4T$, the speed becomes $\\sqrt{4}\\,v = 2v$.' },
+          { id: 'q2', type: 'single', chapter: 'Oscillations', marks: N, answer: 1,
+            text: { en: 'A particle executes SHM with amplitude $A$. At what displacement from the mean position is its kinetic energy equal to its potential energy?', hi: 'एक कण आयाम $A$ के साथ सरल आवर्त गति करता है। माध्य स्थिति से किस विस्थापन पर इसकी गतिज ऊर्जा, स्थितिज ऊर्जा के बराबर होगी?' },
+            options: [{ en: '$A/2$' }, { en: '$A/\\sqrt{2}$' }, { en: '$A/\\sqrt{3}$' }, { en: '$A$' }],
+            solution: 'KE = PE means each is half the total energy: $\\tfrac12 kx^2 = \\tfrac12 \\cdot \\tfrac12 kA^2$, so $x = A/\\sqrt{2}$.' },
+          { id: 'q3', type: 'ar', chapter: 'Oscillations', marks: N, answer: 0,
+            assertion: { en: 'The time period of a simple pendulum does not depend on the mass of the bob.', hi: 'सरल लोलक का आवर्तकाल गोलक के द्रव्यमान पर निर्भर नहीं करता।' },
+            reason: { en: 'The restoring force on the bob and its inertia are both proportional to its mass.', hi: 'गोलक पर प्रत्यानयन बल और उसका जड़त्व, दोनों उसके द्रव्यमान के समानुपाती होते हैं।' },
+            text: { en: 'Given below are two statements: Assertion (A) and Reason (R). Choose the correct option.', hi: 'नीचे दो कथन दिए गए हैं: अभिकथन (A) और कारण (R)। सही विकल्प चुनिए।' },
+            solution: 'Restoring force $= mg\\sin\\theta$ and inertia $= m$, so $m$ cancels in the equation of motion and $T = 2\\pi\\sqrt{L/g}$. Both are true and R explains A.' }
+        ] },
+        { name: 'Chemistry', questions: [
+          { id: 'q4', type: 'single', chapter: 'Chemical Equilibrium', marks: N, answer: 1,
+            text: { en: 'For the reaction $N_2 + 3H_2 \\rightleftharpoons 2NH_3$, the relation between $K_p$ and $K_c$ is:', hi: 'अभिक्रिया $N_2 + 3H_2 \\rightleftharpoons 2NH_3$ के लिए $K_p$ और $K_c$ के बीच संबंध है:' },
+            options: [{ en: '$K_p = K_c(RT)^2$' }, { en: '$K_p = K_c(RT)^{-2}$' }, { en: '$K_p = K_c$' }, { en: '$K_p = K_c(RT)^{-1}$' }],
+            solution: '$\\Delta n_g = 2 - (1 + 3) = -2$, so $K_p = K_c(RT)^{\\Delta n_g} = K_c(RT)^{-2}$.' },
+          { id: 'q5', type: 'single', chapter: 'Redox Reactions', marks: N, answer: 1,
+            text: { en: 'The oxidation number of Cr in $K_2Cr_2O_7$ is:', hi: '$K_2Cr_2O_7$ में Cr की ऑक्सीकरण संख्या है:' },
+            options: [{ en: '+3' }, { en: '+6' }, { en: '+7' }, { en: '+2' }],
+            solution: '$2(+1) + 2x + 7(-2) = 0 \\Rightarrow 2x = 12 \\Rightarrow x = +6$.' },
+          { id: 'q6', type: 'match', chapter: 'Redox Reactions', marks: N, answer: 2,
+            text: { en: 'Match the element in List I with its oxidation state in List II.', hi: 'सूची I के तत्व का सूची II में उसकी ऑक्सीकरण अवस्था से मिलान कीजिए।' },
+            list1: ['(A) Mn in KMnO₄', '(B) S in H₂SO₄', '(C) N in NH₃', '(D) O in H₂O₂'],
+            list2: ['(p) −3', '(q) +7', '(r) −1', '(s) +6'],
+            options: [{ en: 'A-q, B-p, C-s, D-r' }, { en: 'A-s, B-q, C-p, D-r' }, { en: 'A-q, B-s, C-p, D-r' }, { en: 'A-q, B-s, C-r, D-p' }],
+            solution: 'Mn in KMnO₄ = +7, S in H₂SO₄ = +6, N in NH₃ = −3, O in H₂O₂ = −1. So A-q, B-s, C-p, D-r.' }
+        ] },
+        { name: 'Botany', questions: [
+          { id: 'q7', type: 'single', chapter: 'Cell Cycle and Cell Division', marks: N, answer: 2,
+            text: { en: 'Crossing over takes place during which stage of prophase I?', hi: 'जीन विनिमय (क्रॉसिंग ओवर) प्रोफेज़ I की किस अवस्था में होता है?' },
+            options: [{ en: 'Leptotene', hi: 'लेप्टोटीन' }, { en: 'Zygotene', hi: 'ज़ाइगोटीन' }, { en: 'Pachytene', hi: 'पैकीटीन' }, { en: 'Diplotene', hi: 'डिप्लोटीन' }],
+            solution: 'Crossing over between non-sister chromatids of homologous chromosomes happens in pachytene, with the help of the enzyme recombinase.' },
+          { id: 'q8', type: 'single', chapter: 'Transport in Plants', marks: N, answer: 2,
+            text: { en: 'Which of these needs energy (ATP) to move molecules across a membrane?', hi: 'इनमें से किसमें झिल्ली के पार अणुओं को ले जाने के लिए ऊर्जा (ATP) की आवश्यकता होती है?' },
+            options: [{ en: 'Simple diffusion', hi: 'सरल विसरण' }, { en: 'Facilitated diffusion', hi: 'सुसाध्य विसरण' }, { en: 'Active transport', hi: 'सक्रिय परिवहन' }, { en: 'Osmosis', hi: 'परासरण' }],
+            solution: 'Active transport moves molecules against the concentration gradient, which needs energy from ATP.' },
+          { id: 'q9', type: 'ar', chapter: 'Cell Cycle and Cell Division', marks: N, answer: 1,
+            assertion: { en: 'The synaptonemal complex dissolves during diplotene.', hi: 'डिप्लोटीन के दौरान सिनैप्टोनीमल सम्मिश्र विघटित हो जाता है।' },
+            reason: { en: 'Chiasmata become visible during diplotene.', hi: 'डिप्लोटीन के दौरान काएज़्मेटा दिखाई देने लगते हैं।' },
+            text: { en: 'Given below are two statements: Assertion (A) and Reason (R). Choose the correct option.', hi: 'नीचे दो कथन दिए गए हैं: अभिकथन (A) और कारण (R)। सही विकल्प चुनिए।' },
+            solution: 'Both statements are true facts about diplotene, but chiasmata becoming visible is not the reason the synaptonemal complex dissolves.' }
+        ] },
+        { name: 'Zoology', questions: [
+          { id: 'q10', type: 'single', chapter: 'Breathing and Exchange of Gases', marks: N, answer: 0,
+            text: { en: 'The tidal volume of a healthy adult is approximately:', hi: 'एक स्वस्थ वयस्क का ज्वारीय आयतन लगभग होता है:' },
+            options: [{ en: '500 mL' }, { en: '1000 mL' }, { en: '2500 mL' }, { en: '3000 mL' }],
+            solution: 'Tidal volume, the air breathed in or out in a normal breath, is about 500 mL (6000–8000 mL per minute).' },
+          { id: 'q11', type: 'single', chapter: 'Body Fluids and Circulation', marks: N, answer: 0,
+            text: { en: 'Which are the most abundant cells in human blood?', hi: 'मानव रक्त में सबसे अधिक संख्या में कौन-सी कोशिकाएँ होती हैं?' },
+            options: [{ en: 'Erythrocytes (RBCs)', hi: 'लाल रक्त कणिकाएँ' }, { en: 'Leucocytes (WBCs)', hi: 'श्वेत रक्त कणिकाएँ' }, { en: 'Platelets', hi: 'प्लेटलेट्स' }, { en: 'Lymphocytes', hi: 'लिम्फोसाइट्स' }],
+            solution: 'RBCs are the most abundant, about 5 to 5.5 million per mm³ of blood.' },
+          { id: 'q12', type: 'single', chapter: 'Body Fluids and Circulation', marks: N, answer: 1,
+            text: { en: 'The SA node is located in the wall of the:', hi: 'SA नोड किसकी भित्ति में स्थित होता है?' },
+            options: [{ en: 'Left atrium', hi: 'बायाँ आलिंद' }, { en: 'Right atrium', hi: 'दायाँ आलिंद' }, { en: 'Left ventricle', hi: 'बायाँ निलय' }, { en: 'Interventricular septum', hi: 'अंतर-निलय पट' }],
+            solution: 'The SA node, the pacemaker, lies in the right upper corner of the right atrium.' }
+        ] }
+      ]
+    },
+    'JA1': {
+      id: 'JA1', title: 'JEE Advanced Full Syllabus Test 1', exam: 'JEE Advanced', kind: 'series', durationMin: 15, languages: ['en'],
+      note: 'Demo paper with every JEE question type: multiple correct with partial marking, integer, numerical, single correct and matching.',
+      sections: [
+        { name: 'Physics', questions: [
+          { id: 'j1', type: 'multiple', chapter: 'Circular Motion', marks: { correct: 4, wrong: -2, partial: true }, answer: [0, 2],
+            text: { en: 'For a particle in uniform circular motion, which of the following are correct? (One or more options may be correct.)' },
+            options: [{ en: 'Its speed is constant' }, { en: 'Its velocity is constant' }, { en: 'Its acceleration is directed towards the centre' }, { en: 'The net force on it is zero' }],
+            solution: 'Speed is constant but direction changes, so velocity is not constant. Acceleration is centripetal, so the net force is not zero. Correct: A and C.' },
+          { id: 'j2', type: 'integer', chapter: 'Laws of Motion', marks: { correct: 4, wrong: 0 }, answer: 4,
+            text: { en: 'A body of mass $2\\,\\text{kg}$ is acted on by a net force of $8\\,\\text{N}$. Find its acceleration in $\\text{m s}^{-2}$.' },
+            solution: '$a = F/m = 8/2 = 4\\,\\text{m s}^{-2}$.' }
+        ] },
+        { name: 'Chemistry', questions: [
+          { id: 'j3', type: 'numerical', chapter: 'Some Basic Concepts', marks: { correct: 4, wrong: 0 }, answer: 44.0, tolerance: 0.05,
+            text: { en: 'Find the molar mass of $CO_2$ in g/mol, correct to one decimal place. (C = 12, O = 16)' },
+            solution: '$12 + 2 \\times 16 = 44.0$ g/mol.' },
+          { id: 'j4', type: 'single', chapter: 'Chemical Bonding', marks: { correct: 3, wrong: -1 }, answer: 0,
+            text: { en: 'The hybridisation of carbon in $CO_2$ is:' },
+            options: [{ en: '$sp$' }, { en: '$sp^2$' }, { en: '$sp^3$' }, { en: '$sp^3d$' }],
+            solution: 'Carbon forms two σ bonds and has no lone pairs, so it is $sp$ hybridised and the molecule is linear.' }
+        ] },
+        { name: 'Mathematics', questions: [
+          { id: 'j5', type: 'single', chapter: 'Definite Integration', marks: { correct: 3, wrong: -1 }, answer: 1,
+            text: { en: 'The value of $\\displaystyle\\int_0^1 x\\,dx$ is:' },
+            options: [{ en: '$0$' }, { en: '$\\tfrac12$' }, { en: '$1$' }, { en: '$2$' }],
+            solution: '$\\int_0^1 x\\,dx = \\left[\\tfrac{x^2}{2}\\right]_0^1 = \\tfrac12$.' },
+          { id: 'j6', type: 'match', chapter: 'Differentiation', marks: { correct: 3, wrong: -1 }, answer: 3,
+            text: { en: 'Match each function in List I with its derivative in List II.' },
+            list1: ['(P) sin x', '(Q) eˣ', '(R) ln x', '(S) x²'],
+            list2: ['(1) 1/x', '(2) cos x', '(3) 2x', '(4) eˣ'],
+            options: [{ en: 'P-2, Q-1, R-4, S-3' }, { en: 'P-3, Q-4, R-1, S-2' }, { en: 'P-2, Q-4, R-3, S-1' }, { en: 'P-2, Q-4, R-1, S-3' }],
+            solution: '(sin x)′ = cos x, (eˣ)′ = eˣ, (ln x)′ = 1/x, (x²)′ = 2x. So P-2, Q-4, R-1, S-3.' }
+        ] }
+      ]
+    }
+  };
+  PAPERS['P5'] = PAPERS['P6'] = PAPERS['P4'];
+  var STUDENT = { name: 'Riya Sharma', roll: 'TV-NEET-104812', course: true, videoLeft: 8, videoHours: 48 };
+
+  /* ---------- state ---------- */
+  var qs = new URLSearchParams(location.search);
+  var paper = PAPERS[qs.get('test')] || PAPERS['P4'];
+  var KEY = 'tv-attempt-' + paper.id;
+  var flat = [];
+  paper.sections.forEach(function (s, si) { s.questions.forEach(function (q, qi) { flat.push({ q: q, si: si, qi: qi, sec: s.name }); }); });
+  var attempt = load();
+  var lang = (attempt && attempt.lang) || 'en';
+  var curIndex = 0, enteredAt = 0, timerId = null, saveTimer = null;
+
+  function load() { try { return JSON.parse(localStorage.getItem(KEY)); } catch (e) { return null; } }
+  function persist() {
+    attempt.savedAt = Date.now();
+    try { localStorage.setItem(KEY, JSON.stringify(attempt)); } catch (e) {}
+    /* REAL APP: send the changed response to the server here (debounced),
+       e.g. PUT /attempts/:id/responses/:qid {answer, marked, timeMs}.
+       Keep a local queue while offline and resend when back online. */
+    var s = document.getElementById('save-state');
+    if (s) { s.classList.toggle('off', !navigator.onLine); s.lastElementChild.textContent = navigator.onLine ? 'Saved' : 'Offline · saved on this device'; }
+  }
+
+  /* ---------- helpers ---------- */
+  var $ = function (s, el) { return (el || document).querySelector(s); };
+  var $$ = function (s, el) { return Array.prototype.slice.call((el || document).querySelectorAll(s)); };
+  function esc(v) { return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function tx(o) { if (!o) return ''; if (typeof o === 'string') return o; return (lang === 'hi' && o.hi) ? o.hi : o.en; }
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function hms(ms) { var s = Math.max(0, Math.floor(ms / 1000)); return pad(Math.floor(s / 3600)) + ':' + pad(Math.floor(s % 3600 / 60)) + ':' + pad(s % 60); }
+  function mmss(ms) { var s = Math.round(ms / 1000); return Math.floor(s / 60) + 'm ' + pad(s % 60) + 's'; }
+  function math(el) { try { if (window.renderMathInElement) window.renderMathInElement(el, { delimiters: [{ left: '$', right: '$', display: false }], throwOnError: false }); } catch (e) {} }
+  function toast(m) { var t = document.createElement('div'); t.className = 'toast'; t.setAttribute('role', 'status'); t.textContent = m; document.body.appendChild(t); setTimeout(function () { t.remove(); }, 2800); }
+  function show(id) { ['v-instr', 'v-exam', 'v-result'].forEach(function (v) { $('#' + v).hidden = v !== id; }); window.scrollTo(0, 0); }
+  function totalQ() { return flat.length; }
+  function maxMarks() { return flat.reduce(function (a, f) { return a + f.q.marks.correct; }, 0); }
+  function letter(i) { return String.fromCharCode(65 + i); }
+
+  /* ==========================================================================
+     SCORING. The real app must run this ON THE SERVER after submission, using
+     the stored answer key. Kept here so the developer can copy the exact rules.
+     ========================================================================== */
+  function hasAnswer(q, a) {
+    if (a == null || a === '') return false;
+    if (q.type === 'multiple') return Array.isArray(a) && a.length > 0;
+    if (q.type === 'integer' || q.type === 'numerical') return String(a).trim() !== '' && !isNaN(Number(a));
+    return true;
+  }
+  function scoreQuestion(q, r) {
+    // NTA rule: "answered and marked for review" IS evaluated; "marked" without an answer is not.
+    var a = r && r.answer;
+    if (!hasAnswer(q, a)) return { status: 'skipped', marks: 0 };
+    var m = q.marks;
+    switch (q.type) {
+      case 'single': case 'ar': case 'match':
+        return a === q.answer ? { status: 'correct', marks: m.correct } : { status: 'wrong', marks: m.wrong };
+      case 'integer':
+        return Number(a) === q.answer ? { status: 'correct', marks: m.correct } : { status: 'wrong', marks: m.wrong };
+      case 'numerical':
+        return Math.abs(Number(a) - q.answer) <= (q.tolerance || 0) ? { status: 'correct', marks: m.correct } : { status: 'wrong', marks: m.wrong };
+      case 'multiple':
+        var chosenWrong = a.some(function (x) { return q.answer.indexOf(x) < 0; });
+        if (chosenWrong) return { status: 'wrong', marks: m.wrong };
+        if (a.length === q.answer.length) return { status: 'correct', marks: m.correct };
+        // JEE Advanced partial marking: +1 for each correct option chosen, when no wrong option is chosen.
+        return m.partial ? { status: 'partial', marks: a.length } : { status: 'wrong', marks: m.wrong };
+    }
+    return { status: 'skipped', marks: 0 };
+  }
+  function computeResult() {
+    var res = { total: 0, max: maxMarks(), correct: 0, wrong: 0, partial: 0, skipped: 0, negative: 0, sections: {}, chapters: {}, items: [], timeMs: 0 };
+    flat.forEach(function (f, i) {
+      var r = attempt.responses[f.q.id] || {};
+      var sc = scoreQuestion(f.q, r);
+      var t = r.timeMs || 0;
+      res.total += sc.marks; res[sc.status]++; res.timeMs += t;
+      if (sc.marks < 0) res.negative += -sc.marks;
+      var S = res.sections[f.sec] = res.sections[f.sec] || { marks: 0, max: 0, correct: 0, wrong: 0, partial: 0, skipped: 0, time: 0, n: 0 };
+      S.marks += sc.marks; S.max += f.q.marks.correct; S[sc.status]++; S.time += t; S.n++;
+      var C = res.chapters[f.q.chapter] = res.chapters[f.q.chapter] || { right: 0, n: 0, lost: 0, sec: f.sec };
+      C.n++; if (sc.status === 'correct') C.right++; C.lost += f.q.marks.correct - sc.marks;
+      res.items.push({ f: f, n: i + 1, r: r, sc: sc, time: t });
+    });
+    return res;
+  }
+
+  /* ==================== INSTRUCTIONS ==================== */
+  function renderInstr() {
+    var resuming = attempt && !attempt.submittedAt;
+    var markRows = {};
+    flat.forEach(function (f) { var k = f.q.type + '|' + f.q.marks.correct + '|' + f.q.marks.wrong + '|' + (f.q.marks.partial ? 1 : 0); markRows[k] = f.q; });
+    var TYPE = { single: 'Single correct', multiple: 'One or more correct', integer: 'Integer answer', numerical: 'Numerical answer', ar: 'Assertion–Reason', match: 'Match the following' };
+    $('#instr').innerHTML =
+      '<div><h1 style="font-size: 28px">' + esc(paper.title) + '</h1><p style="color: var(--muted); margin-top: 4px">' + esc(paper.exam) + (paper.note ? ' · ' + esc(paper.note) : '') + '</p></div>' +
+      (resuming ? '<div class="notice n-warn"><b>You have a test in progress.</b> Your answers are saved. The timer kept running while you were away, so you have <b>' + hms(timeLeft()) + '</b> left.</div>' : '') +
+      '<div class="facts"><div><b>' + totalQ() + '</b><span>questions</span></div><div><b>' + paper.durationMin + ' min</b><span>duration</span></div><div><b>' + maxMarks() + '</b><span>total marks</span></div><div><b>' + paper.sections.length + '</b><span>sections: ' + esc(paper.sections.map(function (s) { return s.name; }).join(', ')) + '</span></div></div>' +
+      '<section class="card"><h2>Marking scheme</h2><div style="overflow-x: auto"><table><thead><tr><th>Question type</th><th>Correct</th><th>Wrong</th><th>Not answered</th></tr></thead><tbody>' +
+      Object.keys(markRows).map(function (k) { var q = markRows[k]; return '<tr><td>' + TYPE[q.type] + '</td><td>+' + q.marks.correct + (q.marks.partial ? ' (all correct options)<br><span style="color: var(--muted); font-size: 13px">+1 for each correct option if you choose only some and no wrong one</span>' : '') + '</td><td>' + (q.marks.wrong || 0) + '</td><td>0</td></tr>'; }).join('') +
+      '</tbody></table></div></section>' +
+      '<section class="card"><h2>Instructions</h2><ol class="rules">' +
+      '<li>The timer starts when you press Start and <b>keeps running even if you close the app</b>. The test submits automatically when time is up.</li>' +
+      '<li>Your answers are saved automatically. If your internet or phone stops, log in again and continue from where you left off.</li>' +
+      '<li>Use <b>Save &amp; next</b> to save an answer. <b>Mark for review &amp; next</b> flags a question to come back to. A marked question that has an answer is still evaluated.</li>' +
+      '<li>For integer and numerical questions, type the number or use the on-screen keypad.</li>' +
+      '<li>Switching to other apps or tabs is recorded.</li>' +
+      '</ol></section>' +
+      '<section class="card"><h2>Question palette</h2><div class="legend">' +
+      '<div><span class="chip nv">1</span>Not visited</div><div><span class="chip na">2</span>Not answered</div><div><span class="chip an">3</span>Answered</div><div><span class="chip mr">4</span>Marked for review</div><div><span class="chip am">5</span>Answered and marked (will be evaluated)</div>' +
+      '</div></section>' +
+      '<section class="card" style="display: grid; gap: 14px">' +
+      (paper.languages.length > 1 ? '<div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center"><b>Question language</b><div class="seg" role="group" aria-label="Question language">' +
+        paper.languages.map(function (l) { return '<button type="button" data-ilang="' + l + '" aria-pressed="' + (lang === l) + '">' + (l === 'hi' ? 'हिंदी' : 'English') + '</button>'; }).join('') + '</div><span style="font-size: 13px; color: var(--muted)">You can switch during the test.</span></div>' : '') +
+      '<div class="notice" id="net" role="status"></div>' +
+      '<label class="check"><input type="checkbox" id="agree"' + (resuming ? ' checked' : '') + '> I have read the instructions and will not use unfair means.</label>' +
+      '<div><button class="btn btn-primary" type="button" id="start"' + (resuming ? '' : ' disabled') + '>' + (resuming ? 'Resume test' : 'Start test') + '</button></div>' +
+      '</section>' +
+      '<p class="demo-note">Demo paper. Try <a href="?test=JA1">the JEE Advanced demo</a> for multiple-correct, integer and numerical questions.</p>';
+    var net = $('#net');
+    function netState() { net.className = 'notice ' + (navigator.onLine ? 'n-ok' : 'n-err'); net.textContent = navigator.onLine ? 'Internet connection OK.' : 'You are offline. Connect to the internet to start.'; }
+    netState(); window.addEventListener('online', netState); window.addEventListener('offline', netState);
+    $('#agree').addEventListener('change', function () { $('#start').disabled = !this.checked; });
+    $$('[data-ilang]').forEach(function (b) { b.addEventListener('click', function () { lang = b.dataset.ilang; renderInstr(); }); });
+    $('#start').addEventListener('click', startExam);
+  }
+
+  /* ==================== EXAM ==================== */
+  function timeLeft() { return attempt.startedAt + attempt.durationMs - Date.now(); }
+  function startExam() {
+    if (!navigator.onLine && !(attempt && !attempt.submittedAt)) { toast('Connect to the internet to start.'); return; }
+    if (!attempt || attempt.submittedAt) {
+      /* REAL APP: POST /attempts {testId} -> server creates the attempt and
+         returns {attemptId, startedAt, deadline, serverNow, paper (no answers)}.
+         Use deadline + (serverNow vs device clock offset) for the timer. */
+      attempt = { paperId: paper.id, startedAt: Date.now(), durationMs: paper.durationMin * 60000, responses: {}, current: 0, lang: lang, tabSwitches: 0, submittedAt: null };
+    }
+    attempt.lang = lang;
+    curIndex = attempt.current || 0;
+    persist();
+    show('v-exam');
+    $('#e-title').textContent = paper.title;
+    $('#e-cand').textContent = STUDENT.name + ' · ' + STUDENT.roll;
+    buildLang(); buildTabs(); buildLegend();
+    go(curIndex, true);
+    if (timerId) clearInterval(timerId);
+    timerId = setInterval(tickTimer, 500); tickTimer();
+  }
+  function buildLang() {
+    var seg = $('#lang-seg');
+    if (paper.languages.length < 2) { seg.hidden = true; return; }
+    seg.innerHTML = paper.languages.map(function (l) { return '<button type="button" data-lang="' + l + '" aria-pressed="' + (lang === l) + '" style="color: #C9D0EC">' + (l === 'hi' ? 'हिंदी' : 'EN') + '</button>'; }).join('');
+    $$('[data-lang]').forEach(function (b) { b.addEventListener('click', function () { lang = b.dataset.lang; attempt.lang = lang; persist(); buildLang(); renderQ(); }); });
+  }
+  function buildTabs() {
+    $('#sec-tabs').innerHTML = paper.sections.map(function (s, si) {
+      return '<button type="button" role="tab" data-sec="' + si + '" aria-selected="false">' + esc(s.name) + '<small>(' + s.questions.length + ')</small></button>';
+    }).join('');
+    $$('[data-sec]').forEach(function (b) { b.addEventListener('click', function () { var si = Number(b.dataset.sec); go(flat.findIndex(function (f) { return f.si === si; })); }); });
+  }
+  function status(q) {
+    var r = attempt.responses[q.id];
+    if (!r || !r.visited) return 'nv';
+    var ans = hasAnswer(q, r.answer);
+    if (r.marked) return ans ? 'am' : 'mr';
+    return ans ? 'an' : 'na';
+  }
+  function counts(list) {
+    var c = { nv: 0, na: 0, an: 0, mr: 0, am: 0 };
+    list.forEach(function (f) { c[status(f.q)]++; });
+    return c;
+  }
+  function buildLegend() {
+    var c = counts(flat);
+    $('#legend').innerHTML =
+      '<div><span class="chip an">' + c.an + '</span>Answered</div><div><span class="chip na">' + c.na + '</span>Not answered</div>' +
+      '<div><span class="chip nv">' + c.nv + '</span>Not visited</div><div><span class="chip mr">' + c.mr + '</span>Marked</div>' +
+      '<div style="grid-column: span 2"><span class="chip am">' + c.am + '</span>Answered &amp; marked (evaluated)</div>';
+  }
+  function buildPalette() {
+    var f = flat[curIndex];
+    var sec = paper.sections[f.si];
+    $('#pal').innerHTML = '<h3>' + esc(sec.name) + '</h3><div class="qgrid">' + flat.map(function (x, i) {
+      if (x.si !== f.si) return '';
+      var st = status(x.q);
+      var label = { nv: 'not visited', na: 'not answered', an: 'answered', mr: 'marked for review', am: 'answered and marked' }[st];
+      return '<button type="button" class="chip ' + st + (i === curIndex ? ' cur' : '') + '" data-go="' + i + '" aria-label="Question ' + (i + 1) + ', ' + label + '">' + (i + 1) + '</button>';
+    }).join('') + '</div>';
+    $$('[data-go]').forEach(function (b) { b.addEventListener('click', function () { go(Number(b.dataset.go)); closePalette(); }); });
+    $$('[data-sec]').forEach(function (b) { b.setAttribute('aria-selected', Number(b.dataset.sec) === f.si ? 'true' : 'false'); });
+    buildLegend();
+  }
+  function resp(q) { return attempt.responses[q.id] = attempt.responses[q.id] || { answer: null, marked: false, visited: false, timeMs: 0 }; }
+  function leaveCurrent() {
+    if (!enteredAt) return;
+    var q = flat[curIndex].q, r = resp(q);
+    r.timeMs += Date.now() - enteredAt;
+    enteredAt = 0;
+  }
+  function go(i, first) {
+    if (!first) leaveCurrent();
+    curIndex = Math.max(0, Math.min(flat.length - 1, i));
+    attempt.current = curIndex;
+    var r = resp(flat[curIndex].q); r.visited = true;
+    enteredAt = Date.now();
+    persist();
+    renderQ();
+  }
+  function renderQ() {
+    var f = flat[curIndex], q = f.q, r = resp(q);
+    $('#q-no').textContent = 'Question ' + (curIndex + 1) + ' of ' + flat.length;
+    var TYPE = { single: 'Single correct', multiple: 'One or more correct', integer: 'Integer answer', numerical: 'Numerical answer', ar: 'Assertion–Reason', match: 'Match the following' };
+    $('#q-meta').textContent = f.sec + ' · ' + TYPE[q.type] + ' · +' + q.marks.correct + (q.marks.wrong ? ' / ' + q.marks.wrong : ' / 0');
+    var html = '<div class="qtext">' + esc(tx(q.text)) + '</div>';
+    if (q.type === 'ar') html += '<div class="ar"><div><b>Assertion (A):</b> ' + esc(tx(q.assertion)) + '</div><div><b>Reason (R):</b> ' + esc(tx(q.reason)) + '</div></div>';
+    if (q.type === 'match') html += '<div class="mtable"><table><thead><tr><th>List I</th><th>List II</th></tr></thead><tbody>' + q.list1.map(function (a, i) { return '<tr><td>' + esc(a) + '</td><td>' + esc(q.list2[i] || '') + '</td></tr>'; }).join('') + '</tbody></table></div>';
+    var opts = q.type === 'ar' ? AR_OPTIONS : q.options;
+    if (opts && q.type !== 'integer' && q.type !== 'numerical') {
+      var multi = q.type === 'multiple';
+      html += '<div class="opts" role="' + (multi ? 'group' : 'radiogroup') + '" aria-label="Options">' + opts.map(function (o, i) {
+        var on = multi ? (Array.isArray(r.answer) && r.answer.indexOf(i) >= 0) : r.answer === i;
+        return '<button type="button" class="opt' + (multi ? ' multi' : '') + '" role="' + (multi ? 'checkbox' : 'radio') + '" aria-checked="' + on + '" data-opt="' + i + '"><span class="k">' + letter(i) + '</span><span>' + esc(tx(o)) + '</span></button>';
+      }).join('') + '</div>';
+    }
+    if (q.type === 'integer' || q.type === 'numerical') {
+      html += '<div class="numwrap"><label class="sr" for="num">Your answer</label><input id="num" inputmode="decimal" autocomplete="off" placeholder="Your answer" value="' + esc(r.answer == null ? '' : r.answer) + '">' +
+        '<div class="keypad" aria-label="Number keypad">' + ['7', '8', '9', '4', '5', '6', '1', '2', '3', '−', '0', '.'].map(function (k) { return '<button type="button" data-key="' + k + '">' + k + '</button>'; }).join('') +
+        '<button type="button" class="wide" data-key="back">⌫ Backspace</button></div>' +
+        (q.type === 'numerical' ? '<span style="font-size: 13px; color: var(--muted)">Give the answer to 2 decimal places if needed.</span>' : '<span style="font-size: 13px; color: var(--muted)">Whole number only.</span>') + '</div>';
+    }
+    var body = $('#q-body'); body.innerHTML = html; body.scrollTop = 0;
+    math(body);
+    $$('[data-opt]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var i = Number(b.dataset.opt);
+        if (q.type === 'multiple') {
+          var a = Array.isArray(r.answer) ? r.answer.slice() : [];
+          var k = a.indexOf(i); if (k >= 0) a.splice(k, 1); else a.push(i);
+          a.sort(); r.answer = a.length ? a : null;
+        } else r.answer = i;
+        queueSave(); renderQ();
+      });
+    });
+    var num = $('#num');
+    if (num) {
+      var clean = function (v) {
+        v = v.replace(/−/g, '-').replace(q.type === 'integer' ? /[^0-9-]/g : /[^0-9.-]/g, '');
+        v = v.replace(/(?!^)-/g, ''); var p = v.split('.'); if (p.length > 2) v = p[0] + '.' + p.slice(1).join('');
+        return v.slice(0, 12);
+      };
+      num.addEventListener('input', function () { num.value = clean(num.value); r.answer = num.value === '' ? null : num.value; queueSave(); buildPalette(); });
+      $$('[data-key]').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var k = b.dataset.key, v = num.value;
+          if (k === 'back') v = v.slice(0, -1); else if (k === '−') v = v.charAt(0) === '-' ? v.slice(1) : '-' + v; else if (k === '.' && q.type === 'integer') return; else v += k;
+          num.value = clean(v); r.answer = num.value === '' ? null : num.value; queueSave(); buildPalette();
+        });
+      });
+    }
+    $('#b-prev').disabled = curIndex === 0;
+    buildPalette();
+  }
+  function queueSave() { clearTimeout(saveTimer); var s = $('#save-state'); s.lastElementChild.textContent = 'Saving…'; saveTimer = setTimeout(persist, 400); }
+
+  $('#b-next').addEventListener('click', function () { resp(flat[curIndex].q).marked = false; if (curIndex < flat.length - 1) go(curIndex + 1); else { persist(); renderQ(); toast('Last question. Review the palette, then submit.'); } });
+  $('#b-mark').addEventListener('click', function () { resp(flat[curIndex].q).marked = true; if (curIndex < flat.length - 1) go(curIndex + 1); else { persist(); renderQ(); } });
+  $('#b-clear').addEventListener('click', function () { var r = resp(flat[curIndex].q); r.answer = null; persist(); renderQ(); });
+  $('#b-prev').addEventListener('click', function () { go(curIndex - 1); });
+  $('#font-up').addEventListener('click', function () { var s = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--qsize')) || 17; document.documentElement.style.setProperty('--qsize', Math.min(24, s + 1) + 'px'); });
+  $('#font-dn').addEventListener('click', function () { var s = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--qsize')) || 17; document.documentElement.style.setProperty('--qsize', Math.max(14, s - 1) + 'px'); });
+  var side = $('#side');
+  function closePalette() { side.classList.remove('open'); $('#b-palette').setAttribute('aria-expanded', 'false'); }
+  $('#b-palette').addEventListener('click', function () { var o = side.classList.toggle('open'); this.setAttribute('aria-expanded', o ? 'true' : 'false'); });
+
+  // Keyboard shortcuts (desktop): 1–4 / A–D choose, N next, P previous, M mark
+  document.addEventListener('keydown', function (e) {
+    if ($('#v-exam').hidden || e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || document.querySelector('dialog[open]')) return;
+    var k = e.key.toLowerCase(), idx = '1234'.indexOf(k); if (idx < 0) idx = 'abcd'.indexOf(k);
+    var btn = idx >= 0 ? $('[data-opt="' + idx + '"]') : null;
+    if (btn) { btn.click(); e.preventDefault(); }
+    else if (k === 'n') $('#b-next').click(); else if (k === 'p' && curIndex > 0) $('#b-prev').click(); else if (k === 'm') $('#b-mark').click();
+  });
+
+  // Timer: always computed from start time + duration, never by counting down,
+  // so closing the app or changing tabs can't add time.
+  function tickTimer() {
+    if (!attempt || attempt.submittedAt) return;
+    var left = timeLeft(), t = $('#timer');
+    $('#t-left').textContent = hms(left);
+    t.classList.toggle('warn', left <= 5 * 60000 && left > 60000);
+    t.classList.toggle('danger', left <= 60000);
+    if (left <= 5 * 60000 && !attempt.warned5) { attempt.warned5 = true; persist(); toast('5 minutes left.'); }
+    if (left <= 0) { clearInterval(timerId); submit(true); }
+  }
+
+  // Tab / app switch logging
+  document.addEventListener('visibilitychange', function () {
+    if ($('#v-exam').hidden || !attempt || attempt.submittedAt) return;
+    if (document.hidden) { leaveCurrent(); attempt.tabSwitches = (attempt.tabSwitches || 0) + 1; persist(); }
+    else { enteredAt = Date.now(); $('#tab-note').textContent = 'You left the test ' + attempt.tabSwitches + ' time' + (attempt.tabSwitches === 1 ? '' : 's') + '. This is recorded.'; tickTimer(); }
+  });
+  ['copy', 'cut', 'contextmenu'].forEach(function (ev) { document.addEventListener(ev, function (e) { if (!$('#v-exam').hidden && !e.target.closest('input')) e.preventDefault(); }); });
+  window.addEventListener('online', function () { persist(); });
+  window.addEventListener('offline', function () { persist(); });
+  window.addEventListener('beforeunload', function (e) { if (!$('#v-exam').hidden && attempt && !attempt.submittedAt) { leaveCurrent(); persist(); e.preventDefault(); e.returnValue = ''; } });
+
+  // Submit
+  $('#b-submit').addEventListener('click', function () {
+    leaveCurrent(); enteredAt = Date.now(); persist();
+    $('#ds-body').innerHTML = '<p>You still have <b>' + hms(timeLeft()) + '</b>. Once submitted, you can\u2019t change your answers.</p>' +
+      '<div style="overflow-x: auto"><table><thead><tr><th>Section</th><th>Answered</th><th>Not answered</th><th>Marked</th><th>Not visited</th></tr></thead><tbody>' +
+      paper.sections.map(function (s, si) { var c = counts(flat.filter(function (f) { return f.si === si; })); return '<tr><td>' + esc(s.name) + '</td><td>' + (c.an + c.am) + '</td><td>' + c.na + '</td><td>' + (c.mr + c.am) + '</td><td>' + c.nv + '</td></tr>'; }).join('') +
+      '</tbody></table></div><p style="font-size: 13px; color: var(--muted)">Answered and marked questions are evaluated. Marked questions without an answer are not.</p>';
+    $('#d-submit').showModal();
+  });
+  $('#ds-yes').addEventListener('click', function () { $('#d-submit').close(); submit(false); });
+  function submit(auto) {
+    leaveCurrent();
+    attempt.submittedAt = Date.now(); attempt.autoSubmitted = !!auto;
+    persist();
+    /* REAL APP: POST /attempts/:id/submit. The server re-checks the deadline
+       (with a small grace period), scores with the answer key, and returns the result. */
+    if (timerId) clearInterval(timerId);
+    if (auto) toast('Time is up. Your test was submitted automatically.');
+    location.hash = '';
+    renderResult(); show('v-result');
+  }
+
+  /* ==================== RESULT ==================== */
+  var reviewFilter = 'all', reportQ = null, reportReason = 'Wrong answer key';
+  function renderResult() {
+    if (!attempt || !attempt.submittedAt) { demoAttempt(); }
+    var R = computeResult();
+    var attempted = R.correct + R.wrong + R.partial;
+    var acc = attempted ? Math.round((R.correct + R.partial * 0.5) / attempted * 100) : 0;
+    var used = Math.min(attempt.durationMs, attempt.submittedAt - attempt.startedAt);
+    var avg = attempted ? R.timeMs / Math.max(1, totalQ() - R.skipped) : 0;
+    var slowWrong = R.items.filter(function (it) { return it.sc.status === 'wrong' && it.time > 3 * 60000; });
+    var fastWrong = R.items.filter(function (it) { return it.sc.status === 'wrong' && it.time < 30000; });
+    var chapters = Object.keys(R.chapters).map(function (k) { return Object.assign({ name: k }, R.chapters[k]); }).sort(function (a, b) { return b.lost - a.lost; });
+    var colour = function (p) { return p >= 75 ? '#1E7A46' : (p >= 50 ? 'var(--blue)' : 'var(--orange)'); };
+
+    $('#result').innerHTML =
+      '<div class="res-head"><div><h1>' + esc(paper.title) + ': your result</h1><p>Submitted ' + new Date(attempt.submittedAt).toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }) + (attempt.autoSubmitted ? ' (time ran out)' : '') + (attempt.demo ? ' · sample attempt' : '') + '</p></div>' +
+      '<div style="display: flex; gap: 8px; flex-wrap: wrap"><a class="btn btn-outline" href="student-home.html">Back to home</a></div></div>' +
+      '<div class="kpis">' +
+      '<div class="kpi main"><b>' + R.total + ' / ' + R.max + '</b><span>Score</span></div>' +
+      '<div class="kpi"><b>' + acc + '%</b><span>Accuracy</span></div>' +
+      '<div class="kpi"><b>' + attempted + ' / ' + totalQ() + '</b><span>Attempted</span></div>' +
+      '<div class="kpi"><b>' + R.correct + ' · ' + R.wrong + (R.partial ? ' · ' + R.partial : '') + '</b><span>Correct · wrong' + (R.partial ? ' · partly correct' : '') + '</span></div>' +
+      '<div class="kpi"><b>' + mmss(used) + '</b><span>Time used of ' + paper.durationMin + ' min</span></div>' +
+      '</div>' +
+      (paper.kind === 'live' ? '<div class="notice n-info">Your all-India rank will be published at [time] once everyone has finished.</div>' : '') +
+      '<div class="two">' +
+      '<section class="card"><h2>Section-wise</h2>' + paper.sections.map(function (s) {
+        var S = R.sections[s.name], p = S.max ? Math.max(0, Math.round(S.marks / S.max * 100)) : 0;
+        return '<div class="barrow"><span>' + esc(s.name) + '</span><div><i style="width: ' + p + '%; background: ' + colour(p) + '"></i></div><b>' + S.marks + '/' + S.max + '</b></div>' +
+          '<p style="font-size: 12px; color: var(--muted); margin: -4px 0 12px">' + S.correct + ' correct · ' + S.wrong + ' wrong · ' + S.skipped + ' skipped · ' + mmss(S.time) + '</p>';
+      }).join('') + '</section>' +
+      '<section class="card"><h2>What to work on</h2><ol class="tipl">' +
+      (chapters[0] && chapters[0].lost > 0 ? '<li><b>' + esc(chapters[0].name) + '</b> cost you the most: ' + chapters[0].lost + ' marks (' + chapters[0].right + ' of ' + chapters[0].n + ' correct).</li>' : '') +
+      (R.negative ? '<li>Negative marking took away <b>' + R.negative + ' marks</b>.' + (fastWrong.length ? ' ' + fastWrong.length + ' wrong answer' + (fastWrong.length === 1 ? ' was' : 's were') + ' given in under 30 seconds, likely guesses.' : '') + '</li>' : '<li>No marks lost to negative marking. Good control.</li>') +
+      (slowWrong.length ? '<li>You spent over 3 minutes on ' + slowWrong.length + ' question' + (slowWrong.length === 1 ? '' : 's') + ' and still got ' + (slowWrong.length === 1 ? 'it' : 'them') + ' wrong. Next time, move on and come back.</li>' : '') +
+      '<li>Average time per attempted question: <b>' + mmss(avg) + '</b>.</li>' +
+      (R.skipped ? '<li>You left ' + R.skipped + ' question' + (R.skipped === 1 ? '' : 's') + ' unanswered.</li>' : '') +
+      '</ol></section></div>' +
+      '<section class="card"><h2>Chapter-wise</h2><div style="overflow-x: auto"><table><thead><tr><th>Chapter</th><th>Section</th><th>Correct</th><th>Marks lost</th></tr></thead><tbody>' +
+      chapters.map(function (c) { return '<tr><td>' + esc(c.name) + '</td><td>' + esc(c.sec) + '</td><td>' + c.right + ' / ' + c.n + '</td><td>' + (c.lost ? '<b style="color: var(--orange-ink)">' + c.lost + '</b>' : '0') + '</td></tr>'; }).join('') +
+      '</tbody></table></div></section>' +
+      '<section style="display: grid; gap: 12px"><div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center"><h2 style="font-size: 20px">Questions and solutions</h2>' +
+      '<div class="seg" role="group" aria-label="Show">' + [['all', 'All'], ['wrong', 'Wrong'], ['skipped', 'Skipped'], ['correct', 'Correct'], ['marked', 'Marked']].map(function (o) { return '<button type="button" data-rf="' + o[0] + '" aria-pressed="' + (reviewFilter === o[0]) + '">' + o[1] + '</button>'; }).join('') + '</div></div>' +
+      '<div class="review" id="review"></div></section>';
+    $$('[data-rf]').forEach(function (b) { b.addEventListener('click', function () { reviewFilter = b.dataset.rf; renderResult(); }); });
+    renderReview(R);
+    math($('#result'));
+  }
+  function answerText(q, a) {
+    if (!hasAnswer(q, a)) return 'Not answered';
+    if (q.type === 'integer' || q.type === 'numerical') return String(a);
+    var opts = q.type === 'ar' ? AR_OPTIONS : q.options;
+    var idx = Array.isArray(a) ? a : [a];
+    return idx.map(function (i) { return '(' + letter(i) + ') ' + tx(opts[i]); }).join(', ');
+  }
+  function renderReview(R) {
+    var list = R.items.filter(function (it) {
+      if (reviewFilter === 'all') return true;
+      if (reviewFilter === 'marked') return it.r && it.r.marked;
+      if (reviewFilter === 'wrong') return it.sc.status === 'wrong' || it.sc.status === 'partial';
+      return it.sc.status === reviewFilter;
+    });
+    var label = { correct: ['p-correct', 'Correct'], wrong: ['p-wrong', 'Wrong'], partial: ['p-partial', 'Partly correct'], skipped: ['p-skipped', 'Not answered'] };
+    $('#review').innerHTML = list.length ? list.map(function (it) {
+      var q = it.f.q, L = label[it.sc.status];
+      var correctText = (q.type === 'integer' || q.type === 'numerical') ? String(q.answer) + (q.tolerance ? ' (± ' + q.tolerance + ')' : '') : answerText(q, q.answer);
+      return '<article class="rq"><div class="rq-top"><div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center"><b style="font-family: var(--display)">Q.' + it.n + '</b><span class="pill ' + L[0] + '">' + L[1] + ' · ' + (it.sc.marks > 0 ? '+' : '') + it.sc.marks + '</span>' + (it.r && it.r.marked ? '<span class="pill p-skipped">Marked</span>' : '') + '</div>' +
+        '<span style="font-size: 13px; color: var(--muted)">' + esc(it.f.sec) + ' · ' + esc(q.chapter) + ' · ' + mmss(it.time) + '</span></div>' +
+        '<div style="font-size: 16px; line-height: 1.6">' + esc(tx(q.text)) + '</div>' +
+        (q.type === 'ar' ? '<div class="ar" style="font-size: 15px"><div><b>A:</b> ' + esc(tx(q.assertion)) + '</div><div><b>R:</b> ' + esc(tx(q.reason)) + '</div></div>' : '') +
+        (q.type === 'match' ? '<div class="mtable"><table><tbody>' + q.list1.map(function (a, i) { return '<tr><td>' + esc(a) + '</td><td>' + esc(q.list2[i] || '') + '</td></tr>'; }).join('') + '</tbody></table></div>' : '') +
+        '<div class="ans"><span class="yours' + (it.sc.status === 'wrong' ? ' bad' : '') + '">Your answer: ' + esc(answerText(q, it.r && it.r.answer)) + '</span><span class="right">Correct: ' + esc(correctText) + '</span></div>' +
+        '<div class="sol"><b>Solution</b>\n' + esc(q.solution) + '</div>' +
+        '<div style="display: flex; gap: 8px; flex-wrap: wrap"><button class="btn btn-outline btn-sm" type="button" data-video="' + it.n + '">Request video solution</button><button class="btn btn-outline btn-sm" type="button" data-report="' + it.n + '">Report a problem</button></div></article>';
+    }).join('') : '<div class="card"><p style="color: var(--muted)">No questions in this view.</p></div>';
+    math($('#review'));
+    $$('[data-report]').forEach(function (b) { b.addEventListener('click', function () { reportQ = Number(b.dataset.report); openReport(); }); });
+    $$('[data-video]').forEach(function (b) { b.addEventListener('click', function () { openVideo(R.items[Number(b.dataset.video) - 1]); }); });
+  }
+  function openReport() {
+    var reasons = ['Wrong answer key', 'Mistake in the question', 'Wrong or unclear solution', 'Diagram missing or unclear', 'Out of syllabus'];
+    $('#dr-t').textContent = 'Report a problem with Q.' + reportQ;
+    $('#dr-reasons').innerHTML = reasons.map(function (r) { return '<button type="button" aria-pressed="' + (r === reportReason) + '">' + r + '</button>'; }).join('');
+    $$('#dr-reasons button').forEach(function (b) { b.addEventListener('click', function () { reportReason = b.textContent; $$('#dr-reasons button').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); }); }); });
+    $('#dr-note').value = '';
+    $('#d-report').showModal();
+  }
+  $('#dr-send').addEventListener('click', function () {
+    /* REAL APP: POST /reports {testId, questionId, reason, note} -> admin "Reported questions" */
+    $('#d-report').close(); toast('Thanks. We\u2019ll check Q.' + reportQ + ' and let you know.');
+  });
+  var videoItem = null;
+  function openVideo(it) {
+    videoItem = it;
+    $('#dv-q').innerHTML = '<b>Q.' + it.n + '</b> · ' + esc(it.f.sec) + ' · ' + esc(it.f.q.chapter) + '<br>' + esc(tx(it.f.q.text));
+    math($('#dv-q'));
+    $('#dv-note').value = '';
+    $('#dv-limit').textContent = 'You can send ' + STUDENT.videoLeft + ' more request' + (STUDENT.videoLeft === 1 ? '' : 's') + ' this week. We reply within ' + STUDENT.videoHours + ' hours, in the app and on WhatsApp.';
+    $('#d-video').showModal();
+  }
+  $('#dv-send').addEventListener('click', function () {
+    /* REAL APP: POST /video-requests {source:'test', testId, questionId, note} -> admin "Video requests" */
+    if (STUDENT.videoLeft <= 0) { toast('You\u2019ve used all your requests this week.'); return; }
+    STUDENT.videoLeft--; $('#d-video').close(); toast('Request sent for Q.' + videoItem.n + '. We\u2019ll notify you when the video is ready.');
+  });
+  $$('[data-close]').forEach(function (b) { b.addEventListener('click', function () { b.closest('dialog').close(); }); });
+
+  function demoAttempt() {
+    // A sample finished attempt so the result page can be seen directly.
+    var picks = {};
+    flat.forEach(function (f, i) {
+      var q = f.q, a;
+      if (i % 5 === 3) a = null;
+      else if (i % 4 === 1) a = q.type === 'multiple' ? [0] : (q.type === 'integer' || q.type === 'numerical') ? String(q.answer + 1) : (q.answer + 1) % 4;
+      else a = q.type === 'integer' || q.type === 'numerical' ? String(q.answer) : q.answer;
+      picks[q.id] = { answer: a, marked: i === 6, visited: true, timeMs: (20 + (i * 37) % 200) * 1000 };
+    });
+    var started = Date.now() - 18 * 60000;
+    attempt = { paperId: paper.id, startedAt: started, durationMs: paper.durationMin * 60000, responses: picks, current: 0, lang: 'en', tabSwitches: 0, submittedAt: started + 17 * 60000, demo: true };
+  }
+
+  /* ==================== start ==================== */
+  function boot() {
+    if (qs.get('view') === 'result') { renderResult(); show('v-result'); return; }
+    if (attempt && attempt.submittedAt) { if (qs.get('retake') === '1') { attempt = null; try { localStorage.removeItem(KEY); } catch (e) {} } else { renderResult(); show('v-result'); return; } }
+    if (attempt && !attempt.submittedAt && timeLeft() <= 0) { submit(true); return; }
+    renderInstr(); show('v-instr');
+  }
+  if (document.readyState === 'complete') boot(); else window.addEventListener('load', boot);
+})();
+</script>
+</body>
+</html>

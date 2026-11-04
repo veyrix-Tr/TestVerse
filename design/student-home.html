@@ -1,0 +1,666 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Testverse — Home</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#16294A">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22 width=%22512%22 height=%22512%22%3E%3Cdefs%3E%3ClinearGradient id=%22tvg0%22 x1=%220%22 y1=%220%22 x2=%221%22 y2=%221%22%3E%3Cstop offset=%220%22 stop-color=%22#EDBE55%22/%3E%3Cstop offset=%220.55%22 stop-color=%22#D49A2A%22/%3E%3Cstop offset=%221%22 stop-color=%22#B5801C%22/%3E%3C/linearGradient%3E%3CradialGradient id=%22tvbg%22 cx=%220.3%22 cy=%220.2%22 r=%221%22%3E%3Cstop offset=%220%22 stop-color=%22#1B3254%22/%3E%3Cstop offset=%221%22 stop-color=%22#0C1A30%22/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width=%22512%22 height=%22512%22 rx=%22112%22 fill=%22url(#tvbg)%22/%3E%3Cg transform=%22translate(256,256) scale(0.78) translate(-600,-382.5)%22%3E%3Cg transform=%22translate(350.0,130) scale(1.25)%22%3E%3Cpath d=%22M40,60 H360 V130 H254 V360 H158 V130 H40 Z%22 fill=%22#F1EAD8%22/%3E%0A%3Cpath d=%22M163,360 Q190,196 278,80 L258,66 L322,44 L320,112 L300,97 Q226,214 207,360 Z%22 fill=%22url(#tvg0)%22 stroke=%22#13243E%22 stroke-width=%2210%22 stroke-linejoin=%22round%22 paint-order=%22stroke%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root {
+  color-scheme: light;
+  --bg: #F5F6FB; --card: #FFFFFF; --soft: #F1F3F9; --ink: #1B1F3B; --muted: #565B7A; --line: #DEE1EE; --field: #C7CBE3;
+  --navy: #16294A; --navy-2: #1F3961; --navy-line: #3A557F; --on-navy: #FFFFFF; --on-navy-muted: #D7DCF0;
+  --gold: #F2C14E; --gold-soft: #FFF6E0; --gold-line: #EED9A4; --gold-ink: #6B4A00;
+  --blue: #3D4FD9; --blue-ink: #2E3EB8; --blue-soft: #E4E7FB;
+  --green: #1E7A46; --green-soft: #DDF1E4; --green-ink: #155C34;
+  --orange: #B45309; --orange-soft: #FDEBD3; --orange-ink: #8A3C00;
+  --red: #B42318; --red-soft: #FDECEA;
+  --grey-soft: #ECEEF7;
+  --display: "Lexend", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --bg: #0F1426; --card: #141B33; --soft: #1A2240; --ink: #E8EBF7; --muted: #A9B0CF; --line: #2A3355; --field: #3A4470;
+    --navy: #0F1E36; --navy-2: #1A3156; --navy-line: #3A557F;
+    --gold-soft: #241F12; --gold-line: #4A3F1E; --gold-ink: #EBD9A8;
+    --blue: #8F9CFF; --blue-ink: #B3BCFF; --blue-soft: #222C5A;
+    --green: #4CC07F; --green-soft: #14321F; --green-ink: #8FE0B0;
+    --orange: #F0A060; --orange-soft: #3A2414; --orange-ink: #F6B98A;
+    --red: #FF8A80; --red-soft: #3A1714;
+    --grey-soft: #222A48;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+a { color: var(--blue); }
+:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; border-radius: 6px; }
+[hidden] { display: none !important; }
+h1, h2, h3 { font-family: var(--display); margin: 0; line-height: 1.2; }
+p { margin: 0; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Buttons */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 42px; padding: 0 16px; border-radius: 10px; font: 600 14px/1 var(--body); cursor: pointer; border: 1px solid transparent; text-decoration: none; white-space: nowrap; }
+.btn-primary { background: var(--blue); color: #FFFFFF; }
+.btn-gold { background: var(--gold); color: #1B1F3B; }
+.btn-dark { background: var(--navy); color: #FFFFFF; }
+.btn-green { background: #1E7A46; color: #FFFFFF; }
+.btn-outline { background: var(--card); color: var(--ink); border-color: var(--field); }
+.btn-ghost-light { background: transparent; color: #FFFFFF; border-color: var(--navy-line); }
+.btn-sm { min-height: 36px; padding: 0 12px; font-size: 13px; border-radius: 8px; }
+.btn[disabled] { opacity: 0.55; cursor: not-allowed; }
+
+/* Top bar */
+.top { background: var(--navy); color: #FFFFFF; position: sticky; top: 0; z-index: 20; }
+.top .in { max-width: 1280px; margin: 0 auto; padding: 10px 24px; display: flex; align-items: center; gap: 18px; }
+.brand { display: inline-flex; align-items: center; gap: 8px; color: #FFFFFF; text-decoration: none; }
+.brand b { font-family: var(--display); font-size: 20px; }
+.brand small { font-size: 11px; letter-spacing: 0.06em; color: #C9D0EC; }
+.brand small span { color: var(--gold); }
+.mainnav { display: flex; gap: 4px; margin-left: 12px; }
+.mainnav a { color: var(--on-navy-muted); text-decoration: none; font-size: 14px; font-weight: 500; padding: 8px 12px; border-radius: 8px; }
+.mainnav a:hover { background: var(--navy-2); color: #FFFFFF; }
+.mainnav a[aria-current="page"] { background: var(--navy-2); color: #FFFFFF; font-weight: 600; }
+.top-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.credit-chip { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; background: var(--navy-2); color: var(--gold); padding: 7px 10px; border-radius: 999px; text-decoration: none; }
+.icon-btn { position: relative; background: transparent; border: 1px solid var(--navy-line); color: #FFFFFF; width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center; cursor: pointer; }
+.icon-btn .dot { position: absolute; top: 7px; right: 8px; width: 8px; height: 8px; background: var(--gold); border-radius: 50%; }
+.avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--gold); color: #1B1F3B; font-family: var(--display); font-weight: 700; display: grid; place-items: center; border: 0; cursor: pointer; }
+.menu { position: absolute; right: 24px; top: 58px; background: var(--card); color: var(--ink); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 16px 40px rgba(0,0,0,0.2); min-width: 240px; padding: 6px; display: grid; }
+.menu a, .menu button { text-align: left; font: 500 14px/1.3 var(--body); padding: 10px 12px; border-radius: 8px; color: var(--ink); text-decoration: none; background: none; border: 0; cursor: pointer; }
+.menu a:hover, .menu button:hover { background: var(--soft); }
+.menu .head { padding: 10px 12px; border-bottom: 1px solid var(--line); margin-bottom: 4px; }
+.menu .head b { display: block; }
+.menu .head span { font-size: 13px; color: var(--muted); }
+.notes { right: 76px; width: min(360px, calc(100vw - 32px)); }
+.notes .n { padding: 10px 12px; border-radius: 8px; font-size: 14px; display: grid; gap: 2px; }
+.notes .n.unread { background: var(--blue-soft); }
+.notes .n span { font-size: 12px; color: var(--muted); }
+
+.announce { background: var(--gold); color: #1B1F3B; }
+.announce .in { max-width: 1280px; margin: 0 auto; padding: 9px 24px; display: flex; gap: 12px; align-items: center; justify-content: space-between; font-size: 14px; font-weight: 500; }
+.announce button { background: none; border: 0; font-size: 20px; line-height: 1; cursor: pointer; color: #1B1F3B; min-width: 32px; min-height: 32px; }
+
+/* Layout */
+.page { max-width: 1280px; margin: 0 auto; padding: 24px 24px 48px; display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 22px; align-items: start; }
+.col { display: grid; gap: 20px; min-width: 0; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px; }
+.card-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 14px; }
+.card-head h2 { font-size: 18px; font-weight: 600; }
+.card-head a, .card-head .meta { font-size: 14px; }
+.card-head .meta { color: var(--muted); }
+
+/* Greeting */
+.hello { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px; }
+.hello h1 { font-size: 28px; }
+.hello p { color: var(--muted); margin-top: 4px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.tag { display: inline-block; font-size: 12px; font-weight: 600; padding: 4px 9px; border-radius: 999px; }
+.tag-course { background: var(--gold); color: #1B1F3B; }
+.tag-direct { background: var(--grey-soft); color: var(--muted); }
+.stats { display: flex; flex-wrap: wrap; gap: 10px; }
+.stat { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; min-width: 120px; }
+.stat b { display: block; font-family: var(--display); font-size: 20px; }
+.stat span { font-size: 12px; color: var(--muted); }
+
+/* Live */
+.live { background: var(--navy); color: #FFFFFF; border-radius: 18px; padding: 22px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px; align-items: center; }
+.live small { font-size: 13px; font-weight: 600; color: var(--gold); display: inline-flex; align-items: center; gap: 8px; }
+.pulse { width: 9px; height: 9px; border-radius: 50%; background: #FF6B6B; box-shadow: 0 0 0 0 rgba(255,107,107,0.6); animation: pulse 1.6s infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255,107,107,0.6); } 70% { box-shadow: 0 0 0 10px rgba(255,107,107,0); } 100% { box-shadow: 0 0 0 0 rgba(255,107,107,0); } }
+@media (prefers-reduced-motion: reduce) { .pulse { animation: none; } }
+.live h2 { font-size: 22px; margin: 6px 0 4px; }
+.live p { color: var(--on-navy-muted); font-size: 14px; }
+.live-actions { display: grid; gap: 10px; justify-items: end; }
+.countdown { display: flex; gap: 8px; }
+.countdown div { background: var(--navy-2); border-radius: 10px; padding: 6px 8px; min-width: 56px; text-align: center; }
+.countdown b { display: block; font-family: var(--display); font-size: 22px; font-variant-numeric: tabular-nums; }
+.countdown span { font-size: 11px; color: #C9D0EC; }
+.upcoming { display: grid; gap: 0; }
+.up { display: grid; grid-template-columns: 58px minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.up:last-child { border-bottom: 0; }
+.date { text-align: center; border: 1px solid var(--line); border-radius: 10px; padding: 5px 0; line-height: 1.15; }
+.date b { display: block; font-family: var(--display); font-size: 20px; }
+.date span { font-size: 11px; color: var(--muted); }
+.up strong { display: block; font-size: 15px; }
+.up em { font-style: normal; font-size: 13px; color: var(--muted); }
+
+/* Assigned */
+.assigned { display: grid; gap: 10px; }
+.as { border: 1px solid var(--gold-line); background: var(--gold-soft); border-radius: 12px; padding: 14px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: center; }
+.as strong { display: block; }
+.as span { font-size: 13px; color: var(--gold-ink); }
+
+/* Series track */
+.track { display: grid; grid-template-columns: 6fr 3fr 2fr; gap: 14px; }
+.stage h3 { font-size: 13px; font-weight: 600; color: var(--muted); font-family: var(--body); margin-bottom: 8px; }
+.tiles { display: grid; gap: 8px; }
+.stage-part .tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.stage-half .tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.stage-full .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.tile { border: 1px solid var(--line); border-radius: 12px; padding: 10px; background: var(--card); display: grid; gap: 4px; text-align: left; font: inherit; color: var(--ink); cursor: pointer; min-height: 84px; align-content: start; }
+.tile:hover { border-color: var(--blue); }
+.tile b { font-family: var(--display); font-size: 15px; }
+.tile span { font-size: 12px; color: var(--muted); }
+.tile.done { background: var(--green-soft); border-color: transparent; }
+.tile.done span { color: var(--green-ink); font-weight: 600; }
+.tile.next { border: 2px solid var(--blue); padding: 9px; }
+.tile.next span { color: var(--blue-ink); font-weight: 600; }
+.tile.prog { border: 2px dashed var(--orange); padding: 9px; }
+.tile.prog span { color: var(--orange-ink); font-weight: 600; }
+.tile.locked { background: var(--soft); cursor: default; }
+.progress { height: 8px; background: var(--grey-soft); border-radius: 999px; overflow: hidden; margin: 4px 0 16px; }
+.progress i { display: block; height: 8px; background: var(--green); border-radius: 999px; }
+.next-bar { display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: center; border-top: 1px solid var(--line); margin-top: 16px; padding-top: 14px; }
+.next-bar p { font-size: 14px; color: var(--muted); }
+.locked-box { text-align: center; padding: 18px; background: var(--soft); border-radius: 12px; display: grid; gap: 10px; justify-items: center; margin-top: 14px; }
+
+/* Results */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; min-width: 560px; }
+th, td { text-align: left; padding: 11px 10px; border-bottom: 1px solid var(--line); font-size: 14px; }
+th { font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+td .sub { display: block; font-size: 12px; color: var(--muted); }
+
+/* Performance */
+.perf { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 22px; }
+.chart { display: flex; gap: 10px; align-items: flex-end; height: 150px; padding-top: 10px; }
+.chart div { flex: 1 1 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 4px; height: 150px; }
+.chart i { display: block; width: 100%; max-width: 46px; border-radius: 6px 6px 0 0; background: var(--blue); }
+.chart b { font-size: 12px; }
+.chart span { font-size: 11px; color: var(--muted); text-align: center; }
+.bars { display: grid; gap: 10px; }
+.bar { display: grid; grid-template-columns: 90px minmax(0, 1fr) 40px; gap: 10px; align-items: center; font-size: 14px; }
+.bar > div { height: 9px; background: var(--grey-soft); border-radius: 999px; overflow: hidden; }
+.bar i { display: block; height: 9px; border-radius: 999px; }
+.bar b { text-align: right; }
+.weak { margin-top: 14px; display: grid; gap: 8px; }
+.weak div { display: flex; justify-content: space-between; gap: 10px; font-size: 14px; background: var(--soft); border-radius: 8px; padding: 8px 10px; }
+.weak span:last-child { color: var(--orange-ink); font-weight: 600; }
+
+/* Side cards */
+.side-card { display: grid; gap: 12px; }
+.req { display: grid; gap: 8px; }
+.req div { border: 1px solid var(--line); border-radius: 10px; padding: 10px; font-size: 14px; display: grid; gap: 4px; }
+.req .pill { justify-self: start; }
+.pill { display: inline-block; font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 999px; }
+.p-new { background: var(--orange-soft); color: var(--orange-ink); }
+.p-progress { background: var(--blue-soft); color: var(--blue-ink); }
+.p-done { background: var(--green-soft); color: var(--green-ink); }
+.p-declined { background: var(--grey-soft); color: var(--muted); }
+.code { display: flex; gap: 8px; }
+.code code { flex: 1 1 auto; font: 700 18px/1 var(--display); letter-spacing: 0.08em; background: var(--soft); border: 1px dashed var(--field); border-radius: 10px; padding: 12px; text-align: center; color: var(--ink); }
+.course { background: var(--navy); color: #FFFFFF; border: 0; }
+.course p { color: var(--on-navy-muted); font-size: 14px; }
+.hint { font-size: 13px; color: var(--muted); }
+
+/* Dialog */
+dialog { border: 0; border-radius: 16px; padding: 0; width: min(560px, calc(100vw - 32px)); background: var(--card); color: var(--ink); box-shadow: 0 30px 80px rgba(0,0,0,0.35); }
+dialog::backdrop { background: rgba(10, 14, 28, 0.55); }
+.dh { padding: 16px 20px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; }
+.dh h2 { font-size: 18px; }
+.db { padding: 18px 20px; display: grid; gap: 14px; }
+.df { padding: 14px 20px; border-top: 1px solid var(--line); display: flex; justify-content: flex-end; gap: 10px; }
+.close { background: none; border: 0; color: var(--muted); font-size: 24px; cursor: pointer; min-width: 36px; min-height: 36px; }
+label.l { display: block; font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 5px; }
+.input { font: inherit; font-size: 15px; padding: 10px 12px; border: 1px solid var(--field); border-radius: 8px; background: var(--card); color: var(--ink); width: 100%; }
+textarea.input { min-height: 80px; resize: vertical; }
+.drop { border: 2px dashed var(--field); border-radius: 12px; padding: 16px; display: grid; gap: 8px; justify-items: start; }
+.drop img { max-width: 100%; max-height: 180px; border-radius: 8px; border: 1px solid var(--line); }
+.err { background: var(--red-soft); color: var(--red); padding: 10px 12px; border-radius: 8px; font-size: 14px; }
+.limit { background: var(--soft); border-radius: 8px; padding: 10px 12px; font-size: 13px; color: var(--muted); }
+
+.toast { position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%); background: var(--navy); color: #FFFFFF; padding: 12px 18px; border-radius: 10px; font-size: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 60; max-width: calc(100vw - 32px); }
+
+/* Demo bar */
+.demo { position: fixed; bottom: 0; left: 0; right: 0; background: #10162F; color: #C9D0EC; font-size: 13px; z-index: 30; }
+.demo .in { max-width: 1280px; margin: 0 auto; padding: 8px 24px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.demo button { font: 600 12px/1 var(--body); border: 1px solid #2A3560; background: transparent; color: #C9D0EC; padding: 7px 10px; border-radius: 8px; cursor: pointer; }
+.demo button[aria-pressed="true"] { background: var(--gold); color: #1B1F3B; border-color: var(--gold); }
+.foot { max-width: 1280px; margin: 0 auto; padding: 0 24px 72px; display: flex; flex-wrap: wrap; gap: 18px; font-size: 13px; color: var(--muted); }
+.foot a { color: var(--muted); }
+
+@media (max-width: 1060px) {
+  .page { grid-template-columns: 1fr; }
+  .mainnav { display: none; }
+}
+@media (max-width: 720px) {
+  .top .in, .page, .announce .in, .foot { padding-left: 14px; padding-right: 14px; }
+  .brand small { display: none; }
+  .live { grid-template-columns: 1fr; }
+  .live-actions { justify-items: start; }
+  .track { grid-template-columns: 1fr; }
+  .perf { grid-template-columns: 1fr; }
+  .hello h1 { font-size: 23px; }
+  .menu { right: 14px; }
+  .credit-chip span.label { display: none; }
+}
+.tv-logo { display: block; width: auto; aspect-ratio: 1784 / 409; flex: 0 0 auto; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position: absolute" aria-hidden="true" focusable="false"><defs><linearGradient id="tvg0" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#EDBE55"/><stop offset="0.55" stop-color="#D49A2A"/><stop offset="1" stop-color="#B5801C"/></linearGradient><radialGradient id="tvbg" cx="0.3" cy="0.2" r="1"><stop offset="0" stop-color="#1B3254"/><stop offset="1" stop-color="#0C1A30"/></radialGradient></defs><symbol id="tv-logo" viewBox="0 0 1784 409"><g transform="translate(-400,-178)"><g transform="translate(350.0,130) scale(1.25)"><path d="M40,60 H360 V130 H254 V360 H158 V130 H40 Z" fill="#F1EAD8"/>
+<path d="M163,360 Q190,196 278,80 L258,66 L322,44 L320,112 L300,97 Q226,214 207,360 Z" fill="url(#tvg0)" stroke="#13243E" stroke-width="10" stroke-linejoin="round" paint-order="stroke"/></g></g><g transform="translate(490,53) scale(1.26) translate(-86,-674)"><path transform="translate(82.15625,808.125)" d="M106.3125 -131.625V-105.9375H71.4375V0.0H39.375V-105.9375H4.5V-131.625Z M157.0 -105.9375V-79.3125H199.9375V-54.5625H157.0V-25.6875H205.5625V0.0H124.9375V-131.625H205.5625V-105.9375Z M225.125 -39.375H259.25Q260.0 -32.0625 264.3125 -28.21875Q268.625 -24.375 275.5625 -24.375Q282.6875 -24.375 286.8125 -27.65625Q290.9375 -30.9375 290.9375 -36.75Q290.9375 -41.625 287.65625 -44.8125Q284.375 -48.0 279.59375 -50.0625Q274.8125 -52.125 266.0 -54.75Q253.25 -58.6875 245.1875 -62.625Q237.125 -66.5625 231.3125 -74.25Q225.5 -81.9375 225.5 -94.3125Q225.5 -112.6875 238.8125 -123.09375Q252.125 -133.5 273.5 -133.5Q295.25 -133.5 308.5625 -123.09375Q321.875 -112.6875 322.8125 -94.125H288.125Q287.75 -100.5 283.4375 -104.15625Q279.125 -107.8125 272.375 -107.8125Q266.5625 -107.8125 263.0 -104.71875Q259.4375 -101.625 259.4375 -95.8125Q259.4375 -89.4375 265.4375 -85.875Q271.4375 -82.3125 284.1875 -78.1875Q296.9375 -73.875 304.90625 -69.9375Q312.875 -66.0 318.6875 -58.5Q324.5 -51.0 324.5 -39.1875Q324.5 -27.9375 318.78125 -18.75Q313.0625 -9.5625 302.1875 -4.125Q291.3125 1.3125 276.5 1.3125Q262.0625 1.3125 250.625 -3.375Q239.1875 -8.0625 232.34375 -17.25Q225.5 -26.4375 225.125 -39.375Z M441.375 -131.625V-105.9375H406.5V0.0H374.4375V-105.9375H339.5625V-131.625Z" fill="#F1EAD8"/><path transform="translate(530.53125,808.125)" d="M135.1875 -131.625 88.5 0.0H48.375L1.6875 -131.625H35.8125L68.4375 -32.25L101.25 -131.625Z M183.0625 -105.9375V-79.3125H226.0V-54.5625H183.0625V-25.6875H231.625V0.0H151.0V-131.625H231.625V-105.9375Z M322.0625 0.0 294.6875 -49.6875H287.0V0.0H254.9375V-131.625H308.75Q324.3125 -131.625 335.28125 -126.1875Q346.25 -120.75 351.6875 -111.28125Q357.125 -101.8125 357.125 -90.1875Q357.125 -77.0625 349.71875 -66.75Q342.3125 -56.4375 327.875 -52.125L358.25 0.0ZM287.0 -72.375H306.875Q315.6875 -72.375 320.09375 -76.6875Q324.5 -81.0 324.5 -88.875Q324.5 -96.375 320.09375 -100.6875Q315.6875 -105.0 306.875 -105.0H287.0Z M375.9375 -39.375H410.0625Q410.8125 -32.0625 415.125 -28.21875Q419.4375 -24.375 426.375 -24.375Q433.5 -24.375 437.625 -27.65625Q441.75 -30.9375 441.75 -36.75Q441.75 -41.625 438.46875 -44.8125Q435.1875 -48.0 430.40625 -50.0625Q425.625 -52.125 416.8125 -54.75Q404.0625 -58.6875 396.0 -62.625Q387.9375 -66.5625 382.125 -74.25Q376.3125 -81.9375 376.3125 -94.3125Q376.3125 -112.6875 389.625 -123.09375Q402.9375 -133.5 424.3125 -133.5Q446.0625 -133.5 459.375 -123.09375Q472.6875 -112.6875 473.625 -94.125H438.9375Q438.5625 -100.5 434.25 -104.15625Q429.9375 -107.8125 423.1875 -107.8125Q417.375 -107.8125 413.8125 -104.71875Q410.25 -101.625 410.25 -95.8125Q410.25 -89.4375 416.25 -85.875Q422.25 -82.3125 435.0 -78.1875Q447.75 -73.875 455.71875 -69.9375Q463.6875 -66.0 469.5 -58.5Q475.3125 -51.0 475.3125 -39.1875Q475.3125 -27.9375 469.59375 -18.75Q463.875 -9.5625 453.0 -4.125Q442.125 1.3125 427.3125 1.3125Q412.875 1.3125 401.4375 -3.375Q390.0 -8.0625 383.15625 -17.25Q376.3125 -26.4375 375.9375 -39.375Z M529.5625 -105.9375V-79.3125H572.5V-54.5625H529.5625V-25.6875H578.125V0.0H497.5V-131.625H578.125V-105.9375Z" fill="#D49A2A"/></g><g transform="translate(490,259) scale(1.5) translate(-346,-869)"><path transform="translate(342.03562500000004,916.5)" d="M24.28875 -35.7Q28.9425 -35.7 32.70375 -33.46875Q36.465 -31.2375 38.6325 -27.125625Q40.8 -23.01375 40.8 -17.7225Q40.8 -12.43125 38.6325 -8.255625Q36.465 -4.08 32.671875 -1.753125Q28.87875 0.57375 24.28875 0.57375Q20.208750000000002 0.57375 17.053125 -1.02Q13.8975 -2.61375 12.04875 -5.1V0.0H4.78125V-47.175000000000004H12.04875V-29.89875Q13.8975 -32.448750000000004 17.116875 -34.074375Q20.33625 -35.7 24.28875 -35.7ZM22.695 -29.38875Q19.95375 -29.38875 17.499375 -27.986250000000002Q15.045 -26.583750000000002 13.546875 -23.90625Q12.04875 -21.22875 12.04875 -17.595Q12.04875 -13.96125 13.546875 -11.251875Q15.045 -8.5425 17.499375 -7.140000000000001Q19.95375 -5.7375 22.695 -5.7375Q25.5 -5.7375 27.954375 -7.171875Q30.40875 -8.60625 31.906875 -11.3475Q33.405 -14.088750000000001 33.405 -17.7225Q33.405 -21.35625 31.906875 -24.001875Q30.40875 -26.6475 27.954375 -28.018125Q25.5 -29.38875 22.695 -29.38875Z M84.72375 -35.12625 63.17625 16.51125H55.65375L62.79375 -0.57375L48.96000000000001 -35.12625H57.056250000000006L66.9375 -8.35125L77.20125 -35.12625Z  M115.89750000000001 -12.24H123.675Q123.93 -9.37125 125.93812500000001 -7.5225Q127.94625 -5.67375 131.58 -5.67375Q135.34125 -5.67375 137.445 -7.4906250000000005Q139.54875 -9.307500000000001 139.54875 -12.17625Q139.54875 -14.4075 138.241875 -15.809999999999999Q136.935 -17.2125 134.99062500000002 -17.9775Q133.04625000000001 -18.7425 129.60375 -19.635Q125.26875 -20.7825 122.559375 -21.961875Q119.85000000000001 -23.14125 117.9375 -25.627499999999998Q116.025 -28.11375 116.025 -32.2575Q116.025 -36.0825 117.9375 -38.95125Q119.85000000000001 -41.82 123.2925 -43.35Q126.735 -44.88 131.26125000000002 -44.88Q137.7 -44.88 141.811875 -41.660625Q145.92375 -38.441250000000004 146.37 -32.83125H138.3375Q138.14625 -35.253750000000004 136.04250000000002 -36.975Q133.93875 -38.69625 130.49625 -38.69625Q127.3725 -38.69625 125.39625000000001 -37.1025Q123.42 -35.50875 123.42 -32.5125Q123.42 -30.4725 124.66312500000001 -29.165625Q125.90625 -27.85875 127.81875 -27.09375Q129.73125 -26.32875 133.04625000000001 -25.43625Q137.445 -24.225 140.218125 -23.01375Q142.99125 -21.802500000000002 144.93562500000002 -19.284375Q146.88 -16.76625 146.88 -12.55875Q146.88 -9.18 145.063125 -6.18375Q143.24625 -3.1875 139.77187500000002 -1.370625Q136.2975 0.44625000000000004 131.58 0.44625000000000004Q127.1175 0.44625000000000004 123.54750000000001 -1.115625Q119.9775 -2.6775 117.9375 -5.546250000000001Q115.89750000000001 -8.415000000000001 115.89750000000001 -12.24Z M169.065 -29.1975V-9.75375Q169.065 -7.7775 169.989375 -6.916875Q170.91375 -6.05625 173.145 -6.05625H177.60750000000002V0.0H171.87Q166.96125 0.0 164.34750000000003 -2.295Q161.73375000000001 -4.59 161.73375000000001 -9.75375V-29.1975H157.59V-35.12625H161.73375000000001V-43.86H169.065V-35.12625H177.60750000000002V-29.1975Z M221.2125 -35.12625V0.0H213.945V-4.14375Q212.22375 -1.97625 209.450625 -0.733125Q206.6775 0.51 203.55375 0.51Q199.41 0.51 196.12687499999998 -1.2112500000000002Q192.84375 -2.9325 190.963125 -6.311249999999999Q189.0825 -9.69 189.0825 -14.47125V-35.12625H196.28625V-15.555Q196.28625 -10.8375 198.64499999999998 -8.319375Q201.00375 -5.8012500000000005 205.08375 -5.8012500000000005Q209.16375 -5.8012500000000005 211.554375 -8.319375Q213.945 -10.8375 213.945 -15.555V-35.12625Z M250.09125 -35.7Q253.53375 -35.7 256.880625 -34.201875Q260.2275 -32.70375 262.20375 -30.2175V-47.175000000000004H269.535V0.0H262.20375V-5.29125Q260.41875 -2.74125 257.263125 -1.08375Q254.10750000000002 0.57375 250.0275 0.57375Q245.4375 0.57375 241.644375 -1.753125Q237.85125 -4.08 235.651875 -8.255625Q233.4525 -12.43125 233.4525 -17.7225Q233.4525 -23.01375 235.651875 -27.09375Q237.85125 -31.173750000000002 241.644375 -33.436875Q245.4375 -35.7 250.09125 -35.7ZM251.5575 -29.38875Q248.7525 -29.38875 246.32999999999998 -28.018125Q243.9075 -26.6475 242.409375 -24.001875Q240.91125 -21.35625 240.91125 -17.7225Q240.91125 -14.088750000000001 242.409375 -11.3475Q243.9075 -8.60625 246.361875 -7.171875Q248.81625 -5.7375 251.5575 -5.7375Q254.3625 -5.7375 256.78499999999997 -7.140000000000001Q259.2075 -8.5425 260.705625 -11.251875Q262.20375 -13.96125 262.20375 -17.595Q262.20375 -21.22875 260.705625 -23.90625Q259.2075 -26.583750000000002 256.78499999999997 -27.986250000000002Q254.3625 -29.38875 251.5575 -29.38875Z M315.8175 -35.12625 294.27 16.51125H286.7475L293.8875 -0.57375L280.05375 -35.12625H288.15L298.03125 -8.35125L308.295 -35.12625Z M339.97875 -6.5025 349.92375 -35.12625H357.6375L344.25 0.0H335.58L322.25624999999997 -35.12625H330.03375Z M400.15874999999994 -14.85375H373.32Q373.63874999999996 -10.64625 376.44374999999997 -8.09625Q379.24875 -5.54625 383.32874999999996 -5.54625Q389.19374999999997 -5.54625 391.61625 -10.455H399.4575Q397.86375 -5.61 393.688125 -2.5181250000000004Q389.5125 0.57375 383.32874999999996 0.57375Q378.29249999999996 0.57375 374.30812499999996 -1.689375Q370.32374999999996 -3.9525 368.06062499999996 -8.064375Q365.79749999999996 -12.17625 365.79749999999996 -17.595Q365.79749999999996 -23.01375 367.99687499999993 -27.125625Q370.19624999999996 -31.2375 374.18062499999996 -33.46875Q378.16499999999996 -35.7 383.32874999999996 -35.7Q388.30125 -35.7 392.18999999999994 -33.5325Q396.07874999999996 -31.365000000000002 398.24625 -27.444375Q400.41375 -23.52375 400.41375 -18.423750000000002Q400.41375 -16.4475 400.15874999999994 -14.85375ZM392.8275 -20.71875Q392.76374999999996 -24.735 389.95874999999995 -27.1575Q387.15374999999995 -29.580000000000002 383.01 -29.580000000000002Q379.24875 -29.580000000000002 376.57124999999996 -27.189375000000002Q373.89374999999995 -24.798750000000002 373.38374999999996 -20.71875Z M430.43999999999994 -35.7V-28.177500000000002H428.59124999999995Q424.31999999999994 -28.177500000000002 422.1206249999999 -26.01Q419.92124999999993 -23.8425 419.92124999999993 -18.4875V0.0H412.65374999999995V-35.12625H419.92124999999993V-30.02625Q421.51499999999993 -32.70375 424.1606249999999 -34.201875Q426.8062499999999 -35.7 430.43999999999994 -35.7Z M440.3212499999999 -10.77375H447.84374999999994Q448.0349999999999 -8.5425 449.9793749999999 -7.0443750000000005Q451.9237499999999 -5.54625 454.85624999999993 -5.54625Q457.91624999999993 -5.54625 459.6056249999999 -6.725625Q461.29499999999996 -7.905 461.29499999999996 -9.75375Q461.29499999999996 -11.73 459.41437499999995 -12.686250000000001Q457.53374999999994 -13.6425 453.4537499999999 -14.790000000000001Q449.5012499999999 -15.873750000000001 447.01499999999993 -16.89375Q444.52874999999995 -17.91375 442.71187499999996 -20.0175Q440.8949999999999 -22.12125 440.8949999999999 -25.56375Q440.8949999999999 -28.368750000000002 442.5524999999999 -30.695625Q444.2099999999999 -33.0225 447.30187499999994 -34.36125Q450.39374999999995 -35.7 454.4099999999999 -35.7Q460.4024999999999 -35.7 464.0681249999999 -32.671875Q467.73374999999993 -29.64375 467.9887499999999 -24.41625H460.72124999999994Q460.5299999999999 -26.775000000000002 458.8087499999999 -28.177500000000002Q457.0874999999999 -29.580000000000002 454.1549999999999 -29.580000000000002Q451.28624999999994 -29.580000000000002 449.7562499999999 -28.496250000000003Q448.22624999999994 -27.4125 448.22624999999994 -25.6275Q448.22624999999994 -24.225 449.2462499999999 -23.26875Q450.26624999999996 -22.3125 451.73249999999996 -21.770625000000003Q453.1987499999999 -21.22875 456.06749999999994 -20.4Q459.8924999999999 -19.38 462.34687499999995 -18.328125Q464.8012499999999 -17.27625 466.58624999999995 -15.236250000000002Q468.3712499999999 -13.196250000000001 468.43499999999995 -9.8175Q468.43499999999995 -6.82125 466.7774999999999 -4.4625Q465.11999999999995 -2.1037500000000002 462.09187499999996 -0.7650000000000001Q459.0637499999999 0.57375 454.98374999999993 0.57375Q450.8399999999999 0.57375 447.55687499999993 -0.924375Q444.27374999999995 -2.4225 442.3612499999999 -5.004375Q440.4487499999999 -7.58625 440.3212499999999 -10.77375Z M513.3149999999999 -14.85375H486.47624999999994Q486.7949999999999 -10.64625 489.5999999999999 -8.09625Q492.4049999999999 -5.54625 496.4849999999999 -5.54625Q502.3499999999999 -5.54625 504.7724999999999 -10.455H512.6137499999999Q511.0199999999999 -5.61 506.8443749999999 -2.5181250000000004Q502.66874999999993 0.57375 496.4849999999999 0.57375Q491.4487499999999 0.57375 487.4643749999999 -1.689375Q483.4799999999999 -3.9525 481.2168749999999 -8.064375Q478.9537499999999 -12.17625 478.9537499999999 -17.595Q478.9537499999999 -23.01375 481.15312499999993 -27.125625Q483.3524999999999 -31.2375 487.3368749999999 -33.46875Q491.3212499999999 -35.7 496.4849999999999 -35.7Q501.4574999999999 -35.7 505.34624999999994 -33.5325Q509.2349999999999 -31.365000000000002 511.4024999999999 -27.444375Q513.5699999999999 -23.52375 513.5699999999999 -18.423750000000002Q513.5699999999999 -16.4475 513.3149999999999 -14.85375ZM505.98374999999993 -20.71875Q505.9199999999999 -24.735 503.1149999999999 -27.1575Q500.3099999999999 -29.580000000000002 496.16624999999993 -29.580000000000002Q492.4049999999999 -29.580000000000002 489.7274999999999 -27.189375000000002Q487.0499999999999 -24.798750000000002 486.5399999999999 -20.71875Z" fill="#F1EAD8"/></g></symbol></svg>
+
+<header class="top">
+  <div class="in">
+    <a class="brand" href="student-home.html" aria-label="Testverse home">
+      <svg class="tv-logo" style="height: 38px" viewBox="0 0 1784 409" role="img" aria-label="Testverse by Studyverse"><use href="#tv-logo"/></svg>
+    </a>
+    <nav class="mainnav" aria-label="Main">
+      <a href="student-home.html" aria-current="page">Home</a>
+      <a href="#series">My test series</a>
+      <a href="#live">Live tests</a>
+      <a href="#results">Results</a>
+      <a href="#videos">Video solutions</a>
+    </nav>
+    <div class="top-right">
+      <a class="credit-chip" href="#refer" title="Your credits"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9 9h6M9 13h6M12 9v8"/></svg><span id="credits">₹0</span><span class="label">credits</span></a>
+      <button class="icon-btn" type="button" id="bell" aria-label="Notifications" aria-expanded="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span class="dot" id="bell-dot"></span></button>
+      <button class="avatar" type="button" id="me" aria-label="Your account" aria-expanded="false">R</button>
+    </div>
+  </div>
+  <div class="menu notes" id="notes" hidden role="region" aria-label="Notifications"></div>
+  <div class="menu" id="menu" hidden>
+    <div class="head"><b id="menu-name"></b><span id="menu-sub"></span></div>
+    <a href="#">My profile</a>
+    <a href="#refer">Credits &amp; referrals</a>
+    <a href="#">Orders &amp; invoices</a>
+    <a href="#parent">Share progress with parent</a>
+    <a href="#">Help &amp; contact</a>
+    <button type="button" id="logout">Log out</button>
+  </div>
+</header>
+
+<div class="announce" id="announce">
+  <div class="in"><span id="announce-text"></span><button type="button" id="announce-x" aria-label="Dismiss announcement">×</button></div>
+</div>
+
+<main class="page" id="page"></main>
+
+<footer class="foot">
+  <span>© 2026 Studyverse</span><a href="/terms">Terms</a><a href="/privacy">Privacy</a><a href="/refunds">Refund policy</a><a href="/contact">Contact</a>
+</footer>
+
+<div class="demo" role="region" aria-label="Demo controls">
+  <div class="in"><b>Demo: view as</b>
+    <button type="button" data-demo="course">Course (LMS) student</button>
+    <button type="button" data-demo="direct">Direct student</button>
+    <button type="button" data-demo="new">New, not bought yet</button>
+    <span style="margin-left: auto">Sample data only</span>
+  </div>
+</div>
+
+<!-- Video request dialog -->
+<dialog id="dlg-video" aria-labelledby="dv-title">
+  <div class="dh"><h2 id="dv-title">Request a video solution</h2><button class="close" type="button" data-close aria-label="Close">×</button></div>
+  <div class="db">
+    <div class="drop">
+      <label class="l" for="v-photo" style="margin: 0">Photo of the question</label>
+      <input type="file" id="v-photo" accept="image/*" capture="environment">
+      <img id="v-preview" alt="Your question photo" hidden>
+      <span class="hint">Make sure the whole question, options and any diagram are clear.</span>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px">
+      <div><label class="l" for="v-subject">Subject</label><select class="input" id="v-subject"></select></div>
+      <div><label class="l" for="v-chapter">Chapter (optional)</label><input class="input" id="v-chapter" placeholder="e.g. Rotational Motion"></div>
+    </div>
+    <div><label class="l" for="v-note">What's confusing you? (optional)</label><textarea class="input" id="v-note" placeholder="e.g. I don't understand why friction acts upward"></textarea></div>
+    <div class="limit" id="v-limit"></div>
+    <div class="err" id="v-err" hidden></div>
+  </div>
+  <div class="df"><button class="btn btn-outline" type="button" data-close>Cancel</button><button class="btn btn-primary" type="button" id="v-send">Send request</button></div>
+</dialog>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ======================================================================
+     SAMPLE DATA FOR THE DESIGN. In the real app this comes from the server
+     for the signed-in student. Times are set relative to now so every state
+     (live now, countdown, due soon) can be seen in the demo.
+     ====================================================================== */
+  var H = 36e5, now = Date.now();
+  function at(hoursFromNow) { return new Date(now + hoursFromNow * H).toISOString(); }
+
+  var SETTINGS = {
+    announcement: 'Next NEET live test on Sunday at 2:00 PM. Register to get your all-India rank.',
+    youtube: 'https://www.youtube.com/@[your-channel]',
+    videoLimit: { course: 10, direct: 3 },
+    videoHours: 48,
+    referral: { friendDiscount: 100, referrerCredit: 100 }
+  };
+
+  var EXAM = { id: 'neet', label: 'NEET', year: 2027, subjects: ['Physics', 'Chemistry', 'Botany', 'Zoology'] };
+
+  var SERIES = [
+    { id: 'P1', kind: 'part', n: 1, title: 'Part Test 1', chapters: 'Units, Kinematics, NLM · Basic Concepts, Atomic Structure · Cell, Biomolecules', status: 'done', score: 248, max: 360 },
+    { id: 'P2', kind: 'part', n: 2, title: 'Part Test 2', chapters: 'WPE, Rotation · Classification, Bonding · Plant & Animal Kingdom', status: 'done', score: 231, max: 360 },
+    { id: 'P3', kind: 'part', n: 3, title: 'Part Test 3', chapters: 'Gravitation, Matter · States, Thermodynamics · Morphology, Anatomy', status: 'done', score: 262, max: 360 },
+    { id: 'P4', kind: 'part', n: 4, title: 'Part Test 4', chapters: 'KTG, Oscillations · Equilibrium, Redox · Cell Cycle, Transport', status: 'progress', left: '41 min left' },
+    { id: 'P5', kind: 'part', n: 5, title: 'Part Test 5', chapters: 'Waves, Electrostatics · s-, p-block · Plant Physiology', status: 'open' },
+    { id: 'P6', kind: 'part', n: 6, title: 'Part Test 6', chapters: 'Current, Magnetism · Organic basics · Human Physiology I', status: 'open' },
+    { id: 'H1', kind: 'half', n: 1, title: 'Half Syllabus Test 1', chapters: 'Class 11 full', status: 'done', score: 498, max: 720 },
+    { id: 'H2', kind: 'half', n: 2, title: 'Half Syllabus Test 2', chapters: 'Class 12 first half', status: 'soon' },
+    { id: 'H3', kind: 'half', n: 3, title: 'Half Syllabus Test 3', chapters: 'Class 12 second half', status: 'soon' },
+    { id: 'F1', kind: 'full', n: 1, title: 'Full Syllabus Test 1', chapters: 'Complete syllabus', status: 'soon' },
+    { id: 'F2', kind: 'full', n: 2, title: 'Full Syllabus Test 2', chapters: 'Complete syllabus', status: 'soon' }
+  ];
+
+  var LIVE = [
+    { id: 'L0', title: 'NEET Organic Chemistry Live Quiz', meta: '45 questions · 45 min', start: at(-0.15), window: 30, registered: true },
+    { id: 'L1', title: 'NEET Full Syllabus Live Test', meta: '180 questions · 3 hours', start: at(52), window: 30, registered: true },
+    { id: 'L2', title: 'NEET Half Syllabus Live Test', meta: '180 questions · 3 hours', start: at(52 + 24 * 14), window: 30, registered: false },
+    { id: 'L3', title: 'NEET Full Syllabus Live Test 2', meta: '180 questions · 3 hours', start: at(52 + 24 * 28), window: 30, registered: false }
+  ];
+
+  var ASSIGNED = [
+    { id: 'A1', title: 'Organic Chemistry Revision Test', from: 'Your Studyverse teacher', meta: '30 questions · 45 min', due: at(20) },
+    { id: 'A2', title: 'Weekly Batch Test 1', from: 'NEET 2027 course batch', meta: '45 questions · 60 min', due: at(96) }
+  ];
+
+  var RESULTS = [
+    { test: 'NEET Full Syllabus Live Test', when: at(-24 * 6), score: 459, max: 720, rank: '1,284 of 9,640', acc: 75, live: true },
+    { test: 'Part Test 3', when: at(-24 * 9), score: 262, max: 360, rank: null, acc: 78 },
+    { test: 'Half Syllabus Test 1', when: at(-24 * 14), score: 498, max: 720, rank: null, acc: 76 },
+    { test: 'Part Test 2', when: at(-24 * 20), score: 231, max: 360, rank: null, acc: 70 },
+    { test: 'Part Test 1', when: at(-24 * 27), score: 248, max: 360, rank: null, acc: 72 }
+  ];
+
+  var SUBJECT_ACC = [['Physics', 64], ['Chemistry', 71], ['Botany', 82], ['Zoology', 80]];
+  var WEAK = [['Rotational Motion', '38% correct'], ['Chemical Equilibrium', '44% correct'], ['Plant Kingdom', '51% correct']];
+
+  var REQUESTS = [
+    { text: 'Rolling sphere on incline: why is friction upward?', subject: 'Physics', status: 'progress', when: at(-20) },
+    { text: 'Meiosis: terminalisation of chiasmata', subject: 'Botany', status: 'done', when: at(-24 * 4), link: 'https://youtu.be/[video-id]' }
+  ];
+
+  var NOTES = [
+    { text: 'Your video solution for "Meiosis: terminalisation of chiasmata" is ready.', when: '4 days ago', unread: true },
+    { text: 'Live test registered: NEET Full Syllabus Live Test.', when: '5 days ago', unread: true },
+    { text: 'Results for NEET Full Syllabus Live Test are out. Your rank: 1,284.', when: '6 days ago', unread: false }
+  ];
+
+  var MODES = {
+    course: { name: 'Riya Sharma', first: 'Riya', course: true, bought: true, credits: 150, code: 'RIYA4821', videosUsed: 2 },
+    direct: { name: 'Aarav Mehta', first: 'Aarav', course: false, bought: true, credits: 0, code: 'AARAV7310', videosUsed: 1 },
+    'new': { name: 'Sana Khan', first: 'Sana', course: false, bought: false, credits: 0, code: null, videosUsed: 0 }
+  };
+  var mode = 'course';
+
+  /* ---------- helpers ---------- */
+  var $ = function (s, el) { return (el || document).querySelector(s); };
+  var $$ = function (s, el) { return Array.prototype.slice.call((el || document).querySelectorAll(s)); };
+  function esc(v) { return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function rupee(n) { return '₹' + Number(n || 0).toLocaleString('en-IN'); }
+  function fmt(iso, opts) { return new Date(iso).toLocaleString('en-IN', opts || { weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }); }
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function toast(msg) { var t = document.createElement('div'); t.className = 'toast'; t.setAttribute('role', 'status'); t.textContent = msg; document.body.appendChild(t); setTimeout(function () { t.remove(); }, 2800); }
+  function greet() { var h = new Date().getHours(); return h < 12 ? 'Good morning' : (h < 17 ? 'Good afternoon' : 'Good evening'); }
+  function liveState(t) {
+    var s = new Date(t.start).getTime(), end = s + t.window * 60000, n = Date.now();
+    if (n < s) return 'upcoming';
+    if (n <= end) return 'open';
+    return 'closed';
+  }
+
+  /* ---------- render ---------- */
+  function render() {
+    var me = MODES[mode];
+    $('#credits').textContent = rupee(me.credits);
+    $('#me').textContent = me.first.charAt(0);
+    $('#menu-name').textContent = me.name;
+    $('#menu-sub').textContent = EXAM.label + ' ' + EXAM.year + (me.course ? ' · Studyverse course' : '');
+    $$('[data-demo]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.demo === mode ? 'true' : 'false'); });
+
+    var done = SERIES.filter(function (t) { return t.status === 'done'; }).length;
+    var main = '', side = '';
+
+    // Greeting
+    main += '<section class="hello"><div><h1>' + greet() + ', ' + esc(me.first) + '</h1><p><span>' + EXAM.label + ' ' + EXAM.year + '</span>' +
+      (me.course ? '<span class="tag tag-course">Studyverse course student</span>' : '<span class="tag tag-direct">Testverse</span>') + '</p></div>' +
+      '<div class="stats">' +
+      stat(me.bought ? done + ' / 11' : '—', 'series tests done') +
+      stat(me.bought ? '1,284' : '—', 'best all-India rank') +
+      stat(me.bought ? '75%' : '—', 'accuracy, last test') + '</div></section>';
+
+    // Live
+    main += liveSection();
+
+    // Assigned (course students only)
+    if (me.course && ASSIGNED.length) {
+      main += '<section class="card"><div class="card-head"><h2>Assigned to you</h2><span class="meta">Personal and batch tests from your teachers</span></div><div class="assigned">' +
+        ASSIGNED.map(function (a) {
+          var hrs = (new Date(a.due).getTime() - Date.now()) / H;
+          return '<div class="as"><div><strong>' + esc(a.title) + '</strong><span>' + esc(a.from) + ' · ' + esc(a.meta) + ' · due ' + fmt(a.due) + (hrs < 24 ? ' (today)' : '') + '</span></div>' +
+            '<a class="btn btn-dark btn-sm" href="test.html?test=' + a.id + '">Start test</a></div>';
+        }).join('') + '</div></section>';
+    }
+
+    // Series
+    main += seriesSection(me, done);
+
+    // Results + performance
+    if (me.bought) {
+      main += '<section class="card" id="results"><div class="card-head"><h2>Recent results</h2><a href="#">All results</a></div><div class="table-wrap"><table><thead><tr><th>Test</th><th>Score</th><th>Accuracy</th><th>Rank</th><th><span class="sr">Action</span></th></tr></thead><tbody>' +
+        RESULTS.slice(0, 4).map(function (r) {
+          return '<tr><td><b>' + esc(r.test) + '</b><span class="sub">' + fmt(r.when, { day: 'numeric', month: 'short' }) + (r.live ? ' · Live' : '') + '</span></td><td>' + r.score + ' / ' + r.max + '</td><td>' + r.acc + '%</td><td>' + (r.rank ? esc(r.rank) : '<span class="hint">—</span>') + '</td>' +
+            '<td style="text-align: right"><a class="btn btn-outline btn-sm" href="test.html?test=P4&view=result">View analysis</a></td></tr>';
+        }).join('') + '</tbody></table></div></section>';
+
+      var trend = RESULTS.slice().reverse();
+      main += '<section class="card"><div class="card-head"><h2>Your performance</h2><span class="meta">Across all tests</span></div><div class="perf">' +
+        '<div><div class="hint" style="margin-bottom: 4px">Score % by test</div><div class="chart" role="img" aria-label="Score percentage by test: ' + trend.map(function (r) { return r.test + ' ' + Math.round(r.score / r.max * 100) + '%'; }).join(', ') + '">' +
+        trend.map(function (r) { var p = Math.round(r.score / r.max * 100); return '<div><b>' + p + '%</b><i style="height: ' + Math.round(p * 1.1) + 'px"></i><span>' + esc(r.test.replace('NEET Full Syllabus Live Test', 'Live 1').replace('Half Syllabus Test', 'Half').replace('Part Test', 'Part')) + '</span></div>'; }).join('') +
+        '</div></div>' +
+        '<div><div class="hint" style="margin-bottom: 8px">Accuracy by subject</div><div class="bars">' +
+        SUBJECT_ACC.map(function (s) { var c = s[1] >= 75 ? 'var(--green)' : (s[1] >= 68 ? 'var(--blue)' : 'var(--orange)'); return '<div class="bar"><span>' + s[0] + '</span><div><i style="width: ' + s[1] + '%; background: ' + c + '"></i></div><b>' + s[1] + '%</b></div>'; }).join('') +
+        '</div><div class="weak"><div class="hint" style="background: none; padding: 0">Chapters losing you the most marks</div>' +
+        WEAK.map(function (w) { return '<div><span>' + esc(w[0]) + '</span><span>' + esc(w[1]) + '</span></div>'; }).join('') + '</div></div></div></section>';
+    }
+
+    // Side: video solutions
+    var limit = me.course ? SETTINGS.videoLimit.course : SETTINGS.videoLimit.direct;
+    var left = Math.max(0, limit - me.videosUsed);
+    side += '<section class="card side-card" id="videos"><div class="card-head" style="margin: 0"><h2>Video solutions</h2></div>' +
+      '<p class="hint" style="font-size: 14px">Stuck on a question from a test, your book or a coaching sheet? Send it, and our faculty will make a video solution for you.</p>' +
+      '<button class="btn btn-primary" type="button" id="open-video"' + (left ? '' : ' disabled') + '>Request a video solution</button>' +
+      '<span class="hint">' + left + ' of ' + limit + ' requests left this week · reply within ' + SETTINGS.videoHours + ' hours</span>' +
+      (REQUESTS.length && me.bought ? '<div class="req">' + REQUESTS.map(function (r) {
+        var map = { 'new': ['p-new', 'Sent'], progress: ['p-progress', 'Being recorded'], done: ['p-done', 'Ready'], declined: ['p-declined', 'Declined'] }[r.status];
+        return '<div><span class="pill ' + map[0] + '">' + map[1] + '</span><span>' + esc(r.text) + '</span><span class="hint">' + esc(r.subject) + ' · ' + fmt(r.when, { day: 'numeric', month: 'short' }) + '</span>' + (r.link ? '<a href="' + esc(r.link) + '" target="_blank" rel="noopener">Watch video</a>' : '') + '</div>';
+      }).join('') + '</div>' : '') +
+      '<a class="btn btn-outline" href="' + esc(SETTINGS.youtube) + '" target="_blank" rel="noopener">Browse our video library on YouTube</a></section>';
+
+    // Side: refer & earn
+    side += '<section class="card side-card" id="refer"><div class="card-head" style="margin: 0"><h2>Refer &amp; earn</h2><span class="meta">' + rupee(me.credits) + ' credits</span></div>' +
+      (me.code
+        ? '<p class="hint" style="font-size: 14px">Friends get ' + rupee(SETTINGS.referral.friendDiscount) + ' off with your code. You get ' + rupee(SETTINGS.referral.referrerCredit) + ' in credits when they buy.</p>' +
+          '<div class="code"><code id="my-code">' + esc(me.code) + '</code><button class="btn btn-outline" type="button" id="copy-code">Copy</button></div>' +
+          '<a class="btn btn-green" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent('I’m preparing with Testverse by Studyverse. Use my code ' + me.code + ' to get ' + rupee(SETTINGS.referral.friendDiscount) + ' off the test series: https://testverse.in/?ref=' + me.code) + '">Share on WhatsApp</a>'
+        : '<p class="hint" style="font-size: 14px">Buy a test series to get your own referral code and start earning credits.</p>') +
+      '</section>';
+
+    // Side: parent
+    if (me.bought) {
+      side += '<section class="card side-card" id="parent"><div class="card-head" style="margin: 0"><h2>Share progress with parent</h2></div>' +
+        (me.course ? '<p class="hint" style="font-size: 14px">Your parents get your Studyverse report every Sunday. You can also send them a live progress link any time.</p>'
+          : '<p class="hint" style="font-size: 14px">Send your parents a private link with your tests, scores, rank and the subjects that need attention. You can switch it off any time.</p>') +
+        '<a class="btn btn-green" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent('Here’s my NEET test progress on Testverse: https://testverse.in/p/[private-link]') + '">Send on WhatsApp</a></section>';
+    }
+
+    // Side: courses (not for course students)
+    if (!me.course) {
+      side += '<section class="card side-card course"><h2 style="font-size: 18px">Want a teacher too?</h2>' +
+        (me.bought ? '<p>Your Physics accuracy has stayed around 64% across your last 3 tests. A Studyverse teacher can go through your test data with you and fix the chapters losing you marks.</p>'
+          : '<p>Studyverse courses add live classes and faculty who teach from your own test results.</p>') +
+        '<a class="btn btn-gold" href="/courses">Explore Studyverse courses</a></section>';
+    }
+
+    $('#page').innerHTML = '<div class="col">' + main + '</div><aside class="col" aria-label="More">' + side + '</aside>';
+    bind();
+    tick();
+  }
+
+  function stat(v, l) { return '<div class="stat"><b>' + v + '</b><span>' + l + '</span></div>'; }
+
+  function liveSection() {
+    var open = LIVE.filter(function (t) { return liveState(t) === 'open'; })[0];
+    var next = LIVE.filter(function (t) { return liveState(t) === 'upcoming'; }).sort(function (a, b) { return new Date(a.start) - new Date(b.start); });
+    var hero = open || next[0];
+    var html = '<section id="live" style="display: grid; gap: 14px">';
+    if (hero) {
+      var isOpen = liveState(hero) === 'open';
+      var entryEnd = new Date(new Date(hero.start).getTime() + hero.window * 60000);
+      html += '<div class="live"><div><small>' + (isOpen ? '<span class="pulse" aria-hidden="true"></span>Live now' : 'Next all-India live test') + '</small>' +
+        '<h2>' + esc(hero.title) + '</h2><p>' + esc(hero.meta) + ' · ' + fmt(hero.start) + (isOpen ? ' · Enter by ' + fmt(entryEnd.toISOString(), { hour: 'numeric', minute: '2-digit' }) : '') + '</p></div>' +
+        '<div class="live-actions">' +
+        (isOpen
+          ? (hero.registered ? '<a class="btn btn-gold" href="test.html?test=' + hero.id + '">Start live test</a>' : '<button class="btn btn-gold" type="button" data-register="' + hero.id + '">Register and start</button>') +
+            '<span style="font-size: 13px; color: #C9D0EC">Entry closes in <b data-close-in="' + hero.id + '"></b></span>'
+          : '<div class="countdown" data-count-to="' + hero.start + '" aria-label="Time until the test starts"><div><b data-u="d">--</b><span>days</span></div><div><b data-u="h">--</b><span>hrs</span></div><div><b data-u="m">--</b><span>min</span></div><div><b data-u="s">--</b><span>sec</span></div></div>' +
+            (hero.registered ? '<span style="font-size: 13px; color: var(--gold)">✓ You’re registered. We’ll remind you.</span>' : '<button class="btn btn-gold" type="button" data-register="' + hero.id + '">Register free</button>')) +
+        '</div></div>';
+    }
+    var rest = next.filter(function (t) { return t !== hero; });
+    if (rest.length) {
+      html += '<div class="card"><div class="card-head"><h2>Upcoming live tests</h2><a href="#">Full calendar</a></div><div class="upcoming">' +
+        rest.map(function (t) {
+          var d = new Date(t.start);
+          return '<div class="up"><div class="date"><b>' + d.getDate() + '</b><span>' + d.toLocaleString('en-IN', { month: 'short' }) + ', ' + d.toLocaleString('en-IN', { weekday: 'short' }) + '</span></div>' +
+            '<div><strong>' + esc(t.title) + '</strong><em>' + fmt(t.start, { hour: 'numeric', minute: '2-digit' }) + ' · ' + esc(t.meta) + '</em></div>' +
+            (t.registered ? '<span class="pill p-done">Registered</span>' : '<button class="btn btn-outline btn-sm" type="button" data-register="' + t.id + '">Register</button>') + '</div>';
+        }).join('') + '</div></div>';
+    }
+    return html + '</section>';
+  }
+
+  function seriesSection(me, done) {
+    var html = '<section class="card" id="series"><div class="card-head"><h2>My ' + EXAM.label + ' test series</h2><span class="meta">' + (me.bought ? done + ' of 11 done' : '11 tests') + '</span></div>';
+    if (me.bought) html += '<div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="11" aria-valuenow="' + done + '" aria-label="Test series progress"><i style="width: ' + Math.round(done / 11 * 100) + '%"></i></div>';
+    var suggested = SERIES.filter(function (t) { return t.status === 'progress'; })[0] || SERIES.filter(function (t) { return t.status === 'open'; })[0];
+    function tile(t) {
+      if (!me.bought) return '<div class="tile locked"><b>' + esc(shortName(t)) + '</b><span>Locked</span></div>';
+      var cls = 'tile', label;
+      if (t.status === 'done') { cls += ' done'; label = t.score + ' / ' + t.max; }
+      else if (t.status === 'progress') { cls += ' prog'; label = 'Resume · ' + t.left; }
+      else if (t.status === 'soon') { cls += ' locked'; label = 'Coming soon'; }
+      else { label = 'Available'; if (t === suggested) { cls += ' next'; label = 'Suggested next'; } }
+      if (t === suggested && t.status === 'progress') label = 'Resume · ' + t.left;
+      if (t.status === 'soon') return '<div class="' + cls + '"><b>' + esc(shortName(t)) + '</b><span>' + label + '</span></div>';
+      var href = t.status === 'done' ? 'test.html?test=' + t.id + '&view=result' : 'test.html?test=' + t.id;
+      return '<a class="' + cls + '" href="' + href + '" title="' + esc(t.chapters) + '" style="text-decoration: none"><b>' + esc(shortName(t)) + '</b><span>' + esc(label) + '</span></a>';
+    }
+    function stage(kind, title, n) {
+      return '<div class="stage stage-' + kind + '"><h3>' + title + ' (' + n + ')</h3><div class="tiles">' + SERIES.filter(function (t) { return t.kind === kind; }).map(tile).join('') + '</div></div>';
+    }
+    html += '<div class="track">' + stage('part', 'Part tests', 6) + stage('half', 'Half syllabus', 3) + stage('full', 'Full syllabus', 2) + '</div>';
+    if (me.bought && suggested) {
+      html += '<div class="next-bar"><p><b style="color: var(--ink)">' + esc(suggested.title) + '</b> · ' + esc(suggested.chapters) + '</p>' +
+        '<a class="btn btn-primary" href="test.html?test=' + suggested.id + '">' + (suggested.status === 'progress' ? 'Resume test' : 'Start ' + esc(suggested.title)) + '</a></div>';
+    }
+    if (!me.bought) {
+      html += '<div class="locked-box"><b>Get all 11 tests for ' + EXAM.label + '</b><span class="hint">6 part tests, 3 half-syllabus tests and 2 full-syllabus tests, with full analysis and solutions. Coupon and referral codes accepted.</span>' +
+        '<a class="btn btn-primary" href="checkout.html?exam=' + EXAM.id + '">Get the test series</a><span class="hint">All-India live tests are open to you now. Register above.</span></div>';
+    }
+    return html + '</section>';
+    function shortName(t) { return { part: 'Part ', half: 'Half ', full: 'Full ' }[t.kind] + t.n; }
+  }
+
+  /* ---------- interactions ---------- */
+  function bind() {
+    $$('[data-register]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var t = LIVE.filter(function (x) { return x.id === b.dataset.register; })[0];
+        t.registered = true; render();
+        toast(liveState(t) === 'open' ? 'Registered. Opening the test…' : 'Registered for ' + t.title + '. We’ll remind you before it starts.');
+      });
+    });
+    var ov = $('#open-video'); if (ov) ov.addEventListener('click', openVideo);
+    var cc = $('#copy-code'); if (cc) cc.addEventListener('click', function () {
+      var code = $('#my-code').textContent;
+      var link = 'https://testverse.in/?ref=' + code;
+      (navigator.clipboard ? navigator.clipboard.writeText(link) : Promise.reject()).then(function () { toast('Referral link copied'); }, function () { toast('Your link: ' + link); });
+    });
+  }
+
+  // Countdowns
+  function tick() {
+    $$('[data-count-to]').forEach(function (box) {
+      var left = Math.max(0, Math.floor((new Date(box.dataset.countTo).getTime() - Date.now()) / 1000));
+      $('[data-u="d"]', box).textContent = Math.floor(left / 86400);
+      $('[data-u="h"]', box).textContent = pad(Math.floor(left % 86400 / 3600));
+      $('[data-u="m"]', box).textContent = pad(Math.floor(left % 3600 / 60));
+      $('[data-u="s"]', box).textContent = pad(left % 60);
+      if (left === 0) render();
+    });
+    $$('[data-close-in]').forEach(function (el) {
+      var t = LIVE.filter(function (x) { return x.id === el.dataset.closeIn; })[0];
+      var left = Math.max(0, Math.floor((new Date(t.start).getTime() + t.window * 60000 - Date.now()) / 1000));
+      el.textContent = Math.floor(left / 60) + ' min ' + pad(left % 60) + ' s';
+      if (left === 0) render();
+    });
+  }
+  setInterval(tick, 1000);
+
+  // Video request dialog
+  var dlg = $('#dlg-video'), photo = null;
+  $('#v-subject').innerHTML = EXAM.subjects.map(function (s) { return '<option>' + s + '</option>'; }).join('');
+  function openVideo() {
+    var me = MODES[mode], limit = me.course ? SETTINGS.videoLimit.course : SETTINGS.videoLimit.direct;
+    photo = null; $('#v-photo').value = ''; $('#v-preview').hidden = true; $('#v-note').value = ''; $('#v-chapter').value = ''; $('#v-err').hidden = true;
+    $('#v-limit').textContent = 'You can send ' + Math.max(0, limit - me.videosUsed) + ' more this week. We reply within ' + SETTINGS.videoHours + ' hours, in the app and on WhatsApp.';
+    dlg.showModal();
+  }
+  $('#v-photo').addEventListener('change', function () {
+    var f = this.files[0]; if (!f) return;
+    if (!/^image\//.test(f.type)) { showErr('Please choose a photo.'); return; }
+    if (f.size > 10 * 1024 * 1024) { showErr('That photo is over 10 MB. Try a smaller one.'); return; }
+    photo = f; $('#v-err').hidden = true;
+    var r = new FileReader(); r.onload = function () { var img = $('#v-preview'); img.src = r.result; img.hidden = false; }; r.readAsDataURL(f);
+  });
+  function showErr(m) { var e = $('#v-err'); e.textContent = m; e.hidden = false; }
+  $('#v-send').addEventListener('click', function () {
+    if (!photo) { showErr('Add a photo of the question.'); return; }
+    var me = MODES[mode];
+    me.videosUsed++;
+    REQUESTS.unshift({ text: ($('#v-chapter').value.trim() || 'Your question') + ($('#v-note').value.trim() ? ': ' + $('#v-note').value.trim() : ''), subject: $('#v-subject').value, status: 'new', when: new Date().toISOString() });
+    dlg.close(); render();
+    toast('Request sent. We’ll send your video within ' + SETTINGS.videoHours + ' hours.');
+  });
+  $$('[data-close]').forEach(function (b) { b.addEventListener('click', function () { b.closest('dialog').close(); }); });
+
+  // Header menus
+  function toggle(btn, panel) {
+    var open = panel.hidden;
+    $$('.menu').forEach(function (m) { m.hidden = true; });
+    $$('#bell, #me').forEach(function (b) { b.setAttribute('aria-expanded', 'false'); });
+    panel.hidden = !open; btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  $('#notes').innerHTML = '<div class="head"><b>Notifications</b></div>' + NOTES.map(function (n) { return '<div class="n' + (n.unread ? ' unread' : '') + '">' + esc(n.text) + '<span>' + esc(n.when) + '</span></div>'; }).join('');
+  $('#bell').addEventListener('click', function (e) { e.stopPropagation(); toggle(this, $('#notes')); $('#bell-dot').hidden = true; });
+  $('#me').addEventListener('click', function (e) { e.stopPropagation(); toggle(this, $('#menu')); });
+  document.addEventListener('click', function (e) { if (!e.target.closest('.menu')) { $$('.menu').forEach(function (m) { m.hidden = true; }); } });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') $$('.menu').forEach(function (m) { m.hidden = true; }); });
+  $('#logout').addEventListener('click', function () { toast('Logged out (demo)'); });
+
+  // Announcement
+  $('#announce-text').textContent = SETTINGS.announcement;
+  $('#announce-x').addEventListener('click', function () { $('#announce').hidden = true; });
+
+  // Demo switch
+  $$('[data-demo]').forEach(function (b) { b.addEventListener('click', function () { mode = b.dataset.demo; render(); window.scrollTo(0, 0); }); });
+
+  render();
+})();
+</script>
+</body>
+</html>

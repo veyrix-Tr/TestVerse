@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Checkout — Testverse by Studyverse</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#16294A">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22 width=%22512%22 height=%22512%22%3E%3Cdefs%3E%3ClinearGradient id=%22tvg0%22 x1=%220%22 y1=%220%22 x2=%221%22 y2=%221%22%3E%3Cstop offset=%220%22 stop-color=%22#EDBE55%22/%3E%3Cstop offset=%220.55%22 stop-color=%22#D49A2A%22/%3E%3Cstop offset=%221%22 stop-color=%22#B5801C%22/%3E%3C/linearGradient%3E%3CradialGradient id=%22tvbg%22 cx=%220.3%22 cy=%220.2%22 r=%221%22%3E%3Cstop offset=%220%22 stop-color=%22#1B3254%22/%3E%3Cstop offset=%221%22 stop-color=%22#0C1A30%22/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width=%22512%22 height=%22512%22 rx=%22112%22 fill=%22url(#tvbg)%22/%3E%3Cg transform=%22translate(256,256) scale(0.78) translate(-600,-382.5)%22%3E%3Cg transform=%22translate(350.0,130) scale(1.25)%22%3E%3Cpath d=%22M40,60 H360 V130 H254 V360 H158 V130 H40 Z%22 fill=%22#F1EAD8%22/%3E%0A%3Cpath d=%22M163,360 Q190,196 278,80 L258,66 L322,44 L320,112 L300,97 Q226,214 207,360 Z%22 fill=%22url(#tvg0)%22 stroke=%22#13243E%22 stroke-width=%2210%22 stroke-linejoin=%22round%22 paint-order=%22stroke%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root {
+  color-scheme: light;
+  --bg: #F5F6FB; --card: #FFFFFF; --soft: #F5F6FB; --ink: #1B1F3B; --muted: #565B7A; --line: #DEE1EE; --field: #C7CBE3;
+  --navy: #16294A; --navy-2: #1F3961; --gold: #F2C14E; --gold-soft: #FFF6E0; --gold-line: #EED9A4; --gold-ink: #6B4A00;
+  --blue: #3D4FD9; --blue-ink: #2E3EB8; --blue-soft: #F1F3FD;
+  --green: #1E7A46; --green-soft: #E6F4EC; --green-ink: #155C34;
+  --red: #B42318; --red-soft: #FDECEA;
+  --display: "Lexend", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --bg: #0F1426; --card: #141B33; --soft: #1A2240; --ink: #E8EBF7; --muted: #A9B0CF; --line: #2A3355; --field: #3A4470;
+    --navy: #0F1E36; --navy-2: #1A3156; --gold-soft: #241F12; --gold-line: #4A3F1E; --gold-ink: #EBD9A8;
+    --blue: #8F9CFF; --blue-ink: #B3BCFF; --blue-soft: #1E2650;
+    --green: #4CC07F; --green-soft: #14321F; --green-ink: #8FE0B0;
+    --red: #FF8A80; --red-soft: #3A1714;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+a { color: var(--blue); }
+:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; border-radius: 6px; }
+[hidden] { display: none !important; }
+h1, h2, h3 { font-family: var(--display); margin: 0; line-height: 1.2; }
+p { margin: 0; }
+
+.top { background: var(--navy); color: #FFFFFF; }
+.top .in { max-width: 1120px; margin: 0 auto; padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.brand { display: inline-flex; align-items: center; gap: 10px; color: #FFFFFF; text-decoration: none; }
+.brand b { font-family: var(--display); font-size: 20px; }
+.brand small { font-size: 12px; letter-spacing: 0.06em; color: #C9D0EC; }
+.brand small span { color: var(--gold); }
+.secure { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: #C9D0EC; }
+
+.page { max-width: 1120px; margin: 0 auto; padding: 28px 24px 64px; display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 24px; align-items: start; }
+.page > h1 { grid-column: 1 / -1; font-size: 30px; }
+
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 22px; display: grid; gap: 16px; }
+.card + .card { margin-top: 16px; }
+.step-head { display: flex; align-items: center; gap: 12px; }
+.num { width: 32px; height: 32px; border-radius: 50%; background: var(--navy); color: #FFFFFF; display: grid; place-items: center; font-weight: 600; font-family: var(--display); flex: 0 0 32px; }
+.num.done { background: var(--green); }
+.step-head h2 { font-size: 19px; font-weight: 600; }
+.step-head .edit { margin-left: auto; font-size: 14px; background: none; border: 0; color: var(--blue); cursor: pointer; font: inherit; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 20px; border-radius: 12px; font: 600 16px/1 var(--body); cursor: pointer; border: 1px solid transparent; text-decoration: none; }
+.btn-primary { background: var(--blue); color: #FFFFFF; }
+.btn-outline { background: var(--card); color: var(--ink); border-color: var(--field); }
+.btn-gold { background: var(--gold); color: #1B1F3B; }
+.btn-block { width: 100%; }
+.btn[disabled] { opacity: 0.55; cursor: not-allowed; }
+
+label.l { font-size: 14px; font-weight: 600; color: var(--muted); }
+.input { font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid var(--field); border-radius: 10px; background: var(--card); color: var(--ink); width: 100%; min-width: 0; }
+.row { display: flex; gap: 10px; }
+.field { display: grid; gap: 6px; }
+.or { display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 14px; }
+.or::before, .or::after { content: ""; flex: 1 1 0; height: 1px; background: var(--line); }
+.hint { font-size: 14px; color: var(--muted); }
+.signed { display: flex; align-items: center; gap: 10px; font-size: 15px; }
+
+.exams { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.exams label { border: 2px solid var(--line); border-radius: 12px; padding: 12px 14px; cursor: pointer; display: grid; gap: 2px; }
+.exams input { position: absolute; opacity: 0; pointer-events: none; }
+.exams label:has(input:checked) { border-color: var(--blue); background: var(--blue-soft); }
+.exams label:has(input:focus-visible) { outline: 3px solid var(--gold); outline-offset: 2px; }
+.exams b { font-size: 16px; }
+.exams span { font-size: 13px; color: var(--muted); }
+.product { border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: grid; gap: 8px; }
+.product h3 { font-size: 17px; font-weight: 600; }
+.product ul { margin: 0; padding-left: 20px; font-size: 15px; color: var(--muted); display: grid; gap: 4px; }
+
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.grid2 .full { grid-column: 1 / -1; }
+select.input { appearance: auto; }
+.agree { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; }
+.agree input { width: 20px; height: 20px; margin: 1px 0 0; flex: 0 0 20px; }
+.minor { background: var(--gold-soft); border: 1px solid var(--gold-line); color: var(--gold-ink); border-radius: 10px; padding: 12px; font-size: 14px; }
+.minor b { color: var(--ink); }
+@media (max-width: 560px) { .grid2 { grid-template-columns: 1fr; } }
+
+/* Summary */
+.summary { position: sticky; top: 16px; }
+.lines { display: grid; gap: 10px; font-size: 15px; }
+.line { display: flex; justify-content: space-between; gap: 12px; }
+.line.minus span:last-child { color: var(--green); font-weight: 600; }
+.total { display: flex; justify-content: space-between; align-items: baseline; border-top: 1px solid var(--line); padding-top: 14px; }
+.total span { font-weight: 600; }
+.total b { font-family: var(--display); font-size: 28px; }
+.code-box { display: grid; gap: 8px; }
+.applied { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: var(--green-soft); color: var(--green-ink); border-radius: 10px; padding: 10px 12px; font-size: 14px; font-weight: 600; }
+.applied button { background: none; border: 0; color: inherit; text-decoration: underline; cursor: pointer; font: inherit; font-weight: 500; }
+.err { background: var(--red-soft); color: var(--red); border-radius: 10px; padding: 10px 12px; font-size: 14px; }
+.tabs { display: grid; grid-template-columns: 1fr 1fr; background: var(--soft); border-radius: 10px; padding: 4px; gap: 4px; }
+.tabs button { font: 600 14px/1 var(--body); min-height: 40px; border: 0; border-radius: 8px; background: transparent; color: var(--muted); cursor: pointer; }
+.tabs button[aria-selected="true"] { background: var(--card); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,0.12); }
+.credits { display: flex; gap: 10px; align-items: flex-start; border: 1px solid var(--gold-line); background: var(--gold-soft); color: var(--gold-ink); border-radius: 10px; padding: 12px; font-size: 14px; }
+.credits input { width: 20px; height: 20px; margin: 0; flex: 0 0 20px; }
+.credits b { color: var(--ink); }
+.fine { font-size: 13px; color: var(--muted); }
+
+/* Success */
+.success { grid-column: 1 / -1; max-width: 720px; justify-self: center; width: 100%; text-align: center; }
+.success .card { justify-items: center; padding: 36px 28px; }
+.tick { width: 64px; height: 64px; border-radius: 50%; background: var(--green-soft); display: grid; place-items: center; }
+.refbox { width: 100%; background: var(--gold-soft); border: 1px solid var(--gold-line); border-radius: 14px; padding: 20px; display: grid; gap: 12px; text-align: left; }
+.refbox h3 { font-size: 18px; }
+.refcode { display: flex; gap: 10px; flex-wrap: wrap; }
+.refcode code { flex: 1 1 200px; font: 600 20px/1 var(--display); letter-spacing: 0.08em; background: var(--card); border: 1px dashed var(--field); border-radius: 10px; padding: 14px; text-align: center; color: var(--ink); }
+.wa { background: #1E7A46; color: #FFFFFF; }
+
+@media (max-width: 900px) {
+  .page { grid-template-columns: 1fr; }
+  .summary { position: static; }
+}
+@media (max-width: 560px) {
+  .exams { grid-template-columns: 1fr; }
+  .page > h1 { font-size: 24px; }
+  .secure span { display: none; }
+}
+.tv-logo { display: block; width: auto; aspect-ratio: 1784 / 409; flex: 0 0 auto; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position: absolute" aria-hidden="true" focusable="false"><defs><linearGradient id="tvg0" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#EDBE55"/><stop offset="0.55" stop-color="#D49A2A"/><stop offset="1" stop-color="#B5801C"/></linearGradient><radialGradient id="tvbg" cx="0.3" cy="0.2" r="1"><stop offset="0" stop-color="#1B3254"/><stop offset="1" stop-color="#0C1A30"/></radialGradient></defs><symbol id="tv-logo" viewBox="0 0 1784 409"><g transform="translate(-400,-178)"><g transform="translate(350.0,130) scale(1.25)"><path d="M40,60 H360 V130 H254 V360 H158 V130 H40 Z" fill="#F1EAD8"/>
+<path d="M163,360 Q190,196 278,80 L258,66 L322,44 L320,112 L300,97 Q226,214 207,360 Z" fill="url(#tvg0)" stroke="#13243E" stroke-width="10" stroke-linejoin="round" paint-order="stroke"/></g></g><g transform="translate(490,53) scale(1.26) translate(-86,-674)"><path transform="translate(82.15625,808.125)" d="M106.3125 -131.625V-105.9375H71.4375V0.0H39.375V-105.9375H4.5V-131.625Z M157.0 -105.9375V-79.3125H199.9375V-54.5625H157.0V-25.6875H205.5625V0.0H124.9375V-131.625H205.5625V-105.9375Z M225.125 -39.375H259.25Q260.0 -32.0625 264.3125 -28.21875Q268.625 -24.375 275.5625 -24.375Q282.6875 -24.375 286.8125 -27.65625Q290.9375 -30.9375 290.9375 -36.75Q290.9375 -41.625 287.65625 -44.8125Q284.375 -48.0 279.59375 -50.0625Q274.8125 -52.125 266.0 -54.75Q253.25 -58.6875 245.1875 -62.625Q237.125 -66.5625 231.3125 -74.25Q225.5 -81.9375 225.5 -94.3125Q225.5 -112.6875 238.8125 -123.09375Q252.125 -133.5 273.5 -133.5Q295.25 -133.5 308.5625 -123.09375Q321.875 -112.6875 322.8125 -94.125H288.125Q287.75 -100.5 283.4375 -104.15625Q279.125 -107.8125 272.375 -107.8125Q266.5625 -107.8125 263.0 -104.71875Q259.4375 -101.625 259.4375 -95.8125Q259.4375 -89.4375 265.4375 -85.875Q271.4375 -82.3125 284.1875 -78.1875Q296.9375 -73.875 304.90625 -69.9375Q312.875 -66.0 318.6875 -58.5Q324.5 -51.0 324.5 -39.1875Q324.5 -27.9375 318.78125 -18.75Q313.0625 -9.5625 302.1875 -4.125Q291.3125 1.3125 276.5 1.3125Q262.0625 1.3125 250.625 -3.375Q239.1875 -8.0625 232.34375 -17.25Q225.5 -26.4375 225.125 -39.375Z M441.375 -131.625V-105.9375H406.5V0.0H374.4375V-105.9375H339.5625V-131.625Z" fill="#F1EAD8"/><path transform="translate(530.53125,808.125)" d="M135.1875 -131.625 88.5 0.0H48.375L1.6875 -131.625H35.8125L68.4375 -32.25L101.25 -131.625Z M183.0625 -105.9375V-79.3125H226.0V-54.5625H183.0625V-25.6875H231.625V0.0H151.0V-131.625H231.625V-105.9375Z M322.0625 0.0 294.6875 -49.6875H287.0V0.0H254.9375V-131.625H308.75Q324.3125 -131.625 335.28125 -126.1875Q346.25 -120.75 351.6875 -111.28125Q357.125 -101.8125 357.125 -90.1875Q357.125 -77.0625 349.71875 -66.75Q342.3125 -56.4375 327.875 -52.125L358.25 0.0ZM287.0 -72.375H306.875Q315.6875 -72.375 320.09375 -76.6875Q324.5 -81.0 324.5 -88.875Q324.5 -96.375 320.09375 -100.6875Q315.6875 -105.0 306.875 -105.0H287.0Z M375.9375 -39.375H410.0625Q410.8125 -32.0625 415.125 -28.21875Q419.4375 -24.375 426.375 -24.375Q433.5 -24.375 437.625 -27.65625Q441.75 -30.9375 441.75 -36.75Q441.75 -41.625 438.46875 -44.8125Q435.1875 -48.0 430.40625 -50.0625Q425.625 -52.125 416.8125 -54.75Q404.0625 -58.6875 396.0 -62.625Q387.9375 -66.5625 382.125 -74.25Q376.3125 -81.9375 376.3125 -94.3125Q376.3125 -112.6875 389.625 -123.09375Q402.9375 -133.5 424.3125 -133.5Q446.0625 -133.5 459.375 -123.09375Q472.6875 -112.6875 473.625 -94.125H438.9375Q438.5625 -100.5 434.25 -104.15625Q429.9375 -107.8125 423.1875 -107.8125Q417.375 -107.8125 413.8125 -104.71875Q410.25 -101.625 410.25 -95.8125Q410.25 -89.4375 416.25 -85.875Q422.25 -82.3125 435.0 -78.1875Q447.75 -73.875 455.71875 -69.9375Q463.6875 -66.0 469.5 -58.5Q475.3125 -51.0 475.3125 -39.1875Q475.3125 -27.9375 469.59375 -18.75Q463.875 -9.5625 453.0 -4.125Q442.125 1.3125 427.3125 1.3125Q412.875 1.3125 401.4375 -3.375Q390.0 -8.0625 383.15625 -17.25Q376.3125 -26.4375 375.9375 -39.375Z M529.5625 -105.9375V-79.3125H572.5V-54.5625H529.5625V-25.6875H578.125V0.0H497.5V-131.625H578.125V-105.9375Z" fill="#D49A2A"/></g><g transform="translate(490,259) scale(1.5) translate(-346,-869)"><path transform="translate(342.03562500000004,916.5)" d="M24.28875 -35.7Q28.9425 -35.7 32.70375 -33.46875Q36.465 -31.2375 38.6325 -27.125625Q40.8 -23.01375 40.8 -17.7225Q40.8 -12.43125 38.6325 -8.255625Q36.465 -4.08 32.671875 -1.753125Q28.87875 0.57375 24.28875 0.57375Q20.208750000000002 0.57375 17.053125 -1.02Q13.8975 -2.61375 12.04875 -5.1V0.0H4.78125V-47.175000000000004H12.04875V-29.89875Q13.8975 -32.448750000000004 17.116875 -34.074375Q20.33625 -35.7 24.28875 -35.7ZM22.695 -29.38875Q19.95375 -29.38875 17.499375 -27.986250000000002Q15.045 -26.583750000000002 13.546875 -23.90625Q12.04875 -21.22875 12.04875 -17.595Q12.04875 -13.96125 13.546875 -11.251875Q15.045 -8.5425 17.499375 -7.140000000000001Q19.95375 -5.7375 22.695 -5.7375Q25.5 -5.7375 27.954375 -7.171875Q30.40875 -8.60625 31.906875 -11.3475Q33.405 -14.088750000000001 33.405 -17.7225Q33.405 -21.35625 31.906875 -24.001875Q30.40875 -26.6475 27.954375 -28.018125Q25.5 -29.38875 22.695 -29.38875Z M84.72375 -35.12625 63.17625 16.51125H55.65375L62.79375 -0.57375L48.96000000000001 -35.12625H57.056250000000006L66.9375 -8.35125L77.20125 -35.12625Z  M115.89750000000001 -12.24H123.675Q123.93 -9.37125 125.93812500000001 -7.5225Q127.94625 -5.67375 131.58 -5.67375Q135.34125 -5.67375 137.445 -7.4906250000000005Q139.54875 -9.307500000000001 139.54875 -12.17625Q139.54875 -14.4075 138.241875 -15.809999999999999Q136.935 -17.2125 134.99062500000002 -17.9775Q133.04625000000001 -18.7425 129.60375 -19.635Q125.26875 -20.7825 122.559375 -21.961875Q119.85000000000001 -23.14125 117.9375 -25.627499999999998Q116.025 -28.11375 116.025 -32.2575Q116.025 -36.0825 117.9375 -38.95125Q119.85000000000001 -41.82 123.2925 -43.35Q126.735 -44.88 131.26125000000002 -44.88Q137.7 -44.88 141.811875 -41.660625Q145.92375 -38.441250000000004 146.37 -32.83125H138.3375Q138.14625 -35.253750000000004 136.04250000000002 -36.975Q133.93875 -38.69625 130.49625 -38.69625Q127.3725 -38.69625 125.39625000000001 -37.1025Q123.42 -35.50875 123.42 -32.5125Q123.42 -30.4725 124.66312500000001 -29.165625Q125.90625 -27.85875 127.81875 -27.09375Q129.73125 -26.32875 133.04625000000001 -25.43625Q137.445 -24.225 140.218125 -23.01375Q142.99125 -21.802500000000002 144.93562500000002 -19.284375Q146.88 -16.76625 146.88 -12.55875Q146.88 -9.18 145.063125 -6.18375Q143.24625 -3.1875 139.77187500000002 -1.370625Q136.2975 0.44625000000000004 131.58 0.44625000000000004Q127.1175 0.44625000000000004 123.54750000000001 -1.115625Q119.9775 -2.6775 117.9375 -5.546250000000001Q115.89750000000001 -8.415000000000001 115.89750000000001 -12.24Z M169.065 -29.1975V-9.75375Q169.065 -7.7775 169.989375 -6.916875Q170.91375 -6.05625 173.145 -6.05625H177.60750000000002V0.0H171.87Q166.96125 0.0 164.34750000000003 -2.295Q161.73375000000001 -4.59 161.73375000000001 -9.75375V-29.1975H157.59V-35.12625H161.73375000000001V-43.86H169.065V-35.12625H177.60750000000002V-29.1975Z M221.2125 -35.12625V0.0H213.945V-4.14375Q212.22375 -1.97625 209.450625 -0.733125Q206.6775 0.51 203.55375 0.51Q199.41 0.51 196.12687499999998 -1.2112500000000002Q192.84375 -2.9325 190.963125 -6.311249999999999Q189.0825 -9.69 189.0825 -14.47125V-35.12625H196.28625V-15.555Q196.28625 -10.8375 198.64499999999998 -8.319375Q201.00375 -5.8012500000000005 205.08375 -5.8012500000000005Q209.16375 -5.8012500000000005 211.554375 -8.319375Q213.945 -10.8375 213.945 -15.555V-35.12625Z M250.09125 -35.7Q253.53375 -35.7 256.880625 -34.201875Q260.2275 -32.70375 262.20375 -30.2175V-47.175000000000004H269.535V0.0H262.20375V-5.29125Q260.41875 -2.74125 257.263125 -1.08375Q254.10750000000002 0.57375 250.0275 0.57375Q245.4375 0.57375 241.644375 -1.753125Q237.85125 -4.08 235.651875 -8.255625Q233.4525 -12.43125 233.4525 -17.7225Q233.4525 -23.01375 235.651875 -27.09375Q237.85125 -31.173750000000002 241.644375 -33.436875Q245.4375 -35.7 250.09125 -35.7ZM251.5575 -29.38875Q248.7525 -29.38875 246.32999999999998 -28.018125Q243.9075 -26.6475 242.409375 -24.001875Q240.91125 -21.35625 240.91125 -17.7225Q240.91125 -14.088750000000001 242.409375 -11.3475Q243.9075 -8.60625 246.361875 -7.171875Q248.81625 -5.7375 251.5575 -5.7375Q254.3625 -5.7375 256.78499999999997 -7.140000000000001Q259.2075 -8.5425 260.705625 -11.251875Q262.20375 -13.96125 262.20375 -17.595Q262.20375 -21.22875 260.705625 -23.90625Q259.2075 -26.583750000000002 256.78499999999997 -27.986250000000002Q254.3625 -29.38875 251.5575 -29.38875Z M315.8175 -35.12625 294.27 16.51125H286.7475L293.8875 -0.57375L280.05375 -35.12625H288.15L298.03125 -8.35125L308.295 -35.12625Z M339.97875 -6.5025 349.92375 -35.12625H357.6375L344.25 0.0H335.58L322.25624999999997 -35.12625H330.03375Z M400.15874999999994 -14.85375H373.32Q373.63874999999996 -10.64625 376.44374999999997 -8.09625Q379.24875 -5.54625 383.32874999999996 -5.54625Q389.19374999999997 -5.54625 391.61625 -10.455H399.4575Q397.86375 -5.61 393.688125 -2.5181250000000004Q389.5125 0.57375 383.32874999999996 0.57375Q378.29249999999996 0.57375 374.30812499999996 -1.689375Q370.32374999999996 -3.9525 368.06062499999996 -8.064375Q365.79749999999996 -12.17625 365.79749999999996 -17.595Q365.79749999999996 -23.01375 367.99687499999993 -27.125625Q370.19624999999996 -31.2375 374.18062499999996 -33.46875Q378.16499999999996 -35.7 383.32874999999996 -35.7Q388.30125 -35.7 392.18999999999994 -33.5325Q396.07874999999996 -31.365000000000002 398.24625 -27.444375Q400.41375 -23.52375 400.41375 -18.423750000000002Q400.41375 -16.4475 400.15874999999994 -14.85375ZM392.8275 -20.71875Q392.76374999999996 -24.735 389.95874999999995 -27.1575Q387.15374999999995 -29.580000000000002 383.01 -29.580000000000002Q379.24875 -29.580000000000002 376.57124999999996 -27.189375000000002Q373.89374999999995 -24.798750000000002 373.38374999999996 -20.71875Z M430.43999999999994 -35.7V-28.177500000000002H428.59124999999995Q424.31999999999994 -28.177500000000002 422.1206249999999 -26.01Q419.92124999999993 -23.8425 419.92124999999993 -18.4875V0.0H412.65374999999995V-35.12625H419.92124999999993V-30.02625Q421.51499999999993 -32.70375 424.1606249999999 -34.201875Q426.8062499999999 -35.7 430.43999999999994 -35.7Z M440.3212499999999 -10.77375H447.84374999999994Q448.0349999999999 -8.5425 449.9793749999999 -7.0443750000000005Q451.9237499999999 -5.54625 454.85624999999993 -5.54625Q457.91624999999993 -5.54625 459.6056249999999 -6.725625Q461.29499999999996 -7.905 461.29499999999996 -9.75375Q461.29499999999996 -11.73 459.41437499999995 -12.686250000000001Q457.53374999999994 -13.6425 453.4537499999999 -14.790000000000001Q449.5012499999999 -15.873750000000001 447.01499999999993 -16.89375Q444.52874999999995 -17.91375 442.71187499999996 -20.0175Q440.8949999999999 -22.12125 440.8949999999999 -25.56375Q440.8949999999999 -28.368750000000002 442.5524999999999 -30.695625Q444.2099999999999 -33.0225 447.30187499999994 -34.36125Q450.39374999999995 -35.7 454.4099999999999 -35.7Q460.4024999999999 -35.7 464.0681249999999 -32.671875Q467.73374999999993 -29.64375 467.9887499999999 -24.41625H460.72124999999994Q460.5299999999999 -26.775000000000002 458.8087499999999 -28.177500000000002Q457.0874999999999 -29.580000000000002 454.1549999999999 -29.580000000000002Q451.28624999999994 -29.580000000000002 449.7562499999999 -28.496250000000003Q448.22624999999994 -27.4125 448.22624999999994 -25.6275Q448.22624999999994 -24.225 449.2462499999999 -23.26875Q450.26624999999996 -22.3125 451.73249999999996 -21.770625000000003Q453.1987499999999 -21.22875 456.06749999999994 -20.4Q459.8924999999999 -19.38 462.34687499999995 -18.328125Q464.8012499999999 -17.27625 466.58624999999995 -15.236250000000002Q468.3712499999999 -13.196250000000001 468.43499999999995 -9.8175Q468.43499999999995 -6.82125 466.7774999999999 -4.4625Q465.11999999999995 -2.1037500000000002 462.09187499999996 -0.7650000000000001Q459.0637499999999 0.57375 454.98374999999993 0.57375Q450.8399999999999 0.57375 447.55687499999993 -0.924375Q444.27374999999995 -2.4225 442.3612499999999 -5.004375Q440.4487499999999 -7.58625 440.3212499999999 -10.77375Z M513.3149999999999 -14.85375H486.47624999999994Q486.7949999999999 -10.64625 489.5999999999999 -8.09625Q492.4049999999999 -5.54625 496.4849999999999 -5.54625Q502.3499999999999 -5.54625 504.7724999999999 -10.455H512.6137499999999Q511.0199999999999 -5.61 506.8443749999999 -2.5181250000000004Q502.66874999999993 0.57375 496.4849999999999 0.57375Q491.4487499999999 0.57375 487.4643749999999 -1.689375Q483.4799999999999 -3.9525 481.2168749999999 -8.064375Q478.9537499999999 -12.17625 478.9537499999999 -17.595Q478.9537499999999 -23.01375 481.15312499999993 -27.125625Q483.3524999999999 -31.2375 487.3368749999999 -33.46875Q491.3212499999999 -35.7 496.4849999999999 -35.7Q501.4574999999999 -35.7 505.34624999999994 -33.5325Q509.2349999999999 -31.365000000000002 511.4024999999999 -27.444375Q513.5699999999999 -23.52375 513.5699999999999 -18.423750000000002Q513.5699999999999 -16.4475 513.3149999999999 -14.85375ZM505.98374999999993 -20.71875Q505.9199999999999 -24.735 503.1149999999999 -27.1575Q500.3099999999999 -29.580000000000002 496.16624999999993 -29.580000000000002Q492.4049999999999 -29.580000000000002 489.7274999999999 -27.189375000000002Q487.0499999999999 -24.798750000000002 486.5399999999999 -20.71875Z" fill="#F1EAD8"/></g></symbol></svg>
+
+<header class="top">
+  <div class="in">
+    <a class="brand" href="testverse-home.html">
+      <svg class="tv-logo" style="height: 38px" viewBox="0 0 1784 409" role="img" aria-label="Testverse by Studyverse"><use href="#tv-logo"/></svg>
+    </a>
+    <span class="secure"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span>Secure checkout</span></span>
+  </div>
+</header>
+
+<main class="page" id="checkout">
+  <h1>Get your test series</h1>
+
+  <div>
+    <!-- Step 1: account -->
+    <section class="card" aria-labelledby="s1">
+      <div class="step-head"><span class="num" id="n1">1</span><h2 id="s1">Your account</h2></div>
+      <div id="signin">
+        <div style="display: grid; gap: 14px">
+          <button class="btn btn-outline btn-block" type="button" data-signin>Continue with Google</button>
+          <div class="or">or</div>
+          <div class="field">
+            <label class="l" for="phone">Mobile number</label>
+            <div class="row">
+              <input class="input" id="phone" inputmode="tel" autocomplete="tel" placeholder="10-digit mobile number">
+              <button class="btn btn-primary" type="button" data-signin>Send OTP</button>
+            </div>
+          </div>
+          <p class="hint">Studying in a Studyverse course? Use the same Google account or mobile number. It's one account.</p>
+        </div>
+      </div>
+      <div id="signed" class="signed" hidden>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>
+        <span>Signed in as <b>[Student name]</b></span>
+      </div>
+    </section>
+
+
+    <!-- Step 2: about you -->
+    <section class="card" aria-labelledby="s2">
+      <div class="step-head"><span class="num" id="n2">2</span><h2 id="s2">About you</h2></div>
+      <p class="hint" id="about-locked">Sign in first.</p>
+      <form id="about" class="grid2" hidden novalidate>
+        <div class="field full">
+          <label class="l" for="f-name">Full name, as on your exam admit card</label>
+          <input class="input" id="f-name" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label class="l" for="f-dob">Date of birth</label>
+          <input class="input" id="f-dob" type="date" required>
+        </div>
+        <div class="field">
+          <label class="l" for="f-email">Email</label>
+          <input class="input" id="f-email" type="email" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label class="l" for="f-class">Class</label>
+          <select class="input" id="f-class" required>
+            <option value="">Select</option><option>Class 11</option><option>Class 12</option><option>Dropper / repeater</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="l" for="f-year">Exam year</label>
+          <select class="input" id="f-year" required>
+            <option value="">Select</option><option>2027</option><option>2028</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="l" for="f-state">State</label>
+          <input class="input" id="f-state" autocomplete="address-level1" required>
+        </div>
+        <div class="field">
+          <label class="l" for="f-city">City</label>
+          <input class="input" id="f-city" autocomplete="address-level2" required>
+        </div>
+        <div class="field">
+          <label class="l" for="f-pname">Parent or guardian's name</label>
+          <input class="input" id="f-pname" required>
+        </div>
+        <div class="field">
+          <label class="l" for="f-pphone">Parent or guardian's mobile</label>
+          <input class="input" id="f-pphone" inputmode="tel" required>
+        </div>
+        <div class="field full">
+          <label class="l" for="f-coaching">School or coaching you attend now <span style="font-weight: 400">(optional)</span></label>
+          <input class="input" id="f-coaching">
+        </div>
+        <div class="minor full" id="minor" hidden>
+          <b>Parent's consent needed.</b> As you're under 18, we'll send an OTP to your parent's mobile to confirm they agree to you using Testverse. You can still finish checkout now.
+        </div>
+        <label class="agree full"><input type="checkbox" id="f-terms" required><span>I agree to the <a href="/terms">Terms</a> and <a href="/privacy">Privacy Policy</a>.</span></label>
+        <label class="agree full"><input type="checkbox" id="f-results"><span>Contact me after my exam result to share how I did. <span class="fine">Optional. We'll always ask separately before using your name or photo anywhere.</span></span></label>
+      </form>
+    </section>
+
+    <!-- Step 3: exam -->
+    <section class="card" aria-labelledby="s3">
+      <div class="step-head"><span class="num">3</span><h2 id="s3">Your exam</h2></div>
+      <div class="exams" role="radiogroup" aria-labelledby="s3">
+        <label><input type="radio" name="exam" value="neet"><b>NEET</b><span>Physics, Chemistry, Biology</span></label>
+        <label><input type="radio" name="exam" value="jee-main"><b>JEE Main</b><span>Physics, Chemistry, Maths</span></label>
+        <label><input type="radio" name="exam" value="jee-advanced"><b>JEE Advanced</b><span>Paper 1 and Paper 2</span></label>
+      </div>
+      <div class="product" id="product" hidden>
+        <h3 id="product-name"></h3>
+        <ul>
+          <li>6 part tests</li>
+          <li>3 half-syllabus tests</li>
+          <li>2 full-syllabus tests</li>
+          <li>Real CBT screen, rank and full analysis with solutions</li>
+        </ul>
+      </div>
+    </section>
+  </div>
+
+  <!-- Summary -->
+  <aside class="summary" aria-labelledby="sum">
+    <section class="card">
+      <h2 id="sum" style="font-size: 19px">Order summary</h2>
+
+      <div class="lines">
+        <div class="line"><span id="line-product">Test series</span><span id="line-price">—</span></div>
+        <div class="line minus" id="line-code" hidden><span id="line-code-label"></span><span id="line-code-amt"></span></div>
+        <div class="line minus" id="line-credits" hidden><span>Credits used</span><span id="line-credits-amt"></span></div>
+      </div>
+
+      <div class="code-box">
+        <div class="tabs" role="tablist" aria-label="Discount code type">
+          <button type="button" role="tab" aria-selected="true" data-tab="coupon">Coupon code</button>
+          <button type="button" role="tab" aria-selected="false" data-tab="referral">Referral code</button>
+        </div>
+        <div id="code-entry">
+          <label class="l" for="code" id="code-label" style="display: block; margin-bottom: 6px">Coupon code</label>
+          <div class="row">
+            <input class="input" id="code" autocomplete="off" autocapitalize="characters" placeholder="Enter code">
+            <button class="btn btn-outline" type="button" id="apply">Apply</button>
+          </div>
+        </div>
+        <div class="applied" id="applied" hidden><span id="applied-text"></span><button type="button" id="remove">Remove</button></div>
+        <div class="err" id="code-err" role="alert" hidden></div>
+        <p class="fine">One code per order: a coupon or a friend's referral code.</p>
+      </div>
+
+      <label class="credits" id="credits-box" hidden>
+        <input type="checkbox" id="use-credits">
+        <span>Use my credits. You have <b id="credit-bal"></b> available. Credits work on top of a code.</span>
+      </label>
+
+      <div class="total"><span>Total</span><b id="total">—</b></div>
+
+      <button class="btn btn-gold btn-block" type="button" id="pay" disabled>Choose your exam</button>
+      <p class="fine" id="pay-note">Sign in and choose your exam to continue. Payment by UPI, card or net banking.</p>
+    </section>
+  </aside>
+</main>
+
+<!-- Success -->
+<main class="page" id="done" hidden>
+  <div class="success">
+    <section class="card">
+      <span class="tick"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></span>
+      <h1 style="font-size: 28px">You're in</h1>
+      <p style="color: var(--muted)" id="done-text"></p>
+      <a class="btn btn-primary" href="/app">Start Part Test 1</a>
+      <div class="refbox">
+        <h3>Invite friends, earn credits</h3>
+        <p style="color: var(--gold-ink); font-size: 15px">Your friends get <b id="r-disc"></b> off with your code. You get <b id="r-credit"></b> in credits every time one of them buys.</p>
+        <div class="refcode">
+          <code id="my-code">[CODE]</code>
+          <button class="btn btn-outline" type="button" id="copy">Copy link</button>
+        </div>
+        <a class="btn wa" id="wa" href="#" target="_blank" rel="noopener">Share on WhatsApp</a>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script>
+(function () {
+  /* ------------------------------------------------------------------
+     EXAMPLE SETTINGS FOR THE DESIGN ONLY.
+     In the real app, prices, coupons, referral codes and credit balances
+     must come from the server, and the server must recheck every code and
+     recalculate the total before taking payment. Never trust totals
+     calculated in the browser.
+     ------------------------------------------------------------------ */
+  var CONFIG = {
+    currency: '\u20B9',
+    prices: { 'neet': 999, 'jee-main': 999, 'jee-advanced': 1199 },          // example prices
+    names: { 'neet': 'NEET Test Series', 'jee-main': 'JEE Main Test Series', 'jee-advanced': 'JEE Advanced Test Series' },
+    coupons: {                                                             // admin-created codes
+      'LAUNCH20': { type: 'percent', value: 20, label: '20% off' },
+      'RANKER100': { type: 'flat', value: 100, label: '\u20B9100 off' },
+      'DIWALI25': { type: 'percent', value: 25, expired: '3 Nov 2026' }
+    },
+    referral: { friendDiscount: 100, referrerCredit: 100, pattern: /^[A-Z]{3,8}[0-9]{2,4}$/ },
+    creditBalance: 150,                                                    // this student's wallet
+    myReferralCode: 'RIYA4821'
+  };
+
+  var state = { signedIn: false, exam: null, tab: 'coupon', code: null, useCredits: false };
+  var $ = function (id) { return document.getElementById(id); };
+  var money = function (n) { return CONFIG.currency + Math.round(n).toLocaleString('en-IN'); };
+
+  // Prefill from link: ?exam=neet&ref=RIYA4821 or ?coupon=LAUNCH20
+  var qs = new URLSearchParams(location.search);
+  var preExam = qs.get('exam');
+  if (preExam && CONFIG.prices[preExam]) {
+    var r = document.querySelector('input[name="exam"][value="' + preExam + '"]');
+    if (r) { r.checked = true; state.exam = preExam; }
+  }
+
+  // Sign in (demo)
+  document.querySelectorAll('[data-signin]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.signedIn = true;
+      $('signin').hidden = true; $('signed').hidden = false;
+      $('n1').classList.add('done'); $('n1').textContent = '\u2713';
+      $('credits-box').hidden = !(CONFIG.creditBalance > 0);
+      $('credit-bal').textContent = money(CONFIG.creditBalance);
+      $('about-locked').hidden = true; $('about').hidden = false;
+      render();
+    });
+  });
+
+  document.querySelectorAll('input[name="exam"]').forEach(function (r) {
+    r.addEventListener('change', function () { state.exam = r.value; render(); });
+  });
+
+  // Tabs
+  document.querySelectorAll('[data-tab]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.tab = b.dataset.tab;
+      document.querySelectorAll('[data-tab]').forEach(function (x) { x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+      $('code-label').textContent = state.tab === 'coupon' ? 'Coupon code' : "Friend's referral code";
+      $('code-err').hidden = true;
+    });
+  });
+
+  function checkCode(raw, kind) {
+    var c = (raw || '').trim().toUpperCase();
+    if (!c) return { error: 'Enter a code first.' };
+    if (kind === 'coupon') {
+      var cp = CONFIG.coupons[c];
+      if (!cp) return { error: 'That coupon code isn\u2019t valid. Check the spelling, or try it as a referral code.' };
+      if (cp.expired) return { error: 'This coupon expired on ' + cp.expired + '.' };
+      return { code: c, kind: 'coupon', rule: cp, label: 'Coupon ' + c };
+    }
+    if (c === CONFIG.myReferralCode) return { error: 'You can\u2019t use your own referral code.' };
+    if (!CONFIG.referral.pattern.test(c)) return { error: 'That referral code isn\u2019t valid. Ask your friend to check it in their account.' };
+    return { code: c, kind: 'referral', rule: { type: 'flat', value: CONFIG.referral.friendDiscount }, label: 'Referral ' + c };
+  }
+
+  function applyCode(raw, kind) {
+    var res = checkCode(raw, kind);
+    if (res.error) { $('code-err').textContent = res.error; $('code-err').hidden = false; return; }
+    state.code = res; $('code-err').hidden = true; $('code').value = '';
+    render();
+  }
+  $('apply').addEventListener('click', function () { applyCode($('code').value, state.tab); });
+  $('code').addEventListener('keydown', function (e) { if (e.key === 'Enter') applyCode($('code').value, state.tab); });
+  $('remove').addEventListener('click', function () { state.code = null; render(); });
+  // About-you form
+  var REQUIRED = ['f-name', 'f-dob', 'f-email', 'f-class', 'f-year', 'f-state', 'f-city', 'f-pname', 'f-pphone'];
+  function aboutComplete() {
+    var ok = REQUIRED.every(function (id) { return $(id).value.trim() !== ''; });
+    ok = ok && /^\S+@\S+\.\S+$/.test($('f-email').value.trim());
+    ok = ok && $('f-pphone').value.replace(/\D/g, '').length >= 10;
+    return ok && $('f-terms').checked;
+  }
+  function isMinor() {
+    var v = $('f-dob').value; if (!v) return false;
+    var dob = new Date(v), now = new Date();
+    var age = now.getFullYear() - dob.getFullYear() - ((now.getMonth() < dob.getMonth() || (now.getMonth() === dob.getMonth() && now.getDate() < dob.getDate())) ? 1 : 0);
+    return age < 18;
+  }
+  $('about').addEventListener('input', function () { $('minor').hidden = !isMinor(); render(); });
+  $('about').addEventListener('change', function () { $('minor').hidden = !isMinor(); render(); });
+
+  $('use-credits').addEventListener('change', function (e) { state.useCredits = e.target.checked; render(); });
+
+  var preRef = qs.get('ref'), preCoupon = qs.get('coupon');
+  if (preCoupon) applyCode(preCoupon, 'coupon');
+  else if (preRef) { document.querySelector('[data-tab="referral"]').click(); applyCode(preRef, 'referral'); }
+
+  function totals() {
+    var price = state.exam ? CONFIG.prices[state.exam] : 0;
+    var codeOff = 0;
+    if (state.code && price) {
+      codeOff = state.code.rule.type === 'percent' ? price * state.code.rule.value / 100 : state.code.rule.value;
+      codeOff = Math.min(Math.round(codeOff), price);
+    }
+    var afterCode = price - codeOff;
+    var creditOff = state.useCredits && state.signedIn ? Math.min(CONFIG.creditBalance, afterCode) : 0;
+    return { price: price, codeOff: codeOff, creditOff: creditOff, total: afterCode - creditOff };
+  }
+
+  function render() {
+    var t = totals();
+    $('product').hidden = !state.exam;
+    if (state.exam) { $('product-name').textContent = CONFIG.names[state.exam] + ': 11 tests'; }
+    $('line-product').textContent = state.exam ? CONFIG.names[state.exam] : 'Test series';
+    $('line-price').textContent = state.exam ? money(t.price) : '\u2014';
+
+    $('applied').hidden = !state.code; $('code-entry').hidden = !!state.code;
+    if (state.code) {
+      $('applied-text').textContent = state.code.label + (state.code.kind === 'coupon' ? ' applied: ' + state.code.rule.label : ' applied: ' + money(state.code.rule.value) + ' off');
+    }
+    $('line-code').hidden = !(state.code && t.codeOff);
+    if (state.code) { $('line-code-label').textContent = state.code.label; $('line-code-amt').textContent = '\u2212' + money(t.codeOff); }
+    $('line-credits').hidden = !t.creditOff;
+    $('line-credits-amt').textContent = '\u2212' + money(t.creditOff);
+    $('total').textContent = state.exam ? money(t.total) : '\u2014';
+
+    var pay = $('pay');
+    if (!state.signedIn) { pay.disabled = true; pay.textContent = 'Sign in to continue'; }
+    else if (!aboutComplete()) { pay.disabled = true; pay.textContent = 'Fill in your details'; }
+    else if (!state.exam) { pay.disabled = true; pay.textContent = 'Choose your exam'; }
+    else { pay.disabled = false; pay.textContent = t.total > 0 ? 'Pay ' + money(t.total) : 'Get it free'; }
+    var aboutDone = state.signedIn && aboutComplete();
+    $('n2').classList.toggle('done', aboutDone); $('n2').textContent = aboutDone ? '\u2713' : '2';
+    $('pay-note').textContent = state.signedIn && state.exam && aboutComplete() ? 'UPI, card or net banking. You\u2019ll get a receipt by SMS and email.' : 'Sign in, fill in your details and choose your exam to continue. Payment by UPI, card or net banking.';
+  }
+
+  // Pay (demo): the real app opens the payment gateway here, then confirms on the server
+  $('pay').addEventListener('click', function () {
+    if ($('pay').disabled) return;
+    $('checkout').hidden = true; $('done').hidden = false;
+    $('done-text').textContent = 'Your ' + CONFIG.names[state.exam] + ' is ready. All 11 tests are now in your account.';
+    $('r-disc').textContent = money(CONFIG.referral.friendDiscount);
+    $('r-credit').textContent = money(CONFIG.referral.referrerCredit);
+    $('my-code').textContent = CONFIG.myReferralCode;
+    var link = location.origin + '/?ref=' + CONFIG.myReferralCode;
+    $('wa').href = 'https://wa.me/?text=' + encodeURIComponent('I\u2019m preparing with Testverse by Studyverse. Use my code ' + CONFIG.myReferralCode + ' to get ' + money(CONFIG.referral.friendDiscount) + ' off the test series: ' + link);
+    $('copy').addEventListener('click', function () {
+      var btn = this;
+      (navigator.clipboard ? navigator.clipboard.writeText(link) : Promise.reject()).then(function () { btn.textContent = 'Link copied'; }, function () { btn.textContent = link; });
+    });
+    window.scrollTo(0, 0);
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
