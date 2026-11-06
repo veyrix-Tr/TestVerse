@@ -1,17 +1,31 @@
-import logo from './assets/logo.svg'
-import './App.css'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import Admin from './pages/Admin/Admin.jsx'
+import Checkout from './pages/Checkout/Checkout.jsx'
+import Home from './pages/Home/Home.jsx'
+import StudentHome from './pages/StudentHome/StudentHome.jsx'
+import Test from './pages/Test/Test.jsx'
 
+/*
+  Routes map to the design's HTML files:
+    testverse-home.html -> /
+    checkout.html       -> /checkout
+    student-home.html   -> /student
+    test.html           -> /test
+    admin.html          -> /admin
+  Query strings (?ref=, ?exam=, ?test=P4&view=result …) are kept as-is.
+*/
 function App() {
   return (
-    <div className="app">
-      <header className="header">
-        <img src={logo} className="logo" alt="Testverse" />
-      </header>
-      <main className="main">
-        <h1>Welcome to Testverse</h1>
-        <p>Your frontend is ready for development</p>
-      </main>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/student" element={<StudentHome />} />
+        <Route path="/test" element={<Test />} />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 

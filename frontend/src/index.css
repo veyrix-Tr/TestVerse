@@ -1,15 +1,35 @@
+/*
+  Global base only. Every page keeps its own design CSS (copied verbatim from
+  design/*.html) in src/pages/<Page>/<Page>.css, scoped to its root class at
+  build time — see vite.config.js.
+*/
 * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  margin: 0;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Page roots fill the viewport like the design's <body> did (backgrounds are
+   set per page on the root class). */
+.tv-home,
+.tv-checkout,
+.tv-studenthome,
+.tv-test,
+.tv-admin {
+  min-height: 100vh;
+}
+
+/* The design sets `html { scroll-behavior: smooth }` on the homepage only. */
+html.smooth-scroll {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.smooth-scroll {
+    scroll-behavior: auto;
+  }
 }
 
 #root {
