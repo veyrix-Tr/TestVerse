@@ -120,3 +120,34 @@ grey); only the exact values above apply.
 - **Motion**: 150ms ease for hovers; respect `prefers-reduced-motion`.
 - **Responsive**: layouts must work at 390px wide with a 16px gutter and no
   horizontal scroll.
+
+## Layout and density (v2 — supersedes any narrower widths above)
+
+The first pass felt narrow and crowded: content was capped near 1200px and
+everything sat in its own bordered box. v2 rules:
+
+- **Use the width.** Marketing pages (home, checkout, login, signup) use
+  `--container: min(1360px, 100% - 2 * var(--gutter))` with
+  `--gutter: clamp(20px, 5vw, 80px)`. App pages (student, admin, test result)
+  are fluid: content fills the space beside the sidebar up to 1680px, with
+  `padding: clamp(20px, 3vw, 48px)`.
+- **App shell.** Logged-in areas (student, admin) have a fixed 264px navy sidebar on
+  the left: logo, primary nav (text only, active item = soft white pill + gold
+  3px marker), and account info at the bottom. On screens under 1024px it becomes
+  a top bar with a "Menu" text button that opens the nav as a sheet.
+- **Fewer boxes.** Prefer sections separated by whitespace and a section heading
+  (title + one-line description + optional action on the right) over wrapping
+  everything in a bordered card. Use cards only for things that are genuinely
+  objects (a test, a result, a request). Cards: no border in light mode, just
+  `--card` on `--bg` with `--shadow-sm`; keep a 1px `--line` border in dark mode.
+- **Breathing room.** Section gap 40–56px in apps and 112–128px on marketing pages;
+  card padding 24–32px; list rows at least 64px tall; never more than one
+  meta line under a title.
+- **Grids adapt to width.** Use `repeat(auto-fill, minmax(…, 1fr))` so wide screens
+  show more columns instead of more empty space. Dashboard: main column plus a
+  360px right rail at ≥1280px; the rail drops below under 1280px.
+- **Bigger type in apps.** Page title 32–36px, section titles 20–22px, body 15–16px.
+  Numbers that matter (score, rank, timer) are large and confident.
+- **One loud thing per screen.** On the dashboard that is the live test or the next
+  test to take; everything else is quiet.
+- **Check at four widths:** 1920, 1440, 1280 and 390.

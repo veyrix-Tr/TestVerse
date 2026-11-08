@@ -63,7 +63,7 @@ export default function VideoDialog({ onClose, me, onSend }) {
           <img id="v-preview" src={preview || undefined} alt="Your question photo" hidden={!preview} />
           <span className="hint">Make sure the whole question, options and any diagram are clear.</span>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+        <div className="dlg-row">
           <div>
             <label className="l" htmlFor="v-subject">
               Subject

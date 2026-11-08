@@ -199,16 +199,16 @@ VIEWS.dashboard = function () {
   });
   return '<div class="head"><div><h1>Dashboard</h1><p>What needs attention before your next test.</p></div>' +
     '<div class="actions"><button class="btn btn-primary" type="button" data-upload>Upload a test</button></div></div>' +
-    '<div class="grid g4" style="margin-bottom: 20px">' +
-    stat(published, 'tests live or scheduled') + stat(upcoming.length, 'upcoming live tests') +
-    stat(db.students.filter(function (s) { return s.bought; }).length, 'students who bought (demo)') +
-    stat(db.coupons.filter(function (c) { return c.active; }).length, 'active coupons') + '</div>' +
-    '<div class="grid g2">' +
-    '<section class="card"><h2>Needs attention</h2><div class="attn">' + (alerts.length ? alerts.map(function (a) { return '<div class="alert ' + a[0] + '"><span>' + esc(a[1]) + '</span><button class="btn btn-outline btn-sm" type="button" data-goto="' + a[2] + '">Fix</button></div>'; }).join('') : '<div class="alert a-ok"><span>Everything is ready.</span></div>') + '</div></section>' +
-    '<section class="card"><h2>Upcoming live tests</h2>' + (upcoming.length ? upcoming.slice(0, 4).map(function (x) {
-      return '<div class="list-row"><div><b>' + esc(x.title) + '</b><span class="hint" style="display: block; margin: 0">' + esc(examLabel(x.exam)) + ' · ' + when(x.start) + '</span></div><button class="btn btn-outline btn-sm" type="button" data-edit-live="' + esc(x.id) + '">Change date</button></div>';
-    }).join('') : '<p class="hint">No live tests scheduled.</p>') + '</section></div>';
-  function stat(n, l) { return '<div class="card stat"><b>' + n + '</b><span>' + l + '</span></div>'; }
+    '<div class="stats">' +
+    stat(published, 'Tests live or scheduled', db.tests.length + ' tests in total') + stat(upcoming.length, 'Upcoming live tests', upcoming[0] ? 'Next: ' + when(upcoming[0].start) : 'None scheduled') +
+    stat(db.students.filter(function (s) { return s.bought; }).length, 'Students who bought', 'Of ' + db.students.length + ' signed up (demo)') +
+    stat(db.coupons.filter(function (c) { return c.active; }).length, 'Active coupons', db.coupons.length + ' coupons created') + '</div>' +
+    '<div class="dash">' +
+    '<section class="sect"><div class="sect-head"><div><h2>Needs attention</h2><p>' + (alerts.length ? alerts.length + ' item' + (alerts.length === 1 ? '' : 's') + ' to sort out before your next test.' : 'Nothing is blocking your next test.') + '</p></div></div><div class="card attn">' + (alerts.length ? alerts.map(function (a) { return '<div class="alert ' + a[0] + '"><span>' + esc(a[1]) + '</span><button class="btn btn-outline btn-sm" type="button" data-goto="' + a[2] + '">Fix</button></div>'; }).join('') : '<div class="alert a-ok"><span>Everything is ready.</span></div>') + '</div></section>' +
+    '<section class="sect"><div class="sect-head"><div><h2>Upcoming live tests</h2><p>The next one shows on the website countdown.</p></div></div><div class="card list-card">' + (upcoming.length ? upcoming.slice(0, 4).map(function (x) {
+      return '<div class="list-row"><div><b>' + esc(x.title) + '</b><span class="meta">' + esc(examLabel(x.exam)) + ' · ' + when(x.start) + '</span></div><button class="btn btn-outline btn-sm" type="button" data-edit-live="' + esc(x.id) + '">Change date</button></div>';
+    }).join('') : '<p class="hint">No live tests scheduled.</p>') + '</div></section></div>';
+  function stat(n, l, h) { return '<div class="card stat"><span>' + l + '</span><b>' + n + '</b><small>' + esc(h) + '</small></div>'; }
 };
 bind.dashboard = function () {
   $$('[data-goto]').forEach(function (b) { b.addEventListener('click', function () { go(b.dataset.goto); }); });
@@ -224,16 +224,16 @@ VIEWS.tests = function () {
   return '<div class="head"><div><h1>Tests</h1><p>Every test paper: part, half, full syllabus and live.</p></div>' +
     '<div class="actions"><button class="btn btn-primary" type="button" data-upload>Upload a test</button></div></div>' +
     '<div class="filters">' + seg('exam', ['all'].concat(Object.keys(db.exams)), ui.testExam, examLabel) + seg('kind', ['all', 'part', 'half', 'full', 'live', 'assigned'], ui.testKind, function (k) { return k === 'all' ? 'All types' : KIND[k]; }) + '</div>' +
-    '<div class="table-wrap"><table><thead><tr><th>Test</th><th>Exam</th><th>Type</th><th>Given to</th><th>Questions</th><th>Duration</th><th>Status</th><th><span class="sr" style="position: absolute; left: -9999px">Actions</span></th></tr></thead><tbody>' +
+    '<div class="table-wrap"><table><thead><tr><th>Test</th><th>Exam</th><th>Type</th><th>Given to</th><th>Length</th><th>Status</th><th><span class="sr">Actions</span></th></tr></thead><tbody>' +
     (list.length ? list.map(function (x) {
-      return '<tr><td><b>' + esc(x.title) + '</b><span class="sub">' + esc(x.chapters) + '</span>' + (x.missing ? '<span class="pill p-warn" style="margin-top: 4px">' + x.missing + ' answers missing</span>' : '') + '</td>' +
+      return '<tr><td><b>' + esc(x.title) + '</b><span class="sub">' + esc(x.chapters) + '</span>' + (x.missing ? '<span class="pill p-warn">' + x.missing + ' answers missing</span>' : '') + '</td>' +
         '<td>' + esc(examLabel(x.exam)) + '</td><td>' + KIND[x.kind] + (x.kind === 'live' ? '<span class="sub">' + when(x.start) + '</span>' : '') + (x.kind === 'assigned' && x.due ? '<span class="sub">Due ' + when(x.due) + '</span>' : '') + '</td>' +
         '<td>' + esc(audienceText(x)) + (audienceCount(x) != null ? '<span class="sub">' + audienceCount(x) + ' student' + (audienceCount(x) === 1 ? '' : 's') + '</span>' : '') + '</td>' +
-        '<td>' + x.questions + '</td><td>' + x.minutes + ' min</td><td>' + statusPill(x.status) + '</td>' +
+        '<td>' + x.questions + ' questions<span class="sub">' + x.minutes + ' min</span></td><td>' + statusPill(x.status) + '</td>' +
         '<td><div class="row-actions"><button class="btn btn-outline btn-sm" type="button" data-edit="' + esc(x.id) + '">Edit</button>' +
         (x.status === 'draft' ? '<button class="btn btn-dark btn-sm" type="button" data-publish="' + esc(x.id) + '">' + (x.kind === 'live' ? 'Schedule' : 'Publish') + '</button>' : '<button class="btn btn-outline btn-sm" type="button" data-unpublish="' + esc(x.id) + '">Unpublish</button>') +
         '<button class="btn btn-danger btn-sm" type="button" data-del="' + esc(x.id) + '" aria-label="Delete ' + esc(x.title) + '">Delete</button></div></td></tr>';
-    }).join('') : '<tr><td colspan="8" class="hint">No tests match these filters.</td></tr>') +
+    }).join('') : '<tr><td colspan="7" class="hint">No tests match these filters.</td></tr>') +
     '</tbody></table></div>';
   function seg(name, vals, cur, lab) {
     return '<div class="seg" role="group" aria-label="Filter by ' + name + '">' + vals.map(function (v) { return '<button type="button" data-f-' + name + '="' + v + '" aria-pressed="' + (v === cur) + '">' + esc(lab(v)) + '</button>'; }).join('') + '</div>';
@@ -274,11 +274,11 @@ VIEWS.live = function () {
     (list.length ? list.map(function (x) {
       var past = new Date(x.start).getTime() < Date.now();
       return '<tr><td><b>' + when(x.start) + '</b>' + (past ? '<span class="sub">Finished</span>' : '') + '</td>' +
-        '<td>' + esc(x.title) + '<span class="sub">' + esc(examLabel(x.exam)) + ' · ' + x.questions + ' questions, ' + x.minutes + ' min</span>' + (!x.file ? '<span class="pill p-off" style="margin-top: 4px">No test file</span>' : '') + '</td>' +
+        '<td>' + esc(x.title) + '<span class="sub">' + esc(examLabel(x.exam)) + ' · ' + x.questions + ' questions, ' + x.minutes + ' min</span>' + (!x.file ? '<span class="pill p-off">No test file</span>' : '') + '</td>' +
         '<td>' + x.window + ' min</td><td>' + when(x.resultAt) + '</td><td>' + statusPill(x.status) + '</td>' +
         '<td><div class="row-actions"><button class="btn btn-outline btn-sm" type="button" data-edit-live="' + esc(x.id) + '">Change date</button><button class="btn btn-outline btn-sm" type="button" data-edit="' + esc(x.id) + '">Edit test</button></div></td></tr>';
     }).join('') : '<tr><td colspan="6" class="hint">No live tests yet.</td></tr>') + '</tbody></table></div>' +
-    '<p class="hint" style="margin-top: 12px">Moving a live test? Registered students get an SMS and app notification with the new time once you save.</p>';
+    '<p class="hint foot-note">Moving a live test? Registered students get an SMS and app notification with the new time once you save.</p>';
 };
 bind.live = function () {
   bindUpload();
@@ -312,21 +312,21 @@ VIEWS.series = function () {
     for (var i = 1; i <= n; i++) {
       var x = tests.filter(function (y) { return y.kind === kind && y.slot === i; })[0];
       out += x
-        ? '<div class="slot"><div style="display: flex; justify-content: space-between; gap: 8px"><b>' + esc(x.title) + '</b>' + statusPill(x.status) + '</div><span class="hint" style="margin: 0">' + esc(x.chapters) + '</span><div><button class="btn btn-outline btn-sm" type="button" data-edit="' + esc(x.id) + '">Edit</button></div></div>'
-        : '<div class="slot empty"><b>' + KIND[kind] + ' ' + i + '</b><span class="hint" style="margin: 0">Empty</span><div><button class="btn btn-primary btn-sm" type="button" data-upload-slot="' + kind + ':' + i + '">Upload</button></div></div>';
+        ? '<div class="slot"><div class="slot-top"><b>' + esc(x.title) + '</b>' + statusPill(x.status) + '</div><span class="hint">' + esc(x.chapters) + '</span><div><button class="btn btn-outline btn-sm" type="button" data-edit="' + esc(x.id) + '">Edit</button></div></div>'
+        : '<div class="slot empty"><b>' + KIND[kind] + ' ' + i + '</b><span class="hint">Empty slot</span><div><button class="btn btn-primary btn-sm" type="button" data-upload-slot="' + kind + ':' + i + '">Upload</button></div></div>';
     }
     return '<div class="stage"><h3>' + title + ' (' + n + ')</h3><div class="slots s' + n + '">' + out + '</div></div>';
   }
   return '<div class="head"><div><h1>Test series</h1><p>The 11-test plan for each exam: 6 part, 3 half-syllabus, 2 full-syllabus.</p></div></div>' +
     '<div class="filters"><div class="seg" role="group" aria-label="Exam">' + Object.keys(db.exams).map(function (k) { return '<button type="button" data-sx="' + k + '" aria-pressed="' + (k === ui.seriesExam) + '">' + esc(db.exams[k].label) + '</button>'; }).join('') + '</div></div>' +
-    '<div class="grid" style="grid-template-columns: minmax(0, 1fr) 320px; align-items: start">' +
+    '<div class="split">' +
     '<section class="card">' + stage('part', 'Part tests') + stage('half', 'Half-syllabus tests') + stage('full', 'Full-syllabus tests') + '</section>' +
     '<section class="card"><h2>Sale settings</h2>' +
-    '<div class="alert ' + (filled === 11 ? 'a-ok' : 'a-warn') + '" style="margin-bottom: 14px">' + filled + ' of 11 tests published.</div>' +
-    '<div style="display: grid; gap: 12px">' +
+    '<div class="alert ' + (filled === 11 ? 'a-ok' : 'a-warn') + '">' + filled + ' of 11 tests published.</div>' +
+    '<div class="stack">' +
     field('Price (₹)', '<input class="input" type="number" min="0" id="sr-price" value="' + ex.price + '">') +
     '<label class="check"><input type="checkbox" id="sr-sale"' + (ex.onSale ? ' checked' : '') + '> On sale on the website</label>' +
-    '<p class="hint" style="margin: 0">Students who buy get every test in the series as soon as it\u2019s published, including ones you add later.</p>' +
+    '<p class="hint">Students who buy get every test in the series as soon as it\u2019s published, including ones you add later.</p>' +
     '<button class="btn btn-primary" type="button" id="sr-save">Save</button></div></section></div>';
 };
 bind.series = function () {
@@ -347,14 +347,14 @@ VIEWS.exams = function () {
   return '<div class="head"><div><h1>Exams &amp; patterns</h1><p>Used as defaults for new tests, on the website and in the CBT screen. Check against the official notice each year.</p></div></div>' +
     '<div class="grid g3">' + Object.keys(db.exams).map(function (k) {
       var e = db.exams[k];
-      return '<section class="card"><h2>' + esc(e.label) + '</h2><div style="display: grid; gap: 12px">' +
+      return '<section class="card"><h2>' + esc(e.label) + '</h2><div class="stack">' +
         num(k, 'questions', 'Questions (full paper)', e.questions) + num(k, 'minutes', 'Duration (minutes)', e.minutes) + num(k, 'marks', 'Total marks', e.marks) +
-        '<div class="grid g2" style="gap: 10px">' + num(k, 'correct', 'Marks for correct', e.correct) + num(k, 'wrong', 'Marks for wrong', e.wrong) + '</div>' +
+        '<div class="grid g2 tight">' + num(k, 'correct', 'Marks for correct', e.correct) + num(k, 'wrong', 'Marks for wrong', e.wrong) + '</div>' +
         field('Subjects / sections', '<input class="input" data-ek="' + k + '" data-f="sections" value="' + esc(e.sections) + '">') +
-        '<div class="grid g2" style="gap: 10px">' + num(k, 'partQuestions', 'Part test questions', e.partQuestions) + num(k, 'partMinutes', 'Part test minutes', e.partMinutes) + '</div>' +
+        '<div class="grid g2 tight">' + num(k, 'partQuestions', 'Part test questions', e.partQuestions) + num(k, 'partMinutes', 'Part test minutes', e.partMinutes) + '</div>' +
         '<button class="btn btn-primary" type="button" data-save-exam="' + k + '">Save ' + esc(e.label) + '</button></div></section>';
     }).join('') + '</div>' +
-    '<p class="hint" style="margin-top: 12px">JEE Advanced changes its sections and partial marking most years, so tests can override these defaults.</p>';
+    '<p class="hint foot-note">JEE Advanced changes its sections and partial marking most years, so tests can override these defaults.</p>';
   function num(k, f, l, v) { return field(l, '<input class="input" type="number" data-ek="' + k + '" data-f="' + f + '" value="' + v + '">'); }
 };
 bind.exams = function () {
@@ -372,21 +372,21 @@ VIEWS.offers = function () {
   var r = db.referral;
   return '<div class="head"><div><h1>Coupons &amp; referrals</h1><p>Promotions applied at checkout. One code per order; credits can be used on top.</p></div>' +
     '<div class="actions"><button class="btn btn-primary" type="button" id="new-coupon">New coupon</button></div></div>' +
-    '<div class="table-wrap" style="margin-bottom: 18px"><table><thead><tr><th>Code</th><th>Discount</th><th>Exam</th><th>Expires</th><th>Used</th><th>Status</th><th></th></tr></thead><tbody>' +
+    '<div class="table-wrap"><table><thead><tr><th>Code</th><th>Discount</th><th>Exam</th><th>Expires</th><th>Used</th><th>Status</th><th></th></tr></thead><tbody>' +
     db.coupons.map(function (c, i) {
       var expired = new Date(c.expires + 'T23:59:59') < new Date();
       var st = !c.active ? '<span class="pill p-off">Off</span>' : (expired ? '<span class="pill p-draft">Expired</span>' : (c.used >= c.limit ? '<span class="pill p-warn">Limit reached</span>' : '<span class="pill p-published">Active</span>'));
-      return '<tr><td><b style="font-family: monospace; font-size: 15px">' + esc(c.code) + '</b></td><td>' + (c.type === 'percent' ? c.value + '% off' : rupee(c.value) + ' off') + '</td><td>' + esc(examLabel(c.exam)) + '</td><td>' + esc(c.expires) + '</td><td>' + c.used + ' / ' + c.limit + '</td><td>' + st + '</td>' +
+      return '<tr><td><b class="code">' + esc(c.code) + '</b></td><td>' + (c.type === 'percent' ? c.value + '% off' : rupee(c.value) + ' off') + '</td><td>' + esc(examLabel(c.exam)) + '</td><td>' + esc(c.expires) + '</td><td>' + c.used + ' / ' + c.limit + '</td><td>' + st + '</td>' +
         '<td><div class="row-actions"><button class="btn btn-outline btn-sm" type="button" data-cp-edit="' + i + '">Edit</button><button class="btn btn-outline btn-sm" type="button" data-cp-toggle="' + i + '">' + (c.active ? 'Turn off' : 'Turn on') + '</button></div></td></tr>';
     }).join('') + '</tbody></table></div>' +
     '<div class="grid g2">' +
-    '<section class="card"><h2>Referral programme</h2><div style="display: grid; gap: 12px">' +
+    '<section class="card"><h2>Referral programme</h2><div class="stack">' +
     '<label class="check"><input type="checkbox" id="rf-on"' + (r.enabled ? ' checked' : '') + '> Referrals on</label>' +
     field('Friend\u2019s discount (₹)', '<input class="input" type="number" min="0" id="rf-disc" value="' + r.friendDiscount + '">') +
     field('Credits to the student who referred (₹)', '<input class="input" type="number" min="0" id="rf-credit" value="' + r.referrerCredit + '">', 'Given only after the friend\u2019s payment succeeds.') +
     field('Most referrals rewarded per student', '<input class="input" type="number" min="0" id="rf-max" value="' + r.maxPerStudent + '">') +
     '<button class="btn btn-primary" type="button" id="rf-save">Save referral settings</button></div></section>' +
-    '<section class="card"><h2>Adjust a student\u2019s credits</h2><div style="display: grid; gap: 12px">' +
+    '<section class="card"><h2>Adjust a student\u2019s credits</h2><div class="stack">' +
     field('Student mobile number', '<input class="input" id="cr-phone" inputmode="tel" placeholder="10-digit mobile">') +
     field('Amount (₹, use minus to remove)', '<input class="input" type="number" id="cr-amt" placeholder="e.g. 200 or -50">') +
     field('Reason (shown to the student)', '<input class="input" id="cr-reason" placeholder="e.g. Top 100 in live test">') +
@@ -447,29 +447,29 @@ VIEWS.requests = function () {
     '<div class="filters"><div class="seg" role="group" aria-label="Status">' +
     [['open', 'Open'], ['new', 'New'], ['progress', 'Recording'], ['done', 'Sent'], ['declined', 'Declined'], ['all', 'All']].map(function (o) {
       return '<button type="button" data-rs="' + o[0] + '" aria-pressed="' + (ui.reqStatus === o[0]) + '">' + o[1] + '</button>';
-    }).join('') + '</div><span class="hint" style="margin: 0">Promise to students: within ' + v.hours + ' hours · ' + v.limitDirect + ' requests a week (direct), ' + v.limitLms + ' (course students)</span></div>' +
-    (list.length ? '<div style="display: grid; gap: 12px">' + list.map(function (r) {
+    }).join('') + '</div><span class="hint">Promise to students: within ' + v.hours + ' hours · ' + v.limitDirect + ' requests a week (direct), ' + v.limitLms + ' (course students)</span></div>' +
+    (list.length ? '<div class="req-grid">' + list.map(function (r) {
       var age = hoursSince(r.askers[0].at), late = (r.status === 'new' || r.status === 'progress') && age > v.hours;
       var st = REQ_STATUS[r.status];
-      return '<article class="card" style="display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 16px; align-items: start">' +
-        '<div aria-hidden="true" style="width: 96px; height: 96px; border-radius: 10px; background: var(--soft); border: 1px solid var(--line); display: grid; place-items: center; text-align: center; font-size: 12px; color: var(--muted); padding: 6px">' + (r.source === 'photo' ? 'Student\u2019s photo' : 'From a test') + '</div>' +
-        '<div style="display: grid; gap: 8px; min-width: 0">' +
-        '<div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center"><span class="pill ' + st[0] + '">' + st[1] + '</span>' +
+      return '<article class="card req' + (late ? ' late' : '') + '">' +
+        '<div class="req-thumb" aria-hidden="true">' + (r.source === 'photo' ? 'Student\u2019s photo' : 'From a test') + '</div>' +
+        '<div class="req-body">' +
+        '<div class="req-tags"><span class="pill ' + st[0] + '">' + st[1] + '</span>' +
         (r.askers.length > 1 ? '<span class="pill p-scheduled">' + r.askers.length + ' students asked</span>' : '') +
         (late ? '<span class="pill p-off">Past ' + v.hours + ' h</span>' : '') +
-        '<span class="hint" style="margin: 0">' + esc(examLabel(r.exam)) + ' · ' + esc(r.subject) + ' · ' + esc(r.chapter) + ' · ' + esc(r.ref) + '</span></div>' +
-        '<div style="font-size: 15px">' + esc(r.text) + '</div>' +
-        (r.source === 'photo' ? '<div class="hint" style="margin: 0">Text and chapter read from the photo by Claude. Check before recording.</div>' : '') +
-        (r.note ? '<div style="font-size: 14px; background: var(--soft); border-radius: 8px; padding: 8px 10px">Student\u2019s note: ' + esc(r.note) + '</div>' : '') +
-        '<div class="hint" style="margin: 0">Asked by ' + esc(r.askers.map(function (a) { return a.name; }).join(', ')) + ' · first ' + when(r.askers[0].at) + '</div>' +
-        (r.status === 'done' ? '<div style="font-size: 14px">Sent: <a href="' + esc(r.link) + '" target="_blank" rel="noopener">' + esc(r.link) + '</a></div>' : '') +
-        (r.status === 'declined' ? '<div style="font-size: 14px">Reason sent: ' + esc(r.reason) + '</div>' : '') +
-        '<div class="actions">' +
+        '</div><span class="meta">' + esc(examLabel(r.exam)) + ' · ' + esc(r.subject) + ' · ' + esc(r.chapter) + ' · ' + esc(r.ref) + '</span>' +
+        '<div class="req-text">' + esc(r.text) + '</div>' +
+        (r.source === 'photo' ? '<div class="hint">Text and chapter read from the photo by Claude. Check before recording.</div>' : '') +
+        (r.note ? '<div class="req-note">Student\u2019s note: ' + esc(r.note) + '</div>' : '') +
+        '<div class="meta">Asked by ' + esc(r.askers.map(function (a) { return a.name; }).join(', ')) + ' · first ' + when(r.askers[0].at) + '</div>' +
+        (r.status === 'done' ? '<div class="req-extra">Sent: <a href="' + esc(r.link) + '" target="_blank" rel="noopener">' + esc(r.link) + '</a></div>' : '') +
+        (r.status === 'declined' ? '<div class="req-extra">Reason sent: ' + esc(r.reason) + '</div>' : '') +
+        '<div class="actions req-actions">' +
         (r.status === 'new' ? '<button class="btn btn-outline btn-sm" type="button" data-r-start="' + r.id + '">Start recording</button>' : '') +
         (r.status === 'new' || r.status === 'progress' ? '<button class="btn btn-primary btn-sm" type="button" data-r-send="' + r.id + '">Add YouTube link &amp; send</button><button class="btn btn-danger btn-sm" type="button" data-r-decline="' + r.id + '">Decline</button>' : '') +
         (r.status === 'done' ? '<button class="btn btn-outline btn-sm" type="button" data-r-send="' + r.id + '">Change link</button>' : '') +
         '</div></div></article>';
-    }).join('') + '</div>' : '<div class="card"><p class="hint" style="margin: 0">No requests here.</p></div>');
+    }).join('') + '</div>' : '<div class="card empty"><p class="hint">No requests here.</p></div>');
 };
 bind.requests = function () {
   $$('[data-rs]').forEach(function (b) { b.addEventListener('click', function () { ui.reqStatus = b.dataset.rs; render(); }); });
@@ -520,18 +520,19 @@ VIEWS.students = function () {
   var list = db.students.filter(function (s) { return !q || (s.name + ' ' + s.phone + ' ' + s.city).toLowerCase().indexOf(q) >= 0; });
   return '<div class="head"><div><h1>Students &amp; groups</h1><p>Everyone who signed up, from the website or the LMS link. Groups let you send a test to many students at once.</p></div>' +
     '<div class="actions"><button class="btn btn-primary" type="button" id="new-group">New group</button><button class="btn btn-outline" type="button" id="export">Export CSV</button></div></div>' +
-    '<section class="card" style="margin-bottom: 16px"><h2>Groups</h2>' +
-    (db.groups.length ? '<div style="display: grid; gap: 8px">' + db.groups.map(function (g, i) {
-      return '<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px">' +
-        '<div><b>' + esc(g.name) + '</b><span class="hint" style="display: block; margin: 0">' + g.studentIds.length + ' students: ' + esc(g.studentIds.map(function (id) { var s = studentById(id); return s ? s.name : ''; }).filter(Boolean).join(', ')) + '</span></div>' +
+    '<section class="sect"><div class="sect-head"><div><h2>Groups</h2><p>Send a test to everyone in a group at once.</p></div></div>' +
+    (db.groups.length ? '<div class="group-grid">' + db.groups.map(function (g, i) {
+      return '<div class="card group">' +
+        '<div><b>' + esc(g.name) + '</b><span class="meta"><strong>' + g.studentIds.length + ' students</strong> · ' + esc(g.studentIds.map(function (id) { var s = studentById(id); return s ? s.name : ''; }).filter(Boolean).join(', ')) + '</span></div>' +
         '<div class="row-actions"><button class="btn btn-outline btn-sm" type="button" data-g-edit="' + i + '">Edit</button><button class="btn btn-danger btn-sm" type="button" data-g-del="' + i + '">Delete</button></div></div>';
     }).join('') + '</div>' : '<p class="hint">No groups yet.</p>') + '</section>' +
-    '<div class="filters"><label class="l" for="sq" style="position: absolute; left: -9999px">Search students</label><input class="input" id="sq" style="max-width: 360px" placeholder="Search name, mobile or city" value="' + esc(ui.studentQ) + '"></div>' +
+    '<section class="sect"><div class="sect-head"><div><h2>All students</h2><p>' + list.length + ' of ' + db.students.length + ' shown.</p></div></div>' +
+    '<div class="filters"><label class="l sr" for="sq">Search students</label><input class="input search" id="sq" placeholder="Search name, mobile or city" value="' + esc(ui.studentQ) + '"></div>' +
     '<div class="table-wrap"><table><thead><tr><th>Student</th><th>Exam</th><th>City</th><th>Type</th><th>Test series</th><th>Tests taken</th><th>Credits</th><th>Joined</th></tr></thead><tbody>' +
     (list.length ? list.map(function (s) {
       return '<tr><td><b>' + esc(s.name) + '</b><span class="sub">' + esc(s.phone) + '</span></td><td>' + esc(examLabel(s.exam)) + '</td><td>' + esc(s.city) + '</td><td>' + (s.lms ? '<span class="pill p-scheduled">LMS</span>' : '<span class="pill p-draft">Direct</span>') + '</td><td>' + (s.bought ? '<span class="pill p-published">Bought</span>' : '<span class="pill p-draft">Not bought</span>') + '</td><td>' + s.tests + '</td><td>' + rupee(s.credits) + '</td><td>' + esc(s.joined) + '</td></tr>';
-    }).join('') : '<tr><td colspan="8" class="hint">No students match.</td></tr>') + '</tbody></table></div>' +
-    '<p class="hint" style="margin-top: 12px">Sample students for the demo. Mobile numbers are partly hidden for staff who don\u2019t need them.</p>';
+    }).join('') : '<tr><td colspan="8" class="hint">No students match.</td></tr>') + '</tbody></table></div></section>' +
+    '<p class="hint foot-note">Sample students for the demo. Mobile numbers are partly hidden for staff who don\u2019t need them.</p>';
 };
 bind.students = function () {
   $('#new-group').addEventListener('click', function () { groupDialog(-1); });
@@ -580,13 +581,13 @@ VIEWS.website = function () {
   var w = db.website;
   var nextLive = db.tests.filter(function (x) { return x.kind === 'live' && x.status === 'scheduled' && new Date(x.start) > new Date(); }).sort(function (a, b) { return new Date(a.start) - new Date(b.start); })[0];
   return '<div class="head"><div><h1>Website info</h1><p>Text on the homepage. Prices, test plans and live test dates update automatically from the other sections.</p></div></div>' +
-    '<div class="grid g2" style="align-items: start">' +
-    '<section class="card"><h2>Announcement strip</h2><div style="display: grid; gap: 12px">' +
+    '<div class="grid g2">' +
+    '<section class="card"><h2>Announcement strip</h2><div class="stack">' +
     '<label class="check"><input type="checkbox" id="ws-on"' + (w.showAnnouncement ? ' checked' : '') + '> Show at the top of the homepage</label>' +
     field('Text', '<textarea class="input" id="ws-text" maxlength="160">' + esc(w.announcement) + '</textarea>', 'Keep it under 160 characters.') +
     '<button class="btn btn-primary" type="button" id="ws-save">Save</button></div></section>' +
-    '<section class="card"><h2>YouTube video library</h2><div style="display: grid; gap: 12px">' +
-    '<p class="hint" style="margin: 0">Students see a "Video library" button in the app and on the website that opens your channel. Add playlists to send each exam\u2019s students to the right videos.</p>' +
+    '<section class="card"><h2>YouTube video library</h2><div class="stack">' +
+    '<p class="hint">Students see a "Video library" button in the app and on the website that opens your channel. Add playlists to send each exam\u2019s students to the right videos.</p>' +
     field('Channel link', '<input class="input" type="url" id="yt-ch" value="' + esc(db.video.channel) + '">') +
     Object.keys(db.exams).map(function (k) { return field(db.exams[k].label + ' playlist (optional)', '<input class="input" type="url" id="yt-' + k + '" placeholder="https://www.youtube.com/playlist?list=..." value="' + esc(db.video.playlists[k] || '') + '">'); }).join('') +
     '<button class="btn btn-primary" type="button" id="yt-save">Save video library links</button></div></section>' +
@@ -595,13 +596,13 @@ VIEWS.website = function () {
     '<div><span>Next live test (countdown)</span><span>' + (nextLive ? esc(examLabel(nextLive.exam)) + ', ' + when(nextLive.start) : 'None scheduled') + '</span></div>' +
     '<div><span>Referral offer</span><span>' + (db.referral.enabled ? rupee(db.referral.friendDiscount) + ' off / ' + rupee(db.referral.referrerCredit) + ' credits' : 'Off') + '</span></div>' +
     '</div></section></div>' +
-    '<section class="card" style="margin-top: 16px"><div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px"><h2 style="margin: 0">Frequently asked questions</h2><button class="btn btn-outline btn-sm" type="button" id="faq-add">Add question</button></div>' +
-    '<div style="display: grid; gap: 12px">' + w.faqs.map(function (f, i) {
-      return '<div style="border: 1px solid var(--line); border-radius: 10px; padding: 12px; display: grid; gap: 8px">' +
-        '<label class="l" for="fq-' + i + '" style="margin: 0">Question ' + (i + 1) + '</label><input class="input" id="fq-' + i + '" data-fq="' + i + '" value="' + esc(f.q) + '">' +
-        '<label class="l" for="fa-' + i + '" style="margin: 0">Answer</label><textarea class="input" id="fa-' + i + '" data-fa="' + i + '">' + esc(f.a) + '</textarea>' +
+    '<section class="card faq-card"><div class="card-head"><h2>Frequently asked questions</h2><button class="btn btn-outline btn-sm" type="button" id="faq-add">Add question</button></div>' +
+    '<div class="stack">' + w.faqs.map(function (f, i) {
+      return '<div class="faq">' +
+        '<label class="l" for="fq-' + i + '">Question ' + (i + 1) + '</label><input class="input" id="fq-' + i + '" data-fq="' + i + '" value="' + esc(f.q) + '">' +
+        '<label class="l" for="fa-' + i + '">Answer</label><textarea class="input" id="fa-' + i + '" data-fa="' + i + '">' + esc(f.a) + '</textarea>' +
         '<div><button class="btn btn-danger btn-sm" type="button" data-faq-del="' + i + '">Remove</button></div></div>';
-    }).join('') + '</div><div style="margin-top: 12px"><button class="btn btn-primary" type="button" id="faq-save">Save FAQs</button></div></section>';
+    }).join('') + '</div><div class="card-foot"><button class="btn btn-primary" type="button" id="faq-save">Save FAQs</button></div></section>';
 };
 bind.website = function () {
   $('#yt-save').addEventListener('click', function () {

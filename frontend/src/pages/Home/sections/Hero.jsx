@@ -1,55 +1,187 @@
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { EXAMS } from '../../../data/exams.js'
 import { useCountdown } from '../../../lib/hooks.js'
 import { pad } from '../../../lib/format.js'
-import { Link } from 'react-router-dom'
+import ExamSwitch from './ExamSwitch.jsx'
+import AuthLink from '../../../components/AuthLink.jsx'
+
+const TRACK = ['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'H1', 'H2', 'H3', 'F1', 'F2']
+const DONE = 7
+const OFFSETS = [-13, -8, -10, -5, -2, -6, 0]
+
+function latestPct(score) {
+  const m = /^(\d+)\s*\/\s*(\d+)$/.exec(score || '')
+  return m ? Math.round((Number(m[1]) / Number(m[2])) * 100) : 61
+}
+
+/* Score trend across the tests taken so far (a data chart, not decoration). */
+function TrendChart({ pct }) {
+  const pts = OFFSETS.map((o) => pct + o)
+  const W = 520
+  const H = 130
+  const min = 35
+  const max = 80
+  const x = (i) => 12 + (i * (W - 24)) / (TRACK.length - 1)
+  const y = (v) => H - 14 - ((v - min) / (max - min)) * (H - 28)
+  const line = pts.map((v, i) => `${x(i)},${y(v)}`).join(' ')
+  const area = `${x(0)},${H} ${line} ${x(pts.length - 1)},${H}`
+  return (
+    <svg className="trend" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" role="img" aria-label={`Score trend, latest ${pct}%`}>
+      <defs>
+        <linearGradient id="trend-fill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="var(--blue)" stopOpacity="0.22" />
+          <stop offset="1" stopColor="var(--blue)" stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      {[45, 60, 75].map((g) => (
+        <line key={g} x1="0" x2={W} y1={y(g)} y2={y(g)} className="trend-grid" />
+      ))}
+      <polygon points={area} fill="url(#trend-fill)" />
+      <polyline points={line} className="trend-line" />
+      {pts.map((v, i) => (
+        <circle key={i} cx={x(i)} cy={y(v)} r={i === pts.length - 1 ? 5 : 3} className={i === pts.length - 1 ? 'trend-last' : 'trend-dot'} />
+      ))}
+    </svg>
+  )
+}
+
+/* Product preview: the student's plan dashboard, built in HTML/CSS. */
+function PlanPreview({ exam }) {
+  const ex = EXAMS[exam || 'neet']
+  const pct = latestPct(ex.sample.score)
+  return (
+    <figure className="preview" aria-label="Example of a student's test plan dashboard">
+      <div className="preview-window">
+        <div className="pw-bar">
+          <span>Your {ex.label} plan</span>
+          <em>
+            {DONE} of {TRACK.length} tests done
+          </em>
+        </div>
+        <div className="pw-stats">
+          <div>
+            <small>Latest score</small>
+            <b>{ex.sample.score}</b>
+          </div>
+          <div>
+            <small>Accuracy</small>
+            <b>{ex.sample.acc}</b>
+          </div>
+          <div>
+            <small>Trend</small>
+            <b className="up">+13 pts</b>
+          </div>
+        </div>
+        <div className="pw-chart">
+          <div className="pw-label">Score across your plan, %</div>
+          <TrendChart pct={pct} />
+          <div className="pw-track" aria-hidden="true">
+            {TRACK.map((t, i) => (
+              <span key={t} className={i < DONE ? 'done' : i === DONE ? 'next' : ''}>
+                {t}
+              </span>
+            ))}
+          </div>
+        </div>
+        <div className="pw-next">
+          <div>
+            <small>Up next</small>
+            <b>Half Syllabus Test 2</b>
+            <span>{ex.specs.half}</span>
+          </div>
+                  </div>
+      </div>
+      <div className="preview-float" aria-hidden="true">
+        <small>All-India rank</small>
+        <b>1,284</b>
+        <span>Up 312 since the last live test</span>
+      </div>
+    </figure>
+  )
+}
 
 function Countdown({ iso }) {
   const { d, h, m, s, done } = useCountdown(iso)
+  const cells = [
+    [done ? '00' : String(d), 'days'],
+    [pad(h), 'hrs'],
+    [pad(m), 'min'],
+    [pad(s), 'sec'],
+  ]
   return (
     <div className="countdown" aria-label="Time until the live test starts">
-      <div>
-        <b>{done ? '00' : String(d)}</b>
-        <span>days</span>
-      </div>
-      <div>
-        <b>{pad(h)}</b>
-        <span>hours</span>
-      </div>
-      <div>
-        <b>{pad(m)}</b>
-        <span>min</span>
-      </div>
-      <div>
-        <b>{pad(s)}</b>
-        <span>sec</span>
+      {cells.map(([v, l]) => (
+        <div key={l}>
+          <b>{v}</b>
+          <span>{l}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function LiveStrip({ exam }) {
+  const ex = exam ? EXAMS[exam] : null
+  // The first live test that hasn't started yet (or the last one, once all have).
+  const [now] = useState(() => Date.now())
+  const upcoming = ex ? ex.live.filter((t) => new Date(t.start).getTime() > now) : []
+  const list = upcoming.length ? upcoming : ex ? ex.live.slice(-1) : []
+  const next = list[0] || null
+  return (
+    <div className="live-strip">
+      <div className="wrap live-row">
+        {next ? (
+          <>
+            <div className="live-main">
+              <small>Next all-India live test, free for everyone</small>
+              <strong data-live-title>{next.name}</strong>
+              <span>
+                {next.day} {next.when.split(',')[0]}, {next.meta}
+              </span>
+            </div>
+            <Countdown key={next.start} iso={next.start} />
+            <div className="live-more">
+              {list.slice(1, 3).map((t) => (
+                <div key={t.start}>
+                  <b>
+                    {t.day} {t.when.split(',')[0]}
+                  </b>
+                  <span>{t.name.replace(ex.label + ' ', '')}</span>
+                </div>
+              ))}
+              <a href={'/live-tests?exam=' + exam} data-live-link>
+                Full live test calendar
+              </a>
+            </div>
+          </>
+        ) : (
+          <div className="live-empty">
+            <small>All-India live tests</small>
+            <p>Free for everyone, with a real all-India rank. Choose your exam above to see the next one and its countdown.</p>
+          </div>
+        )}
       </div>
     </div>
   )
 }
 
-/* design/testverse-home.html <section class="hero on-navy"> */
 export default function Hero({ exam, onChoose, signupHref }) {
-  const ex = exam ? EXAMS[exam] : null
-  const next = ex ? ex.live[0] : null
-
   return (
     <section className="hero on-navy">
-      <div className="wrap">
-        <div>
-          <div className="hero-switch-label" id="hero-switch-label">
-            I'm preparing for
-          </div>
-          <div className="exam-switch" role="group" aria-labelledby="hero-switch-label" data-switch>
-            {Object.keys(EXAMS).map((id) => (
-              <button key={id} type="button" data-exam={id} aria-pressed={exam === id ? 'true' : 'false'} onClick={() => onChoose(id, true)}>
-                {EXAMS[id].label}
-              </button>
-            ))}
-          </div>
-          <h1>A complete test plan, from your first chapter to the final exam.</h1>
+      <div className="wrap hero-grid">
+        <div className="hero-copy">
+          <p className="hero-eyebrow">The complete test plan for NEET and JEE</p>
+          <h1>
+            From your first chapter <span>to the final exam.</span>
+          </h1>
           <p className="hero-lede">
-            6 part tests, 3 half-syllabus tests and 2 full-syllabus tests, set by experienced faculty and run on a real CBT screen. Plus all-India live tests, so you know exactly where you stand.
+            11 tests in the right order, set by experienced faculty and taken on a real CBT screen. Plus free all-India live tests, so you always know where you stand.
           </p>
+          <div className="hero-switch">
+            <span id="hero-switch-label">I'm preparing for</span>
+            <ExamSwitch exam={exam} onChoose={onChoose} labelledBy="hero-switch-label" tone="navy" />
+          </div>
           <div className="hero-ctas">
             <Link className="btn btn-gold btn-lg" to={signupHref} data-signup>
               Get the test series
@@ -59,56 +191,12 @@ export default function Hero({ exam, onChoose, signupHref }) {
             </a>
           </div>
           <p className="hero-note">
-            In a Studyverse course? <Link to="/login">Log in with the same account.</Link>
+            In a Studyverse course? <AuthLink to="/login">Log in with the same account</AuthLink>
           </p>
         </div>
-
-        <aside className="live-card">
-          <div className="pick" data-when="none" hidden={!!ex}>
-            <h2>Which exam are you preparing for?</h2>
-            <p>Choose one to see its live tests and test plan.</p>
-            <div className="pick-buttons">
-              <button type="button" data-pick="neet" onClick={() => onChoose('neet', true)}>
-                NEET <span>Physics, Chemistry, Biology</span>
-              </button>
-              <button type="button" data-pick="jee-main" onClick={() => onChoose('jee-main', true)}>
-                JEE Main <span>Physics, Chemistry, Maths</span>
-              </button>
-              <button type="button" data-pick="jee-advanced" onClick={() => onChoose('jee-advanced', true)}>
-                JEE Advanced <span>Paper 1 and Paper 2</span>
-              </button>
-            </div>
-          </div>
-          <div data-when="some" hidden={!ex}>
-            <div className="live-top">
-              <small>Next all-India live test</small>
-              <strong data-live-title>{next ? next.name : ''}</strong>
-              {next ? <Countdown key={next.start} iso={next.start} /> : null}
-            </div>
-            <ul data-live-list>
-              {ex
-                ? ex.live.map((t) => (
-                    <li key={t.start}>
-                      <div className="date">
-                        <b>{t.day}</b>
-                        <span>{t.when}</span>
-                      </div>
-                      <div>
-                        <strong>{t.name}</strong>
-                        <em>{t.meta}</em>
-                      </div>
-                    </li>
-                  ))
-                : null}
-            </ul>
-            <div className="live-foot">
-              <a className="btn btn-dark" href={exam ? '/live-tests?exam=' + exam : '/live-tests'} data-live-link>
-                See the full live test calendar
-              </a>
-            </div>
-          </div>
-        </aside>
+        <PlanPreview exam={exam} />
       </div>
+      <LiveStrip exam={exam} />
     </section>
   )
 }

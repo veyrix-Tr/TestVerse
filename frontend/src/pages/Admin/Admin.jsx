@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './Admin.css'
 import LogoSprite from '../../components/LogoSprite.jsx'
 import { usePageMeta } from '../../lib/hooks.js'
@@ -15,6 +15,7 @@ import mountAdmin from './adminApp.js'
 export default function Admin() {
   usePageMeta({ title: 'Admin — Testverse by Studyverse' })
   const rootRef = useRef(null)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
     mountAdmin(rootRef.current)
@@ -24,43 +25,77 @@ export default function Admin() {
     <div className="tv-admin" ref={rootRef}>
       <LogoSprite />
 
-      <div className="app">
-        <nav className="side" aria-label="Admin sections">
+      <div className={'app' + (menuOpen ? ' menu-open' : '')}>
+        <header className="topbar">
+          <svg className="tv-logo" style={{ height: '28px' }} viewBox="0 0 1784 409" role="img" aria-label="Testverse by Studyverse">
+            <use href="#tv-logo" />
+          </svg>
+          <small className="admin-tag">Admin</small>
+          <button className="menu-toggle" type="button" aria-controls="admin-nav" aria-expanded={menuOpen ? 'true' : 'false'} onClick={() => setMenuOpen((v) => !v)}>
+            {menuOpen ? 'Close' : 'Menu'}
+          </button>
+        </header>
+        <div className="scrim" aria-hidden="true" onClick={() => setMenuOpen(false)}></div>
+        <nav
+          className="side"
+          id="admin-nav"
+          aria-label="Admin sections"
+          onClick={(e) => {
+            if (e.target.closest('[data-view]')) {
+              setMenuOpen(false)
+              window.scrollTo(0, 0)
+            }
+          }}
+        >
           <div className="brand">
-            <svg className="tv-logo" style={{ height: '32px' }} viewBox="0 0 1784 409" role="img" aria-label="Testverse by Studyverse">
+            <svg className="tv-logo" style={{ height: '30px' }} viewBox="0 0 1784 409" role="img" aria-label="Testverse by Studyverse">
               <use href="#tv-logo" />
             </svg>
-            <small>ADMIN</small>
+            <small className="admin-tag">Admin</small>
           </div>
-          <button type="button" data-view="dashboard">
-            Dashboard
-          </button>
-          <button type="button" data-view="tests">
-            Tests <span className="count" data-count="tests"></span>
-          </button>
-          <button type="button" data-view="live">
-            Live tests
-          </button>
-          <button type="button" data-view="series">
-            Test series
-          </button>
-          <button type="button" data-view="exams">
-            Exams &amp; patterns
-          </button>
-          <button type="button" data-view="offers">
-            Coupons &amp; referrals
-          </button>
-          <button type="button" data-view="requests">
-            Video requests <span className="count" data-count="requests"></span>
-          </button>
-          <button type="button" data-view="students">
-            Students &amp; groups
-          </button>
-          <button type="button" data-view="website">
-            Website info
-          </button>
+          <div className="nav">
+            <button type="button" data-view="dashboard">
+              Dashboard
+            </button>
+            <span className="nav-label">Content</span>
+            <button type="button" data-view="tests">
+              Tests <span className="count" data-count="tests"></span>
+            </button>
+            <button type="button" data-view="live">
+              Live tests
+            </button>
+            <button type="button" data-view="series">
+              Test series
+            </button>
+            <button type="button" data-view="exams">
+              Exams &amp; patterns
+            </button>
+            <span className="nav-label">Students</span>
+            <button type="button" data-view="students">
+              Students &amp; groups
+            </button>
+            <button type="button" data-view="requests">
+              Video requests <span className="count" data-count="requests"></span>
+            </button>
+            <span className="nav-label">Growth</span>
+            <button type="button" data-view="offers">
+              Coupons &amp; referrals
+            </button>
+            <button type="button" data-view="website">
+              Website info
+            </button>
+          </div>
           <div className="side-foot">
-            <span>Demo: changes are saved in this browser only.</span>
+            <div className="account">
+              <span className="avatar" aria-hidden="true">
+                SV
+              </span>
+              <div>
+                <b>Studyverse team</b>
+                <span>Administrator</span>
+              </div>
+            </div>
+            <p>Demo: changes are saved in this browser only.</p>
             <button type="button" id="reset">
               Reset demo data
             </button>

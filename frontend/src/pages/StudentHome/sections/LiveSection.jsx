@@ -1,130 +1,133 @@
-import { liveState } from '../../../data/studentDemo.js'
-import { fmt, pad } from '../../../lib/format.js'
 import { Link } from 'react-router-dom'
+import { SETTINGS, liveState } from '../../../data/studentDemo.js'
+import { fmt, pad } from '../../../lib/format.js'
+import SectionHead from '../SectionHead.jsx'
 
-/* design/student-home.html liveSection() — live hero + upcoming list */
-export default function LiveSection({ live, now, onRegister }) {
-  const open = live.filter((t) => liveState(t) === 'open')[0]
-  const next = live
-    .filter((t) => liveState(t) === 'upcoming')
-    .sort((a, b) => new Date(a.start) - new Date(b.start))
-  const hero = open || next[0]
-  const rest = next.filter((t) => t !== hero)
+const time = (iso) => fmt(iso, { hour: 'numeric', minute: '2-digit' })
 
-  return (
-    <section id="live" style={{ display: 'grid', gap: '24px' }}>
-      {hero ? <LiveHero hero={hero} now={now} onRegister={onRegister} /> : null}
-
-      {rest.length ? (
-        <div className="card">
-          <div className="card-head">
-            <h2>Upcoming live tests</h2>
-            <a href="#calendar">Full calendar</a>
-          </div>
-          <div className="upcoming">
-            {rest.map((t) => {
-              const d = new Date(t.start)
-              return (
-                <div className="up" key={t.id}>
-                  <div className="date">
-                    <b>{d.getDate()}</b>
-                    <span>
-                      {d.toLocaleString('en-IN', { month: 'short' })}, {d.toLocaleString('en-IN', { weekday: 'short' })}
-                    </span>
-                  </div>
-                  <div>
-                    <strong>{t.title}</strong>
-                    <em>
-                      {fmt(t.start, { hour: 'numeric', minute: '2-digit' })} · {t.meta}
-                    </em>
-                  </div>
-                  {t.registered ? (
-                    <span className="pill p-done">Registered</span>
-                  ) : (
-                    <button className="btn btn-outline btn-sm" type="button" data-register={t.id} onClick={() => onRegister(t.id)}>
-                      Register
-                    </button>
-                  )}
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      ) : null}
-    </section>
-  )
-}
-
-function LiveHero({ hero, now, onRegister }) {
+/* The one loud element on the dashboard: the live test now, or the next one. */
+export function LiveHero({ hero, now, onRegister }) {
+  if (!hero) return null
+  const start = new Date(hero.start).getTime()
   const isOpen = liveState(hero) === 'open'
-  const entryEnd = new Date(new Date(hero.start).getTime() + hero.window * 60000)
-  const left = Math.max(0, Math.floor((new Date(hero.start).getTime() + hero.window * 60000 - now) / 1000))
-  const cd = Math.max(0, Math.floor((new Date(hero.start).getTime() - now) / 1000))
+  const entryEnd = start + hero.window * 60000
+  const left = Math.max(0, Math.floor((entryEnd - now) / 1000))
+  const cd = Math.max(0, Math.floor((start - now) / 1000))
 
   return (
-    <div className="live">
-      <div>
-        <small>
+    <section className={'hero' + (isOpen ? ' is-live' : '')} aria-labelledby="hero-title">
+      <div className="hero-main">
+        <p className="hero-eyebrow">
           {isOpen ? (
             <>
-              <span className="pulse" aria-hidden="true"></span>Live now
+              <span className="live-dot" aria-hidden="true"></span>Live now · All-India live test
             </>
           ) : (
             'Next all-India live test'
           )}
-        </small>
-        <h2>{hero.title}</h2>
-        <p>
-          {hero.meta} · {fmt(hero.start)}
-          {isOpen ? ' · Enter by ' + fmt(entryEnd.toISOString(), { hour: 'numeric', minute: '2-digit' }) : ''}
         </p>
-      </div>
-      <div className="live-actions">
-        {isOpen ? (
-          <>
-            {hero.registered ? (
-              <Link className="btn btn-gold" to={'/test?test=' + hero.id}>
+        <h2 id="hero-title">{hero.title}</h2>
+        <p className="hero-meta">
+          {hero.meta} · {isOpen ? 'Started ' + time(hero.start) : fmt(hero.start)}
+        </p>
+        <div className="hero-actions">
+          {isOpen ? (
+            hero.registered ? (
+              <Link className="btn btn-gold btn-lg" to={'/test?test=' + hero.id}>
                 Start live test
               </Link>
             ) : (
-              <button className="btn btn-gold" type="button" data-register={hero.id} onClick={() => onRegister(hero.id)}>
+              <button className="btn btn-gold btn-lg" type="button" onClick={() => onRegister(hero.id)}>
                 Register and start
               </button>
-            )}
-            <span className="live-note">
-              Entry closes in <b>{Math.floor(left / 60)} min {pad(left % 60)} s</b>
-            </span>
-          </>
-        ) : (
-          <>
-            <div className="countdown" data-count-to={hero.start} aria-label="Time until the test starts">
-              <div>
-                <b>{Math.floor(cd / 86400)}</b>
-                <span>days</span>
-              </div>
-              <div>
-                <b>{pad(Math.floor((cd % 86400) / 3600))}</b>
-                <span>hrs</span>
-              </div>
-              <div>
-                <b>{pad(Math.floor((cd % 3600) / 60))}</b>
-                <span>min</span>
-              </div>
-              <div>
-                <b>{pad(cd % 60)}</b>
-                <span>sec</span>
-              </div>
-            </div>
-            {hero.registered ? (
-              <span className="live-note ok">You’re registered. We’ll remind you.</span>
-            ) : (
-              <button className="btn btn-gold" type="button" data-register={hero.id} onClick={() => onRegister(hero.id)}>
-                Register free
-              </button>
-            )}
-          </>
-        )}
+            )
+          ) : hero.registered ? null : (
+            <button className="btn btn-gold btn-lg" type="button" onClick={() => onRegister(hero.id)}>
+              Register free
+            </button>
+          )}
+          <span className="hero-note">
+            {hero.registered ? 'You’re registered. ' : ''}
+            {isOpen ? 'Your all-India rank comes out after the test closes.' : hero.registered ? 'We’ll remind you before it starts.' : 'Free for every student.'}
+          </span>
+        </div>
       </div>
-    </div>
+
+      {isOpen ? (
+        <div className="hero-clock" role="timer" aria-label="Time left to enter the test">
+          <span className="clock-label">Entry closes in</span>
+          <span className="clock-big">
+            {pad(Math.floor(left / 60))}:{pad(left % 60)}
+          </span>
+          <span className="clock-sub">Enter by {time(new Date(entryEnd).toISOString())}</span>
+        </div>
+      ) : (
+        <div className="hero-clock" role="timer" aria-label="Time until the test starts">
+          <span className="clock-label">Starts in</span>
+          <div className="clock-segs">
+            {[
+              [Math.floor(cd / 86400), 'days'],
+              [pad(Math.floor((cd % 86400) / 3600)), 'hrs'],
+              [pad(Math.floor((cd % 3600) / 60)), 'min'],
+              [pad(cd % 60), 'sec'],
+            ].map(([v, l]) => (
+              <span className="seg" key={l}>
+                <b>{v}</b>
+                <small>{l}</small>
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+    </section>
+  )
+}
+
+/* Upcoming live tests as tiles; the announcement becomes the section description. */
+export function UpcomingLive({ rest, onRegister }) {
+  return (
+    <section className="section" id="live" aria-labelledby="live-title">
+      <SectionHead id="live-title" title="Upcoming live tests" desc={SETTINGS.announcement}>
+        <a className="text-link" href="#live">
+          Full calendar
+        </a>
+      </SectionHead>
+      {rest.length ? (
+        <ul className="grid live-grid">
+          {rest.map((t) => {
+            const d = new Date(t.start)
+            return (
+              <li className="card live-card" key={t.id}>
+                <div className="live-date">
+                  <b>{d.getDate()}</b>
+                  <span>
+                    {d.toLocaleString('en-IN', { month: 'short' })}
+                    <br />
+                    {d.toLocaleString('en-IN', { weekday: 'long' })}
+                  </span>
+                </div>
+                <div className="live-body">
+                  <h3>{t.title}</h3>
+                  <p className="meta">
+                    {time(t.start)} · {t.meta}
+                  </p>
+                </div>
+                <div className="live-foot">
+                  {t.registered ? (
+                    <span className="status status-green">Registered</span>
+                  ) : (
+                    <button className="btn btn-outline btn-sm" type="button" onClick={() => onRegister(t.id)}>
+                      Register
+                    </button>
+                  )}
+                </div>
+              </li>
+            )
+          })}
+        </ul>
+      ) : (
+        <p className="empty">No more live tests scheduled yet. We’ll add the next one soon.</p>
+      )}
+    </section>
   )
 }

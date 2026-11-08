@@ -37,3 +37,59 @@ html.smooth-scroll {
 #root {
   min-height: 100vh;
 }
+
+/*
+  Page transitions (View Transitions API, via <Link viewTransition>). Global on
+  purpose: page stylesheets are scoped to their root class, and these
+  pseudo-elements live on the document. Named groups:
+    brand-logo  – the Testverse logo glides between header and auth panel
+    auth-brand  – the navy auth panel stays put between /login and /signup
+    auth-panel  – the clicked "Log in"/"Sign up" control grows into the form
+*/
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) {
+    animation: tv-vt-out 280ms cubic-bezier(0.4, 0, 1, 1) both;
+  }
+  ::view-transition-new(root) {
+    animation: tv-vt-in 520ms cubic-bezier(0.16, 1, 0.3, 1) 60ms both;
+  }
+  ::view-transition-group(brand-logo),
+  ::view-transition-group(auth-brand),
+  ::view-transition-group(auth-panel) {
+    animation-duration: 640ms;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  /* The button's snapshot would stretch, so it dissolves fast while the
+     form's snapshot grows out of its box. */
+  ::view-transition-old(auth-panel) {
+    animation: tv-vt-fade-out 110ms ease both;
+  }
+  ::view-transition-new(auth-panel) {
+    animation: tv-vt-fade-in 420ms ease 120ms both;
+  }
+  ::view-transition-old(auth-panel),
+  ::view-transition-new(auth-panel) {
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+@keyframes tv-vt-out {
+  to { opacity: 0; transform: scale(0.985); filter: blur(6px); }
+}
+@keyframes tv-vt-in {
+  from { opacity: 0; transform: scale(1.015); filter: blur(6px); }
+}
+@keyframes tv-vt-fade-out {
+  to { opacity: 0; }
+}
+@keyframes tv-vt-fade-in {
+  from { opacity: 0; }
+}

@@ -113,15 +113,33 @@ export default function ExamView({ paper, flat, attempt, lang, setLang, curIndex
     )
   }
 
+  const secStats = paper.sections.map((s, si) => {
+    const list = flat.filter((x) => x.si === si)
+    const k = countsOf(attempt, list)
+    return { name: s.name, si, total: list.length, done: k.an + k.am }
+  })
+  const answered = c.an + c.am
+  const initials = STUDENT.name
+    .split(' ')
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join('')
+
   return (
     <section id="v-exam" className="exam">
       <div className="bar exam-top">
         <div className="in">
-          <div className="cand">
-            <b id="e-title">{paper.title}</b>
-            <span id="e-cand">
-              {STUDENT.name} · {STUDENT.roll}
-            </span>
+          <div className="exam-id">
+            <svg className="tv-logo exam-logo" viewBox="0 0 1784 409" role="img" aria-label="Testverse">
+              <use href="#tv-logo" />
+            </svg>
+            <span className="exam-sep" aria-hidden="true"></span>
+            <div className="cand">
+              <b id="e-title">{paper.title}</b>
+              <span id="e-cand">
+                {STUDENT.name} · {STUDENT.roll}
+              </span>
+            </div>
           </div>
           <div className="top-tools">
             <span className={'save-state' + (saveText.indexOf('Offline') === 0 ? ' off' : '')} id="save-state" aria-live="polite">
@@ -137,12 +155,14 @@ export default function ExamView({ paper, flat, attempt, lang, setLang, curIndex
                 ))}
               </div>
             ) : null}
-            <button className="tool" type="button" id="font-dn" aria-label="Smaller text" onClick={onFontDn}>
-              A−
-            </button>
-            <button className="tool" type="button" id="font-up" aria-label="Larger text" onClick={onFontUp}>
-              A+
-            </button>
+            <div className="font-tools" role="group" aria-label="Text size">
+              <button className="tool" type="button" id="font-dn" aria-label="Smaller text" onClick={onFontDn}>
+                A−
+              </button>
+              <button className="tool" type="button" id="font-up" aria-label="Larger text" onClick={onFontUp}>
+                A+
+              </button>
+            </div>
             <div className={'timer' + (left <= 60000 ? ' danger' : left <= 5 * 60000 ? ' warn' : '')} id="timer" role="timer" aria-label="Time left">
               <span>Time left</span>
               <b id="t-left">{hms(left)}</b>
@@ -156,7 +176,9 @@ export default function ExamView({ paper, flat, attempt, lang, setLang, curIndex
           {paper.sections.map((s, si) => (
             <button key={si} type="button" role="tab" data-sec={si} aria-selected={f.si === si ? 'true' : 'false'} onClick={() => api.goSection(si)}>
               {s.name}
-              <small>{s.questions.length}</small>
+              <small>
+                {secStats[si].done}/{s.questions.length}
+              </small>
             </button>
           ))}
         </div>
@@ -165,12 +187,21 @@ export default function ExamView({ paper, flat, attempt, lang, setLang, curIndex
       <div className="exam-body">
         <article className="qpane" aria-live="polite">
           <div className="qhead">
-            <b id="q-no">
-              Question {curIndex + 1} of {flat.length}
-            </b>
-            <span id="q-meta">
-              {`${f.sec} · ${Q_TYPE_LABELS[q.type]} · +${q.marks.correct} / ${q.marks.wrong || 0}`}
-            </span>
+            <div className="qhead-l">
+              <span className="qno" id="q-no">
+                Question {curIndex + 1}
+                <small> of {flat.length}</small>
+              </span>
+              {r.marked ? <span className="tag tag-mr">Marked for review</span> : null}
+            </div>
+            <div className="qmeta" id="q-meta">
+              <span className="tag">{f.sec}</span>
+              <span className="tag">{Q_TYPE_LABELS[q.type]}</span>
+              <span className="tag tag-marks">
+                <b>+{q.marks.correct}</b>
+                <i>{String(q.marks.wrong || 0).replace('-', '−')}</i>
+              </span>
+            </div>
           </div>
           <div className="qbody" id="q-body" ref={qbodyRef}>
             {body}
@@ -180,7 +211,7 @@ export default function ExamView({ paper, flat, attempt, lang, setLang, curIndex
               <button className="btn btn-purple" type="button" id="b-mark" onClick={api.markNext}>
                 Mark for review &amp; next
               </button>
-              <button className="btn btn-outline" type="button" id="b-clear" onClick={api.clearResponse}>
+              <button className="btn btn-ghost" type="button" id="b-clear" onClick={api.clearResponse}>
                 Clear response
               </button>
             </div>
@@ -205,49 +236,102 @@ export default function ExamView({ paper, flat, attempt, lang, setLang, curIndex
           </div>
         </article>
 
+        <div className={'side-scrim' + (sideOpen ? ' open' : '')} aria-hidden="true" onClick={() => setSideOpen(false)}></div>
+
         <aside className={'side' + (sideOpen ? ' open' : '')} id="side" aria-label="Question palette">
-          <div className="side-head" id="legend">
-            <div>
-              <span className="chip an">{c.an}</span>Answered
-            </div>
-            <div>
-              <span className="chip na">{c.na}</span>Not answered
-            </div>
-            <div>
-              <span className="chip nv">{c.nv}</span>Not visited
-            </div>
-            <div>
-              <span className="chip mr">{c.mr}</span>Marked
-            </div>
-            <div style={{ gridColumn: 'span 2' }}>
-              <span className="chip am">{c.am}</span>Answered &amp; marked (evaluated)
-            </div>
+          <div className="sheet-head">
+            <b>Question palette</b>
+            <button className="close" type="button" onClick={() => setSideOpen(false)}>
+              Close
+            </button>
           </div>
-          <div className="grid-wrap" id="pal">
-            <h3>{sec.name}</h3>
-            <div className="qgrid">
-              {flat.map((x, i) => {
-                if (x.si !== f.si) return null
-                const st = statusOf(attempt, x.q)
-                return (
-                  <button
-                    key={i}
-                    type="button"
-                    className={'chip ' + st + (i === curIndex ? ' cur' : '')}
-                    aria-label={'Question ' + (i + 1) + ', ' + STATUS_LABEL[st]}
-                    onClick={() => {
-                      api.goQuestion(i)
-                      setSideOpen(false)
-                    }}
-                  >
-                    {i + 1}
-                  </button>
-                )
-              })}
+          <div className="side-scroll">
+            <div className="cand-card">
+              <span className="avatar" aria-hidden="true">
+                {initials}
+              </span>
+              <div>
+                <b>{STUDENT.name}</b>
+                <span>{STUDENT.roll}</span>
+              </div>
+              <div className="progress-num">
+                <b>{answered}</b>
+                <span>of {flat.length} answered</span>
+              </div>
+            </div>
+
+            <div className="side-head" id="legend">
+              <div>
+                <span className="chip an">{c.an}</span>Answered
+              </div>
+              <div>
+                <span className="chip na">{c.na}</span>Not answered
+              </div>
+              <div>
+                <span className="chip nv">{c.nv}</span>Not visited
+              </div>
+              <div>
+                <span className="chip mr">{c.mr}</span>Marked
+              </div>
+              <div className="wide">
+                <span className="chip am">{c.am}</span>Answered &amp; marked (evaluated)
+              </div>
+            </div>
+
+            <div className="grid-wrap" id="pal">
+              <h3>
+                {sec.name}
+                <span>{sec.questions.length} questions</span>
+              </h3>
+              <div className="qgrid">
+                {flat.map((x, i) => {
+                  if (x.si !== f.si) return null
+                  const st = statusOf(attempt, x.q)
+                  return (
+                    <button
+                      key={i}
+                      type="button"
+                      className={'chip ' + st + (i === curIndex ? ' cur' : '')}
+                      aria-label={'Question ' + (i + 1) + ', ' + STATUS_LABEL[st]}
+                      aria-current={i === curIndex ? 'true' : undefined}
+                      onClick={() => {
+                        api.goQuestion(i)
+                        setSideOpen(false)
+                      }}
+                    >
+                      {i + 1}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+
+            <div className="sec-list">
+              <h3>All sections</h3>
+              {secStats.map((s) => (
+                <button
+                  key={s.si}
+                  type="button"
+                  className={'sec-row' + (s.si === f.si ? ' on' : '')}
+                  aria-current={s.si === f.si ? 'true' : undefined}
+                  onClick={() => {
+                    api.goSection(s.si)
+                    setSideOpen(false)
+                  }}
+                >
+                  <span className="sec-name">{s.name}</span>
+                  <span className="sec-count">
+                    {s.done}/{s.total}
+                  </span>
+                  <span className="sec-bar" aria-hidden="true">
+                    <i style={{ width: (s.total ? (s.done / s.total) * 100 : 0) + '%' }}></i>
+                  </span>
+                </button>
+              ))}
             </div>
           </div>
           <div className="side-foot">
-            <button className="btn btn-dark" type="button" id="b-submit" onClick={api.openSubmit}>
+            <button className="btn btn-dark btn-block" type="button" id="b-submit" onClick={api.openSubmit}>
               Submit test
             </button>
             <span className="demo-note" id="tab-note">

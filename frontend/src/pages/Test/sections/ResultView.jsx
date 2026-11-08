@@ -51,12 +51,35 @@ export default function ResultView({ paper, flat, attempt, reviewFilter, setRevi
   })
   const label = { correct: ['p-correct', 'Correct'], wrong: ['p-wrong', 'Wrong'], partial: ['p-partial', 'Partly correct'], skipped: ['p-skipped', 'Not answered'] }
 
+  const pct = R.max ? Math.max(0, Math.min(100, Math.round((R.total / R.max) * 100))) : 0
+  const usedPct = attempt.durationMs ? Math.min(100, Math.round((used / attempt.durationMs) * 100)) : 0
+  const RING = 2 * Math.PI * 52
+  const counts = {
+    all: R.items.length,
+    wrong: R.items.filter((it) => it.sc.status === 'wrong' || it.sc.status === 'partial').length,
+    skipped: R.skipped,
+    correct: R.correct,
+    marked: R.items.filter((it) => it.r && it.r.marked).length,
+  }
+  const verdict = pct >= 75 ? 'Excellent work' : pct >= 50 ? 'Solid attempt' : pct >= 25 ? 'Room to grow' : 'A starting point'
+
+  function jump(n) {
+    if (reviewFilter !== 'all') setReviewFilter('all')
+    setTimeout(() => {
+      const el = document.getElementById('rq-' + n)
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        el.focus({ preventScroll: true })
+      }
+    }, 30)
+  }
+
   return (
-    <section id="v-result">
-      <div className="bar">
+    <section id="v-result" className="result">
+      <header className="bar">
         <div className="in">
           <Link className="brand" to="/student">
-            <svg className="tv-logo" style={{ height: '34px' }} viewBox="0 0 1784 409" role="img" aria-label="Testverse by Studyverse">
+            <svg className="tv-logo" style={{ height: '32px' }} viewBox="0 0 1784 409" role="img" aria-label="Testverse by Studyverse">
               <use href="#tv-logo" />
             </svg>
           </Link>
@@ -64,15 +87,23 @@ export default function ResultView({ paper, flat, attempt, reviewFilter, setRevi
             Back to home
           </Link>
         </div>
-      </div>
+      </header>
 
-      <div className="res-wrap" id="result">
-        <div className="res-head">
-          <div>
-            <span className="eyebrow">Result and analysis</span>
-            <h1>
-              {paper.title}: your result
-            </h1>
+      <div className="res-hero">
+        <div className="res-shell res-hero-in">
+          <div className="score">
+            <svg className="ring" viewBox="0 0 120 120" role="img" aria-label={`Score ${pct} percent`}>
+              <circle cx="60" cy="60" r="52" className="ring-track" />
+              <circle cx="60" cy="60" r="52" className="ring-val" strokeDasharray={RING} strokeDashoffset={RING * (1 - pct / 100)} transform="rotate(-90 60 60)" />
+            </svg>
+            <div className="ring-label">
+              <b>{pct}%</b>
+              <span>of max</span>
+            </div>
+          </div>
+          <div className="res-title">
+            <span className="eyebrow on-navy">Result and analysis · {paper.exam}</span>
+            <h1>{paper.title}</h1>
             <p>
               Submitted{' '}
               {new Date(attempt.submittedAt).toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' })}
@@ -80,77 +111,110 @@ export default function ResultView({ paper, flat, attempt, reviewFilter, setRevi
               {attempt.demo ? ' · sample attempt' : ''}
             </p>
           </div>
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-            <Link className="btn btn-outline" to="/student">
-              Back to home
-            </Link>
+          <div className="res-score">
+            <span>{verdict}</span>
+            <b>
+              {R.total}
+              <small> / {R.max}</small>
+            </b>
+            <em>marks scored</em>
           </div>
         </div>
+      </div>
 
+      <div className="res-shell res-body" id="result">
         <div className="kpis">
-          <div className="kpi main">
-            <b>
-              {R.total} / {R.max}
-            </b>
-            <span>Score</span>
-          </div>
           <div className="kpi">
-            <b>{acc}%</b>
             <span>Accuracy</span>
+            <b>{acc}%</b>
+            <div className="meter" aria-hidden="true">
+              <i style={{ width: acc + '%', background: colour(acc) }}></i>
+            </div>
+            <small>of the questions you attempted</small>
           </div>
           <div className="kpi">
-            <b>
-              {attempted} / {totalQ}
-            </b>
             <span>Attempted</span>
-          </div>
-          <div className="kpi">
             <b>
-              {R.correct} · {R.wrong}
-              {R.partial ? ' · ' + R.partial : ''}
+              {attempted}
+              <small> / {totalQ}</small>
             </b>
-            <span>
-              Correct · wrong{R.partial ? ' · partly correct' : ''}
-            </span>
+            <div className="meter" aria-hidden="true">
+              <i style={{ width: (totalQ ? (attempted / totalQ) * 100 : 0) + '%' }}></i>
+            </div>
+            <small>{R.skipped} left blank</small>
           </div>
           <div className="kpi">
+            <span>Correct · wrong{R.partial ? ' · partial' : ''}</span>
+            <b className="cw">
+              <em className="c-ok">{R.correct}</em>
+              <em className="c-dot">·</em>
+              <em className="c-bad">{R.wrong}</em>
+              {R.partial ? (
+                <>
+                  <em className="c-dot">·</em>
+                  <em className="c-part">{R.partial}</em>
+                </>
+              ) : null}
+            </b>
+            <div className="meter split" aria-hidden="true">
+              <i className="s-ok" style={{ width: (totalQ ? (R.correct / totalQ) * 100 : 0) + '%' }}></i>
+              <i className="s-part" style={{ width: (totalQ ? (R.partial / totalQ) * 100 : 0) + '%' }}></i>
+              <i className="s-bad" style={{ width: (totalQ ? (R.wrong / totalQ) * 100 : 0) + '%' }}></i>
+            </div>
+            <small>{R.negative ? `${R.negative} marks lost to negative marking` : 'No negative marks'}</small>
+          </div>
+          <div className="kpi">
+            <span>Time used</span>
             <b>{mmss(used)}</b>
-            <span>Time used of {paper.durationMin} min</span>
+            <div className="meter" aria-hidden="true">
+              <i style={{ width: usedPct + '%' }}></i>
+            </div>
+            <small>of {paper.durationMin} min · {mmss(avg)} per question</small>
           </div>
         </div>
 
         {paper.kind === 'live' ? <div className="notice n-info">Your all-India rank will be published at [time] once everyone has finished.</div> : null}
 
-        <div className="two">
-          <section className="card">
-            <h2>Section-wise</h2>
-            <div className="section-rows">
-            {paper.sections.map((s) => {
-              const S = R.sections[s.name]
-              const p = S.max ? Math.max(0, Math.round((S.marks / S.max) * 100)) : 0
-              return (
-                <div key={s.name}>
-                  <div className="barrow">
-                    <span>{s.name}</span>
-                    <div>
+        <div className="analysis">
+          <section className="block">
+            <div className="block-head">
+              <h2>Section-wise</h2>
+              <p>Marks per section against the maximum.</p>
+            </div>
+            <div className="panel section-rows">
+              {paper.sections.map((s) => {
+                const S = R.sections[s.name]
+                const p = S.max ? Math.max(0, Math.round((S.marks / S.max) * 100)) : 0
+                return (
+                  <div className="srow" key={s.name}>
+                    <div className="srow-top">
+                      <b>{s.name}</b>
+                      <span className="srow-score">
+                        {S.marks}
+                        <small> / {S.max}</small>
+                      </span>
+                    </div>
+                    <div className="meter lg" aria-hidden="true">
                       <i style={{ width: p + '%', background: colour(p) }}></i>
                     </div>
-                    <b>
-                      {S.marks}/{S.max}
-                    </b>
+                    <p className="bar-meta">
+                      <span>{S.correct} correct</span>
+                      <span>{S.wrong} wrong</span>
+                      <span>{S.skipped} skipped</span>
+                      <span>{mmss(S.time)}</span>
+                    </p>
                   </div>
-                  <p className="bar-meta">
-                    {S.correct} correct · {S.wrong} wrong · {S.skipped} skipped · {mmss(S.time)}
-                  </p>
-                </div>
-              )
-            })}
+                )
+              })}
             </div>
           </section>
 
-          <section className="card">
-            <h2>What to work on</h2>
-            <ol className="tipl">
+          <section className="block">
+            <div className="block-head">
+              <h2>What to work on</h2>
+              <p>The few things that would move your score most.</p>
+            </div>
+            <ol className="panel tipl">
               {chapters[0] && chapters[0].lost > 0 ? (
                 <li>
                   <b>{chapters[0].name}</b> cost you the most: {chapters[0].lost} marks ({chapters[0].right} of {chapters[0].n} correct).
@@ -177,37 +241,54 @@ export default function ResultView({ paper, flat, attempt, reviewFilter, setRevi
           </section>
         </div>
 
-        <section className="card">
-          <h2>Chapter-wise</h2>
-          <div style={{ overflowX: 'auto' }}>
-            <table>
+        <section className="block">
+          <div className="block-head">
+            <h2>Chapter-wise</h2>
+            <p>Sorted by marks lost, so the chapters to revise come first.</p>
+          </div>
+          <div className="panel table-panel">
+            <table className="chap">
               <thead>
                 <tr>
                   <th>Chapter</th>
                   <th>Section</th>
+                  <th className="hide-sm">Accuracy</th>
                   <th className="n">Correct</th>
                   <th className="n">Marks lost</th>
                 </tr>
               </thead>
               <tbody>
-                {chapters.map((c) => (
-                  <tr key={c.name + c.sec}>
-                    <td>{c.name}</td>
-                    <td>{c.sec}</td>
-                    <td className="n">
-                      {c.right} / {c.n}
-                    </td>
-                    <td className="n">{c.lost ? <b className="lost">{c.lost}</b> : '0'}</td>
-                  </tr>
-                ))}
+                {chapters.map((c) => {
+                  const p = c.n ? Math.round((c.right / c.n) * 100) : 0
+                  return (
+                    <tr key={c.name + c.sec}>
+                      <td>
+                        <b>{c.name}</b>
+                      </td>
+                      <td className="muted">{c.sec}</td>
+                      <td className="hide-sm">
+                        <div className="meter" aria-hidden="true">
+                          <i style={{ width: p + '%', background: colour(p) }}></i>
+                        </div>
+                      </td>
+                      <td className="n">
+                        {c.right} / {c.n}
+                      </td>
+                      <td className="n">{c.lost ? <b className="lost">−{c.lost}</b> : <span className="muted">0</span>}</td>
+                    </tr>
+                  )
+                })}
               </tbody>
             </table>
           </div>
         </section>
 
-        <section style={{ display: 'grid', gap: '16px' }}>
-          <div className="review-head">
-            <h2>Questions and solutions</h2>
+        <section className="block" aria-labelledby="rv-t">
+          <div className="block-head review-head">
+            <div>
+              <h2 id="rv-t">Questions and solutions</h2>
+              <p>Jump to any question, or filter the list below.</p>
+            </div>
             <div className="seg" role="group" aria-label="Show">
               {[
                 ['all', 'All'],
@@ -218,10 +299,26 @@ export default function ResultView({ paper, flat, attempt, reviewFilter, setRevi
               ].map(([k, text]) => (
                 <button key={k} type="button" data-rf={k} aria-pressed={reviewFilter === k ? 'true' : 'false'} onClick={() => setReviewFilter(k)}>
                   {text}
+                  <small>{counts[k]}</small>
                 </button>
               ))}
             </div>
           </div>
+
+          <div className="qmap" role="group" aria-label="Jump to a question">
+            {R.items.map((it) => (
+              <button key={it.n} type="button" className={'qm qm-' + it.sc.status} onClick={() => jump(it.n)} aria-label={`Question ${it.n}, ${label[it.sc.status][1]}`}>
+                {it.n}
+              </button>
+            ))}
+            <span className="qmap-key">
+              <span><i className="qm-correct"></i>Correct</span>
+              <span><i className="qm-wrong"></i>Wrong</span>
+              {R.partial ? <span><i className="qm-partial"></i>Partly correct</span> : null}
+              <span><i className="qm-skipped"></i>Not answered</span>
+            </span>
+          </div>
+
           <div className="review" id="review">
             {list.length ? (
               list.map((it) => {
@@ -229,7 +326,7 @@ export default function ResultView({ paper, flat, attempt, reviewFilter, setRevi
                 const L = label[it.sc.status]
                 const correctText = q.type === 'integer' || q.type === 'numerical' ? String(q.answer) + (q.tolerance ? ' (± ' + q.tolerance + ')' : '') : answerText(q, q.answer, lang)
                 return (
-                  <article className="rq" key={q.id}>
+                  <article className={'rq rq-' + it.sc.status} key={q.id} id={'rq-' + it.n} tabIndex={-1}>
                     <div className="rq-top">
                       <div className="rq-id">
                         <b>Q.{it.n}</b>
@@ -271,23 +368,26 @@ export default function ResultView({ paper, flat, attempt, reviewFilter, setRevi
                       </div>
                     ) : null}
                     <div className="ans">
-                      <span className={'yours' + (it.sc.status === 'wrong' ? ' bad' : '')}>
-                        <MathText html={esc('Your answer: ' + answerText(q, it.r && it.r.answer, lang))} />
-                      </span>
-                      <span className="right">
-                        <MathText html={esc('Correct: ' + correctText)} />
-                      </span>
+                      <div className={'yours' + (it.sc.status === 'wrong' ? ' bad' : it.sc.status === 'correct' ? ' good' : '')}>
+                        <span>Your answer</span>
+                        <MathText html={esc(answerText(q, it.r && it.r.answer, lang))} />
+                      </div>
+                      <div className="right">
+                        <span>Correct answer</span>
+                        <MathText html={esc(correctText)} />
+                      </div>
                     </div>
-                    <div className="sol">
-                      <b>Solution</b>
-                      {'\n'}
-                      <MathText html={esc(q.solution)} />
-                    </div>
+                    <details className="sol" open={it.sc.status !== 'correct'}>
+                      <summary>Solution</summary>
+                      <div>
+                        <MathText html={esc(q.solution)} />
+                      </div>
+                    </details>
                     <div className="rq-actions">
-                      <button className="btn btn-outline btn-sm" type="button" onClick={() => onVideo(it)}>
+                      <button className="btn btn-ghost btn-sm" type="button" onClick={() => onVideo(it)}>
                         Request video solution
                       </button>
-                      <button className="btn btn-outline btn-sm" type="button" onClick={() => onReport(it.n)}>
+                      <button className="btn btn-ghost btn-sm" type="button" onClick={() => onReport(it.n)}>
                         Report a problem
                       </button>
                     </div>
@@ -295,9 +395,7 @@ export default function ResultView({ paper, flat, attempt, reviewFilter, setRevi
                 )
               })
             ) : (
-              <div className="card">
-                <p style={{ color: 'var(--muted)' }}>No questions in this view.</p>
-              </div>
+              <div className="empty">No questions in this view.</div>
             )}
           </div>
         </section>

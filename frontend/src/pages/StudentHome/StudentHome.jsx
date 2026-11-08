@@ -1,38 +1,45 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import './StudentHome.css'
 import LogoSprite from '../../components/LogoSprite.jsx'
-import { ASSIGNED, EXAM, LIVE, MODES, RESULTS, REQUESTS, SERIES, SETTINGS, SUBJECT_ACC, WEAK, liveState } from '../../data/studentDemo.js'
-import { fmt, greet } from '../../lib/format.js'
+import { ASSIGNED, LIVE, MODES, REQUESTS, SERIES, SETTINGS, liveState } from '../../data/studentDemo.js'
+import { fmt } from '../../lib/format.js'
 import { usePageMeta } from '../../lib/hooks.js'
 import { useToast } from '../../lib/useToast.jsx'
-import LiveSection from './sections/LiveSection.jsx'
+import SectionHead from './SectionHead.jsx'
+import { LiveHero, UpcomingLive } from './sections/LiveSection.jsx'
+import PageHeader from './sections/PageHeader.jsx'
+import PerformanceSection from './sections/PerformanceSection.jsx'
+import ResultsSection from './sections/ResultsSection.jsx'
 import SeriesSection from './sections/SeriesSection.jsx'
+import Sidebar from './sections/Sidebar.jsx'
 import SideCards from './sections/SideCards.jsx'
-import StudentHeader from './sections/StudentHeader.jsx'
 import VideoDialog from './sections/VideoDialog.jsx'
-import { Link } from 'react-router-dom'
 
 const initialModes = Object.fromEntries(Object.entries(MODES).map(([k, v]) => [k, { ...v }]))
 const initialLive = LIVE.map((t) => ({ ...t }))
 const initialRequests = REQUESTS.map((r) => ({ ...r }))
+const TOTAL = SERIES.length
+const SPY = ['top', 'series', 'live', 'results']
 
-function barColor(v) {
-  return v >= 75 ? 'var(--green)' : v >= 68 ? 'var(--blue)' : 'var(--orange)'
+function pickLive(live) {
+  const open = live.find((t) => liveState(t) === 'open')
+  const next = live.filter((t) => liveState(t) === 'upcoming').sort((a, b) => new Date(a.start) - new Date(b.start))
+  const hero = open || next[0]
+  return { hero, rest: next.filter((t) => t !== hero) }
 }
 
 /* design/student-home.html -> route "/student" */
 export default function StudentHome() {
-  usePageMeta({ title: 'My Testverse — Home' })
+  usePageMeta({ title: 'My Testverse — Dashboard' })
 
   const [mode, setMode] = useState('course')
   const [modes, setModes] = useState(initialModes)
   const [live, setLive] = useState(initialLive)
   const [requests, setRequests] = useState(initialRequests)
   const [now, setNow] = useState(() => Date.now())
-  const [notesOpen, setNotesOpen] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [dot, setDot] = useState(true)
-  const [announceHidden, setAnnounceHidden] = useState(false)
+  const [sheetOpen, setSheetOpen] = useState(false)
+  const [active, setActive] = useState('top')
   const [videoOpen, setVideoOpen] = useState(false)
   const { toast, node } = useToast()
 
@@ -40,12 +47,36 @@ export default function StudentHome() {
   const limit = me.course ? SETTINGS.videoLimit.course : SETTINGS.videoLimit.direct
   const videoLeft = Math.max(0, limit - me.videosUsed)
   const done = SERIES.filter((t) => t.status === 'done').length
+  const { hero, rest } = pickLive(live)
 
-  // 1s ticker for countdowns / entry windows (the design runs setInterval(tick, 1000))
+  // 1s ticker for countdowns / entry windows
   useEffect(() => {
     const id = setInterval(() => setNow(Date.now()), 1000)
     return () => clearInterval(id)
   }, [])
+
+  // Highlight the nav item for the section in view
+  useEffect(() => {
+    if (!('IntersectionObserver' in window)) return undefined
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActive(e.target.id)
+        })
+      },
+      { rootMargin: '-30% 0px -60% 0px' },
+    )
+    SPY.forEach((id) => {
+      const el = document.getElementById(id)
+      if (el) io.observe(el)
+    })
+    return () => io.disconnect()
+  }, [mode])
+
+  function navigate(id) {
+    setActive(id)
+    setSheetOpen(false)
+  }
 
   function register(id) {
     const t = live.find((x) => x.id === id)
@@ -68,247 +99,97 @@ export default function StudentHome() {
     toast('Request sent. We’ll send your video within ' + SETTINGS.videoHours + ' hours.')
   }
 
-  const trend = RESULTS.slice().reverse()
-
   return (
     <div className="tv-studenthome">
       <LogoSprite />
 
-      <StudentHeader
-        me={me}
-        dot={dot}
-        notesOpen={notesOpen}
-        menuOpen={menuOpen}
-        setNotesOpen={(v) => {
-          setNotesOpen(v)
-          if (v) setDot(false)
-        }}
-        setMenuOpen={setMenuOpen}
-        onLogout={() => toast('Logged out (demo)')}
-      />
+      <Sidebar me={me} active={active} onNavigate={navigate} sheetOpen={sheetOpen} setSheetOpen={setSheetOpen} onLogout={() => toast('Logged out (demo)')} />
 
-      <div className="announce" id="announce" hidden={announceHidden}>
-        <div className="in">
-          <span id="announce-text">{SETTINGS.announcement}</span>
-          <button type="button" id="announce-x" aria-label="Dismiss announcement" onClick={() => setAnnounceHidden(true)}>
-            Dismiss
-          </button>
+      <div className="shell">
+        <div className="content">
+          <main className="layout" id="main">
+            <div className="main-col">
+              <PageHeader me={me} done={done} total={TOTAL} />
+
+              <LiveHero hero={hero} now={now} onRegister={register} />
+
+              {me.course && ASSIGNED.length ? (
+                <section className="section" id="assigned" aria-labelledby="assigned-title">
+                  <SectionHead id="assigned-title" title="Assigned to you" desc="Personal and batch tests from your Studyverse teachers." />
+                  <ul className="grid assigned-grid">
+                    {ASSIGNED.map((a) => {
+                      const hrs = (new Date(a.due).getTime() - now) / 36e5
+                      return (
+                        <li className="card assigned-card" key={a.id}>
+                          <div className="assigned-top">
+                            <span className="meta">{a.from}</span>
+                            {hrs < 24 ? <span className="status status-amber">Due in {Math.max(1, Math.round(hrs))} h</span> : null}
+                          </div>
+                          <h3>{a.title}</h3>
+                          <p className="meta">
+                            {a.meta} · due {fmt(a.due)}
+                          </p>
+                          <Link className="btn btn-dark btn-sm" to={'/test?test=' + a.id}>
+                            Start test
+                          </Link>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </section>
+              ) : null}
+
+              <SeriesSection me={me} done={done} total={TOTAL} />
+
+              <UpcomingLive rest={rest} onRegister={register} />
+
+              {me.bought ? (
+                <>
+                  <ResultsSection />
+                  <PerformanceSection />
+                </>
+              ) : null}
+            </div>
+
+            <aside className="rail" aria-label="Video solutions, referrals and sharing">
+              <SideCards me={me} requests={requests} videoLeft={videoLeft} onOpenVideo={() => setVideoOpen(true)} onCopyCode={copyCode} />
+            </aside>
+          </main>
+
+          <footer className="foot">
+            <span>© 2026 Studyverse</span>
+            <nav aria-label="Legal">
+              <a href="/terms">Terms</a>
+              <a href="/privacy">Privacy</a>
+              <a href="/refunds">Refund policy</a>
+              <a href="/contact">Contact</a>
+            </nav>
+          </footer>
         </div>
       </div>
 
-      <main className="page" id="page">
-        <div className="col">
-          {/* Greeting + stats */}
-          <section className="hello">
-            <div>
-              <h1>
-                {greet()}, {me.first}
-              </h1>
-              <p>
-                <span>
-                  {EXAM.label} {EXAM.year}
-                </span>
-                {me.course ? <span className="tag tag-course">Studyverse course student</span> : <span className="tag tag-direct">Testverse</span>}
-              </p>
-            </div>
-            <div className="stats">
-              <div className="stat">
-                <b>{me.bought ? done + ' / 11' : '—'}</b>
-                <span>series tests done</span>
-              </div>
-              <div className="stat">
-                <b>{me.bought ? '1,284' : '—'}</b>
-                <span>best all-India rank</span>
-              </div>
-              <div className="stat">
-                <b>{me.bought ? '75%' : '—'}</b>
-                <span>accuracy, last test</span>
-              </div>
-            </div>
-          </section>
-
-          {/* Live */}
-          <LiveSection live={live} now={now} onRegister={register} />
-
-          {/* Assigned (course students only) */}
-          {me.course && ASSIGNED.length ? (
-            <section className="card">
-              <div className="card-head">
-                <h2>Assigned to you</h2>
-                <span className="meta">Personal and batch tests from your teachers</span>
-              </div>
-              <div className="assigned">
-                {ASSIGNED.map((a) => {
-                  const hrs = (new Date(a.due).getTime() - now) / 36e5
-                  return (
-                    <div className="as" key={a.id}>
-                      <div>
-                        <strong>
-                          {a.title}
-                          {hrs < 24 ? <span className="pill p-new">Due today</span> : null}
-                        </strong>
-                        <span>
-                          {a.from} · {a.meta} · due {fmt(a.due)}
-                        </span>
-                      </div>
-                      <Link className="btn btn-dark btn-sm" to={'/test?test=' + a.id}>
-                        Start test
-                      </Link>
-                    </div>
-                  )
-                })}
-              </div>
-            </section>
-          ) : null}
-
-          {/* Series */}
-          <SeriesSection me={me} done={done} />
-
-          {/* Results + performance */}
-          {me.bought ? (
-            <>
-              <section className="card" id="results">
-                <div className="card-head">
-                  <h2>Recent results</h2>
-                  <a href="#results">All results</a>
-                </div>
-                <div className="table-wrap">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Test</th>
-                        <th>Score</th>
-                        <th>Accuracy</th>
-                        <th>Rank</th>
-                        <th>
-                          <span className="sr">Action</span>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {RESULTS.slice(0, 4).map((r, i) => (
-                        <tr key={i}>
-                          <td>
-                            <b>{r.test}</b>
-                            <span className="sub">
-                              {fmt(r.when, { day: 'numeric', month: 'short' })}
-                              {r.live ? ' · Live' : ''}
-                            </span>
-                          </td>
-                          <td>
-                            {r.score} / {r.max}
-                          </td>
-                          <td>{r.acc}%</td>
-                          <td>{r.rank ? r.rank : <span className="hint">—</span>}</td>
-                          <td style={{ textAlign: 'right' }}>
-                            <Link className="btn btn-outline btn-sm" to="/test?test=P4&view=result">
-                              View analysis
-                            </Link>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </section>
-
-              <section className="card">
-                <div className="card-head">
-                  <h2>Your performance</h2>
-                  <span className="meta">Across all tests</span>
-                </div>
-                <div className="perf">
-                  <div>
-                    <div className="hint" style={{ marginBottom: '4px' }}>
-                      Score % by test
-                    </div>
-                    <div
-                      className="chart"
-                      role="img"
-                      aria-label={'Score percentage by test: ' + trend.map((r) => r.test + ' ' + Math.round((r.score / r.max) * 100) + '%').join(', ')}
-                    >
-                      {trend.map((r) => {
-                        const p = Math.round((r.score / r.max) * 100)
-                        const short = r.test.replace('NEET Full Syllabus Live Test', 'Live 1').replace('Half Syllabus Test', 'Half').replace('Part Test', 'Part')
-                        return (
-                          <div key={r.test}>
-                            <b>{p}%</b>
-                            <i style={{ height: Math.round(p * 1.1) + 'px' }}></i>
-                            <span>{short}</span>
-                          </div>
-                        )
-                      })}
-                    </div>
-                  </div>
-                  <div>
-                    <div className="hint" style={{ marginBottom: '8px' }}>
-                      Accuracy by subject
-                    </div>
-                    <div className="bars">
-                      {SUBJECT_ACC.map(([label, pct]) => (
-                        <div className="bar" key={label}>
-                          <span>{label}</span>
-                          <div>
-                            <i style={{ width: pct + '%', background: barColor(pct) }}></i>
-                          </div>
-                          <b>{pct}%</b>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="weak">
-                      <div className="hint" style={{ background: 'none', padding: 0 }}>
-                        Chapters losing you the most marks
-                      </div>
-                      {WEAK.map(([label, pct]) => (
-                        <div key={label}>
-                          <span>{label}</span>
-                          <span>{pct}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </section>
-            </>
-          ) : null}
-        </div>
-
-        <aside className="col" aria-label="More">
-          <SideCards me={me} requests={requests} videoLeft={videoLeft} onOpenVideo={() => setVideoOpen(true)} onCopyCode={copyCode} />
-        </aside>
-      </main>
-
-      <footer className="foot">
-        <span>© 2026 Studyverse</span>
-        <a href="/terms">Terms</a>
-        <a href="/privacy">Privacy</a>
-        <a href="/refunds">Refund policy</a>
-        <a href="/contact">Contact</a>
-      </footer>
-
       <div className="demo" role="region" aria-label="Demo controls">
-        <div className="in">
-          <b>Demo: view as</b>
+        <b>Demo: view as</b>
+        <div className="demo-seg">
           {['course', 'direct', 'new'].map((m) => (
             <button
               key={m}
               type="button"
-              data-demo={m}
               aria-pressed={mode === m ? 'true' : 'false'}
               onClick={() => {
                 setMode(m)
                 window.scrollTo(0, 0)
               }}
             >
-              {m === 'course' ? 'Course (LMS) student' : m === 'direct' ? 'Direct student' : 'New, not bought yet'}
+              <span className="long">{m === 'course' ? 'Course (LMS) student' : m === 'direct' ? 'Direct student' : 'New, not bought yet'}</span>
+              <span className="short">{m === 'course' ? 'Course student' : m === 'direct' ? 'Direct' : 'New student'}</span>
             </button>
           ))}
-          <span style={{ marginLeft: 'auto' }}>Sample data only</span>
         </div>
+        <span className="demo-note">Sample data only</span>
       </div>
 
-      {/* Mounted only while open, so every request starts with fresh fields
-          (the design resets them in openVideo()). */}
+      {/* Mounted only while open, so every request starts with fresh fields. */}
       {videoOpen ? <VideoDialog onClose={() => setVideoOpen(false)} me={me} onSend={sendVideo} /> : null}
 
       {node}

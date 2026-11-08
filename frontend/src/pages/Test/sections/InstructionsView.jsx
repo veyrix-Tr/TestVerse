@@ -7,9 +7,19 @@ function timeLeftOf(a) {
   return a.startedAt + a.durationMs - Date.now()
 }
 
+const LEGEND = [
+  ['nv', '1', 'Not visited', 'You have not opened it yet'],
+  ['na', '2', 'Not answered', 'Opened, but no answer saved'],
+  ['an', '3', 'Answered', 'Your answer is saved'],
+  ['mr', '4', 'Marked for review', 'No answer, flagged to revisit'],
+  ['am', '5', 'Answered and marked', 'Flagged, and still evaluated'],
+]
+
 /*
   design/test.html renderInstr() — instructions screen (facts, marking scheme,
   rules, palette legend, language pick, internet check, agree + start).
+  Layout: navy hero with the paper facts, then the reading column on the left
+  and a sticky "ready to start" panel on the right.
 */
 export default function InstructionsView({ paper, flat, attempt, lang, setLang, onStart, online }) {
   const resuming = !!(attempt && !attempt.submittedAt)
@@ -24,14 +34,18 @@ export default function InstructionsView({ paper, flat, attempt, lang, setLang, 
 
   const totalQ = flat.length
   const maxMarks = flat.reduce((a, f) => a + f.q.marks.correct, 0)
+  const sectionRows = paper.sections.map((s, si) => {
+    const qs = flat.filter((f) => f.si === si)
+    return { name: s.name, n: qs.length, marks: qs.reduce((a, f) => a + f.q.marks.correct, 0) }
+  })
   const agreeId = 'agree'
 
   return (
-    <section id="v-instr">
-      <div className="bar">
+    <section id="v-instr" className="instr">
+      <header className="bar">
         <div className="in">
           <Link className="brand" to="/student">
-            <svg className="tv-logo" style={{ height: '34px' }} viewBox="0 0 1784 409" role="img" aria-label="Testverse by Studyverse">
+            <svg className="tv-logo" style={{ height: '32px' }} viewBox="0 0 1784 409" role="img" aria-label="Testverse by Studyverse">
               <use href="#tv-logo" />
             </svg>
           </Link>
@@ -39,145 +53,199 @@ export default function InstructionsView({ paper, flat, attempt, lang, setLang, 
             Back to home
           </Link>
         </div>
-      </div>
-      <div className="wrap" id="instr">
-        <div className="page-head">
-          <span className="eyebrow">Instructions</span>
-          <h1>{paper.title}</h1>
-          <p>{paper.note ? `${paper.exam} · ${paper.note}` : paper.exam}</p>
-        </div>
+      </header>
 
-        {resuming ? (
-          <div className="notice n-warn">
-            <b>You have a test in progress.</b> Your answers are saved. The timer kept running while you were away, so you have <b>{hms(timeLeftOf(attempt))}</b> left.
-          </div>
-        ) : null}
-
-        <div className="facts">
-          <div>
-            <b>{totalQ}</b>
-            <span>questions</span>
-          </div>
-          <div>
-            <b>{paper.durationMin} min</b>
-            <span>duration</span>
-          </div>
-          <div>
-            <b>{maxMarks}</b>
-            <span>total marks</span>
-          </div>
-          <div>
-            <b>{paper.sections.length}</b>
-            <span>sections: {paper.sections.map((s) => s.name).join(', ')}</span>
-          </div>
-        </div>
-
-        <section className="card">
-          <h2>Marking scheme</h2>
-          <div style={{ overflowX: 'auto' }}>
-            <table>
-              <thead>
-                <tr>
-                  <th>Question type</th>
-                  <th>Correct</th>
-                  <th>Wrong</th>
-                  <th>Not answered</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[...markRows.values()].map((q, i) => (
-                  <tr key={i}>
-                    <td>{Q_TYPE_LABELS[q.type]}</td>
-                    <td>
-                      {'+' + q.marks.correct}
-                      {q.marks.partial ? (
-                        <>
-                          {' '}
-                          (all correct options)
-                          <br />
-                          <span style={{ color: 'var(--muted)', fontSize: '13px', fontVariantNumeric: 'normal' }}>+1 for each correct option if you choose only some and no wrong one</span>
-                        </>
-                      ) : null}
-                    </td>
-                    <td>{q.marks.wrong || 0}</td>
-                    <td>0</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        <section className="card">
-          <h2>Instructions</h2>
-          <ol className="rules">
-            <li>
-              The timer starts when you press Start and <b>keeps running even if you close the app</b>. The test submits automatically when time is up.
-            </li>
-            <li>Your answers are saved automatically. If your internet or phone stops, log in again and continue from where you left off.</li>
-            <li>
-              Use <b>Save &amp; next</b> to save an answer. <b>Mark for review &amp; next</b> flags a question to come back to. A marked question that has an answer is still evaluated.
-            </li>
-            <li>For integer and numerical questions, type the number or use the on-screen keypad.</li>
-            <li>Switching to other apps or tabs is recorded.</li>
-          </ol>
-        </section>
-
-        <section className="card">
-          <h2>Question palette</h2>
-          <div className="legend">
-            <div>
-              <span className="chip nv">1</span>Not visited
-            </div>
-            <div>
-              <span className="chip na">2</span>Not answered
-            </div>
-            <div>
-              <span className="chip an">3</span>Answered
-            </div>
-            <div>
-              <span className="chip mr">4</span>Marked for review
-            </div>
-            <div>
-              <span className="chip am">5</span>Answered and marked (will be evaluated)
-            </div>
-          </div>
-        </section>
-
-        <section className="card start-card">
-          {paper.languages.length > 1 ? (
-            <div className="lang-row">
-              <b>Question language</b>
-              <div className="seg" role="group" aria-label="Question language">
-                {paper.languages.map((l) => (
-                  <button key={l} type="button" data-ilang={l} aria-pressed={lang === l ? 'true' : 'false'} onClick={() => setLang(l)}>
-                    {l === 'hi' ? 'हिंदी' : 'English'}
-                  </button>
-                ))}
+      <div className="instr-hero">
+        <div className="shell instr-cols">
+          <div className="hero-copy">
+            <span className="eyebrow on-navy">{paper.exam} · Instructions</span>
+            <h1>{paper.title}</h1>
+            {paper.note ? <p>{paper.note}</p> : null}
+            <dl className="facts">
+              <div>
+                <dt>Questions</dt>
+                <dd>{totalQ}</dd>
               </div>
-              <span>You can switch during the test.</span>
+              <div>
+                <dt>Duration</dt>
+                <dd>
+                  {paper.durationMin}
+                  <small>min</small>
+                </dd>
+              </div>
+              <div>
+                <dt>Total marks</dt>
+                <dd>{maxMarks}</dd>
+              </div>
+              <div>
+                <dt>Sections</dt>
+                <dd>{paper.sections.length}</dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+      </div>
+
+      <div className="shell instr-cols instr-body" id="instr">
+        <div className="instr-main">
+          {resuming ? (
+            <div className="notice n-warn">
+              <b>You have a test in progress.</b> Your answers are saved. The timer kept running while you were away, so you have <b>{hms(timeLeftOf(attempt))}</b> left.
             </div>
           ) : null}
-          <div className={'notice ' + (online ? 'n-ok' : 'n-err')} id="net" role="status">
-            {online ? 'Internet connection OK.' : 'You are offline. Connect to the internet to start.'}
+
+          <div className="duo">
+            <section className="block">
+              <div className="block-head">
+                <h2>Paper structure</h2>
+                <p>Sections appear as tabs in the exam. Move between them freely.</p>
+              </div>
+              <div className="panel">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Section</th>
+                      <th className="n">Questions</th>
+                      <th className="n">Marks</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {sectionRows.map((s) => (
+                      <tr key={s.name}>
+                        <td>
+                          <b>{s.name}</b>
+                        </td>
+                        <td className="n">{s.n}</td>
+                        <td className="n">{s.marks}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td>Total</td>
+                      <td className="n">{totalQ}</td>
+                      <td className="n">{maxMarks}</td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </section>
+
+            <section className="block">
+              <div className="block-head">
+                <h2>Marking scheme</h2>
+                <p>Unanswered questions never cost marks.</p>
+              </div>
+              <div className="panel">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Question type</th>
+                      <th className="n">Correct</th>
+                      <th className="n">Wrong</th>
+                      <th className="n">Blank</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[...markRows.values()].map((q, i) => (
+                      <tr key={i}>
+                        <td>
+                          <b>{Q_TYPE_LABELS[q.type]}</b>
+                          {q.marks.partial ? <span className="sub">+1 for each correct option if you choose only some and no wrong one</span> : null}
+                        </td>
+                        <td className="n">
+                          <span className="mk mk-plus">{'+' + q.marks.correct}</span>
+                        </td>
+                        <td className="n">{q.marks.wrong ? <span className="mk mk-minus">{String(q.marks.wrong).replace('-', '−')}</span> : <span className="mk">0</span>}</td>
+                        <td className="n">
+                          <span className="mk">0</span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
           </div>
-          <label className="check" htmlFor={agreeId}>
-            <input type="checkbox" id={agreeId} checked={agree} onChange={(e) => setAgree(e.target.checked)} /> I have read the instructions and will not use unfair means.
-          </label>
-          <div>
-            <button className="btn btn-primary" type="button" id="start" disabled={!agree} onClick={onStart}>
+
+          <section className="block">
+            <div className="block-head">
+              <h2>Instructions</h2>
+              <p>Read these once. They are the same rules as the real exam.</p>
+            </div>
+            <ol className="rules">
+              <li>
+                The timer starts when you press Start and <b>keeps running even if you close the app</b>. The test submits automatically when time is up.
+              </li>
+              <li>Your answers are saved automatically. If your internet or phone stops, log in again and continue from where you left off.</li>
+              <li>
+                Use <b>Save &amp; next</b> to save an answer. <b>Mark for review &amp; next</b> flags a question to come back to. A marked question that has an answer is still evaluated.
+              </li>
+              <li>For integer and numerical questions, type the number or use the on-screen keypad.</li>
+              <li>Switching to other apps or tabs is recorded.</li>
+            </ol>
+          </section>
+        </div>
+
+        <aside className="ready" aria-label="Start the test">
+          <div className="ready-card">
+            <div className="ready-head">
+              <h2>{resuming ? 'Pick up where you left off' : 'Ready when you are'}</h2>
+              <p>{resuming ? `${hms(timeLeftOf(attempt))} left on the clock.` : `${paper.durationMin} minutes, ${totalQ} questions. The clock starts on Start.`}</p>
+            </div>
+
+            {paper.languages.length > 1 ? (
+              <div className="ready-row">
+                <span className="field-label" id="lang-label">
+                  Question language
+                </span>
+                <div className="seg seg-full" role="group" aria-labelledby="lang-label">
+                  {paper.languages.map((l) => (
+                    <button key={l} type="button" data-ilang={l} aria-pressed={lang === l ? 'true' : 'false'} onClick={() => setLang(l)}>
+                      {l === 'hi' ? 'हिंदी' : 'English'}
+                    </button>
+                  ))}
+                </div>
+                <span className="hint">You can switch at any time during the test.</span>
+              </div>
+            ) : null}
+
+            <div className="ready-row">
+              <span className="field-label">Question palette</span>
+              <ul className="legend">
+                {LEGEND.map(([k, n, label, desc]) => (
+                  <li key={k}>
+                    <span className={'chip ' + k} aria-hidden="true">
+                      {n}
+                    </span>
+                    <span>
+                      <b>{label}</b>
+                      <small>{desc}</small>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className={'net ' + (online ? 'ok' : 'err')} id="net" role="status">
+              <i aria-hidden="true"></i>
+              {online ? 'Internet connection OK' : 'You are offline. Connect to the internet to start.'}
+            </div>
+
+            <label className="check" htmlFor={agreeId}>
+              <input type="checkbox" id={agreeId} checked={agree} onChange={(e) => setAgree(e.target.checked)} />
+              <span>I have read the instructions and will not use unfair means.</span>
+            </label>
+
+            <button className="btn btn-primary btn-lg btn-block" type="button" id="start" disabled={!agree} onClick={onStart}>
               {resuming ? 'Resume test' : 'Start test'}
             </button>
           </div>
-        </section>
 
-        <p className="demo-note">
-          Demo paper. Try{' '}
-          <Link to="/test?test=JA1">
-            the JEE Advanced demo
-          </Link>{' '}
-          for multiple-correct, integer and numerical questions.
-        </p>
+          <p className="demo-note">
+            Demo paper. Try <Link to="/test?test=JA1">the JEE Advanced demo</Link> for multiple-correct, integer and numerical questions.
+          </p>
+        </aside>
       </div>
     </section>
   )

@@ -9,11 +9,11 @@ import Faq from './sections/Faq.jsx'
 import FinalCta from './sections/FinalCta.jsx'
 import Hero from './sections/Hero.jsx'
 import HowItWorks from './sections/HowItWorks.jsx'
-import ParentsDuo from './sections/ParentsDuo.jsx'
-import Refer from './sections/Refer.jsx'
 import SiteFooter from './sections/SiteFooter.jsx'
 import SiteHeader from './sections/SiteHeader.jsx'
 import TestPlan from './sections/TestPlan.jsx'
+import Together from './sections/Together.jsx'
+import Why from './sections/Why.jsx'
 
 /*
   design/testverse-home.html -> route "/"
@@ -91,41 +91,16 @@ export default function Home() {
 
       <div className="ref-banner" data-ref-banner hidden={!refCode}>
         <div className="wrap">
-          <span>
+          <p>
             Your friend's referral code <b data-ref-code>{refCode}</b> will be applied at checkout: <b>[REFERRAL DISCOUNT]</b> off your test series.
-          </span>
+          </p>
         </div>
       </div>
 
       <main>
         <Hero exam={exam} onChoose={choose} signupHref={signupHref} />
 
-        <section id="why" className="section" aria-labelledby="why-title">
-          <div className="wrap">
-            <div className="section-head">
-              <h2 id="why-title">Why students choose Testverse</h2>
-              <p>Lots of apps have a test series. Here's what's different about ours.</p>
-            </div>
-            <div className="why">
-              <div>
-                <h3>A plan, not a pile of tests</h3>
-                <p>11 tests in a set order: part tests as you finish chapters, half-syllabus tests to join them up, then two full papers to rehearse the real exam. You always know which test comes next.</p>
-              </div>
-              <div>
-                <h3>Papers set by real faculty</h3>
-                <p>Every paper is set and checked by Studyverse faculty [with X+ years of NEET and JEE teaching], matched to the current exam pattern and level.</p>
-              </div>
-              <div>
-                <h3>Analysis that tells you what to fix</h3>
-                <p>Not just a score. Chapter-wise accuracy, time per question, marks lost to guessing, and a full solution for every question.</p>
-              </div>
-              <div>
-                <h3>A teacher when you need one</h3>
-                <p>If your scores stop improving, a Studyverse teacher can review your test data with you. Same account, so nothing starts from zero.</p>
-              </div>
-            </div>
-          </div>
-        </section>
+        <Why />
 
         <TestPlan exam={exam} onChoose={choose} signupHref={signupHref} />
 
@@ -135,9 +110,7 @@ export default function Home() {
 
         <HowItWorks />
 
-        <Refer />
-
-        <ParentsDuo />
+        <Together />
 
         <Faq />
 

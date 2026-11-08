@@ -1,9 +1,12 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import './Checkout.css'
 import LogoSprite from '../../components/LogoSprite.jsx'
-import { usePageMeta } from '../../lib/hooks.js'
 import { money } from '../../lib/format.js'
-import { Link } from 'react-router-dom'
+import { usePageMeta } from '../../lib/hooks.js'
+import { loadSession, saveSession } from '../../lib/session.js'
+import { OtpInput, PhoneField, Resend } from '../Login/AuthParts.jsx'
+import { isPhone, prettyPhone, useResendTimer } from '../Login/phone.js'
 
 /* ------------------------------------------------------------------
    EXAMPLE SETTINGS FOR THE DESIGN ONLY.
@@ -27,7 +30,21 @@ const CONFIG = {
   myReferralCode: 'RIYA4821',
 }
 
+const EXAM_OPTIONS = [
+  { key: 'neet', label: 'NEET', note: 'Physics, Chemistry, Biology' },
+  { key: 'jee-main', label: 'JEE Main', note: 'Physics, Chemistry, Maths' },
+  { key: 'jee-advanced', label: 'JEE Advanced', note: 'Paper 1 and Paper 2' },
+]
+
+/* The series, in order: drawn on the success ticket. */
+const SERIES = [
+  { label: 'Part tests', n: 6, prefix: 'P' },
+  { label: 'Half syllabus', n: 3, prefix: 'H' },
+  { label: 'Full syllabus', n: 2, prefix: 'F' },
+]
+
 const REQUIRED = ['f-name', 'f-dob', 'f-email', 'f-class', 'f-year', 'f-state', 'f-city', 'f-pname', 'f-pphone']
+const EMAIL_RE = /^\S+@\S+\.\S+$/
 
 function checkCode(raw, kind) {
   const c = (raw || '').trim().toUpperCase()
@@ -43,11 +60,25 @@ function checkCode(raw, kind) {
   return { code: c, kind: 'referral', rule: { type: 'flat', value: CONFIG.referral.friendDiscount }, label: 'Referral ' + c }
 }
 
-function aboutComplete(form) {
-  let ok = REQUIRED.every((id) => (form[id] || '').trim() !== '')
-  ok = ok && /^\S+@\S+\.\S+$/.test((form['f-email'] || '').trim())
-  ok = ok && (form['f-pphone'] || '').replace(/\D/g, '').length >= 10
-  return ok && !!form['f-terms']
+function emailOk(v) {
+  return EMAIL_RE.test((v || '').trim())
+}
+function pphoneOk(v) {
+  return (v || '').replace(/\D/g, '').length >= 10
+}
+
+/* How many of the 10 required things are done (9 fields + terms). */
+function aboutProgress(form) {
+  let n = 0
+  for (const id of REQUIRED) {
+    const v = (form[id] || '').trim()
+    if (!v) continue
+    if (id === 'f-email' && !emailOk(v)) continue
+    if (id === 'f-pphone' && !pphoneOk(v)) continue
+    n++
+  }
+  if (form['f-terms']) n++
+  return n
 }
 
 function isMinor(dob) {
@@ -58,6 +89,29 @@ function isMinor(dob) {
   return age < 18
 }
 
+function Field({ id, label, hint, optional, error, wide, children }) {
+  return (
+    <div className={'field' + (wide ? ' wide' : '')}>
+      <label htmlFor={id}>
+        {label}
+        {optional && <span className="opt"> (optional)</span>}
+      </label>
+      {children}
+      {error ? (
+        <p className="err" id={id + '-err'} role="alert">
+          {error}
+        </p>
+      ) : (
+        hint && (
+          <p className="hint" id={id + '-hint'}>
+            {hint}
+          </p>
+        )
+      )}
+    </div>
+  )
+}
+
 /* design/checkout.html -> route "/checkout" */
 export default function Checkout() {
   usePageMeta({ title: 'Checkout — Testverse by Studyverse' })
@@ -66,25 +120,31 @@ export default function Checkout() {
   const preExam = qs.get('exam')
   const preCoupon = qs.get('coupon')
   const preRef = qs.get('ref')
+  const preCode = preCoupon ? checkCode(preCoupon, 'coupon') : preRef ? checkCode(preRef, 'referral') : null
 
   /* state — prefill from link: ?exam=neet&ref=RIYA4821 or ?coupon=LAUNCH20 */
-  const [signedIn, setSignedIn] = useState(false)
+  const [user, setUser] = useState(() => loadSession())
+  const signedIn = !!user
   const [exam, setExam] = useState(preExam && CONFIG.prices[preExam] ? preExam : null)
   const [tab, setTab] = useState(preRef && !preCoupon ? 'referral' : 'coupon')
-  const [code, setCode] = useState(() => {
-    const res = preCoupon ? checkCode(preCoupon, 'coupon') : preRef ? checkCode(preRef, 'referral') : null
-    return res && !res.error ? res : null
-  })
-  const [codeErr, setCodeErr] = useState(() => {
-    const res = preCoupon ? checkCode(preCoupon, 'coupon') : preRef ? checkCode(preRef, 'referral') : null
-    return res && res.error ? res.error : null
-  })
+  const [code, setCode] = useState(preCode && !preCode.error ? preCode : null)
+  const [codeErr, setCodeErr] = useState(preCode && preCode.error ? preCode.error : null)
+  const [codeOpen, setCodeOpen] = useState(!!preCode)
   const [codeInput, setCodeInput] = useState('')
   const [useCredits, setUseCredits] = useState(false)
-  const [form, setForm] = useState({})
-  const [paid, setPaid] = useState(false)
+  const [form, setForm] = useState(() => ({ 'f-name': (loadSession() || {}).name || '' }))
+  const [touched, setTouched] = useState({})
+  const [paid, setPaid] = useState(null) // totals at the moment of payment
 
-  const complete = aboutComplete(form)
+  /* account step: mobile + OTP (demo: any 6 digits) */
+  const [authStep, setAuthStep] = useState('phone')
+  const [phone, setPhone] = useState('')
+  const [otp, setOtp] = useState('')
+  const [authErr, setAuthErr] = useState(null)
+  const [left, restartTimer] = useResendTimer()
+
+  const filled = aboutProgress(form)
+  const complete = filled === REQUIRED.length + 1
 
   function totals() {
     const price = exam ? CONFIG.prices[exam] : 0
@@ -111,8 +171,26 @@ export default function Checkout() {
     setCodeInput('')
   }
 
-  function signIn() {
-    setSignedIn(true)
+  function signIn(u) {
+    saveSession(u)
+    setUser(u)
+    setForm((f) => ({ ...f, 'f-name': f['f-name'] || u.name || '' }))
+    setAuthStep('phone')
+    setOtp('')
+    setAuthErr(null)
+  }
+
+  function sendOtp() {
+    if (!isPhone(phone)) return setAuthErr('Enter a valid 10-digit mobile number.')
+    setAuthErr(null)
+    setOtp('')
+    setAuthStep('otp')
+    restartTimer()
+  }
+
+  function verifyOtp(c) {
+    if (!/^\d{6}$/.test(c)) return setAuthErr('Enter the 6-digit code we sent to your phone.')
+    signIn({ phone, provider: 'otp' })
   }
 
   function onFormChange(e) {
@@ -121,20 +199,38 @@ export default function Checkout() {
     else setForm((f) => ({ ...f, [el.id]: el.value }))
   }
 
+  function onFormBlur(e) {
+    const id = e.target.id
+    if (id) setTouched((s) => (s[id] ? s : { ...s, [id]: true }))
+  }
+
   /* Pay (demo): the real app opens the payment gateway here, then confirms on the server */
   function pay() {
-    setPaid(true)
+    setPaid({ ...t, exam })
     window.scrollTo(0, 0)
   }
 
   const payDisabled = !signedIn || !complete || !exam
-  const payLabel = !signedIn ? 'Sign in to continue' : !complete ? 'Fill in your details' : !exam ? 'Choose your exam' : t.total > 0 ? 'Pay ' + money(t.total) : 'Get it free'
+  const payLabel = !exam ? 'Choose your exam' : !signedIn ? 'Sign in to continue' : !complete ? 'Fill in your details' : t.total > 0 ? 'Pay ' + money(t.total) : 'Get it free'
   const aboutDone = signedIn && complete
-  const doneText = 'Your ' + CONFIG.names[exam] + ' is ready. All 11 tests are now in your account.'
+  const userName = user && user.name ? user.name : null
+  const firstName = userName ? userName.split(' ')[0] : null
   const refLink = window.location.origin + '/?ref=' + CONFIG.myReferralCode
   const waHref =
     'https://wa.me/?text=' +
     encodeURIComponent("I'm preparing with Testverse by Studyverse. Use my code " + CONFIG.myReferralCode + ' to get ' + money(CONFIG.referral.friendDiscount) + ' off the test series: ' + refLink)
+
+  const steps = [
+    { id: 'step-exam', label: 'Exam', done: !!exam },
+    { id: 'step-account', label: 'Account', done: signedIn },
+    { id: 'step-details', label: 'Your details', done: aboutDone },
+    { id: 'summary', label: 'Payment', done: false },
+  ]
+  const current = steps.findIndex((s) => !s.done)
+  const stepState = (i) => (steps[i].done ? ' is-done' : i === current ? ' is-current' : '')
+
+  const emailErr = touched['f-email'] && form['f-email'] && !emailOk(form['f-email']) ? 'Enter a valid email address, like name@example.com.' : null
+  const pphoneErr = touched['f-pphone'] && form['f-pphone'] && !pphoneOk(form['f-pphone']) ? 'Enter a 10-digit mobile number.' : null
 
   return (
     <div className="tv-checkout">
@@ -142,321 +238,513 @@ export default function Checkout() {
 
       <header className="top">
         <div className="in">
-          <Link className="brand" to="/">
-            <svg className="tv-logo" style={{ height: '38px' }} viewBox="0 0 1784 409" role="img" aria-label="Testverse by Studyverse">
+          <Link className="brand" to="/" aria-label="Testverse by Studyverse, home">
+            <svg className="tv-logo" style={{ height: '36px' }} viewBox="0 0 1784 409" role="img" aria-label="Testverse by Studyverse">
               <use href="#tv-logo" />
             </svg>
           </Link>
-          <span className="secure">
-            <span>Secure checkout</span>
-          </span>
+          <span className="secure">Secure checkout</span>
         </div>
       </header>
 
-      <main className="page" id="checkout" hidden={paid}>
-        <h1>Get your test series</h1>
-
-        <div>
-          {/* Step 1: account */}
-          <section className="card" aria-labelledby="s1">
-            <div className="step-head">
-              <span className={'num' + (signedIn ? ' done' : '')} id="n1">
-                1
-              </span>
-              <h2 id="s1">Your account</h2>
-              {signedIn && <span className="step-state">Done</span>}
+      {!paid ? (
+        <main className="page" id="checkout">
+          <div className="page-head">
+            <div>
+              <p className="eyebrow">Checkout</p>
+              <h1>Get your test series</h1>
+              <p className="lede">Three short steps. Your 11 tests unlock the moment you pay.</p>
             </div>
-            <div id="signin" hidden={signedIn}>
-              <div style={{ display: 'grid', gap: '14px' }}>
-                <button className="btn btn-outline btn-block" type="button" data-signin onClick={signIn}>
-                  Continue with Google
-                </button>
-                <div className="or">or</div>
-                <div className="field">
-                  <label className="l" htmlFor="phone">
-                    Mobile number
-                  </label>
-                  <div className="row">
-                    <input className="input" id="phone" inputMode="tel" autoComplete="tel" placeholder="10-digit mobile number" />
-                    <button className="btn btn-primary" type="button" data-signin onClick={signIn}>
-                      Send OTP
-                    </button>
+            <ol className="progress" aria-label="Checkout progress">
+              {steps.map((s, i) => (
+                <li key={s.id} className={stepState(i).trim()} aria-current={i === current ? 'step' : undefined}>
+                  <a href={'#' + s.id}>
+                    <span className="p-num">{i + 1}</span>
+                    <span className="p-label">{s.label}</span>
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </div>
+
+          <div className="layout">
+            <div className="steps">
+              {/* Step 1: exam */}
+              <section className={'step' + stepState(0)} id="step-exam" aria-labelledby="s1">
+                <div className="rail" aria-hidden="true">
+                  <span className="num">1</span>
+                </div>
+                <div className="step-body">
+                  <header className="step-head">
+                    <div>
+                      <h2 id="s1">Choose your exam</h2>
+                      <p className="step-sub">Each series has 11 tests on the real CBT screen.</p>
+                    </div>
+                    {exam && <span className="chip chip-done">Done</span>}
+                  </header>
+                  <div className="exams" role="radiogroup" aria-labelledby="s1">
+                    {EXAM_OPTIONS.map((o) => (
+                      <label key={o.key} className={'exam' + (exam === o.key ? ' on' : '')}>
+                        <input type="radio" name="exam" value={o.key} checked={exam === o.key} onChange={() => setExam(o.key)} />
+                        <span className="exam-top">
+                          <b>{o.label}</b>
+                          <span className="radio" aria-hidden="true" />
+                        </span>
+                        <span className="exam-note">{o.note}</span>
+                        <span className="exam-price">{money(CONFIG.prices[o.key])}</span>
+                      </label>
+                    ))}
                   </div>
+                  {exam && (
+                    <div className="product" id="product">
+                      <h3 id="product-name">{CONFIG.names[exam]}: what you get</h3>
+                      <ul>
+                        <li>
+                          <b>6</b> part tests
+                        </li>
+                        <li>
+                          <b>3</b> half-syllabus tests
+                        </li>
+                        <li>
+                          <b>2</b> full-syllabus tests
+                        </li>
+                        <li>Real CBT screen, all-India rank and full analysis with solutions</li>
+                      </ul>
+                    </div>
+                  )}
                 </div>
-                <p className="hint">Studying in a Studyverse course? Use the same Google account or mobile number. It's one account.</p>
-              </div>
-            </div>
-            <div id="signed" className="signed" hidden={!signedIn}>
-              <span>
-                Signed in as <b>[Student name]</b>
-              </span>
-            </div>
-          </section>
+              </section>
 
-          {/* Step 2: about you */}
-          <section className="card" aria-labelledby="s2">
-            <div className="step-head">
-              <span className={'num' + (aboutDone ? ' done' : '')} id="n2">
-                2
-              </span>
-              <h2 id="s2">About you</h2>
-              {aboutDone && <span className="step-state">Done</span>}
-            </div>
-            <p className="hint" id="about-locked" hidden={signedIn}>
-              Sign in first.
-            </p>
-            <form id="about" className="grid2" hidden={!signedIn} noValidate onChange={onFormChange}>
-              <div className="field full">
-                <label className="l" htmlFor="f-name">
-                  Full name, as on your exam admit card
-                </label>
-                <input className="input" id="f-name" autoComplete="name" required defaultValue="" />
-              </div>
-              <div className="field">
-                <label className="l" htmlFor="f-dob">
-                  Date of birth
-                </label>
-                <input className="input" id="f-dob" type="date" required defaultValue="" />
-              </div>
-              <div className="field">
-                <label className="l" htmlFor="f-email">
-                  Email
-                </label>
-                <input className="input" id="f-email" type="email" autoComplete="email" required defaultValue="" />
-              </div>
-              <div className="field">
-                <label className="l" htmlFor="f-class">
-                  Class
-                </label>
-                <select className="input" id="f-class" required defaultValue="">
-                  <option value="">Select</option>
-                  <option>Class 11</option>
-                  <option>Class 12</option>
-                  <option>Dropper / repeater</option>
-                </select>
-              </div>
-              <div className="field">
-                <label className="l" htmlFor="f-year">
-                  Exam year
-                </label>
-                <select className="input" id="f-year" required defaultValue="">
-                  <option value="">Select</option>
-                  <option>2027</option>
-                  <option>2028</option>
-                </select>
-              </div>
-              <div className="field">
-                <label className="l" htmlFor="f-state">
-                  State
-                </label>
-                <input className="input" id="f-state" autoComplete="address-level1" required defaultValue="" />
-              </div>
-              <div className="field">
-                <label className="l" htmlFor="f-city">
-                  City
-                </label>
-                <input className="input" id="f-city" autoComplete="address-level2" required defaultValue="" />
-              </div>
-              <div className="field">
-                <label className="l" htmlFor="f-pname">
-                  Parent or guardian's name
-                </label>
-                <input className="input" id="f-pname" required defaultValue="" />
-              </div>
-              <div className="field">
-                <label className="l" htmlFor="f-pphone">
-                  Parent or guardian's mobile
-                </label>
-                <input className="input" id="f-pphone" inputMode="tel" required defaultValue="" />
-              </div>
-              <div className="field full">
-                <label className="l" htmlFor="f-coaching">
-                  School or coaching you attend now <span style={{ fontWeight: 400 }}>(optional)</span>
-                </label>
-                <input className="input" id="f-coaching" defaultValue="" />
-              </div>
-              <div className="minor full" id="minor" hidden={!isMinor(form['f-dob'])}>
-                <b>Parent's consent needed.</b> As you're under 18, we'll send an OTP to your parent's mobile to confirm they agree to you using Testverse. You can still finish checkout now.
-              </div>
-              <label className="agree full">
-                <input type="checkbox" id="f-terms" required defaultChecked={!!form['f-terms']} />
-                <span>
-                  I agree to the <a href="/terms">Terms</a> and <a href="/privacy">Privacy Policy</a>.
-                </span>
-              </label>
-              <label className="agree full">
-                <input type="checkbox" id="f-results" defaultChecked={!!form['f-results']} />
-                <span>
-                  Contact me after my exam result to share how I did. <span className="fine">Optional. We'll always ask separately before using your name or photo anywhere.</span>
-                </span>
-              </label>
-            </form>
-          </section>
+              {/* Step 2: account */}
+              <section className={'step' + stepState(1)} id="step-account" aria-labelledby="s2">
+                <div className="rail" aria-hidden="true">
+                  <span className="num">2</span>
+                </div>
+                <div className="step-body">
+                  <header className="step-head">
+                    <div>
+                      <h2 id="s2">Your account</h2>
+                      <p className="step-sub">{signedIn ? 'Your tests will be added to this account.' : 'One account for Testverse and Studyverse courses.'}</p>
+                    </div>
+                    {signedIn && <span className="chip chip-done">Done</span>}
+                  </header>
 
-          {/* Step 3: exam */}
-          <section className="card" aria-labelledby="s3">
-            <div className="step-head">
-              <span className="num">3</span>
-              <h2 id="s3">Your exam</h2>
-            </div>
-            <div className="exams" role="radiogroup" aria-labelledby="s3">
-              <label>
-                <input type="radio" name="exam" value="neet" checked={exam === 'neet'} onChange={() => setExam('neet')} />
-                <b>NEET</b>
-                <span>Physics, Chemistry, Biology</span>
-              </label>
-              <label>
-                <input type="radio" name="exam" value="jee-main" checked={exam === 'jee-main'} onChange={() => setExam('jee-main')} />
-                <b>JEE Main</b>
-                <span>Physics, Chemistry, Maths</span>
-              </label>
-              <label>
-                <input type="radio" name="exam" value="jee-advanced" checked={exam === 'jee-advanced'} onChange={() => setExam('jee-advanced')} />
-                <b>JEE Advanced</b>
-                <span>Paper 1 and Paper 2</span>
-              </label>
-            </div>
-            <div className="product" id="product" hidden={!exam}>
-              <h3 id="product-name">{exam ? CONFIG.names[exam] + ': 11 tests' : ''}</h3>
-              <ul>
-                <li>6 part tests</li>
-                <li>3 half-syllabus tests</li>
-                <li>2 full-syllabus tests</li>
-                <li>Real CBT screen, rank and full analysis with solutions</li>
-              </ul>
-            </div>
-          </section>
-        </div>
+                  {signedIn ? (
+                    <div className="signed" id="signed">
+                      <span className="avatar" aria-hidden="true">
+                        {(userName || 'S').charAt(0).toUpperCase()}
+                      </span>
+                      <span className="signed-who">
+                        <span className="signed-label">Signed in as</span>
+                        <b>{userName || (user.phone ? '+91 ' + prettyPhone(user.phone) : 'Student')}</b>
+                      </span>
+                      <button type="button" className="linkbtn" onClick={() => {
+                          setUser(null)
+                          setForm({})
+                          setTouched({})
+                        }}>
+                        Use a different account
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="signin" id="signin">
+                      <button className="btn btn-outline btn-lg btn-block" type="button" onClick={() => signIn({ name: 'Riya', provider: 'google' })}>
+                        Continue with Google
+                      </button>
+                      <div className="or">
+                        <span>or use your mobile number</span>
+                      </div>
+                      {authStep === 'phone' ? (
+                        <div className="field">
+                          <label htmlFor="phone">Mobile number</label>
+                          <div className="row">
+                            <PhoneField
+                              id="phone"
+                              value={phone}
+                              onChange={setPhone}
+                              invalid={!!authErr}
+                              describedBy={authErr ? 'phone-err' : 'phone-hint'}
+                            />
+                            <button className="btn btn-primary btn-lg" type="button" onClick={sendOtp}>
+                              Send OTP
+                            </button>
+                          </div>
+                          {authErr ? (
+                            <p className="err" id="phone-err" role="alert">
+                              {authErr}
+                            </p>
+                          ) : (
+                            <p className="hint" id="phone-hint">
+                              In a Studyverse course? Use the same Google account or number.
+                            </p>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="field">
+                          <label htmlFor="otp">Code sent to +91 {prettyPhone(phone)}</label>
+                          <div className="row">
+                            <OtpInput id="otp" value={otp} onChange={setOtp} onComplete={verifyOtp} invalid={!!authErr} describedBy={authErr ? 'otp-err' : 'otp-hint'} />
+                            <button className="btn btn-primary btn-lg" type="button" onClick={() => verifyOtp(otp)}>
+                              Verify
+                            </button>
+                          </div>
+                          {authErr ? (
+                            <p className="err" id="otp-err" role="alert">
+                              {authErr}
+                            </p>
+                          ) : (
+                            <p className="hint" id="otp-hint">
+                              Demo: any 6 digits will work.
+                            </p>
+                          )}
+                          <p className="otp-actions">
+                            <button
+                              type="button"
+                              className="linkbtn"
+                              onClick={() => {
+                                setAuthStep('phone')
+                                setAuthErr(null)
+                              }}
+                            >
+                              Change number
+                            </button>
+                            <Resend left={left} onResend={restartTimer} />
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </section>
 
-        {/* Summary */}
-        <aside className="summary" aria-labelledby="sum">
-          <section className="card">
-            <h2 id="sum">Order summary</h2>
+              {/* Step 3: about you */}
+              <section className={'step' + stepState(2)} id="step-details" aria-labelledby="s3">
+                <div className="rail" aria-hidden="true">
+                  <span className="num">3</span>
+                </div>
+                <div className="step-body">
+                  <header className="step-head">
+                    <div>
+                      <h2 id="s3">About you</h2>
+                      <p className="step-sub">For your rank card, results and parent reports.</p>
+                    </div>
+                    {signedIn &&
+                      (aboutDone ? (
+                        <span className="chip chip-done">Done</span>
+                      ) : (
+                        <span className="chip">
+                          <span className="tnum">{filled}</span> of 10
+                        </span>
+                      ))}
+                  </header>
+                  <p className="locked" id="about-locked" hidden={signedIn}>
+                    Sign in above and this step opens.
+                  </p>
+                  <form id="about" className="about" key={user ? 'signed-in' : 'signed-out'} hidden={!signedIn} noValidate onChange={onFormChange} onBlur={onFormBlur}>
+                    <fieldset className="group">
+                      <legend>Student</legend>
+                      <div className="grid">
+                        <Field id="f-name" label="Full name" hint="As printed on your exam admit card." wide>
+                          <input className="input" id="f-name" autoComplete="name" required defaultValue={form['f-name'] || ''} aria-describedby="f-name-hint" />
+                        </Field>
+                        <Field id="f-dob" label="Date of birth">
+                          <input className="input" id="f-dob" type="date" required defaultValue="" />
+                        </Field>
+                        <Field id="f-email" label="Email" error={emailErr}>
+                          <input
+                            className="input"
+                            id="f-email"
+                            type="email"
+                            autoComplete="email"
+                            required
+                            defaultValue=""
+                            aria-invalid={emailErr ? 'true' : undefined}
+                            aria-describedby={emailErr ? 'f-email-err' : undefined}
+                          />
+                        </Field>
+                        <Field id="f-class" label="Class">
+                          <select className="input" id="f-class" required defaultValue="">
+                            <option value="">Select</option>
+                            <option>Class 11</option>
+                            <option>Class 12</option>
+                            <option>Dropper / repeater</option>
+                          </select>
+                        </Field>
+                        <Field id="f-year" label="Exam year">
+                          <select className="input" id="f-year" required defaultValue="">
+                            <option value="">Select</option>
+                            <option>2027</option>
+                            <option>2028</option>
+                          </select>
+                        </Field>
+                      </div>
+                    </fieldset>
 
-            <div className="lines">
-              <div className="line">
-                <span id="line-product">{exam ? CONFIG.names[exam] : 'Test series'}</span>
-                <span id="line-price">{exam ? money(t.price) : '—'}</span>
-              </div>
-              <div className="line minus" id="line-code" hidden={!code || !t.codeOff}>
-                <span id="line-code-label">{code ? code.label : ''}</span>
-                <span id="line-code-amt">{code ? '−' + money(t.codeOff) : ''}</span>
-              </div>
-              <div className="line minus" id="line-credits" hidden={!t.creditOff}>
-                <span>Credits used</span>
-                <span id="line-credits-amt">−{money(t.creditOff)}</span>
-              </div>
+                    <fieldset className="group">
+                      <legend>Where you study</legend>
+                      <div className="grid">
+                        <Field id="f-state" label="State">
+                          <input className="input" id="f-state" autoComplete="address-level1" required defaultValue="" />
+                        </Field>
+                        <Field id="f-city" label="City">
+                          <input className="input" id="f-city" autoComplete="address-level2" required defaultValue="" />
+                        </Field>
+                        <Field id="f-coaching" label="School or coaching you attend now" optional wide>
+                          <input className="input" id="f-coaching" defaultValue="" />
+                        </Field>
+                      </div>
+                    </fieldset>
+
+                    <fieldset className="group">
+                      <legend>Parent or guardian</legend>
+                      <div className="grid">
+                        <Field id="f-pname" label="Name">
+                          <input className="input" id="f-pname" required defaultValue="" />
+                        </Field>
+                        <Field id="f-pphone" label="Mobile number" hint="We send them a short report after each test." error={pphoneErr}>
+                          <input
+                            className="input"
+                            id="f-pphone"
+                            type="tel"
+                            inputMode="tel"
+                            required
+                            defaultValue=""
+                            aria-invalid={pphoneErr ? 'true' : undefined}
+                            aria-describedby={pphoneErr ? 'f-pphone-err' : 'f-pphone-hint'}
+                          />
+                        </Field>
+                      </div>
+                      <div className="minor" id="minor" hidden={!isMinor(form['f-dob'])}>
+                        <b>Parent's consent needed.</b> As you're under 18, we'll send an OTP to your parent's mobile to confirm they agree to you using Testverse. You can still finish checkout now.
+                      </div>
+                    </fieldset>
+
+                    <div className="agrees">
+                      <label className="agree">
+                        <input type="checkbox" id="f-terms" required defaultChecked={!!form['f-terms']} />
+                        <span>
+                          I agree to the <a href="/terms">Terms</a> and <a href="/privacy">Privacy Policy</a>.
+                        </span>
+                      </label>
+                      <label className="agree">
+                        <input type="checkbox" id="f-results" defaultChecked={!!form['f-results']} />
+                        <span>
+                          Contact me after my exam result to share how I did.
+                          <span className="fine"> Optional. We'll always ask separately before using your name or photo anywhere.</span>
+                        </span>
+                      </label>
+                    </div>
+                  </form>
+                </div>
+              </section>
             </div>
 
-            <div className="code-box">
-              <div className="tabs" role="tablist" aria-label="Discount code type">
-                <button
-                  type="button"
-                  role="tab"
-                  aria-selected={tab === 'coupon' ? 'true' : 'false'}
-                  data-tab="coupon"
-                  onClick={() => {
-                    setTab('coupon')
-                    setCodeErr(null)
-                  }}
-                >
-                  Coupon code
-                </button>
-                <button
-                  type="button"
-                  role="tab"
-                  aria-selected={tab === 'referral' ? 'true' : 'false'}
-                  data-tab="referral"
-                  onClick={() => {
-                    setTab('referral')
-                    setCodeErr(null)
-                  }}
-                >
-                  Referral code
-                </button>
-              </div>
-              <div id="code-entry" hidden={!!code}>
-                <label className="l" htmlFor="code" id="code-label" style={{ display: 'block', marginBottom: '6px' }}>
-                  {tab === 'coupon' ? 'Coupon code' : "Friend's referral code"}
-                </label>
-                <div className="row">
-                  <input
-                    className="input"
-                    id="code"
-                    autoComplete="off"
-                    autoCapitalize="characters"
-                    placeholder="Enter code"
-                    value={codeInput}
-                    onChange={(e) => setCodeInput(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), applyCode(codeInput, tab))}
-                  />
-                  <button className="btn btn-outline" type="button" id="apply" onClick={() => applyCode(codeInput, tab)}>
-                    Apply
+            {/* Summary */}
+            <aside className="summary" id="summary" aria-labelledby="sum">
+              <div className="sum-card">
+                <div className="sum-body">
+                  <p className="eyebrow" id="sum">
+                    Order summary
+                  </p>
+
+                  <div className="sum-product">
+                    <div>
+                      <h2 id="line-product">{exam ? CONFIG.names[exam] : 'Test series'}</h2>
+                      <p>{exam ? '11 tests, rank and full analysis' : 'Choose your exam to see the price.'}</p>
+                    </div>
+                    {exam && (
+                      <b id="line-price" className="tnum">
+                        {money(t.price)}
+                      </b>
+                    )}
+                  </div>
+
+                  <dl className="lines">
+                    <div className="line" id="line-code" hidden={!code || !t.codeOff}>
+                      <dt id="line-code-label">{code ? code.label : ''}</dt>
+                      <dd id="line-code-amt">{code ? '−' + money(t.codeOff) : ''}</dd>
+                    </div>
+                    <div className="line" id="line-credits" hidden={!t.creditOff}>
+                      <dt>Credits used</dt>
+                      <dd id="line-credits-amt">−{money(t.creditOff)}</dd>
+                    </div>
+                  </dl>
+
+                  <div className="code-box">
+                    {code ? (
+                      <div className="applied" id="applied">
+                        <span id="applied-text">
+                          <b>{code.code}</b> {code.kind === 'coupon' ? code.rule.label : money(code.rule.value) + ' off'} applied
+                        </span>
+                        <button
+                          type="button"
+                          className="linkbtn"
+                          id="remove"
+                          onClick={() => {
+                            setCode(null)
+                            setCodeErr(null)
+                          }}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ) : !codeOpen ? (
+                      <button type="button" className="linkbtn code-toggle" onClick={() => setCodeOpen(true)}>
+                        Have a coupon or referral code?
+                      </button>
+                    ) : (
+                      <div id="code-entry">
+                        <div className="tabs" role="tablist" aria-label="Discount code type">
+                          {[
+                            ['coupon', 'Coupon'],
+                            ['referral', 'Referral'],
+                          ].map(([k, l]) => (
+                            <button
+                              key={k}
+                              type="button"
+                              role="tab"
+                              aria-selected={tab === k ? 'true' : 'false'}
+                              data-tab={k}
+                              onClick={() => {
+                                setTab(k)
+                                setCodeErr(null)
+                              }}
+                            >
+                              {l}
+                            </button>
+                          ))}
+                        </div>
+                        <label className="l" htmlFor="code" id="code-label">
+                          {tab === 'coupon' ? 'Coupon code' : "Friend's referral code"}
+                        </label>
+                        <div className="row">
+                          <input
+                            className="input code-input"
+                            id="code"
+                            autoComplete="off"
+                            autoCapitalize="characters"
+                            placeholder={tab === 'coupon' ? 'LAUNCH20' : 'RIYA4821'}
+                            value={codeInput}
+                            onChange={(e) => setCodeInput(e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), applyCode(codeInput, tab))}
+                            aria-invalid={codeErr ? 'true' : undefined}
+                            aria-describedby={codeErr ? 'code-err' : 'code-fine'}
+                          />
+                          <button className="btn btn-outline" type="button" id="apply" onClick={() => applyCode(codeInput, tab)}>
+                            Apply
+                          </button>
+                        </div>
+                        <p className="fine" id="code-fine">
+                          One code per order: a coupon or a friend's referral code.
+                        </p>
+                      </div>
+                    )}
+                    <p className="err" id="code-err" role="alert" hidden={!codeErr}>
+                      {codeErr}
+                    </p>
+                  </div>
+
+                  <label className="credits" id="credits-box" hidden={!signedIn || !(CONFIG.creditBalance > 0)}>
+                    <input type="checkbox" id="use-credits" checked={useCredits} onChange={(e) => setUseCredits(e.target.checked)} />
+                    <span>
+                      Use my credits
+                      <span className="fine">
+                        {' '}
+                        <b id="credit-bal">{money(CONFIG.creditBalance)}</b> available. Works on top of a code.
+                      </span>
+                    </span>
+                  </label>
+                </div>
+
+                <div className="paybox">
+                  <div className="total">
+                    <span>Total</span>
+                    <b id="total" className={'tnum' + (exam ? '' : ' dim')}>
+                      {money(exam ? t.total : 0)}
+                    </b>
+                  </div>
+                  {exam && t.price > t.total && <p className="saved">You save {money(t.price - t.total)}</p>}
+                  <button className="btn btn-gold btn-block" type="button" id="pay" disabled={payDisabled} onClick={pay}>
+                    {payLabel}
                   </button>
+                  <p className="pay-note" id="pay-note">
+                    {!payDisabled ? 'UPI, card or net banking. You’ll get a receipt by SMS and email.' : 'Finish the steps above to continue. Pay by UPI, card or net banking.'}
+                  </p>
                 </div>
               </div>
-              <div className="applied" id="applied" hidden={!code}>
-                <span id="applied-text">
-                  {code ? code.label + (code.kind === 'coupon' ? ' applied: ' + code.rule.label : ' applied: ' + money(code.rule.value) + ' off') : ''}
-                </span>
-                <button
-                  type="button"
-                  id="remove"
-                  onClick={() => {
-                    setCode(null)
-                    setCodeErr(null)
-                  }}
-                >
-                  Remove
-                </button>
+            </aside>
+          </div>
+        </main>
+      ) : (
+        /* Success */
+        <main className="page done" id="done">
+          <div className="done-hero">
+            <p className="eyebrow">Payment confirmed</p>
+            <h1>
+              You're in{firstName ? ', ' + firstName : ''}.
+            </h1>
+            <p id="done-text">Your {CONFIG.names[paid.exam]} is ready. All 11 tests are now in your account.</p>
+            <p className="done-meta">
+              {paid.total > 0 ? (
+                <>
+                  Paid <b className="tnum">{money(paid.total)}</b>
+                </>
+              ) : (
+                <b>Free with your code and credits</b>
+              )}
+              <span className="sep" aria-hidden="true" />
+              Receipt sent by SMS and email
+            </p>
+          </div>
+
+          <div className="done-grid">
+            <section className="ticket" aria-labelledby="ticket-title">
+              <div className="ticket-head">
+                <span className="ticket-kicker">Unlocked</span>
+                <h2 id="ticket-title">{CONFIG.names[paid.exam]}</h2>
               </div>
-              <div className="err" id="code-err" role="alert" hidden={!codeErr}>
-                {codeErr}
+              <ol className="series">
+                {SERIES.map((g, gi) => (
+                  <li key={g.label}>
+                    <span className="series-label">
+                      {g.label} <span className="tnum">{g.n}</span>
+                    </span>
+                    <span className="series-row">
+                      {Array.from({ length: g.n }, (_, i) => {
+                        const idx = SERIES.slice(0, gi).reduce((a, s) => a + s.n, 0) + i
+                        return (
+                          <span key={i} className="seg" style={{ animationDelay: 120 + idx * 70 + 'ms' }}>
+                            {g.prefix + (i + 1)}
+                          </span>
+                        )
+                      })}
+                    </span>
+                  </li>
+                ))}
+              </ol>
+              <div className="ticket-foot">
+                <Link className="btn btn-gold btn-lg" to="/student">
+                  Start Part Test 1
+                </Link>
+                <Link className="ticket-link" to="/student">
+                  Go to my dashboard
+                </Link>
               </div>
-              <p className="fine">One code per order: a coupon or a friend's referral code.</p>
-            </div>
+            </section>
 
-            <label className="credits" id="credits-box" hidden={!signedIn || !(CONFIG.creditBalance > 0)}>
-              <input type="checkbox" id="use-credits" checked={useCredits} onChange={(e) => setUseCredits(e.target.checked)} />
-              <span>
-                Use my credits. You have <b id="credit-bal">{money(CONFIG.creditBalance)}</b> available. Credits work on top of a code.
-              </span>
-            </label>
-
-            <div className="paybox">
-              <div className="total">
-                <span>Total</span>
-                <b id="total">{exam ? money(t.total) : '—'}</b>
-              </div>
-
-              <button className="btn btn-gold btn-block" type="button" id="pay" disabled={payDisabled} onClick={pay}>
-                {payLabel}
-              </button>
-              <p className="fine" id="pay-note">
-                {signedIn && exam && complete ? 'UPI, card or net banking. You’ll get a receipt by SMS and email.' : 'Sign in, fill in your details and choose your exam to continue. Payment by UPI, card or net banking.'}
-              </p>
-            </div>
-          </section>
-        </aside>
-      </main>
-
-      {/* Success */}
-      <main className="page" id="done" hidden={!paid}>
-        <div className="success">
-          <section className="card">
-            <div className="success-head">
-              <p className="eyebrow">Payment confirmed</p>
-              <h1>You're in</h1>
-              <p id="done-text">{paid ? doneText : ''}</p>
-            </div>
-            <Link className="btn btn-primary" to="/student">
-              Start Part Test 1
-            </Link>
-            <div className="refbox">
-              <h3>Invite friends, earn credits</h3>
-              <p>
-                Your friends get <b id="r-disc">{money(CONFIG.referral.friendDiscount)}</b> off with your code. You get <b id="r-credit">{money(CONFIG.referral.referrerCredit)}</b> in credits every time one of them buys.
-              </p>
+            <section className="invite" aria-labelledby="invite-title">
+              <h3 id="invite-title">Invite friends, earn credits</h3>
+              <p className="invite-sub">Preparing is easier together. Share your code with friends who are taking the same exam.</p>
+              <dl className="perks">
+                <div>
+                  <dt id="r-disc">{money(CONFIG.referral.friendDiscount)}</dt>
+                  <dd>off for each friend who uses your code</dd>
+                </div>
+                <div>
+                  <dt id="r-credit">{money(CONFIG.referral.referrerCredit)}</dt>
+                  <dd>in credits for you every time one buys</dd>
+                </div>
+              </dl>
               <div className="refcode">
                 <code id="my-code">{CONFIG.myReferralCode}</code>
                 <button
@@ -478,13 +766,13 @@ export default function Checkout() {
                   Copy link
                 </button>
               </div>
-              <a className="btn wa" id="wa" href={waHref} target="_blank" rel="noopener">
+              <a className="btn btn-dark btn-block" id="wa" href={waHref} target="_blank" rel="noopener">
                 Share on WhatsApp
               </a>
-            </div>
-          </section>
-        </div>
-      </main>
+            </section>
+          </div>
+        </main>
+      )}
     </div>
   )
 }
