@@ -2,55 +2,112 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import './Login.css'
 import LogoSprite from '../../components/LogoSprite.jsx'
+import { api } from '../../lib/api.js'
 import { usePageMeta } from '../../lib/hooks.js'
-import { saveSession } from '../../lib/session.js'
-import { BrandAside, OtpInput, PhoneField, Resend } from './AuthParts.jsx'
-import { isPhone, prettyPhone, useResendTimer } from './phone.js'
+import { nextPath, saveSession } from '../../lib/session.js'
+import { BrandAside, OtpInput, Resend } from './AuthParts.jsx'
+import { isEmail, useResendTimer } from './otp.js'
 
-/* route "/login" — mobile number + OTP, or Google. No passwords.
-   DEMO ONLY: no SMS is sent and any 6 digits sign in.
-   REAL APP: send and verify the OTP on the server and let it set the session (see lib/session.js). */
+/* route "/login" — email + password, with "Forgot password?" resetting the
+   password through a 6-digit code the backend emails via Brevo.
+   Steps: 'login' -> 'forgot' (email) -> 'code' (OTP) -> 'reset' (new password). */
 export default function Login() {
   usePageMeta({ title: 'Log in — Testverse by Studyverse' })
   const navigate = useNavigate()
 
-  const [step, setStep] = useState('phone') // 'phone' | 'otp'
-  const [phone, setPhone] = useState('')
+  const [step, setStep] = useState('login')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [otp, setOtp] = useState('')
+  const [newPassword, setNewPassword] = useState('')
   const [error, setError] = useState(null) // { field, msg }
   const [busy, setBusy] = useState(false)
   const [left, restartTimer] = useResendTimer()
 
   const invalid = (k) => !!(error && error.field === k)
+  const errFor = (k) =>
+    invalid(k) ? (
+      <p className="err" id="login-err" role="alert">
+        {error.msg}
+      </p>
+    ) : null
+  const describe = (k, hint) => (invalid(k) ? 'login-err' : hint)
 
-  function finish(user) {
+  /* Runs a request with the busy flag; errors land on `field`. */
+  async function run(field, fn) {
     setBusy(true)
-    setTimeout(() => {
-      saveSession(user)
-      navigate('/student', { viewTransition: true })
-    }, 350)
+    setError(null)
+    try {
+      await fn()
+    } catch (e) {
+      setError({ field, msg: e.message })
+    } finally {
+      setBusy(false)
+    }
   }
 
-  function sendOtp(e) {
+  function finish(session) {
+    saveSession(session)
+    navigate(nextPath(), { replace: true, viewTransition: true })
+  }
+
+  function logIn(e) {
     e.preventDefault()
-    if (!isPhone(phone)) return setError({ field: 'phone', msg: 'Enter a valid 10-digit mobile number.' })
+    if (!isEmail(email)) return setError({ field: 'email', msg: 'Enter a valid email address, like name@example.com.' })
+    if (!password) return setError({ field: 'password', msg: 'Enter your password.' })
+    run('password', async () => finish(await api('/auth/login', { body: { email, password } })))
+  }
+
+  function goTo(next) {
+    setStep(next)
     setError(null)
-    setOtp('')
-    setStep('otp')
-    restartTimer()
+  }
+
+  function sendCode(e) {
+    e?.preventDefault()
+    if (!isEmail(email)) return setError({ field: 'email', msg: 'Enter a valid email address, like name@example.com.' })
+    run(step === 'code' ? 'otp' : 'email', async () => {
+      await api('/auth/forgot-password', { body: { email } })
+      setOtp('')
+      setStep('code')
+      restartTimer()
+    })
   }
 
   function verify(code) {
-    if (!/^\d{6}$/.test(code)) return setError({ field: 'otp', msg: 'Enter the 6-digit code we sent to your phone.' })
-    setError(null)
-    finish({ phone, provider: 'otp' })
+    if (!/^\d{6}$/.test(code)) return setError({ field: 'otp', msg: 'Enter the 6-digit code we emailed you.' })
+    run('otp', async () => {
+      await api('/auth/verify-otp', { body: { email, otp: code } })
+      setNewPassword('')
+      setStep('reset')
+    })
   }
 
-  function changeNumber() {
-    setStep('phone')
-    setOtp('')
-    setError(null)
+  function reset(e) {
+    e.preventDefault()
+    if (newPassword.length < 8) return setError({ field: 'newpass', msg: 'Use at least 8 characters.' })
+    run('newpass', async () => finish(await api('/auth/reset-password', { body: { email, otp, password: newPassword } })))
   }
+
+  const emailField = (autoFocus) => (
+    <div className="field">
+      <label htmlFor="login-email">Email</label>
+      <input
+        id="login-email"
+        className="input"
+        type="email"
+        autoComplete="email"
+        placeholder="name@example.com"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        aria-invalid={invalid('email') ? 'true' : undefined}
+        aria-describedby={describe('email')}
+        autoFocus={autoFocus}
+        disabled={busy}
+      />
+      {errFor('email')}
+    </div>
+  )
 
   return (
     <div className="tv-login">
@@ -113,55 +170,79 @@ export default function Login() {
         <main className="form-side">
           <div className="form-top">
             <span>New to Testverse?</span>
-            <Link viewTransition className="btn btn-outline btn-sm" to="/signup">
+            <Link viewTransition className="btn btn-outline btn-sm" to={'/signup' + window.location.search}>
               Create an account
             </Link>
           </div>
 
           <div className="form-wrap">
-            {step === 'phone' ? (
+            {step === 'login' && (
               <>
                 <header className="form-head">
                   <h1>Log in to Testverse</h1>
-                  <p className="sub">Use the Google account or mobile number you use for Studyverse.</p>
+                  <p className="sub">Use the email and password you signed up with.</p>
                 </header>
 
-                <button className="btn btn-outline btn-lg btn-block" type="button" disabled={busy} onClick={() => finish({ name: 'Riya', provider: 'google' })}>
-                  Continue with Google
-                </button>
-
-                <div className="or">
-                  <span>or use your mobile number</span>
-                </div>
-
-                <form className="stack" onSubmit={sendOtp} noValidate>
+                <form className="stack" onSubmit={logIn} noValidate>
+                  {emailField(true)}
                   <div className="field">
-                    <label htmlFor="login-phone">Mobile number</label>
-                    <PhoneField id="login-phone" value={phone} onChange={setPhone} invalid={invalid('phone')} describedBy={invalid('phone') ? 'login-err' : 'login-phone-hint'} />
-                    {invalid('phone') ? (
-                      <p className="err" id="login-err" role="alert">
-                        {error.msg}
-                      </p>
-                    ) : (
-                      <p className="hint" id="login-phone-hint">
-                        We'll text you a 6-digit code. No password needed.
-                      </p>
-                    )}
+                    <div className="label-row">
+                      <label htmlFor="login-password">Password</label>
+                      <button type="button" className="linkbtn" onClick={() => goTo('forgot')}>
+                        Forgot password?
+                      </button>
+                    </div>
+                    <input
+                      id="login-password"
+                      className="input"
+                      type="password"
+                      autoComplete="current-password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      aria-invalid={invalid('password') ? 'true' : undefined}
+                      aria-describedby={describe('password')}
+                      disabled={busy}
+                    />
+                    {errFor('password')}
                   </div>
                   <button className="btn btn-primary btn-lg btn-block" type="submit" disabled={busy}>
-                    Send OTP
+                    {busy ? 'Logging in…' : 'Log in'}
                   </button>
                 </form>
               </>
-            ) : (
+            )}
+
+            {step === 'forgot' && (
               <>
                 <header className="form-head">
-                  <p className="step-kicker">Step 2 of 2</p>
-                  <h1>Enter the code</h1>
+                  <p className="step-kicker">Reset password</p>
+                  <h1>Forgot your password?</h1>
+                  <p className="sub">Enter your account email and we'll send you a 6-digit code to reset it.</p>
+                </header>
+
+                <form className="stack" onSubmit={sendCode} noValidate>
+                  {emailField(true)}
+                  <button className="btn btn-primary btn-lg btn-block" type="submit" disabled={busy}>
+                    {busy ? 'Sending code…' : 'Send code'}
+                  </button>
+                  <p className="resend">
+                    <button type="button" className="linkbtn" onClick={() => goTo('login')}>
+                      Back to log in
+                    </button>
+                  </p>
+                </form>
+              </>
+            )}
+
+            {step === 'code' && (
+              <>
+                <header className="form-head">
+                  <p className="step-kicker">Step 2 of 3</p>
+                  <h1>Check your email</h1>
                   <p className="sub" role="status">
-                    We sent a 6-digit code to <b className="tnum">+91 {prettyPhone(phone)}</b>.{' '}
-                    <button type="button" className="linkbtn" onClick={changeNumber}>
-                      Change number
+                    We sent a 6-digit code to <b>{email.trim()}</b>.{' '}
+                    <button type="button" className="linkbtn" onClick={() => goTo('forgot')}>
+                      Change email
                     </button>
                   </p>
                 </header>
@@ -175,30 +256,63 @@ export default function Login() {
                   noValidate
                 >
                   <div className="field">
-                    <label htmlFor="login-otp">One-time code</label>
-                    <OtpInput id="login-otp" value={otp} onChange={setOtp} onComplete={verify} invalid={invalid('otp')} describedBy={invalid('otp') ? 'login-err' : 'login-otp-hint'} disabled={busy} />
-                    {invalid('otp') ? (
-                      <p className="err" id="login-err" role="alert">
-                        {error.msg}
-                      </p>
-                    ) : (
+                    <label htmlFor="login-otp">Reset code</label>
+                    <OtpInput id="login-otp" value={otp} onChange={setOtp} onComplete={verify} invalid={invalid('otp')} describedBy={describe('otp', 'login-otp-hint')} disabled={busy} />
+                    {errFor('otp') || (
                       <p className="hint" id="login-otp-hint">
-                        Demo: any 6 digits will work.
+                        The code expires in 10 minutes. Check your spam folder if you can't find it.
                       </p>
                     )}
                   </div>
                   <button className="btn btn-primary btn-lg btn-block" type="submit" disabled={busy}>
-                    {busy ? 'Logging in…' : 'Verify and log in'}
+                    {busy ? 'Checking…' : 'Verify code'}
                   </button>
                   <p className="resend">
-                    Didn't get it? <Resend left={left} onResend={restartTimer} />
+                    Didn't get it? <Resend left={left} onResend={() => sendCode()} disabled={busy} />
                   </p>
                 </form>
               </>
             )}
 
+            {step === 'reset' && (
+              <>
+                <header className="form-head">
+                  <p className="step-kicker">Step 3 of 3</p>
+                  <h1>Set a new password</h1>
+                  <p className="sub">You'll be logged in as soon as it's saved.</p>
+                </header>
+
+                <form className="stack" onSubmit={reset} noValidate>
+                  <input type="email" autoComplete="username" value={email} readOnly hidden />
+                  <div className="field">
+                    <label htmlFor="login-newpass">New password</label>
+                    <input
+                      id="login-newpass"
+                      className="input"
+                      type="password"
+                      autoComplete="new-password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      aria-invalid={invalid('newpass') ? 'true' : undefined}
+                      aria-describedby={describe('newpass', 'login-newpass-hint')}
+                      autoFocus
+                      disabled={busy}
+                    />
+                    {errFor('newpass') || (
+                      <p className="hint" id="login-newpass-hint">
+                        At least 8 characters.
+                      </p>
+                    )}
+                  </div>
+                  <button className="btn btn-primary btn-lg btn-block" type="submit" disabled={busy}>
+                    {busy ? 'Saving…' : 'Save and log in'}
+                  </button>
+                </form>
+              </>
+            )}
+
             <p className="switch">
-              New to Testverse? <Link viewTransition to="/signup">Create an account</Link>
+              New to Testverse? <Link viewTransition to={'/signup' + window.location.search}>Create an account</Link>
             </p>
           </div>
 

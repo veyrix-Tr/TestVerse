@@ -1,0 +1,45 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id              String    @id @default(cuid())
+  name            String
+  email           String    @unique
+  password        String
+  role            String    @default("student")
+  // Exam key the student is preparing for: "neet" | "jee-main" | "jee-advanced"
+  exam            String?
+  phone           String?
+  grade           String?   // "Class 11" | "Class 12" | "Dropper / repeater"
+  targetYear      Int?
+  state           String?
+  city            String?
+  // Set when the sign-up OTP is confirmed — every account is created verified.
+  emailVerifiedAt DateTime?
+  isActive        Boolean   @default(true)
+  lastLoginAt     DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+// One live OTP per (email, purpose). Only a SHA-256 hash of the code is kept,
+// and a record is dropped after too many wrong guesses.
+model Otp {
+  id        Int      @id @default(autoincrement())
+  email     String
+  purpose   String   // "signup" | "reset"
+  codeHash  String
+  attempts  Int      @default(0)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@unique([email, purpose])
+}

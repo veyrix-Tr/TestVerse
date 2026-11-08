@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import './StudentHome.css'
 import LogoSprite from '../../components/LogoSprite.jsx'
 import { ASSIGNED, LIVE, MODES, REQUESTS, SERIES, SETTINGS, liveState } from '../../data/studentDemo.js'
 import { fmt } from '../../lib/format.js'
 import { usePageMeta } from '../../lib/hooks.js'
+import { clearSession, loadSession } from '../../lib/session.js'
 import { useToast } from '../../lib/useToast.jsx'
 import SectionHead from './SectionHead.jsx'
 import { LiveHero, UpcomingLive } from './sections/LiveSection.jsx'
@@ -42,8 +43,11 @@ export default function StudentHome() {
   const [active, setActive] = useState('top')
   const [videoOpen, setVideoOpen] = useState(false)
   const { toast, node } = useToast()
+  const routerNavigate = useNavigate()
 
-  const me = modes[mode]
+  // Signed-in student's name over the demo account (the route requires a session)
+  const account = loadSession()
+  const me = account ? { ...modes[mode], name: account.name, first: account.name.split(' ')[0] } : modes[mode]
   const limit = me.course ? SETTINGS.videoLimit.course : SETTINGS.videoLimit.direct
   const videoLeft = Math.max(0, limit - me.videosUsed)
   const done = SERIES.filter((t) => t.status === 'done').length
@@ -103,7 +107,10 @@ export default function StudentHome() {
     <div className="tv-studenthome">
       <LogoSprite />
 
-      <Sidebar me={me} active={active} onNavigate={navigate} sheetOpen={sheetOpen} setSheetOpen={setSheetOpen} onLogout={() => toast('Logged out (demo)')} />
+      <Sidebar me={me} active={active} onNavigate={navigate} sheetOpen={sheetOpen} setSheetOpen={setSheetOpen} onLogout={() => {
+          clearSession()
+          routerNavigate('/login', { replace: true, viewTransition: true })
+        }} />
 
       <div className="shell">
         <div className="content">

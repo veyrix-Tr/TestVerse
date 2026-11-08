@@ -1,4 +1,5 @@
-import { Navigate, RouterProvider, createBrowserRouter, useLocation } from 'react-router-dom'
+import { Navigate, RouterProvider, createBrowserRouter, redirect, useLocation } from 'react-router-dom'
+import { checkSession } from './lib/session.js'
 
 /*
   Routes map to the design's HTML files:
@@ -8,6 +9,7 @@ import { Navigate, RouterProvider, createBrowserRouter, useLocation } from 'reac
     test.html           -> /test
     admin.html          -> /admin
   /login and /signup have no design file; they reuse the checkout palette.
+  /student needs a signed-in session (email + password, see lib/session.js).
   Query strings (?ref=, ?exam=, ?test=P4&view=result …) are kept as-is.
   A data router (createBrowserRouter) is used because <Link viewTransition>
   only animates under RouterProvider. Each page is loaded on demand; the
@@ -19,6 +21,13 @@ const page = (load) => ({
   lazy: () => load().then((m) => ({ Component: m.default })),
   HydrateFallback: () => null,
 })
+
+/* Signed-in only: confirm the session with the server, else go to /login and come back. */
+async function requireSession({ request }) {
+  if (await checkSession()) return null
+  const { pathname, search } = new URL(request.url)
+  return redirect('/login?next=' + encodeURIComponent(pathname + search))
+}
 
 /* Test reads its query string once, so a <Link> from /test?test=P4 to
    /test?test=JA1 must remount it (and flush the old attempt on unmount). */
@@ -38,7 +47,7 @@ const router = createBrowserRouter([
   { path: '/login', ...page(() => import('./pages/Login/Login.jsx')) },
   { path: '/signup', ...page(() => import('./pages/Signup/Signup.jsx')) },
   { path: '/checkout', ...page(() => import('./pages/Checkout/Checkout.jsx')) },
-  { path: '/student', ...page(() => import('./pages/StudentHome/StudentHome.jsx')) },
+  { path: '/student', loader: requireSession, ...page(() => import('./pages/StudentHome/StudentHome.jsx')) },
   { path: '/test', ...testPage },
   { path: '/admin', ...page(() => import('./pages/Admin/Admin.jsx')) },
   { path: '*', element: <Navigate to="/" replace /> },

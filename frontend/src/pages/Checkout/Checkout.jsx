@@ -4,9 +4,9 @@ import './Checkout.css'
 import LogoSprite from '../../components/LogoSprite.jsx'
 import { money } from '../../lib/format.js'
 import { usePageMeta } from '../../lib/hooks.js'
-import { loadSession, saveSession } from '../../lib/session.js'
-import { OtpInput, PhoneField, Resend } from '../Login/AuthParts.jsx'
-import { isPhone, prettyPhone, useResendTimer } from '../Login/phone.js'
+import { api } from '../../lib/api.js'
+import { clearSession, loadSession, saveSession } from '../../lib/session.js'
+import { isEmail } from '../Login/otp.js'
 
 /* ------------------------------------------------------------------
    EXAMPLE SETTINGS FOR THE DESIGN ONLY.
@@ -132,16 +132,19 @@ export default function Checkout() {
   const [codeOpen, setCodeOpen] = useState(!!preCode)
   const [codeInput, setCodeInput] = useState('')
   const [useCredits, setUseCredits] = useState(false)
-  const [form, setForm] = useState(() => ({ 'f-name': (loadSession() || {}).name || '' }))
+  const [form, setForm] = useState(() => {
+    const u = loadSession() || {}
+    return { 'f-name': u.name || '', 'f-email': u.email || '' }
+  })
   const [touched, setTouched] = useState({})
   const [paid, setPaid] = useState(null) // totals at the moment of payment
 
-  /* account step: mobile + OTP (demo: any 6 digits) */
-  const [authStep, setAuthStep] = useState('phone')
-  const [phone, setPhone] = useState('')
-  const [otp, setOtp] = useState('')
+  /* account step: email + password (new students sign up on /signup and come back) */
+  const [loginEmail, setLoginEmail] = useState('')
+  const [loginPassword, setLoginPassword] = useState('')
   const [authErr, setAuthErr] = useState(null)
-  const [left, restartTimer] = useResendTimer()
+  const [authBusy, setAuthBusy] = useState(false)
+  const backHere = encodeURIComponent(window.location.pathname + window.location.search)
 
   const filled = aboutProgress(form)
   const complete = filled === REQUIRED.length + 1
@@ -171,26 +174,23 @@ export default function Checkout() {
     setCodeInput('')
   }
 
-  function signIn(u) {
-    saveSession(u)
-    setUser(u)
-    setForm((f) => ({ ...f, 'f-name': f['f-name'] || u.name || '' }))
-    setAuthStep('phone')
-    setOtp('')
+  async function signIn(e) {
+    e.preventDefault()
+    if (!isEmail(loginEmail)) return setAuthErr('Enter a valid email address, like name@example.com.')
+    if (!loginPassword) return setAuthErr('Enter your password.')
+    setAuthBusy(true)
     setAuthErr(null)
-  }
-
-  function sendOtp() {
-    if (!isPhone(phone)) return setAuthErr('Enter a valid 10-digit mobile number.')
-    setAuthErr(null)
-    setOtp('')
-    setAuthStep('otp')
-    restartTimer()
-  }
-
-  function verifyOtp(c) {
-    if (!/^\d{6}$/.test(c)) return setAuthErr('Enter the 6-digit code we sent to your phone.')
-    signIn({ phone, provider: 'otp' })
+    try {
+      const session = await api('/auth/login', { body: { email: loginEmail, password: loginPassword } })
+      saveSession(session)
+      setUser(session.user)
+      setForm((f) => ({ ...f, 'f-name': f['f-name'] || session.user.name || '', 'f-email': f['f-email'] || session.user.email || '' }))
+      setLoginPassword('')
+    } catch (err) {
+      setAuthErr(err.message)
+    } finally {
+      setAuthBusy(false)
+    }
   }
 
   function onFormChange(e) {
@@ -336,9 +336,10 @@ export default function Checkout() {
                       </span>
                       <span className="signed-who">
                         <span className="signed-label">Signed in as</span>
-                        <b>{userName || (user.phone ? '+91 ' + prettyPhone(user.phone) : 'Student')}</b>
+                        <b>{userName || user.email || 'Student'}</b>
                       </span>
                       <button type="button" className="linkbtn" onClick={() => {
+                          clearSession()
                           setUser(null)
                           setForm({})
                           setTouched({})
@@ -347,72 +348,59 @@ export default function Checkout() {
                       </button>
                     </div>
                   ) : (
-                    <div className="signin" id="signin">
-                      <button className="btn btn-outline btn-lg btn-block" type="button" onClick={() => signIn({ name: 'Riya', provider: 'google' })}>
-                        Continue with Google
-                      </button>
-                      <div className="or">
-                        <span>or use your mobile number</span>
+                    <form className="signin" id="signin" onSubmit={signIn} noValidate>
+                      <div className="field">
+                        <label htmlFor="login-email">Email</label>
+                        <input
+                          id="login-email"
+                          className="input"
+                          type="email"
+                          autoComplete="email"
+                          placeholder="name@example.com"
+                          value={loginEmail}
+                          onChange={(e) => setLoginEmail(e.target.value)}
+                          aria-invalid={authErr ? 'true' : undefined}
+                          aria-describedby={authErr ? 'auth-err' : 'auth-hint'}
+                          disabled={authBusy}
+                        />
                       </div>
-                      {authStep === 'phone' ? (
-                        <div className="field">
-                          <label htmlFor="phone">Mobile number</label>
-                          <div className="row">
-                            <PhoneField
-                              id="phone"
-                              value={phone}
-                              onChange={setPhone}
-                              invalid={!!authErr}
-                              describedBy={authErr ? 'phone-err' : 'phone-hint'}
-                            />
-                            <button className="btn btn-primary btn-lg" type="button" onClick={sendOtp}>
-                              Send OTP
-                            </button>
-                          </div>
-                          {authErr ? (
-                            <p className="err" id="phone-err" role="alert">
-                              {authErr}
-                            </p>
-                          ) : (
-                            <p className="hint" id="phone-hint">
-                              In a Studyverse course? Use the same Google account or number.
-                            </p>
-                          )}
+                      <div className="field">
+                        <label htmlFor="login-password">Password</label>
+                        <div className="row">
+                          <input
+                            id="login-password"
+                            className="input"
+                            type="password"
+                            autoComplete="current-password"
+                            value={loginPassword}
+                            onChange={(e) => setLoginPassword(e.target.value)}
+                            aria-invalid={authErr ? 'true' : undefined}
+                            aria-describedby={authErr ? 'auth-err' : 'auth-hint'}
+                            disabled={authBusy}
+                          />
+                          <button className="btn btn-primary btn-lg" type="submit" disabled={authBusy}>
+                            {authBusy ? 'Logging in…' : 'Log in'}
+                          </button>
                         </div>
-                      ) : (
-                        <div className="field">
-                          <label htmlFor="otp">Code sent to +91 {prettyPhone(phone)}</label>
-                          <div className="row">
-                            <OtpInput id="otp" value={otp} onChange={setOtp} onComplete={verifyOtp} invalid={!!authErr} describedBy={authErr ? 'otp-err' : 'otp-hint'} />
-                            <button className="btn btn-primary btn-lg" type="button" onClick={() => verifyOtp(otp)}>
-                              Verify
-                            </button>
-                          </div>
-                          {authErr ? (
-                            <p className="err" id="otp-err" role="alert">
-                              {authErr}
-                            </p>
-                          ) : (
-                            <p className="hint" id="otp-hint">
-                              Demo: any 6 digits will work.
-                            </p>
-                          )}
-                          <p className="otp-actions">
-                            <button
-                              type="button"
-                              className="linkbtn"
-                              onClick={() => {
-                                setAuthStep('phone')
-                                setAuthErr(null)
-                              }}
-                            >
-                              Change number
-                            </button>
-                            <Resend left={left} onResend={restartTimer} />
+                        {authErr ? (
+                          <p className="err" id="auth-err" role="alert">
+                            {authErr}
                           </p>
-                        </div>
-                      )}
-                    </div>
+                        ) : (
+                          <p className="hint" id="auth-hint">
+                            In a Studyverse course? Use the same email.
+                          </p>
+                        )}
+                      </div>
+                      <p className="otp-actions">
+                        <Link className="linkbtn" to={'/signup?next=' + backHere + (exam ? '&exam=' + exam : '')}>
+                          New here? Create an account
+                        </Link>
+                        <Link className="linkbtn" to={'/login?next=' + backHere}>
+                          Forgot password?
+                        </Link>
+                      </p>
+                    </form>
                   )}
                 </div>
               </section>
@@ -445,7 +433,7 @@ export default function Checkout() {
                       <legend>Student</legend>
                       <div className="grid">
                         <Field id="f-name" label="Full name" hint="As printed on your exam admit card." wide>
-                          <input className="input" id="f-name" autoComplete="name" required defaultValue={form['f-name'] || ''} aria-describedby="f-name-hint" />
+                          <input className="input" id="f-name" key={'name-' + (user ? user.id : '')} autoComplete="name" required defaultValue={form['f-name'] || ''} aria-describedby="f-name-hint" />
                         </Field>
                         <Field id="f-dob" label="Date of birth">
                           <input className="input" id="f-dob" type="date" required defaultValue="" />
@@ -454,10 +442,11 @@ export default function Checkout() {
                           <input
                             className="input"
                             id="f-email"
+                            key={'email-' + (user ? user.id : '')}
                             type="email"
                             autoComplete="email"
                             required
-                            defaultValue=""
+                            defaultValue={form['f-email'] || ''}
                             aria-invalid={emailErr ? 'true' : undefined}
                             aria-describedby={emailErr ? 'f-email-err' : undefined}
                           />

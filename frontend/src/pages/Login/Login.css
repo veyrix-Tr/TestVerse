@@ -367,3 +367,8 @@ p { margin: 0; }
   0%, 100% { opacity: 0.55; transform: scale(1); }
   50% { opacity: 1; transform: scale(1.12); }
 }
+
+/* Password label with the "Forgot password?" link on the same line */
+.label-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.label-row > label { font-size: 13px; font-weight: 600; letter-spacing: 0.01em; color: var(--ink-2); }
+.label-row .linkbtn { font-size: 13px; }

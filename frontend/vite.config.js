@@ -51,6 +51,12 @@ function pageScoping() {
 
 export default defineConfig({
   plugins: [react()],
+  // Dev: forward API calls to the backend (TestVerse/backend, `npm run dev`)
+  server: {
+    proxy: {
+      '/api': process.env.VITE_PROXY_TARGET || 'http://localhost:5000',
+    },
+  },
   css: {
     postcss: {
       plugins: [pageScoping()],

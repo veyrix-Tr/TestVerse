@@ -1,17 +1,12 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { cleanPhone, prettyPhone } from './phone.js'
+import { cleanPhone, prettyPhone } from './otp.js'
 
 /*
-  Pieces shared by /login, /signup and the account step of /checkout:
-  the +91 mobile field, the 6-digit OTP field, the resend countdown and the
-  navy brand column. Styling lives in each page's own stylesheet (the class
-  names are the same in Login.css, Signup.css and Checkout.css).
-
-  DEMO ONLY: no SMS is sent and any 6 digits are accepted.
-  REAL APP: POST /api/auth/otp/send { phone } and POST /api/auth/otp/verify
-  { phone, code }, rate-limit both on the server, and let the server set the
-  session (see lib/session.js).
+  Pieces shared by /login and /signup: the +91 mobile field, the 6-digit OTP
+  field for the code emailed by the backend (via Brevo), the resend countdown
+  and the navy brand column. Styling lives in each page's own stylesheet (the class names are the
+  same in Login.css and Signup.css).
 */
 
 export function PhoneField({ id, value, onChange, invalid, describedBy, autoFocus, disabled }) {
@@ -38,7 +33,7 @@ export function PhoneField({ id, value, onChange, invalid, describedBy, autoFocu
   )
 }
 
-/* One real input (so paste, SMS autofill and screen readers work) drawn as six cells. */
+/* One real input (so paste, autofill and screen readers work) drawn as six cells. */
 export function OtpInput({ id, value, onChange, onComplete, invalid, describedBy, disabled }) {
   const [focused, setFocused] = useState(false)
   const active = Math.min(value.length, 5)
@@ -77,7 +72,7 @@ export function OtpInput({ id, value, onChange, onComplete, invalid, describedBy
 }
 
 /* "Resend code in 0:24" / "Resend code" */
-export function Resend({ left, onResend }) {
+export function Resend({ left, onResend, disabled }) {
   if (left > 0)
     return (
       <span className="resend-wait">
@@ -85,7 +80,7 @@ export function Resend({ left, onResend }) {
       </span>
     )
   return (
-    <button type="button" className="linkbtn" onClick={onResend}>
+    <button type="button" className="linkbtn" onClick={onResend} disabled={disabled}>
       Resend code
     </button>
   )

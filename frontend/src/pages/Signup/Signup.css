@@ -201,6 +201,27 @@ p { margin: 0; }
 .input::placeholder { color: var(--muted); opacity: 0.7; }
 .input:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-soft); }
 .input[aria-invalid="true"] { border-color: var(--red); }
+select.input {
+  appearance: none; -webkit-appearance: none; padding-right: 40px; cursor: pointer;
+  background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position: calc(100% - 20px) 50%, calc(100% - 15px) 50%;
+  background-size: 5px 5px, 5px 5px; background-repeat: no-repeat;
+}
+/* Two fields side by side (class + year, state + city); stacks on small phones */
+.pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.verified { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; border: 1px solid var(--green-soft); border-radius: 10px; background: var(--green-soft); font-size: 14px; color: var(--green-ink); }
+.verified b { color: var(--ink); font-weight: 600; overflow-wrap: anywhere; }
+/* Email label with "Change email" on the same line */
+.label-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.label-row > label { font-size: 13px; font-weight: 600; letter-spacing: 0.01em; color: var(--ink-2); }
+.label-row .linkbtn { font-size: 13px; }
+.input[readonly] { background: var(--soft); color: var(--ink-2); }
+/* Code section that opens under the email once the code is sent */
+.code-box { display: grid; gap: 16px; padding: 18px; border: 1px solid var(--line); border-radius: 12px; background: var(--soft); }
+@media (prefers-reduced-motion: no-preference) {
+  .code-box { animation: code-open 220ms ease-out; }
+  @keyframes code-open { from { opacity: 0; transform: translateY(-6px); } }
+}
 
 /* +91 mobile field */
 .phone {
@@ -291,6 +312,7 @@ p { margin: 0; }
   .switch { display: block; padding-top: 22px; }
 }
 @media (max-width: 420px) {
+  .pair { grid-template-columns: minmax(0, 1fr); }
   .brand { padding: 16px 16px 24px; }
   .form-side { padding: 4px 16px 24px; }
   .otp-cells { gap: 8px; }
