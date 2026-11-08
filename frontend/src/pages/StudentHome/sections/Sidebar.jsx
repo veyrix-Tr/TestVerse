@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { EXAM } from '../../../data/studentDemo.js'
-import { rupee } from '../../../lib/format.js'
 import { usePopover } from '../usePopover.js'
 
 const NAV = [
@@ -10,7 +9,6 @@ const NAV = [
   { id: 'live', label: 'Live tests' },
   { id: 'results', label: 'Results' },
   { id: 'videos', label: 'Video solutions' },
-  { id: 'refer', label: 'Refer & earn' },
 ]
 
 function planLabel(me) {
@@ -101,18 +99,9 @@ export default function Sidebar({ me, active, onNavigate, sheetOpen, setSheetOpe
         </nav>
 
         <div className="sidebar-foot">
-          <a className="credits" href="#refer" onClick={() => onNavigate('refer')}>
-            <span className="credits-label">Credits</span>
-            <span className="credits-value">{rupee(me.credits)}</span>
-            <span className="credits-hint">{me.code ? 'Earn more by referring friends' : 'Buy a series to start earning'}</span>
-          </a>
-
           <div className="account" ref={accountRef}>
             <div className="account-menu" id="account-menu" hidden={!accountOpen}>
               <a href="#">My profile</a>
-              <a href="#refer" onClick={() => setAccountOpen(false)}>
-                Credits &amp; referrals
-              </a>
               <a href="#">Orders &amp; invoices</a>
               {me.bought ? (
                 <a href="#parent" onClick={() => setAccountOpen(false)}>

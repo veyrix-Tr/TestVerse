@@ -107,9 +107,9 @@ export default function SeriesSection({ me, done, total }) {
           <div className="next-text">
             <p className="eyebrow">Unlock the full series</p>
             <h3>Get all 11 tests for {EXAM.label}</h3>
-            <p className="meta">Full analysis and solutions for every test. Coupon and referral codes accepted. All-India live tests stay free for you.</p>
+            <p className="meta">Full analysis and solutions for every test. All-India live tests stay free for you.</p>
           </div>
-          <Link className="btn btn-primary" to={'/checkout?exam=' + EXAM.id}>
+          <Link className="btn btn-primary" to="/subscribe">
             Get the test series
           </Link>
         </div>

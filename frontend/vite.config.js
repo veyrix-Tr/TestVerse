@@ -12,7 +12,7 @@ import { defineConfig } from 'vite'
 */
 const PAGE_ROOTS = {
   'Home.css': 'tv-home',
-  'Checkout.css': 'tv-checkout',
+  'Subscribe.css': 'tv-subscribe',
   'StudentHome.css': 'tv-studenthome',
   'Test.css': 'tv-test',
   'Admin.css': 'tv-admin',

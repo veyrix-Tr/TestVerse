@@ -201,6 +201,18 @@ p { margin: 0; }
 .input::placeholder { color: var(--muted); opacity: 0.7; }
 .input:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-soft); }
 .input[aria-invalid="true"] { border-color: var(--red); }
+.pw { position: relative; }
+.pw .input { padding-right: 52px; }
+.pw .input::-ms-reveal, .pw .input::-ms-clear { display: none; }
+.pw-toggle {
+  position: absolute; top: 50%; right: 6px; transform: translateY(-50%);
+  width: 40px; height: 40px; display: grid; place-items: center;
+  background: none; border: 0; border-radius: 8px; color: var(--muted); cursor: pointer;
+  transition: color 150ms ease, background-color 150ms ease;
+}
+.pw-toggle:hover { color: var(--ink); background: var(--soft); }
+.pw-toggle[aria-pressed="true"] { color: var(--blue); }
+.pw-toggle[disabled] { opacity: 0.5; cursor: not-allowed; }
 select.input {
   appearance: none; -webkit-appearance: none; padding-right: 40px; cursor: pointer;
   background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);

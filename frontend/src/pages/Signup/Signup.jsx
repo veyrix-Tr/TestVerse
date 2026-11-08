@@ -5,8 +5,8 @@ import LogoSprite from '../../components/LogoSprite.jsx'
 import { EXAMS } from '../../data/exams.js'
 import { api } from '../../lib/api.js'
 import { usePageMeta } from '../../lib/hooks.js'
-import { nextPath, saveSession } from '../../lib/session.js'
-import { BrandAside, OtpInput, PhoneField, Resend } from '../Login/AuthParts.jsx'
+import { saveSession } from '../../lib/session.js'
+import { BrandAside, OtpInput, PasswordInput, PhoneField, Resend } from '../Login/AuthParts.jsx'
 import { isEmail, isPhone, useResendTimer } from '../Login/otp.js'
 
 /* route "/signup" — two steps:
@@ -126,7 +126,8 @@ export default function Signup() {
       try {
         const session = await api('/auth/signup', { body: { signupToken, ...form, name: form.name.trim(), targetYear: Number(form.targetYear) } })
         saveSession(session)
-        navigate(nextPath(), { replace: true, viewTransition: true })
+        // New accounts pick and buy their batch next
+        navigate('/subscribe', { replace: true, viewTransition: true })
       } catch (err) {
         // Verification expired or the email got registered meanwhile: back to step 1
         if (err.field === 'email') {
@@ -352,7 +353,7 @@ export default function Signup() {
 
                   <div className="field">
                     <label htmlFor="su-password">Create a password</label>
-                    <input {...bind('password')} type="password" autoComplete="new-password" aria-describedby={invalid('password') ? 'su-err' : 'su-password-hint'} />
+                    <PasswordInput {...bind('password')} autoComplete="new-password" aria-describedby={invalid('password') ? 'su-err' : 'su-password-hint'} />
                     {errFor('password') || (
                       <p className="hint" id="su-password-hint">
                         At least 8 characters. You'll use it with your email to log in.

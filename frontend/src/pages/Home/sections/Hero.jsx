@@ -191,7 +191,7 @@ export default function Hero({ exam, onChoose, signupHref }) {
             </a>
           </div>
           <p className="hero-note">
-            In a Studyverse course? <AuthLink to="/login">Log in with the same account</AuthLink>
+            Already have an account? <AuthLink to="/login">Log in</AuthLink>
           </p>
         </div>
         <PlanPreview exam={exam} />

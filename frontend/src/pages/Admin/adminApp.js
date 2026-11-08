@@ -43,20 +43,14 @@ function seed() {
       { id: 'A2', exam: 'neet', kind: 'assigned', slot: null, title: 'Weekly Batch Test 1', chapters: 'Laws of Motion, Chemical Bonding, Cell', questions: 45, minutes: 60, status: 'draft', file: 'batch-week-1.docx', missing: 0, audience: { type: 'groups', groupIds: ['G1'], studentIds: [] }, opens: '2026-11-07T18:00', due: '' },
       { id: 'L3', exam: 'neet', kind: 'live', slot: null, title: 'NEET Half Syllabus Live Test', chapters: 'Class 11', questions: 180, minutes: 180, status: 'draft', start: '2026-11-15T14:00', window: 30, resultAt: '2026-11-15T20:00', file: '', missing: 0 }
     ],
-    coupons: [
-      { code: 'LAUNCH20', type: 'percent', value: 20, exam: 'all', expires: '2026-12-31', limit: 500, used: 132, active: true },
-      { code: 'RANKER100', type: 'flat', value: 100, exam: 'neet', expires: '2026-11-30', limit: 200, used: 41, active: true },
-      { code: 'DIWALI25', type: 'percent', value: 25, exam: 'all', expires: '2026-11-03', limit: 1000, used: 388, active: false }
-    ],
-    referral: { enabled: true, friendDiscount: 100, referrerCredit: 100, maxPerStudent: 20 },
     students: [
-      { id: 'S1', name: 'Riya Sharma', phone: '98xxxxxx10', exam: 'neet', city: 'Jodhpur', lms: true, bought: true, tests: 5, credits: 150, joined: '2026-10-12' },
-      { id: 'S2', name: 'Aarav Mehta', phone: '97xxxxxx44', exam: 'jee-main', city: 'Jaipur', lms: true, bought: true, tests: 2, credits: 0, joined: '2026-10-15' },
-      { id: 'S3', name: 'Sana Khan', phone: '99xxxxxx02', exam: 'neet', city: 'Kota', lms: false, bought: false, tests: 0, credits: 0, joined: '2026-10-20' },
-      { id: 'S4', name: 'Kabir Singh', phone: '96xxxxxx71', exam: 'jee-advanced', city: 'Bikaner', lms: false, bought: true, tests: 1, credits: 200, joined: '2026-10-22' },
-      { id: 'S5', name: 'Priya Choudhary', phone: '95xxxxxx38', exam: 'neet', city: 'Jodhpur', lms: true, bought: true, tests: 4, credits: 0, joined: '2026-10-09' },
-      { id: 'S6', name: 'Arjun Rathore', phone: '94xxxxxx56', exam: 'neet', city: 'Pali', lms: true, bought: true, tests: 3, credits: 50, joined: '2026-10-11' },
-      { id: 'S7', name: 'Ishaan Verma', phone: '93xxxxxx27', exam: 'jee-main', city: 'Jodhpur', lms: true, bought: true, tests: 2, credits: 0, joined: '2026-10-14' }
+      { id: 'S1', name: 'Riya Sharma', phone: '98xxxxxx10', exam: 'neet', city: 'Jodhpur', lms: true, bought: true, tests: 5, joined: '2026-10-12' },
+      { id: 'S2', name: 'Aarav Mehta', phone: '97xxxxxx44', exam: 'jee-main', city: 'Jaipur', lms: true, bought: true, tests: 2, joined: '2026-10-15' },
+      { id: 'S3', name: 'Sana Khan', phone: '99xxxxxx02', exam: 'neet', city: 'Kota', lms: false, bought: false, tests: 0, joined: '2026-10-20' },
+      { id: 'S4', name: 'Kabir Singh', phone: '96xxxxxx71', exam: 'jee-advanced', city: 'Bikaner', lms: false, bought: true, tests: 1, joined: '2026-10-22' },
+      { id: 'S5', name: 'Priya Choudhary', phone: '95xxxxxx38', exam: 'neet', city: 'Jodhpur', lms: true, bought: true, tests: 4, joined: '2026-10-09' },
+      { id: 'S6', name: 'Arjun Rathore', phone: '94xxxxxx56', exam: 'neet', city: 'Pali', lms: true, bought: true, tests: 3, joined: '2026-10-11' },
+      { id: 'S7', name: 'Ishaan Verma', phone: '93xxxxxx27', exam: 'jee-main', city: 'Jodhpur', lms: true, bought: true, tests: 2, joined: '2026-10-14' }
     ],
     groups: [
       { id: 'G1', name: 'NEET 2027 course batch', studentIds: ['S1', 'S5', 'S6'] },
@@ -79,7 +73,6 @@ function seed() {
       showAnnouncement: true,
       faqs: [
         { q: 'How much does it cost?', a: '₹999 per exam for all 11 tests.' },
-        { q: 'Can I use a coupon or referral code?', a: 'Yes. Enter one code at checkout. Credits can be used on top.' },
         { q: 'What if I miss a live test?', a: 'You can take it later for a practice score. It won’t count towards the all-India rank.' }
       ]
     }
@@ -201,8 +194,7 @@ VIEWS.dashboard = function () {
     '<div class="actions"><button class="btn btn-primary" type="button" data-upload>Upload a test</button></div></div>' +
     '<div class="stats">' +
     stat(published, 'Tests live or scheduled', db.tests.length + ' tests in total') + stat(upcoming.length, 'Upcoming live tests', upcoming[0] ? 'Next: ' + when(upcoming[0].start) : 'None scheduled') +
-    stat(db.students.filter(function (s) { return s.bought; }).length, 'Students who bought', 'Of ' + db.students.length + ' signed up (demo)') +
-    stat(db.coupons.filter(function (c) { return c.active; }).length, 'Active coupons', db.coupons.length + ' coupons created') + '</div>' +
+    stat(db.students.filter(function (s) { return s.bought; }).length, 'Students who bought', 'Of ' + db.students.length + ' signed up (demo)') + '</div>' +
     '<div class="dash">' +
     '<section class="sect"><div class="sect-head"><div><h2>Needs attention</h2><p>' + (alerts.length ? alerts.length + ' item' + (alerts.length === 1 ? '' : 's') + ' to sort out before your next test.' : 'Nothing is blocking your next test.') + '</p></div></div><div class="card attn">' + (alerts.length ? alerts.map(function (a) { return '<div class="alert ' + a[0] + '"><span>' + esc(a[1]) + '</span><button class="btn btn-outline btn-sm" type="button" data-goto="' + a[2] + '">Fix</button></div>'; }).join('') : '<div class="alert a-ok"><span>Everything is ready.</span></div>') + '</div></section>' +
     '<section class="sect"><div class="sect-head"><div><h2>Upcoming live tests</h2><p>The next one shows on the website countdown.</p></div></div><div class="card list-card">' + (upcoming.length ? upcoming.slice(0, 4).map(function (x) {
@@ -367,71 +359,6 @@ bind.exams = function () {
   });
 };
 
-/* ---------- Coupons & referrals ---------- */
-VIEWS.offers = function () {
-  var r = db.referral;
-  return '<div class="head"><div><h1>Coupons &amp; referrals</h1><p>Promotions applied at checkout. One code per order; credits can be used on top.</p></div>' +
-    '<div class="actions"><button class="btn btn-primary" type="button" id="new-coupon">New coupon</button></div></div>' +
-    '<div class="table-wrap"><table><thead><tr><th>Code</th><th>Discount</th><th>Exam</th><th>Expires</th><th>Used</th><th>Status</th><th></th></tr></thead><tbody>' +
-    db.coupons.map(function (c, i) {
-      var expired = new Date(c.expires + 'T23:59:59') < new Date();
-      var st = !c.active ? '<span class="pill p-off">Off</span>' : (expired ? '<span class="pill p-draft">Expired</span>' : (c.used >= c.limit ? '<span class="pill p-warn">Limit reached</span>' : '<span class="pill p-published">Active</span>'));
-      return '<tr><td><b class="code">' + esc(c.code) + '</b></td><td>' + (c.type === 'percent' ? c.value + '% off' : rupee(c.value) + ' off') + '</td><td>' + esc(examLabel(c.exam)) + '</td><td>' + esc(c.expires) + '</td><td>' + c.used + ' / ' + c.limit + '</td><td>' + st + '</td>' +
-        '<td><div class="row-actions"><button class="btn btn-outline btn-sm" type="button" data-cp-edit="' + i + '">Edit</button><button class="btn btn-outline btn-sm" type="button" data-cp-toggle="' + i + '">' + (c.active ? 'Turn off' : 'Turn on') + '</button></div></td></tr>';
-    }).join('') + '</tbody></table></div>' +
-    '<div class="grid g2">' +
-    '<section class="card"><h2>Referral programme</h2><div class="stack">' +
-    '<label class="check"><input type="checkbox" id="rf-on"' + (r.enabled ? ' checked' : '') + '> Referrals on</label>' +
-    field('Friend\u2019s discount (₹)', '<input class="input" type="number" min="0" id="rf-disc" value="' + r.friendDiscount + '">') +
-    field('Credits to the student who referred (₹)', '<input class="input" type="number" min="0" id="rf-credit" value="' + r.referrerCredit + '">', 'Given only after the friend\u2019s payment succeeds.') +
-    field('Most referrals rewarded per student', '<input class="input" type="number" min="0" id="rf-max" value="' + r.maxPerStudent + '">') +
-    '<button class="btn btn-primary" type="button" id="rf-save">Save referral settings</button></div></section>' +
-    '<section class="card"><h2>Adjust a student\u2019s credits</h2><div class="stack">' +
-    field('Student mobile number', '<input class="input" id="cr-phone" inputmode="tel" placeholder="10-digit mobile">') +
-    field('Amount (₹, use minus to remove)', '<input class="input" type="number" id="cr-amt" placeholder="e.g. 200 or -50">') +
-    field('Reason (shown to the student)', '<input class="input" id="cr-reason" placeholder="e.g. Top 100 in live test">') +
-    '<button class="btn btn-primary" type="button" id="cr-save">Add credits</button></div></section></div>';
-};
-bind.offers = function () {
-  $('#new-coupon').addEventListener('click', function () { couponDialog(-1); });
-  $$('[data-cp-edit]').forEach(function (b) { b.addEventListener('click', function () { couponDialog(Number(b.dataset.cpEdit)); }); });
-  $$('[data-cp-toggle]').forEach(function (b) { b.addEventListener('click', function () { var c = db.coupons[Number(b.dataset.cpToggle)]; c.active = !c.active; save(); render(); toast(c.code + (c.active ? ' turned on' : ' turned off')); }); });
-  $('#rf-save').addEventListener('click', function () {
-    db.referral = { enabled: $('#rf-on').checked, friendDiscount: Number($('#rf-disc').value) || 0, referrerCredit: Number($('#rf-credit').value) || 0, maxPerStudent: Number($('#rf-max').value) || 0 };
-    save(); toast('Referral settings saved');
-  });
-  $('#cr-save').addEventListener('click', function () {
-    var phone = $('#cr-phone').value.replace(/\D/g, ''), amt = Number($('#cr-amt').value), reason = $('#cr-reason').value.trim();
-    if (phone.length < 10) { toast('Enter a 10-digit mobile number'); return; }
-    if (!amt) { toast('Enter an amount'); return; }
-    if (!reason) { toast('Add a reason'); return; }
-    toast((amt > 0 ? rupee(amt) + ' added to ' : rupee(-amt) + ' removed from ') + phone + "'s credits");
-    $('#cr-phone').value = $('#cr-amt').value = $('#cr-reason').value = '';
-  });
-};
-function couponDialog(i) {
-  var c = i >= 0 ? db.coupons[i] : { code: '', type: 'percent', value: 10, exam: 'all', expires: '', limit: 100, used: 0, active: true };
-  formDialog(i >= 0 ? 'Edit coupon ' + c.code : 'New coupon',
-    '<div class="form">' +
-    field('Code', '<input class="input" id="cp-code" value="' + esc(c.code) + '" style="text-transform: uppercase" placeholder="e.g. NEET50"' + (i >= 0 ? ' readonly' : '') + '>', i >= 0 ? 'Codes can\u2019t be renamed once used.' : 'Letters and numbers only.') +
-    field('Applies to', '<select class="input" id="cp-exam">' + examOptions(c.exam, true) + '</select>') +
-    field('Discount type', '<select class="input" id="cp-type"><option value="percent"' + (c.type === 'percent' ? ' selected' : '') + '>Percent off</option><option value="flat"' + (c.type === 'flat' ? ' selected' : '') + '>Rupees off</option></select>') +
-    field('Discount value', '<input class="input" type="number" min="1" id="cp-value" value="' + c.value + '">') +
-    field('Expires on', '<input class="input" type="date" id="cp-exp" value="' + esc(c.expires) + '">') +
-    field('Usage limit (total)', '<input class="input" type="number" min="1" id="cp-limit" value="' + c.limit + '">') +
-    '</div>',
-    function () {
-      var code = $('#cp-code').value.trim().toUpperCase(), type = $('#cp-type').value, value = Number($('#cp-value').value), exp = $('#cp-exp').value;
-      if (!/^[A-Z0-9]{3,20}$/.test(code)) return 'Use 3–20 letters and numbers for the code.';
-      if (i < 0 && db.coupons.some(function (x) { return x.code === code; })) return 'That code already exists.';
-      if (!(value > 0) || (type === 'percent' && value > 100)) return 'Enter a discount between 1 and 100%, or a rupee amount.';
-      if (!exp) return 'Choose an expiry date.';
-      var n = { code: code, type: type, value: value, exam: $('#cp-exam').value, expires: exp, limit: Number($('#cp-limit').value) || 1, used: c.used, active: c.active };
-      if (i >= 0) db.coupons[i] = n; else db.coupons.unshift(n);
-      save(); render(); toast('Coupon ' + code + ' saved');
-    });
-}
-
 /* ---------- Video requests ---------- */
 function hoursSince(iso) { return (Date.now() - new Date(iso).getTime()) / 36e5; }
 var REQ_STATUS = { 'new': ['p-warn', 'New'], progress: ['p-scheduled', 'Recording'], done: ['p-published', 'Sent'], declined: ['p-draft', 'Declined'] };
@@ -528,9 +455,9 @@ VIEWS.students = function () {
     }).join('') + '</div>' : '<p class="hint">No groups yet.</p>') + '</section>' +
     '<section class="sect"><div class="sect-head"><div><h2>All students</h2><p>' + list.length + ' of ' + db.students.length + ' shown.</p></div></div>' +
     '<div class="filters"><label class="l sr" for="sq">Search students</label><input class="input search" id="sq" placeholder="Search name, mobile or city" value="' + esc(ui.studentQ) + '"></div>' +
-    '<div class="table-wrap"><table><thead><tr><th>Student</th><th>Exam</th><th>City</th><th>Type</th><th>Test series</th><th>Tests taken</th><th>Credits</th><th>Joined</th></tr></thead><tbody>' +
+    '<div class="table-wrap"><table><thead><tr><th>Student</th><th>Exam</th><th>City</th><th>Type</th><th>Test series</th><th>Tests taken</th><th>Joined</th></tr></thead><tbody>' +
     (list.length ? list.map(function (s) {
-      return '<tr><td><b>' + esc(s.name) + '</b><span class="sub">' + esc(s.phone) + '</span></td><td>' + esc(examLabel(s.exam)) + '</td><td>' + esc(s.city) + '</td><td>' + (s.lms ? '<span class="pill p-scheduled">LMS</span>' : '<span class="pill p-draft">Direct</span>') + '</td><td>' + (s.bought ? '<span class="pill p-published">Bought</span>' : '<span class="pill p-draft">Not bought</span>') + '</td><td>' + s.tests + '</td><td>' + rupee(s.credits) + '</td><td>' + esc(s.joined) + '</td></tr>';
+      return '<tr><td><b>' + esc(s.name) + '</b><span class="sub">' + esc(s.phone) + '</span></td><td>' + esc(examLabel(s.exam)) + '</td><td>' + esc(s.city) + '</td><td>' + (s.lms ? '<span class="pill p-scheduled">LMS</span>' : '<span class="pill p-draft">Direct</span>') + '</td><td>' + (s.bought ? '<span class="pill p-published">Bought</span>' : '<span class="pill p-draft">Not bought</span>') + '</td><td>' + s.tests + '</td><td>' + esc(s.joined) + '</td></tr>';
     }).join('') : '<tr><td colspan="8" class="hint">No students match.</td></tr>') + '</tbody></table></div></section>' +
     '<p class="hint foot-note">Sample students for the demo. Mobile numbers are partly hidden for staff who don\u2019t need them.</p>';
 };
@@ -548,7 +475,7 @@ bind.students = function () {
   var inp = $('#sq');
   inp.addEventListener('input', function () { ui.studentQ = inp.value; var pos = inp.selectionStart; render(); var n = $('#sq'); n.focus(); n.setSelectionRange(pos, pos); });
   $('#export').addEventListener('click', function () {
-    var rows = [['Name', 'Mobile', 'Exam', 'City', 'Type', 'Bought', 'Tests taken', 'Credits', 'Joined']].concat(db.students.map(function (s) { return [s.name, s.phone, examLabel(s.exam), s.city, s.lms ? 'LMS' : 'Direct', s.bought ? 'Yes' : 'No', s.tests, s.credits, s.joined]; }));
+    var rows = [['Name', 'Mobile', 'Exam', 'City', 'Type', 'Bought', 'Tests taken', 'Joined']].concat(db.students.map(function (s) { return [s.name, s.phone, examLabel(s.exam), s.city, s.lms ? 'LMS' : 'Direct', s.bought ? 'Yes' : 'No', s.tests, s.joined]; }));
     var csv = rows.map(function (r) { return r.map(function (v) { return '"' + String(v).replace(/"/g, '""') + '"'; }).join(','); }).join('\n');
     var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' })); a.download = 'students.csv'; a.click();
   });
@@ -594,7 +521,6 @@ VIEWS.website = function () {
     '<section class="card"><h2>Shown automatically</h2><div class="summary-list">' +
     Object.keys(db.exams).map(function (k) { var e = db.exams[k]; return '<div><span>' + esc(e.label) + ' price</span><span>' + (e.onSale ? rupee(e.price) : 'Not on sale') + '</span></div>'; }).join('') +
     '<div><span>Next live test (countdown)</span><span>' + (nextLive ? esc(examLabel(nextLive.exam)) + ', ' + when(nextLive.start) : 'None scheduled') + '</span></div>' +
-    '<div><span>Referral offer</span><span>' + (db.referral.enabled ? rupee(db.referral.friendDiscount) + ' off / ' + rupee(db.referral.referrerCredit) + ' credits' : 'Off') + '</span></div>' +
     '</div></section></div>' +
     '<section class="card faq-card"><div class="card-head"><h2>Frequently asked questions</h2><button class="btn btn-outline btn-sm" type="button" id="faq-add">Add question</button></div>' +
     '<div class="stack">' + w.faqs.map(function (f, i) {

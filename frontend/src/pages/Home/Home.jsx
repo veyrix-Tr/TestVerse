@@ -28,7 +28,6 @@ export default function Home() {
       'A complete test plan for NEET, JEE Main and JEE Advanced: 6 part tests, 3 half-syllabus tests and 2 full-syllabus tests, plus all-India live tests. Real CBT screen, rank and full analysis. By Studyverse.',
   })
 
-  const refCode = (new URLSearchParams(window.location.search).get('ref') || '').trim().toUpperCase()
   const [exam, setExam] = useState(null)
 
   // The design sets `html { scroll-behavior: smooth }` (scoped CSS can't reach
@@ -81,21 +80,13 @@ export default function Home() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const signupHref =
-    '/checkout' + (refCode || exam ? '?' + [exam ? 'exam=' + exam : '', refCode ? 'ref=' + encodeURIComponent(refCode) : ''].filter(Boolean).join('&') : '')
+  // New students sign up first (with the chosen exam), then pick their batch
+  const signupHref = '/signup' + (exam ? '?exam=' + exam : '')
 
   return (
     <div className="tv-home">
       <LogoSprite />
       <SiteHeader />
-
-      <div className="ref-banner" data-ref-banner hidden={!refCode}>
-        <div className="wrap">
-          <p>
-            Your friend's referral code <b data-ref-code>{refCode}</b> will be applied at checkout: <b>[REFERRAL DISCOUNT]</b> off your test series.
-          </p>
-        </div>
-      </div>
 
       <main>
         <Hero exam={exam} onChoose={choose} signupHref={signupHref} />

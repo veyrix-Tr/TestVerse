@@ -1,0 +1,124 @@
+/* /subscribe — scoped to .tv-subscribe at build time (see vite.config.js). */
+:root {
+  color-scheme: light;
+  --bg: #F7F8FA; --soft: #F1F3F7; --card: #FFFFFF;
+  --ink: #0E1A2B; --ink-2: #26324A; --muted: #5B6577; --line: #E4E8EE; --field: #CDD3DE;
+  --navy: #0B1B33; --navy-2: #13294A; --navy-line: #2A4166; --on-navy: #FFFFFF; --on-navy-muted: #B9C3D6;
+  --gold: #E9B949; --gold-2: #D9A632; --gold-soft: #FBF4E2; --gold-line: #EEDDB0; --gold-ink: #7A5600;
+  --blue: #2450D6; --blue-ink: #1B3DAA; --blue-soft: #EEF2FD;
+  --green: #15803D; --green-soft: #E8F5EC; --green-ink: #11602F;
+  --amber: #B45309; --amber-soft: #FDF3E7;
+  --red: #C2261B; --red-soft: #FCEDEC;
+  --purple: #6D3FC0; --purple-soft: #F2EDFB;
+  --shadow-sm: 0 1px 2px rgba(14, 26, 43, 0.05), 0 1px 1px rgba(14, 26, 43, 0.03);
+  --shadow-md: 0 12px 32px -12px rgba(14, 26, 43, 0.18);
+  --shadow-lg: 0 30px 60px -20px rgba(5, 12, 28, 0.45);
+  --display: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
+  --body: "Inter", "Segoe UI", system-ui, sans-serif;
+  --on-primary: #FFFFFF;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --bg: #0A1120; --soft: #111A2C; --card: #0F1828;
+    --ink: #E9EDF5; --ink-2: #C9D1E0; --muted: #98A3B8; --line: #1F2B40; --field: #334159;
+    --navy: #07111F; --navy-2: #0F1F38; --navy-line: #24395A; --on-navy-muted: #A9B5CB;
+    --gold-soft: #2A2312; --gold-line: #4A3D1C; --gold-ink: #F0D79A;
+    --blue: #7F9BFF; --blue-ink: #A9BCFF; --blue-soft: #16224A;
+    --green: #4CC27E; --green-soft: #10291B; --green-ink: #94E0B3;
+    --amber: #F0A456; --amber-soft: #2D1E0E;
+    --red: #FF8A80; --red-soft: #33130F;
+    --purple: #B49CFF; --purple-soft: #221A3D;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 12px 32px -12px rgba(0, 0, 0, 0.6);
+    --on-primary: #0B1B33;
+  }
+}
+
+/* ---------- Base ---------- */
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 400 16px/1.6 var(--body);
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+}
+a { color: var(--blue); text-decoration: none; }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+h1, h2, h3 { font-family: var(--display); margin: 0; color: var(--ink); }
+p { margin: 0; }
+.tnum { font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); }
+.tv-logo { display: block; width: auto; height: 36px; aspect-ratio: 1784 / 409; }
+.wrap { width: min(1360px, 100% - 2 * clamp(20px, 5vw, 80px)); margin-inline: auto; }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 44px; padding: 0 18px; border-radius: 10px; border: 1px solid transparent;
+  font: 600 15px/1 var(--body); cursor: pointer;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+.btn-lg { min-height: 54px; font-size: 16px; }
+.btn-sm { min-height: 36px; padding: 0 14px; font-size: 14px; }
+.btn-block { width: 100%; }
+.btn-gold { background: var(--gold); color: #0B1B33; }
+.btn-gold:hover { background: var(--gold-2); }
+.btn-ghost { background: transparent; color: #fff; border-color: rgba(255, 255, 255, 0.22); }
+.btn-ghost:hover { background: rgba(255, 255, 255, 0.08); }
+.btn[disabled] { opacity: 0.5; cursor: not-allowed; }
+
+/* ---------- Top bar ---------- */
+.top { background: var(--navy); color: var(--on-navy); border-bottom: 1px solid var(--navy-line); }
+.top :focus-visible { outline-color: var(--gold); }
+.top-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 72px; }
+.brand { display: inline-flex; border-radius: 6px; }
+.who { display: flex; align-items: center; gap: 16px; font-size: 14px; color: var(--on-navy-muted); }
+.who b { color: #fff; font-weight: 600; }
+
+/* ---------- Layout ---------- */
+.page { padding-block: clamp(40px, 6vw, 96px) 96px; }
+.layout { display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: clamp(32px, 6vw, 112px); align-items: start; }
+
+/* ---------- Intro + what's included ---------- */
+.intro { max-width: 640px; }
+.eyebrow { font: 600 12px/1 var(--body); letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue); }
+.intro h1 { margin-top: 14px; font-size: clamp(30px, 3vw, 42px); line-height: 1.12; letter-spacing: -0.022em; font-weight: 700; text-wrap: balance; }
+.lead { margin-top: 14px; font-size: clamp(16px, 1.1vw, 18px); color: var(--muted); line-height: 1.6; }
+.included { list-style: none; margin: clamp(28px, 3vw, 40px) 0 0; padding: 0; display: grid; }
+.included li { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 4px; padding: 18px 0; border-top: 1px solid var(--line); }
+.included li:last-child { border-bottom: 1px solid var(--line); }
+.inc-num { font: 700 15px/1.5 var(--display); color: var(--blue); }
+.included b { display: block; font: 600 16px/1.4 var(--display); color: var(--ink); letter-spacing: -0.01em; }
+.included li span span { display: block; margin-top: 2px; font-size: 15px; color: var(--muted); }
+
+/* ---------- Summary ---------- */
+.summary { position: sticky; top: 24px; }
+.sum-card {
+  background: var(--navy); color: var(--on-navy); border-radius: 18px; padding: 28px;
+  box-shadow: var(--shadow-md); border: 1px solid var(--navy-line);
+}
+.sum-card :focus-visible { outline-color: var(--gold); }
+.sum-card .eyebrow { color: var(--gold); }
+.sum-card h2 { margin-top: 12px; color: #fff; font-size: 26px; line-height: 1.2; letter-spacing: -0.02em; }
+.sum-meta { margin-top: 8px; font-size: 15px; color: #fff; }
+.sum-meta span { display: block; margin-top: 2px; font-size: 14px; color: var(--on-navy-muted); }
+.sum-text, .sum-loading { margin-top: 12px; font-size: 15px; color: var(--on-navy-muted); }
+.sum-price { margin: 20px 0 24px; padding: 16px 0; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; border-block: 1px solid var(--navy-line); font-size: 14px; color: var(--on-navy-muted); }
+.sum-price b { font: 700 24px/1 var(--display); color: #fff; letter-spacing: -0.02em; }
+.sum-price b.tbd { font: 600 15px/1.3 var(--body); color: var(--on-navy-muted); letter-spacing: 0; text-align: right; }
+.err { margin-bottom: 16px; padding: 12px 14px; border-radius: 10px; font-size: 14px; background: var(--red-soft); color: var(--red); }
+.sum-note { margin-top: 14px; font-size: 13px; color: var(--on-navy-muted); text-align: center; }
+
+@media (max-width: 1080px) {
+  .layout { grid-template-columns: 1fr; }
+  .summary { position: static; }
+}
+@media (max-width: 560px) {
+  .top-row { height: 64px; }
+  .tv-logo { height: 30px; }
+  .who span { display: none; }
+  .sum-card { padding: 22px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}

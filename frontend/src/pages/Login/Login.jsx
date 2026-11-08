@@ -5,7 +5,7 @@ import LogoSprite from '../../components/LogoSprite.jsx'
 import { api } from '../../lib/api.js'
 import { usePageMeta } from '../../lib/hooks.js'
 import { nextPath, saveSession } from '../../lib/session.js'
-import { BrandAside, OtpInput, Resend } from './AuthParts.jsx'
+import { BrandAside, OtpInput, PasswordInput, Resend } from './AuthParts.jsx'
 import { isEmail, useResendTimer } from './otp.js'
 
 /* route "/login" — email + password, with "Forgot password?" resetting the
@@ -192,10 +192,8 @@ export default function Login() {
                         Forgot password?
                       </button>
                     </div>
-                    <input
+                    <PasswordInput
                       id="login-password"
-                      className="input"
-                      type="password"
                       autoComplete="current-password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
@@ -286,10 +284,8 @@ export default function Login() {
                   <input type="email" autoComplete="username" value={email} readOnly hidden />
                   <div className="field">
                     <label htmlFor="login-newpass">New password</label>
-                    <input
+                    <PasswordInput
                       id="login-newpass"
-                      className="input"
-                      type="password"
                       autoComplete="new-password"
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}

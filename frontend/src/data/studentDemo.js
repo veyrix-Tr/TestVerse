@@ -16,7 +16,6 @@ export const SETTINGS = {
   youtube: 'https://www.youtube.com/@[your-channel]',
   videoLimit: { course: 10, direct: 3 },
   videoHours: 48,
-  referral: { friendDiscount: 100, referrerCredit: 100 },
 }
 
 export const EXAM = { id: 'neet', label: 'NEET', year: 2027, subjects: ['Physics', 'Chemistry', 'Botany', 'Zoology'] }
@@ -80,9 +79,9 @@ export const NOTES = [
 ]
 
 export const MODES = {
-  course: { name: 'Riya Sharma', first: 'Riya', course: true, bought: true, credits: 150, code: 'RIYA4821', videosUsed: 2 },
-  direct: { name: 'Aarav Mehta', first: 'Aarav', course: false, bought: true, credits: 0, code: 'AARAV7310', videosUsed: 1 },
-  new: { name: 'Sana Khan', first: 'Sana', course: false, bought: false, credits: 0, code: null, videosUsed: 0 },
+  course: { name: 'Riya Sharma', first: 'Riya', course: true, bought: true, videosUsed: 2 },
+  direct: { name: 'Aarav Mehta', first: 'Aarav', course: false, bought: true, videosUsed: 1 },
+  new: { name: 'Sana Khan', first: 'Sana', course: false, bought: false, videosUsed: 0 },
 }
 
 export function liveState(t) {

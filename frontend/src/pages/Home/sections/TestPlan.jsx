@@ -46,7 +46,7 @@ export default function TestPlan({ exam, onChoose, signupHref }) {
         </ol>
 
         <div className="plan-foot">
-          <p>Take any test whenever you're ready. Every test has the same CBT screen, real marking, and full analysis with solutions. Coupon and referral codes are accepted at checkout.</p>
+          <p>Take any test whenever you're ready. Every test has the same CBT screen, real marking, and full analysis with solutions.</p>
           <div className="plan-buy">
             <div>
               <small>{ex ? ex.label + ' test series' : 'Test series, per exam'}</small>

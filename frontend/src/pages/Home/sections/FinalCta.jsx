@@ -22,7 +22,7 @@ export default function FinalCta({ signupHref }) {
         <div className="courses">
           <div>
             <h3>Want a teacher too?</h3>
-            <p>Studyverse courses add live classes and faculty who teach from your own test results. Same account, so all your tests and ranks come with you.</p>
+            <p>Studyverse courses add live classes and faculty who teach from your own test results.</p>
           </div>
           <a className="btn btn-ghost" href="/courses">
             Explore Studyverse courses

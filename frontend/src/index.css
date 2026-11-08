@@ -15,7 +15,7 @@ body {
 /* Page roots fill the viewport like the design's <body> did (backgrounds are
    set per page on the root class). */
 .tv-home,
-.tv-checkout,
+.tv-subscribe,
 .tv-studenthome,
 .tv-test,
 .tv-admin,

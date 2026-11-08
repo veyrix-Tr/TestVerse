@@ -28,6 +28,9 @@ app.get('/', (req, res) => {
 const authRoutes = require('./routes/authRoutes');
 app.use('/api/auth', authRoutes);
 
+const subscriptionRoutes = require('./routes/subscriptionRoutes');
+app.use('/api', subscriptionRoutes);
+
 app.use('/api', (req, res) => res.status(404).json({ error: 'Not found' }));
 
 // Local dev runs the server; Vercel imports this file as a module

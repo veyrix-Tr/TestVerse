@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt    = require('jsonwebtoken');
 const prisma = require('../lib/prisma');
 const { sendOtpEmail } = require('../services/emailService');
+const { WITH_SUBSCRIPTION, publicUser } = require('../lib/publicUser');
 
 const EXAMS              = ['neet', 'jee-main', 'jee-advanced'];
 const GRADES             = ['Class 11', 'Class 12', 'Dropper / repeater'];
@@ -19,19 +20,6 @@ const hashOtp     = (otp) => crypto.createHash('sha256').update(String(otp)).dig
 const generateOtp = () => crypto.randomInt(100000, 1000000).toString();
 
 const clean = (v, max = 80) => String(v || '').trim().slice(0, max);
-
-const publicUser = (user) => ({
-  id:         user.id,
-  name:       user.name,
-  email:      user.email,
-  role:       user.role,
-  exam:       user.exam,
-  phone:      user.phone,
-  grade:      user.grade,
-  targetYear: user.targetYear,
-  state:      user.state,
-  city:       user.city,
-});
 
 const signToken = (user) =>
   jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
@@ -190,6 +178,7 @@ const signup = async (req, res) => {
         emailVerifiedAt: new Date(),
         lastLoginAt:     new Date(),
       },
+      include: WITH_SUBSCRIPTION,
     });
 
     res.status(201).json({ message: 'Account created successfully', token: signToken(user), user: publicUser(user) });
@@ -210,7 +199,7 @@ const login = async (req, res) => {
     const password = req.body.password;
     if (!email || !password) return res.status(400).json({ error: 'Email and password are required.' });
 
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.user.findUnique({ where: { email }, include: WITH_SUBSCRIPTION });
     if (!user || !(await bcrypt.compare(String(password), user.password))) {
       return res.status(401).json({ error: 'Incorrect email or password.' });
     }
@@ -231,7 +220,7 @@ const login = async (req, res) => {
 // GET /api/auth/me — the signed-in user, used to confirm a stored token is still good
 const me = async (req, res) => {
   try {
-    const user = await prisma.user.findUnique({ where: { id: req.user.id } });
+    const user = await prisma.user.findUnique({ where: { id: req.user.id }, include: WITH_SUBSCRIPTION });
     if (!user || !user.isActive) return res.status(401).json({ error: 'Invalid token' });
     res.json({ user: publicUser(user) });
   } catch (error) {
@@ -297,6 +286,7 @@ const resetPassword = async (req, res) => {
     const user = await prisma.user.update({
       where: { email },
       data:  { password: await bcrypt.hash(String(password), 10), lastLoginAt: new Date() },
+      include: WITH_SUBSCRIPTION,
     });
 
     res.json({ message: 'Password reset successfully', token: signToken(user), user: publicUser(user) });

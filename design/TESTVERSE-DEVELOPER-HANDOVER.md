@@ -96,7 +96,7 @@ Every test runs on an **NTA-style CBT screen** and ends with **detailed analysis
 | User | How they arrive | What differs |
 |---|---|---|
 | Direct student | Signs up on Testverse | Standard app |
-| Course (LMS) student | Opens Testverse from the Studyverse LMS, already signed in (same account) | Also gets assigned tests and a higher video-request limit; parents get the LMS Sunday report |
+| Course (LMS) student | Signs up on Testverse like everyone else (accounts are separate from the LMS for now) | Also gets assigned tests and a higher video-request limit; parents get the LMS Sunday report |
 | Admin / staff | Admin panel | Roles: admin, content, support |
 
 ---
@@ -104,8 +104,8 @@ Every test runs on an **NTA-style CBT screen** and ends with **detailed analysis
 ## 2. Business rules (decided)
 
 ### Accounts
-- **One Studyverse account across the LMS and Testverse.** No second sign-up for LMS students.
-- **Sign-in:** phone OTP or Google.
+- **Separate Testverse accounts** *(decided Nov 2026; replaces "one Studyverse account").* Accounts are not shared with the Studyverse LMS for now, so course students also sign up once on Testverse. Sharing the user table can come later.
+- **Sign-in:** email + password *(decided Nov 2026; replaces phone OTP / Google).* Sign-up verifies the email with a 6-digit code sent through Brevo; a forgotten password is reset the same way. There is no Google or phone-OTP login.
 - **Details collected at checkout:**
   - full name as on the exam admit card
   - date of birth, email, class (11 / 12 / dropper), exam year
@@ -193,7 +193,7 @@ In the prototype these live in one `EXAMS` block in the script.
 
 ### 3.2 Checkout — `checkout.html`
 **Steps:**
-1. **Account:** Google or mobile OTP.
+1. **Account:** log in with email + password, or create an account (email code) and come back via `?next=`. Anything the account already knows (name, email, exam, class, exam year, state, city) is pre-filled.
 2. **About you:** fields per §2. Shows a parent-consent notice when under 18.
 3. **Exam:** what's included.
 
@@ -294,7 +294,7 @@ Follow the same design system. Build each as a real page.
 
 | Page | Must include |
 |---|---|
-| **Log in** (returning users) | Phone OTP, Google, "new here? Get the test series" |
+| **Log in** (returning users) | Email + password; "Forgot password?" (email code, then a new password); "New here? Create an account" |
 | **Profile** | Details from checkout (editable except name and date of birth after first test), exam, language preference, delete account |
 | **Credits & referrals** | Balance, ledger (earned / used / admin adjustments with reasons), referral code, list of referred friends and rewards |
 | **Orders & invoices** | Orders with status; downloadable GST invoice PDF (white logo) |
@@ -324,16 +324,16 @@ Follow the same design system. Build each as a real page.
 
 ## 5. Recommended stack
 
-Fits the existing Studyverse Firebase data and a small team. Equivalent tools are fine.
+Matches the existing Studyverse backend (Express + Prisma) and a small team. Equivalent tools are fine. *Auth, database and server rows updated Nov 2026 to what is built in `backend/`; this replaces the original Firebase plan.*
 
 | Need | Recommendation |
 |---|---|
 | Front end | React (Next.js) or plain HTML/JS from the prototypes; mobile-first web app (PWA). Native apps later if needed |
-| Auth | Firebase Auth (phone OTP + Google), **shared with the LMS** so it's one account |
-| Database | Firestore |
-| Server logic | Cloud Functions (or Node/Express on Cloud Run). **Scoring, pricing and access checks only here** |
-| Files | Firebase Storage (question images, papers, request photos, invoices) |
-| Scheduled jobs | Cloud Scheduler: auto-submit, live ranks, reminders, coupon expiry |
+| Auth | **Built:** own email + password accounts (bcrypt), 7-day JWTs, 6-digit email OTPs via Brevo. Not shared with the LMS for now |
+| Database | **Built:** PostgreSQL on Supabase, via Prisma (`backend/prisma/schema.prisma`) |
+| Server logic | **Built:** Node/Express in `backend/` (deployable on Vercel). **Scoring, pricing and access checks only here** |
+| Files | Object storage, e.g. Supabase Storage (question images, papers, request photos, invoices) |
+| Scheduled jobs | A scheduler (e.g. Vercel Cron or Supabase `pg_cron`): auto-submit, live ranks, reminders, coupon expiry |
 | Payments | Razorpay (UPI, cards, net banking), server orders + webhook |
 | SMS / WhatsApp | MSG91, Gupshup or the WhatsApp Business API (templates need approval) |
 | Formulas | KaTeX |
@@ -345,6 +345,8 @@ Fits the existing Studyverse Firebase data and a small team. Equivalent tools ar
 ## 6. Data model
 
 All documents also have `createdAt`, `updatedAt`, `createdBy`.
+
+> **Built so far (Nov 2026):** accounts live in PostgreSQL as the Prisma models `User` (id, name, email, password hash, role, exam, phone, grade, targetYear, state, city, emailVerifiedAt, isActive, lastLoginAt) and `Otp` (email + purpose, hashed code, attempts, expiry). Field names differ from the sketch below: `class` → `grade`, `examYear` → `targetYear`. The rest of this model is still the plan; add it as Prisma tables.
 
 ```text
 users/{uid}
@@ -434,6 +436,19 @@ auditLog/{id}                       adminUid, action, target, before, after, at
 ## 7. API endpoints
 
 All require auth unless noted. Admin endpoints check roles.
+
+**Auth (built: `backend/README.md`, mounted at `/api/auth`)**
+
+| Method | Path | Purpose |
+|---|---|---|
+| POST | `/signup/send-otp` | Email a 6-digit code (409 if the email is taken) |
+| POST | `/signup/verify-otp` | Use up the code, returns a 30-minute `signupToken` |
+| POST | `/signup` | Create the account for the verified email, returns `{ token, user }` |
+| POST | `/login` | Email + password, returns `{ token, user }` |
+| GET | `/me` | The signed-in user (Bearer token) |
+| POST | `/forgot-password` | Email a reset code |
+| POST | `/verify-otp` | Check a reset code without using it up |
+| POST | `/reset-password` | Set a new password with the code, returns `{ token, user }` |
 
 **Public / student**
 
@@ -701,7 +716,7 @@ Estimate for **one experienced full-stack developer**. Two developers in paralle
 
 | # | Milestone | Done when | Time |
 |---|---|---|---|
-| 1 | Accounts + data + admin core | OTP/Google login, shared LMS account, profile, exams, tests, questions, admin login + roles, upload wizard saving real data | 2 weeks |
+| 1 | Accounts + data + admin core | Email + password login with email OTP *(done)*, profile, exams, tests, questions, admin login + roles, upload wizard saving real data | 2 weeks |
 | 2 | **Test engine** | Start/resume, server timer, autosave + offline queue, auto-submit job, scoring, result page with solutions, reports | 3 weeks |
 | 3 | Payments + series access | Quote/order, Razorpay, webhook, purchase grants access, invoices, success/failure pages, policy pages | 1.5 weeks |
 | 4 | Live tests | Registration, entry window, rank job, publish, rank list, reminders | 1 week |

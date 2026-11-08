@@ -129,14 +129,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .sidenav a.is-active { color: #FFFFFF; background: rgba(255, 255, 255, 0.08); font-weight: 600; }
 .sidenav a.is-active::before { content: ""; position: absolute; left: 0; top: 11px; bottom: 11px; width: 3px; border-radius: 0 3px 3px 0; background: var(--gold); }
 .sidebar-foot { margin-top: auto; padding-top: 24px; display: grid; gap: 12px; }
-.credits {
-  display: grid; gap: 2px; padding: 16px; border-radius: 12px; text-decoration: none;
-  background: rgba(255, 255, 255, 0.04); border: 1px solid var(--navy-line); transition: background-color 150ms ease;
-}
-.credits:hover { background: rgba(255, 255, 255, 0.08); text-decoration: none; }
-.credits-label { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--on-navy-muted); }
-.credits-value { font: 700 24px/1.2 var(--display); letter-spacing: -0.02em; color: var(--gold); font-variant-numeric: tabular-nums; }
-.credits-hint { font-size: 13px; color: var(--on-navy-muted); }
 .account { position: relative; }
 .account-btn {
   width: 100%; display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 12px;
@@ -396,8 +388,6 @@ a.tile:hover { text-decoration: none; box-shadow: var(--shadow-md); border-color
 .rail-card h2 { font-size: 19px; font-weight: 700; letter-spacing: -0.015em; line-height: 1.3; }
 .rail-text { font-size: 14.5px; line-height: 1.6; color: var(--muted); }
 .rail-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
-.rail-figure { font: 700 22px/1 var(--display); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; color: var(--ink); white-space: nowrap; }
-.rail-figure small { font: 500 13px/1 var(--body); color: var(--muted); margin-left: 6px; letter-spacing: 0; }
 .quota { display: grid; gap: 8px; }
 .quota-row { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; color: var(--ink-2); }
 .quota-row b { font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
@@ -409,10 +399,6 @@ a.tile:hover { text-decoration: none; box-shadow: var(--shadow-md); border-color
 .req-top .meta { font-size: 13px; }
 .requests p { font-size: 14.5px; line-height: 1.45; color: var(--ink); }
 .requests .text-link { font-size: 13.5px; }
-.code { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: auto auto; column-gap: 12px; row-gap: 4px; align-items: center; padding: 14px 14px 14px 18px; border-radius: 12px; border: 1px dashed var(--field); background: var(--soft); }
-.code-label { grid-column: 1; font-size: 11.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
-.code code { grid-column: 1; font: 700 20px/1.1 var(--display); letter-spacing: 0.12em; color: var(--ink); overflow: hidden; text-overflow: ellipsis; }
-.code .btn { grid-column: 2; grid-row: 1 / 3; }
 .teacher-card { background: linear-gradient(180deg, var(--card), var(--card)); }
 .teacher-card .eyebrow { color: var(--gold-ink); }
 .teacher-card h2 { margin-top: -8px; }

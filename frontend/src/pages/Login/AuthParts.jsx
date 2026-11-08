@@ -9,6 +9,31 @@ import { cleanPhone, prettyPhone } from './otp.js'
   same in Login.css and Signup.css).
 */
 
+/* Password field with a show/hide eye button. Takes the same props as an <input>. */
+export function PasswordInput({ id, disabled, className = 'input', ...props }) {
+  const [shown, setShown] = useState(false)
+  return (
+    <div className="pw">
+      <input {...props} id={id} className={className} type={shown ? 'text' : 'password'} disabled={disabled} autoCapitalize="off" spellCheck="false" />
+      <button
+        type="button"
+        className="pw-toggle"
+        aria-label={shown ? 'Hide password' : 'Show password'}
+        aria-pressed={shown}
+        aria-controls={id}
+        disabled={disabled}
+        onClick={() => setShown((v) => !v)}
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" />
+          <circle cx="12" cy="12" r="3" />
+          {shown ? <path d="M3 3l18 18" /> : null}
+        </svg>
+      </button>
+    </div>
+  )
+}
+
 export function PhoneField({ id, value, onChange, invalid, describedBy, autoFocus, disabled }) {
   return (
     <div className={'phone' + (invalid ? ' is-invalid' : '')}>
@@ -99,7 +124,7 @@ export function BrandLogo({ height = 40 }) {
 const STATS = [
   ['11', 'tests per series, from part syllabus to the full exam'],
   ['3', 'exams: NEET, JEE Main and JEE Advanced'],
-  ['1', 'account for Testverse and Studyverse courses'],
+  ['Free', 'all-India live tests, each with a real rank'],
 ]
 
 /* Navy brand column of the auth screens. */

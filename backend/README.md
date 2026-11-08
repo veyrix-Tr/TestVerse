@@ -42,3 +42,24 @@ Validation errors include a `field` key naming the input to highlight.
 OTP rules: codes last 10 minutes, a new one can be requested every 30 seconds,
 only a SHA-256 hash is stored, and 5 wrong guesses discard the code.
 Protect other routes with `requireAuth` from `middleware/auth.js`.
+
+Every `user` in these responses carries `subscription`: `null`, or
+`{ status: "pending" | "active", batch: { id, name, exam, grade, price }, activatedAt }`.
+
+## Batches & subscription — `/api`
+
+A batch is one exam + class (e.g. `11th JEE`); the six batches are seeded by the
+`add_batches_subscriptions` migration. A student buys **one** batch, once, and it is
+always the batch matching the exam and class they gave at sign-up
+(`jee-main`/`jee-advanced` → `jee`).
+
+| Method | Path | Body | Result |
+| --- | --- | --- | --- |
+| GET | `/batches` | — (public) | `{ batches }` on sale, in display order |
+| GET | `/subscription` | — (Bearer token) | `{ subscription, batch }`: the purchase (or null) and the batch the student's exam + class put them in (or null) |
+| POST | `/subscription` | — (Bearer token) | Starts the purchase of that batch. 409 if the student already has an active batch |
+
+Payments aren't wired in yet. With `MOCK_PAYMENTS=true` (outside production)
+the purchase is activated at once (201). Otherwise it stays `pending` and the
+call returns 503 "Online payment isn't available yet"; Cashfree will replace
+that branch in `controllers/subscriptionController.js`.

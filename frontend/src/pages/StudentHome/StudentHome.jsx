@@ -88,14 +88,6 @@ export default function StudentHome() {
     toast(liveState(t) === 'open' ? 'Registered. Opening the test…' : 'Registered for ' + t.title + '. We’ll remind you before it starts.')
   }
 
-  function copyCode() {
-    const link = 'https://testverse.in/?ref=' + me.code
-    ;(navigator.clipboard ? navigator.clipboard.writeText(link) : Promise.reject()).then(
-      () => toast('Referral link copied'),
-      () => toast('Your link: ' + link),
-    )
-  }
-
   function sendVideo({ subject, chapter, note }) {
     setModes((m) => ({ ...m, [mode]: { ...m[mode], videosUsed: m[mode].videosUsed + 1 } }))
     setRequests((r) => [{ text: (chapter.trim() || 'Your question') + (note.trim() ? ': ' + note.trim() : ''), subject, status: 'new', when: new Date().toISOString() }, ...r])
@@ -158,8 +150,8 @@ export default function StudentHome() {
               ) : null}
             </div>
 
-            <aside className="rail" aria-label="Video solutions, referrals and sharing">
-              <SideCards me={me} requests={requests} videoLeft={videoLeft} onOpenVideo={() => setVideoOpen(true)} onCopyCode={copyCode} />
+            <aside className="rail" aria-label="Video solutions and sharing">
+              <SideCards me={me} requests={requests} videoLeft={videoLeft} onOpenVideo={() => setVideoOpen(true)} />
             </aside>
           </main>
 

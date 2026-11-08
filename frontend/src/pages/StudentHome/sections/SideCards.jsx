@@ -1,5 +1,5 @@
 import { EXAM, SETTINGS } from '../../../data/studentDemo.js'
-import { fmt, rupee } from '../../../lib/format.js'
+import { fmt } from '../../../lib/format.js'
 
 const REQ_STATUS = {
   new: ['status-blue', 'Sent'],
@@ -8,12 +8,9 @@ const REQ_STATUS = {
   declined: ['status-red', 'Declined'],
 }
 
-/* Right rail: video solutions, refer & earn, share with parent, courses. */
-export default function SideCards({ me, requests, videoLeft, onOpenVideo, onCopyCode }) {
+/* Right rail: video solutions, share with parent, courses. */
+export default function SideCards({ me, requests, videoLeft, onOpenVideo }) {
   const limit = me.course ? SETTINGS.videoLimit.course : SETTINGS.videoLimit.direct
-  const waRefer =
-    'https://wa.me/?text=' +
-    encodeURIComponent('I’m preparing with Testverse by Studyverse. Use my code ' + me.code + ' to get ' + rupee(SETTINGS.referral.friendDiscount) + ' off the test series: https://testverse.in/?ref=' + me.code)
 
   return (
     <>
@@ -60,35 +57,6 @@ export default function SideCards({ me, requests, videoLeft, onOpenVideo, onCopy
         <a className="text-link" href={SETTINGS.youtube} target="_blank" rel="noopener">
           Browse our video library on YouTube
         </a>
-      </section>
-
-      <section className="card rail-card" id="refer" aria-labelledby="refer-title">
-        <div className="rail-head">
-          <h2 id="refer-title">Refer &amp; earn</h2>
-          <span className="rail-figure">
-            {rupee(me.credits)}
-            <small>credits</small>
-          </span>
-        </div>
-        {me.code ? (
-          <>
-            <p className="rail-text">
-              Friends get {rupee(SETTINGS.referral.friendDiscount)} off with your code. You get {rupee(SETTINGS.referral.referrerCredit)} in credits when they buy.
-            </p>
-            <div className="code">
-              <span className="code-label">Your code</span>
-              <code>{me.code}</code>
-              <button className="btn btn-outline btn-sm" type="button" onClick={onCopyCode}>
-                Copy link
-              </button>
-            </div>
-            <a className="btn btn-outline btn-block btn-wa" target="_blank" rel="noopener" href={waRefer}>
-              Share on WhatsApp
-            </a>
-          </>
-        ) : (
-          <p className="rail-text">Buy a test series to get your own referral code and start earning credits.</p>
-        )}
       </section>
 
       {me.bought ? (

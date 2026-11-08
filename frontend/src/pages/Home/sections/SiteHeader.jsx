@@ -6,7 +6,7 @@ const LINKS = [
   ['#plan', 'Test plan'],
   ['#cbt', 'CBT screen'],
   ['#analysis', 'Analysis'],
-  ['#refer', 'Refer & earn'],
+  ['#parents', 'For parents'],
   ['#faq', 'FAQ'],
 ]
 

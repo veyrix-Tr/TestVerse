@@ -38,7 +38,7 @@ export function greet() {
   return h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening'
 }
 
-/* Copy to clipboard with a graceful fallback (used for referral links). */
+/* Copy to clipboard with a graceful fallback. */
 export function copyText(text) {
   return navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()
 }

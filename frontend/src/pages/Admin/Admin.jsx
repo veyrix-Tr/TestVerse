@@ -78,9 +78,6 @@ export default function Admin() {
               Video requests <span className="count" data-count="requests"></span>
             </button>
             <span className="nav-label">Growth</span>
-            <button type="button" data-view="offers">
-              Coupons &amp; referrals
-            </button>
             <button type="button" data-view="website">
               Website info
             </button>

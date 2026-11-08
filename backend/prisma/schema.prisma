@@ -28,6 +28,44 @@ model User {
   lastLoginAt     DateTime?
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
+
+  subscription    Subscription?
+}
+
+// A plan a student buys: one exam + class, e.g. "11th JEE". Tests are later
+// given to batches, so a student only sees the tests of the batch they bought.
+model Batch {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  exam      String   // "jee" | "neet"
+  grade     String   // "Class 11" | "Class 12" | "Dropper / repeater"
+  price     Int?     // in rupees; null until pricing is decided
+  isActive  Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  subscriptions Subscription[]
+
+  @@unique([exam, grade])
+}
+
+// One-time purchase of a batch. A student can hold only one (userId is unique).
+// "pending" until the payment is confirmed, then "active".
+model Subscription {
+  id          String    @id @default(cuid())
+  userId      String    @unique
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  batchId     String
+  batch       Batch     @relation(fields: [batchId], references: [id])
+  status      String    @default("pending") // "pending" | "active"
+  amount      Int?      // rupees charged, copied from the batch at purchase time
+  paymentRef  String?   // gateway order/payment id (Cashfree), once payments exist
+  activatedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([batchId])
 }
 
 // One live OTP per (email, purpose). Only a SHA-256 hash of the code is kept,
