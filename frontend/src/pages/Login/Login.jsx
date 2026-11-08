@@ -48,7 +48,8 @@ export default function Login() {
 
   function finish(session) {
     saveSession(session)
-    navigate(nextPath(), { replace: true, viewTransition: true })
+    // Admins go to the admin console; students to their dashboard (or ?next=)
+    navigate(nextPath(session.user.role === 'admin' ? '/admin' : '/student'), { replace: true, viewTransition: true })
   }
 
   function logIn(e) {

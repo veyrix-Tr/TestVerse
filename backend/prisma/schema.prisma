@@ -30,6 +30,8 @@ model User {
   updatedAt       DateTime  @updatedAt
 
   subscription    Subscription?
+  testsCreated    Test[]
+  attempts        Attempt[]
 }
 
 // A plan a student buys: one exam + class, e.g. "11th JEE". Tests are later
@@ -80,4 +82,60 @@ model Otp {
   createdAt DateTime @default(now())
 
   @@unique([email, purpose])
+}
+
+// A test an admin builds from a JSON question paper (docs/test-format.md).
+// `paper` is the checked, normalised paper including answers and solutions;
+// students only ever receive it without them until they submit.
+// Later: a TestBatch table will say which batches may attempt it.
+model Test {
+  id            String    @id @default(cuid())
+  title         String
+  subject       String    // e.g. "Physics" or "Physics, Chemistry, Maths"
+  exam          String?   // "jee" | "neet" | null
+  durationMin   Int
+  instructions  String    @default("")
+  marking       Json      // default marks per question type
+  languages     String[]  @default(["en"])
+  paper         Json?     // null while a draft has no paper yet
+  source        Json?     // the JSON exactly as the admin gave it, for editing
+  questionCount Int       @default(0)
+  totalMarks    Float     @default(0)
+  status        String    @default("draft") // "draft" | "published"
+  opensAt       DateTime? // students may start from…
+  closesAt      DateTime? // …until (both optional)
+  createdById   String?
+  createdBy     User?     @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  attempts      Attempt[]
+
+  @@index([status])
+}
+
+// One student's attempt at one test (one attempt per test for now).
+// The clock is the server's: deadline = startedAt + test duration.
+model Attempt {
+  id            String    @id @default(cuid())
+  testId        String
+  test          Test      @relation(fields: [testId], references: [id], onDelete: Cascade)
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  startedAt     DateTime  @default(now())
+  deadline      DateTime
+  responses     Json      @default("{}") // { [questionId]: { answer, marked, visited, timeMs } }
+  submittedAt   DateTime?
+  autoSubmitted Boolean   @default(false)
+  score         Float?
+  maxScore      Float?
+  correct       Int?
+  wrong         Int?
+  partial       Int?
+  skipped       Int?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@unique([testId, userId])
+  @@index([userId])
 }

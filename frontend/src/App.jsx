@@ -29,22 +29,32 @@ async function requireSession({ request }) {
   return redirect('/login?next=' + encodeURIComponent(pathname + search))
 }
 
-/* Signed in AND holding an active batch, else on to /subscribe. */
+/* Signed in AND holding an active batch, else on to /subscribe. Admins don't
+   buy batches, so they go to their console. */
 async function requireSubscription(args) {
   const user = await checkSession()
   if (!user) return requireSession(args)
+  if (user.role === 'admin') return redirect('/admin')
   return user.subscription?.status === 'active' ? null : redirect('/subscribe')
 }
 
-/* The batch picker is for signed-in students who don't have a batch yet. */
+/* The batch page is for signed-in students who don't have a batch yet. */
 async function requireNoSubscription(args) {
   const user = await checkSession()
   if (!user) return requireSession(args)
+  if (user.role === 'admin') return redirect('/admin')
   return user.subscription?.status === 'active' ? redirect('/student') : null
 }
 
-/* Test reads its query string once, so a <Link> from /test?test=P4 to
-   /test?test=JA1 must remount it (and flush the old attempt on unmount). */
+/* Admin accounts only (the server checks the role again on every admin API call). */
+async function requireAdmin(args) {
+  const user = await checkSession()
+  if (!user) return requireSession(args)
+  return user.role === 'admin' ? null : redirect('/student')
+}
+
+/* Test reads its query string once, so a <Link> from /test?test=a to
+   /test?test=b (or to &view=result) must remount it (and flush the old attempt on unmount). */
 const testPage = {
   lazy: () =>
     import('./pages/Test/Test.jsx').then(({ default: Test }) => ({
@@ -63,8 +73,8 @@ const router = createBrowserRouter([
   { path: '/subscribe', loader: requireNoSubscription, ...page(() => import('./pages/Subscribe/Subscribe.jsx')) },
   { path: '/checkout', element: <Navigate to="/subscribe" replace /> },
   { path: '/student', loader: requireSubscription, ...page(() => import('./pages/StudentHome/StudentHome.jsx')) },
-  { path: '/test', ...testPage },
-  { path: '/admin', ...page(() => import('./pages/Admin/Admin.jsx')) },
+  { path: '/test', loader: requireSession, ...testPage },
+  { path: '/admin', loader: requireAdmin, ...page(() => import('./pages/Admin/Admin.jsx')) },
   { path: '*', element: <Navigate to="/" replace /> },
 ])
 

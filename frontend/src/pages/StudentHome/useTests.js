@@ -1,0 +1,87 @@
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { api } from '../../lib/api.js'
+import { getToken } from '../../lib/session.js'
+
+/*
+  The signed-in student's published tests (GET /api/tests) with their status
+  and score. `offset` is the server clock minus this device's clock, so
+  countdowns agree with the server. The list reloads when the tab comes back
+  into view and when a countdown crosses a boundary (a test opens or closes,
+  or an attempt's time runs out).
+*/
+export function useTests() {
+  const [state, setState] = useState({ status: 'loading', tests: [], offset: 0, error: '' })
+  const lastLoad = useRef(0)
+
+  const load = useCallback(async (quiet) => {
+    lastLoad.current = Date.now()
+    if (!quiet) setState((s) => ({ ...s, status: s.tests.length ? s.status : 'loading', error: '' }))
+    try {
+      const d = await api('/tests', { token: getToken() })
+      const t = Date.parse(d.serverNow)
+      setState({ status: 'ready', tests: d.tests || [], offset: Number.isFinite(t) ? t - Date.now() : 0, error: '' })
+    } catch (e) {
+      setState((s) => (quiet && s.status === 'ready' ? s : { ...s, status: 'error', error: e.message }))
+    }
+  }, [])
+
+  useEffect(() => {
+    // state starts as 'loading'; fetch outside the effect's synchronous body
+    const first = setTimeout(() => load(true), 0)
+    function onVis() {
+      if (!document.hidden && Date.now() - lastLoad.current > 5000) load(true)
+    }
+    document.addEventListener('visibilitychange', onVis)
+    return () => {
+      clearTimeout(first)
+      document.removeEventListener('visibilitychange', onVis)
+    }
+  }, [load])
+
+  /* Reload (at most every 10 s) when the list is out of date. */
+  const refresh = useCallback(() => {
+    if (Date.now() - lastLoad.current > 10000) load(true)
+  }, [load])
+
+  return { ...state, reload: load, refresh }
+}
+
+/* The status right now, on the server's clock. `stale` means the server would
+   say something different, so the list should be reloaded. */
+export function statusNow(t, now) {
+  const at = (iso) => (iso ? Date.parse(iso) : NaN)
+  if (t.status === 'upcoming' && now >= at(t.opensAt)) return { status: 'open', stale: true }
+  if (t.status === 'open' && now >= at(t.closesAt)) return { status: 'closed', stale: true }
+  if (t.status === 'in-progress' && t.attempt && now >= at(t.attempt.deadline)) return { status: 'in-progress', stale: true }
+  return { status: t.status, stale: false }
+}
+
+/* Groups in the order the dashboard shows them. */
+export const GROUPS = [
+  { key: 'in-progress', title: 'In progress', desc: 'The clock is running. Your answers are saved.' },
+  { key: 'open', title: 'Available now', desc: 'Start any time before it closes.' },
+  { key: 'upcoming', title: 'Upcoming', desc: 'You can read the instructions now and start once it opens.' },
+  { key: 'done', title: 'Completed', desc: 'Open a result for your score, solutions and analysis.' },
+  { key: 'closed', title: 'Closed', desc: 'These closed before you started them.' },
+]
+
+const ts = (iso) => (iso ? Date.parse(iso) : 0)
+
+export function groupTests(tests, now) {
+  const by = Object.fromEntries(GROUPS.map((g) => [g.key, []]))
+  for (const t of tests) {
+    const s = statusNow(t, now).status
+    if (by[s]) by[s].push({ ...t, status: s })
+  }
+  by['in-progress'].sort((a, b) => ts(a.attempt.deadline) - ts(b.attempt.deadline))
+  by.open.sort((a, b) => (ts(a.closesAt) || Infinity) - (ts(b.closesAt) || Infinity))
+  by.upcoming.sort((a, b) => ts(a.opensAt) - ts(b.opensAt))
+  by.done.sort((a, b) => ts(b.attempt.submittedAt) - ts(a.attempt.submittedAt))
+  by.closed.sort((a, b) => ts(b.closesAt) - ts(a.closesAt))
+  return by
+}
+
+/* The one test the hero should show: in progress, else available, else the next upcoming. */
+export function heroTest(groups) {
+  return groups['in-progress'][0] || groups.open[0] || groups.upcoming[0] || null
+}

@@ -1,11 +1,22 @@
 import { useState } from 'react'
-import { hms } from '../../../lib/format.js'
-import { Q_TYPE_LABELS } from '../data/papers.js'
 import { Link } from 'react-router-dom'
+import { fmt, hms, pad } from '../../../lib/format.js'
+import { useCountdown } from '../../../lib/hooks.js'
+import { Q_TYPE_LABELS } from '../data/papers.js'
 
-function timeLeftOf(a) {
-  return a.startedAt + a.durationMs - Date.now()
-}
+const mins = (n) => n + (n === 1 ? ' minute' : ' minutes')
+
+const HOW_IT_WORKS = [
+  <>
+    The timer starts when you press Start and <b>keeps running even if you close the app</b>. The test submits automatically when time is up.
+  </>,
+  <>Your answers are saved automatically. If your internet or phone stops, log in again and continue from where you left off.</>,
+  <>
+    Use <b>Save &amp; next</b> to save an answer. <b>Mark for review &amp; next</b> flags a question to come back to. A marked question that has an answer is still evaluated.
+  </>,
+  <>For integer and numerical questions, type the number or use the on-screen keypad.</>,
+  <>Switching to other apps or tabs is recorded.</>,
+]
 
 const LEGEND = [
   ['nv', '1', 'Not visited', 'You have not opened it yet'],
@@ -21,9 +32,17 @@ const LEGEND = [
   Layout: navy hero with the paper facts, then the reading column on the left
   and a sticky "ready to start" panel on the right.
 */
-export default function InstructionsView({ paper, flat, attempt, lang, setLang, onStart, online }) {
+export default function InstructionsView({ paper, flat, attempt, left, lang, setLang, onStart, starting, online, blocked, offset }) {
   const resuming = !!(attempt && !attempt.submittedAt)
   const [agree, setAgree] = useState(resuming)
+  // Opening time on this device's clock (the server's clock is `offset` ahead)
+  const opensLocal = blocked && blocked.opensAt ? new Date(Date.parse(blocked.opensAt) - (offset || 0)).toISOString() : null
+  const cd = useCountdown(opensLocal)
+  const waiting = !!opensLocal && !cd.done
+  const teacherRules = paper.instructions
+    .split('\n')
+    .map((l) => l.replace(/^\s*(?:[-*•]|\d+[.)])\s*/, '').trim())
+    .filter(Boolean)
 
   // One row per distinct marking scheme, in first-appearance order.
   const markRows = new Map()
@@ -60,7 +79,10 @@ export default function InstructionsView({ paper, flat, attempt, lang, setLang, 
           <div className="hero-copy">
             <span className="eyebrow on-navy">{paper.exam} · Instructions</span>
             <h1>{paper.title}</h1>
-            {paper.note ? <p>{paper.note}</p> : null}
+            <p>
+              {paper.subject}
+              {paper.closesAt ? ` · Open until ${fmt(paper.closesAt)}` : ''}
+            </p>
             <dl className="facts">
               <div>
                 <dt>Questions</dt>
@@ -90,7 +112,7 @@ export default function InstructionsView({ paper, flat, attempt, lang, setLang, 
         <div className="instr-main">
           {resuming ? (
             <div className="notice n-warn">
-              <b>You have a test in progress.</b> Your answers are saved. The timer kept running while you were away, so you have <b>{hms(timeLeftOf(attempt))}</b> left.
+              <b>You have a test in progress.</b> Your answers are saved. The timer kept running while you were away, so you have <b>{hms(left)}</b> left.
             </div>
           ) : null}
 
@@ -168,21 +190,29 @@ export default function InstructionsView({ paper, flat, attempt, lang, setLang, 
             </section>
           </div>
 
+          {teacherRules.length ? (
+            <section className="block" id="teacher-rules">
+              <div className="block-head">
+                <h2>Instructions</h2>
+                <p>From your teacher, for this test.</p>
+              </div>
+              <ol className="rules">
+                {teacherRules.map((r, i) => (
+                  <li key={i}>{r}</li>
+                ))}
+              </ol>
+            </section>
+          ) : null}
+
           <section className="block">
             <div className="block-head">
-              <h2>Instructions</h2>
+              <h2>{teacherRules.length ? 'How the exam screen works' : 'Instructions'}</h2>
               <p>Read these once. They are the same rules as the real exam.</p>
             </div>
             <ol className="rules">
-              <li>
-                The timer starts when you press Start and <b>keeps running even if you close the app</b>. The test submits automatically when time is up.
-              </li>
-              <li>Your answers are saved automatically. If your internet or phone stops, log in again and continue from where you left off.</li>
-              <li>
-                Use <b>Save &amp; next</b> to save an answer. <b>Mark for review &amp; next</b> flags a question to come back to. A marked question that has an answer is still evaluated.
-              </li>
-              <li>For integer and numerical questions, type the number or use the on-screen keypad.</li>
-              <li>Switching to other apps or tabs is recorded.</li>
+              {HOW_IT_WORKS.map((r, i) => (
+                <li key={i}>{r}</li>
+              ))}
             </ol>
           </section>
         </div>
@@ -190,9 +220,34 @@ export default function InstructionsView({ paper, flat, attempt, lang, setLang, 
         <aside className="ready" aria-label="Start the test">
           <div className="ready-card">
             <div className="ready-head">
-              <h2>{resuming ? 'Pick up where you left off' : 'Ready when you are'}</h2>
-              <p>{resuming ? `${hms(timeLeftOf(attempt))} left on the clock.` : `${paper.durationMin} minutes, ${totalQ} questions. The clock starts on Start.`}</p>
+              <h2>{resuming ? 'Pick up where you left off' : waiting ? 'Not open yet' : 'Ready when you are'}</h2>
+              <p>
+                {resuming
+                  ? `${hms(left)} left on the clock.`
+                  : waiting
+                    ? `This test opens on ${fmt(blocked.opensAt)}.`
+                    : `${mins(paper.durationMin)}, ${totalQ} questions. The clock starts on Start.`}
+              </p>
             </div>
+
+            {waiting ? (
+              <div className="opens-in" role="timer" aria-label="Time until the test opens">
+                <span className="field-label">Opens in</span>
+                <div className="opens-segs">
+                  {[
+                    [cd.d, 'days'],
+                    [pad(cd.h), 'hrs'],
+                    [pad(cd.m), 'min'],
+                    [pad(cd.s), 'sec'],
+                  ].map(([v, l]) => (
+                    <span key={l}>
+                      <b>{v}</b>
+                      <small>{l}</small>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ) : null}
 
             {paper.languages.length > 1 ? (
               <div className="ready-row">
@@ -237,14 +292,12 @@ export default function InstructionsView({ paper, flat, attempt, lang, setLang, 
               <span>I have read the instructions and will not use unfair means.</span>
             </label>
 
-            <button className="btn btn-primary btn-lg btn-block" type="button" id="start" disabled={!agree} onClick={onStart}>
-              {resuming ? 'Resume test' : 'Start test'}
+            <button className="btn btn-primary btn-lg btn-block" type="button" id="start" disabled={!agree || waiting || starting} onClick={onStart}>
+              {starting ? (resuming ? 'Resuming…' : 'Starting…') : waiting ? 'Opens ' + fmt(blocked.opensAt, { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }) : resuming ? 'Resume test' : 'Start test'}
             </button>
           </div>
 
-          <p className="demo-note">
-            Demo paper. Try <Link to="/test?test=JA1">the JEE Advanced demo</Link> for multiple-correct, integer and numerical questions.
-          </p>
+          {paper.closesAt && !resuming ? <p className="demo-note">Start before {fmt(paper.closesAt)}. You get the full {mins(paper.durationMin)} once you start.</p> : null}
         </aside>
       </div>
     </section>

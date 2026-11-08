@@ -23,4 +23,19 @@ const requireAuth = (req, res, next) => {
   }
 };
 
-module.exports = { requireAuth };
+// Use after requireAuth on admin-only routes. The role is re-read from the
+// database, so taking admin away works at once (not only when the token expires).
+const prisma = require('../lib/prisma');
+
+const requireAdmin = async (req, res, next) => {
+  try {
+    const user = await prisma.user.findUnique({ where: { id: req.user.id }, select: { role: true, isActive: true } });
+    if (!user || !user.isActive || user.role !== 'admin') return res.status(403).json({ error: 'Admins only' });
+    next();
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Something went wrong' });
+  }
+};
+
+module.exports = { requireAuth, requireAdmin };

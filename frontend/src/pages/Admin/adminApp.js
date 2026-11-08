@@ -11,6 +11,7 @@
 'use strict';
 
 var root = null;
+var onView = null; // Admin.jsx: told which view is showing
 var dlgForm = null,
   onSave = null;
 var dlgTest = null,
@@ -160,10 +161,11 @@ function go(view) {
   ui.view = VIEWS[view] ? view : 'dashboard';
   $$('.side [data-view]').forEach(function (b) { b.setAttribute('aria-current', b.dataset.view === ui.view ? 'page' : 'false'); });
   if (location.hash.slice(1) !== ui.view) { try { history.replaceState(null, '', '#' + ui.view); } catch { /* not allowed in some previews */ } }
+  if (onView) onView(ui.view);
   render();
 }
 function render() {
-  $('[data-count="tests"]').textContent = db.tests.length;
+  /* The Tests count comes from the real API (TestsAdmin.jsx sets it). */
   var openReq = db.requests.filter(function (r) { return r.status === 'new' || r.status === 'progress'; }).length;
   var rc = $('[data-count="requests"]'); rc.textContent = openReq; rc.hidden = !openReq;
   $('#view').innerHTML = VIEWS[ui.view]();
@@ -208,54 +210,11 @@ bind.dashboard = function () {
   bindUpload();
 };
 
-/* ---------- Tests ---------- */
-VIEWS.tests = function () {
-  var list = db.tests.filter(function (x) {
-    return (ui.testExam === 'all' || x.exam === ui.testExam) && (ui.testKind === 'all' || x.kind === ui.testKind);
-  });
-  return '<div class="head"><div><h1>Tests</h1><p>Every test paper: part, half, full syllabus and live.</p></div>' +
-    '<div class="actions"><button class="btn btn-primary" type="button" data-upload>Upload a test</button></div></div>' +
-    '<div class="filters">' + seg('exam', ['all'].concat(Object.keys(db.exams)), ui.testExam, examLabel) + seg('kind', ['all', 'part', 'half', 'full', 'live', 'assigned'], ui.testKind, function (k) { return k === 'all' ? 'All types' : KIND[k]; }) + '</div>' +
-    '<div class="table-wrap"><table><thead><tr><th>Test</th><th>Exam</th><th>Type</th><th>Given to</th><th>Length</th><th>Status</th><th><span class="sr">Actions</span></th></tr></thead><tbody>' +
-    (list.length ? list.map(function (x) {
-      return '<tr><td><b>' + esc(x.title) + '</b><span class="sub">' + esc(x.chapters) + '</span>' + (x.missing ? '<span class="pill p-warn">' + x.missing + ' answers missing</span>' : '') + '</td>' +
-        '<td>' + esc(examLabel(x.exam)) + '</td><td>' + KIND[x.kind] + (x.kind === 'live' ? '<span class="sub">' + when(x.start) + '</span>' : '') + (x.kind === 'assigned' && x.due ? '<span class="sub">Due ' + when(x.due) + '</span>' : '') + '</td>' +
-        '<td>' + esc(audienceText(x)) + (audienceCount(x) != null ? '<span class="sub">' + audienceCount(x) + ' student' + (audienceCount(x) === 1 ? '' : 's') + '</span>' : '') + '</td>' +
-        '<td>' + x.questions + ' questions<span class="sub">' + x.minutes + ' min</span></td><td>' + statusPill(x.status) + '</td>' +
-        '<td><div class="row-actions"><button class="btn btn-outline btn-sm" type="button" data-edit="' + esc(x.id) + '">Edit</button>' +
-        (x.status === 'draft' ? '<button class="btn btn-dark btn-sm" type="button" data-publish="' + esc(x.id) + '">' + (x.kind === 'live' ? 'Schedule' : 'Publish') + '</button>' : '<button class="btn btn-outline btn-sm" type="button" data-unpublish="' + esc(x.id) + '">Unpublish</button>') +
-        '<button class="btn btn-danger btn-sm" type="button" data-del="' + esc(x.id) + '" aria-label="Delete ' + esc(x.title) + '">Delete</button></div></td></tr>';
-    }).join('') : '<tr><td colspan="7" class="hint">No tests match these filters.</td></tr>') +
-    '</tbody></table></div>';
-  function seg(name, vals, cur, lab) {
-    return '<div class="seg" role="group" aria-label="Filter by ' + name + '">' + vals.map(function (v) { return '<button type="button" data-f-' + name + '="' + v + '" aria-pressed="' + (v === cur) + '">' + esc(lab(v)) + '</button>'; }).join('') + '</div>';
-  }
-};
-bind.tests = function () {
-  bindUpload();
-  $$('[data-f-exam]').forEach(function (b) { b.addEventListener('click', function () { ui.testExam = b.dataset.fExam; render(); }); });
-  $$('[data-f-kind]').forEach(function (b) { b.addEventListener('click', function () { ui.testKind = b.dataset.fKind; render(); }); });
-  $$('[data-edit]').forEach(function (b) { b.addEventListener('click', function () { openTestDialog(b.dataset.edit); }); });
-  $$('[data-publish]').forEach(function (b) { b.addEventListener('click', function () { setStatus(b.dataset.publish, true); }); });
-  $$('[data-unpublish]').forEach(function (b) { b.addEventListener('click', function () { setStatus(b.dataset.unpublish, false); }); });
-  $$('[data-del]').forEach(function (b) {
-    b.addEventListener('click', function () {
-      var x = find(b.dataset.del);
-      if (!confirm('Delete "' + x.title + '" (' + examLabel(x.exam) + ')? Students who already took it keep their results.')) return;
-      db.tests = db.tests.filter(function (y) { return y.id !== x.id; }); save(); render(); toast('Test deleted');
-    });
-  });
-};
+/* ---------- Tests ----------
+   Real, API-backed screen: Admin.jsx renders <TestsAdmin/> beside #view while
+   this view is active (see onView in mountAdmin), so #view stays empty here. */
+VIEWS.tests = function () { return ''; };
 function find(id) { return db.tests.filter(function (x) { return x.id === id; })[0]; }
-function setStatus(id, on) {
-  var x = find(id);
-  if (on) {
-    if (!x.file) { toast('Upload the test file first'); return; }
-    if (x.missing) { toast('Add the ' + x.missing + ' missing answers first'); return; }
-    x.status = x.kind === 'live' ? 'scheduled' : 'published';
-  } else x.status = 'draft';
-  save(); render(); toast(on ? (x.kind === 'live' ? 'Live test scheduled' : 'Test published') : 'Moved back to draft');
-}
 
 /* ---------- Live tests ---------- */
 VIEWS.live = function () {
@@ -331,31 +290,6 @@ bind.series = function () {
     var ex = db.exams[ui.seriesExam], price = Number($('#sr-price').value);
     if (!(price >= 0)) { toast('Enter a valid price'); return; }
     ex.price = price; ex.onSale = $('#sr-sale').checked; save(); render(); toast(ex.label + ' series saved');
-  });
-};
-
-/* ---------- Exams & patterns ---------- */
-VIEWS.exams = function () {
-  return '<div class="head"><div><h1>Exams &amp; patterns</h1><p>Used as defaults for new tests, on the website and in the CBT screen. Check against the official notice each year.</p></div></div>' +
-    '<div class="grid g3">' + Object.keys(db.exams).map(function (k) {
-      var e = db.exams[k];
-      return '<section class="card"><h2>' + esc(e.label) + '</h2><div class="stack">' +
-        num(k, 'questions', 'Questions (full paper)', e.questions) + num(k, 'minutes', 'Duration (minutes)', e.minutes) + num(k, 'marks', 'Total marks', e.marks) +
-        '<div class="grid g2 tight">' + num(k, 'correct', 'Marks for correct', e.correct) + num(k, 'wrong', 'Marks for wrong', e.wrong) + '</div>' +
-        field('Subjects / sections', '<input class="input" data-ek="' + k + '" data-f="sections" value="' + esc(e.sections) + '">') +
-        '<div class="grid g2 tight">' + num(k, 'partQuestions', 'Part test questions', e.partQuestions) + num(k, 'partMinutes', 'Part test minutes', e.partMinutes) + '</div>' +
-        '<button class="btn btn-primary" type="button" data-save-exam="' + k + '">Save ' + esc(e.label) + '</button></div></section>';
-    }).join('') + '</div>' +
-    '<p class="hint foot-note">JEE Advanced changes its sections and partial marking most years, so tests can override these defaults.</p>';
-  function num(k, f, l, v) { return field(l, '<input class="input" type="number" data-ek="' + k + '" data-f="' + f + '" value="' + v + '">'); }
-};
-bind.exams = function () {
-  $$('[data-save-exam]').forEach(function (b) {
-    b.addEventListener('click', function () {
-      var k = b.dataset.saveExam, e = db.exams[k];
-      $$('[data-ek="' + k + '"]').forEach(function (inp) { e[inp.dataset.f] = inp.type === 'number' ? Number(inp.value) : inp.value.trim(); });
-      save(); toast(e.label + ' pattern saved');
-    });
   });
 };
 
@@ -770,8 +704,9 @@ function once(el, fn) {
   el.__tvBound = true;
   el.addEventListener('click', fn);
 }
-export default function mountAdmin(el) {
+export default function mountAdmin(el, opts) {
   root = el || document.body;
+  onView = (opts && opts.onView) || null;
   dlgForm = $('#dlg-form');
   dlgTest = $('#dlg-test');
 

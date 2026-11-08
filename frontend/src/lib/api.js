@@ -6,18 +6,20 @@
 const BASE = import.meta.env.VITE_API_URL || ''
 
 export class ApiError extends Error {
-  constructor(message, status, field) {
+  constructor(message, status, field, data) {
     super(message)
     this.status = status
     this.field = field // form field the server blamed, when it names one
+    this.data = data || {} // the whole error reply (e.g. a paper's `errors` list)
   }
 }
 
-export async function api(path, { body, token } = {}) {
+/* GET without a body, POST with one; pass `method` for PUT / DELETE. */
+export async function api(path, { body, token, method } = {}) {
   let res
   try {
     res = await fetch(BASE + '/api' + path, {
-      method: body ? 'POST' : 'GET',
+      method: method || (body ? 'POST' : 'GET'),
       headers: {
         ...(body ? { 'Content-Type': 'application/json' } : {}),
         ...(token ? { Authorization: 'Bearer ' + token } : {}),
@@ -28,6 +30,6 @@ export async function api(path, { body, token } = {}) {
     throw new ApiError("Can't reach Testverse right now. Check your connection and try again.", 0)
   }
   const data = await res.json().catch(() => ({}))
-  if (!res.ok) throw new ApiError(data.error || 'Something went wrong. Please try again.', res.status, data.field)
+  if (!res.ok) throw new ApiError(data.error || 'Something went wrong. Please try again.', res.status, data.field, data)
   return data
 }

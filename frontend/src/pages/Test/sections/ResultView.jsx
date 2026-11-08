@@ -16,6 +16,11 @@ function tx(o, lang) {
   return lang === 'hi' && o.hi ? o.hi : o.en
 }
 
+/* Only YouTube links are accepted by the server; check again before linking. */
+function videoUrl(v) {
+  return typeof v === 'string' && /^https:\/\/(www\.|m\.)?(youtube\.com|youtu\.be)\//.test(v) ? v : null
+}
+
 function answerText(q, a, lang) {
   if (!hasAnswer(q, a)) return 'Not answered'
   if (q.type === 'integer' || q.type === 'numerical') return String(a)
@@ -28,8 +33,11 @@ function answerText(q, a, lang) {
   design/test.html renderResult() + renderReview() — KPIs, section bars,
   "What to work on", chapter table, review list with filters.
 */
-export default function ResultView({ paper, flat, attempt, reviewFilter, setReviewFilter, onReport, onVideo }) {
+export default function ResultView({ paper, flat, attempt, reviewFilter, setReviewFilter }) {
   const R = computeResult(flat, attempt)
+  // The server's stored score is the headline; computeResult (same rules) drives the breakdown.
+  const total = Number.isFinite(attempt.score) ? attempt.score : R.total
+  const max = Number.isFinite(attempt.maxScore) && attempt.maxScore > 0 ? attempt.maxScore : R.max
   const totalQ = flat.length
   const attempted = R.correct + R.wrong + R.partial
   const acc = attempted ? Math.round(((R.correct + R.partial * 0.5) / attempted) * 100) : 0
@@ -51,7 +59,7 @@ export default function ResultView({ paper, flat, attempt, reviewFilter, setRevi
   })
   const label = { correct: ['p-correct', 'Correct'], wrong: ['p-wrong', 'Wrong'], partial: ['p-partial', 'Partly correct'], skipped: ['p-skipped', 'Not answered'] }
 
-  const pct = R.max ? Math.max(0, Math.min(100, Math.round((R.total / R.max) * 100))) : 0
+  const pct = max ? Math.max(0, Math.min(100, Math.round((total / max) * 100))) : 0
   const usedPct = attempt.durationMs ? Math.min(100, Math.round((used / attempt.durationMs) * 100)) : 0
   const RING = 2 * Math.PI * 52
   const counts = {
@@ -108,14 +116,13 @@ export default function ResultView({ paper, flat, attempt, reviewFilter, setRevi
               Submitted{' '}
               {new Date(attempt.submittedAt).toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' })}
               {attempt.autoSubmitted ? ' (time ran out)' : ''}
-              {attempt.demo ? ' · sample attempt' : ''}
             </p>
           </div>
           <div className="res-score">
             <span>{verdict}</span>
-            <b>
-              {R.total}
-              <small> / {R.max}</small>
+            <b id="res-score">
+              {total}
+              <small> / {max}</small>
             </b>
             <em>marks scored</em>
           </div>
@@ -172,8 +179,6 @@ export default function ResultView({ paper, flat, attempt, reviewFilter, setRevi
             <small>of {paper.durationMin} min · {mmss(avg)} per question</small>
           </div>
         </div>
-
-        {paper.kind === 'live' ? <div className="notice n-info">Your all-India rank will be published at [time] once everyone has finished.</div> : null}
 
         <div className="analysis">
           <section className="block">
@@ -337,7 +342,7 @@ export default function ResultView({ paper, flat, attempt, reviewFilter, setRevi
                         {it.r && it.r.marked ? <span className="pill p-skipped">Marked</span> : null}
                       </div>
                       <span className="rq-meta">
-                        {it.f.sec} · {q.chapter} · {mmss(it.time)}
+                        {[it.f.sec, q.chapter, mmss(it.time)].filter(Boolean).join(' · ')}
                       </span>
                     </div>
                     <div className="rq-text">
@@ -377,20 +382,24 @@ export default function ResultView({ paper, flat, attempt, reviewFilter, setRevi
                         <MathText html={esc(correctText)} />
                       </div>
                     </div>
-                    <details className="sol" open={it.sc.status !== 'correct'}>
-                      <summary>Solution</summary>
-                      <div>
-                        <MathText html={esc(q.solution)} />
+                    {q.solution ? (
+                      <details className="sol" open={it.sc.status !== 'correct'}>
+                        <summary>Solution</summary>
+                        <div>
+                          <MathText html={esc(tx(q.solution, lang))} />
+                        </div>
+                      </details>
+                    ) : (
+                      <p className="sol-none">No written solution for this question.</p>
+                    )}
+                    {videoUrl(q.video) ? (
+                      <div className="rq-actions">
+                        <a className="btn btn-outline btn-sm" href={videoUrl(q.video)} target="_blank" rel="noopener noreferrer">
+                          Watch video solution
+                          <span className="sr"> for question {it.n} (opens YouTube in a new tab)</span>
+                        </a>
                       </div>
-                    </details>
-                    <div className="rq-actions">
-                      <button className="btn btn-ghost btn-sm" type="button" onClick={() => onVideo(it)}>
-                        Request video solution
-                      </button>
-                      <button className="btn btn-ghost btn-sm" type="button" onClick={() => onReport(it.n)}>
-                        Report a problem
-                      </button>
-                    </div>
+                    ) : null}
                   </article>
                 )
               })

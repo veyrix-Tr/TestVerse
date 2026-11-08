@@ -1,8 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import './Admin.css'
 import LogoSprite from '../../components/LogoSprite.jsx'
+import { useNavigate } from 'react-router-dom'
 import { usePageMeta } from '../../lib/hooks.js'
+import { clearSession, loadSession } from '../../lib/session.js'
 import mountAdmin from './adminApp.js'
+import TestsAdmin from './TestsAdmin.jsx'
+import { loadTestCount } from './testsApi.js'
 
 /*
   design/admin.html -> route "/admin"
@@ -11,15 +15,44 @@ import mountAdmin from './adminApp.js'
   up (sidebar, empty <main id="view">, the two dialogs). All content, routing
   (#dashboard, #tests, …) and every interaction are the design's own script,
   mounted by mountAdmin() below — see adminApp.js.
+
+  Exception: the "Tests" view is real and API-backed. adminApp reports the
+  current view through onView; while it is "tests", #view is hidden and the
+  React <TestsAdmin/> screen renders in its place.
 */
 export default function Admin() {
   usePageMeta({ title: 'Admin — Testverse by Studyverse' })
   const rootRef = useRef(null)
   const [menuOpen, setMenuOpen] = useState(false)
+  const navigate = useNavigate()
+  const [view, setView] = useState(null)
+  const [testCount, setTestCount] = useState(null)
+  const me = loadSession() // the route loader only lets admins in
+  const initials = (me?.name || 'Admin')
+    .split(/\s+/)
+    .map((w) => w[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase()
+
+  function logOut() {
+    clearSession()
+    navigate('/login', { replace: true })
+  }
 
   useEffect(() => {
-    mountAdmin(rootRef.current)
+    mountAdmin(rootRef.current, { onView: setView })
   }, [])
+
+  useEffect(() => {
+    let live = true
+    loadTestCount().then((n) => live && n != null && setTestCount(n))
+    return () => {
+      live = false
+    }
+  }, [])
+
+  const showTests = view === 'tests'
 
   return (
     <div className="tv-admin" ref={rootRef}>
@@ -59,16 +92,13 @@ export default function Admin() {
             </button>
             <span className="nav-label">Content</span>
             <button type="button" data-view="tests">
-              Tests <span className="count" data-count="tests"></span>
+              Tests <span className="count" data-count="tests">{testCount ?? ''}</span>
             </button>
             <button type="button" data-view="live">
               Live tests
             </button>
             <button type="button" data-view="series">
               Test series
-            </button>
-            <button type="button" data-view="exams">
-              Exams &amp; patterns
             </button>
             <span className="nav-label">Students</span>
             <button type="button" data-view="students">
@@ -85,20 +115,28 @@ export default function Admin() {
           <div className="side-foot">
             <div className="account">
               <span className="avatar" aria-hidden="true">
-                SV
+                {initials}
               </span>
               <div>
-                <b>Studyverse team</b>
-                <span>Administrator</span>
+                <b>{me?.name || 'Admin'}</b>
+                <span>{me?.email || 'Administrator'}</span>
               </div>
             </div>
+            <button type="button" className="logout" onClick={logOut}>
+              Log out
+            </button>
             <p>Demo: changes are saved in this browser only.</p>
             <button type="button" id="reset">
               Reset demo data
             </button>
           </div>
         </nav>
-        <main className="main" id="view" tabIndex={-1}></main>
+        <main className="main" id="view" tabIndex={-1} hidden={showTests}></main>
+        {showTests && (
+          <main className="main" id="tests-view">
+            <TestsAdmin onCount={setTestCount} />
+          </main>
+        )}
       </div>
 
       {/* Upload / edit test */}

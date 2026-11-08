@@ -1,21 +1,12 @@
 import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { EXAM } from '../../../data/studentDemo.js'
 import { usePopover } from '../usePopover.js'
 
 const NAV = [
   { id: 'top', label: 'Dashboard' },
-  { id: 'series', label: 'My test series' },
-  { id: 'live', label: 'Live tests' },
-  { id: 'results', label: 'Results' },
+  { id: 'tests', label: 'Your tests' },
   { id: 'videos', label: 'Video solutions' },
 ]
-
-function planLabel(me) {
-  if (me.course) return 'Studyverse course'
-  if (me.bought) return 'Test series'
-  return 'Free account'
-}
 
 function Logo({ height }) {
   return (
@@ -53,8 +44,6 @@ export default function Sidebar({ me, active, onNavigate, sheetOpen, setSheetOpe
     return undefined
   }, [sheetOpen, setSheetOpen])
 
-  const visible = NAV.filter((n) => n.id !== 'results' || me.bought)
-
   return (
     <>
       <div className="topbar">
@@ -80,7 +69,7 @@ export default function Sidebar({ me, active, onNavigate, sheetOpen, setSheetOpe
 
         <nav className="sidenav" aria-label="Main">
           <ul>
-            {visible.map((n) => {
+            {NAV.map((n) => {
               const isActive = active === n.id
               return (
                 <li key={n.id}>
@@ -101,14 +90,6 @@ export default function Sidebar({ me, active, onNavigate, sheetOpen, setSheetOpe
         <div className="sidebar-foot">
           <div className="account" ref={accountRef}>
             <div className="account-menu" id="account-menu" hidden={!accountOpen}>
-              <a href="#">My profile</a>
-              <a href="#">Orders &amp; invoices</a>
-              {me.bought ? (
-                <a href="#parent" onClick={() => setAccountOpen(false)}>
-                  Share progress with parent
-                </a>
-              ) : null}
-              <a href="#">Help &amp; contact</a>
               <button
                 type="button"
                 onClick={() => {
@@ -132,9 +113,7 @@ export default function Sidebar({ me, active, onNavigate, sheetOpen, setSheetOpe
               </span>
               <span className="account-text">
                 <b>{me.name}</b>
-                <span>
-                  {EXAM.label} {EXAM.year} · {planLabel(me)}
-                </span>
+                <span>{[me.examText, me.batch].filter(Boolean).join(' · ') || me.email}</span>
               </span>
             </button>
           </div>

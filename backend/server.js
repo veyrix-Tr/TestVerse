@@ -15,6 +15,9 @@ const allowedOrigins = process.env.FRONTEND_URL
   ? [process.env.FRONTEND_URL, 'http://localhost:5173', 'http://localhost:4173']
   : ['http://localhost:5173', 'http://localhost:4173'];
 app.use(cors({ origin: allowedOrigins }));
+// Question papers are big (180 questions, Hindi, solutions), so admin routes
+// get a larger limit. This must come before the general parser.
+app.use('/api/admin', express.json({ limit: '5mb' }));
 app.use(express.json({ limit: '100kb' }));
 
 // Routes
@@ -27,6 +30,12 @@ app.get('/', (req, res) => {
 
 const authRoutes = require('./routes/authRoutes');
 app.use('/api/auth', authRoutes);
+
+const adminTestRoutes = require('./routes/adminTestRoutes');
+app.use('/api/admin', adminTestRoutes);
+
+const testRoutes = require('./routes/testRoutes');
+app.use('/api/tests', testRoutes);
 
 const subscriptionRoutes = require('./routes/subscriptionRoutes');
 app.use('/api', subscriptionRoutes);

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { AR_OPTIONS, Q_TYPE_LABELS, STUDENT } from '../data/papers.js'
+import { AR_OPTIONS, Q_TYPE_LABELS } from '../data/papers.js'
 import { esc } from '../../../lib/esc.js'
 import MathText from '../../../lib/MathText.jsx'
 import { hms } from '../../../lib/format.js'
@@ -14,7 +14,7 @@ function letter(i) {
   timer), section tabs, question body for all 6 types, palette side sheet.
   All behaviour lives in Test.jsx and arrives through `api`.
 */
-export default function ExamView({ paper, flat, attempt, lang, setLang, curIndex, left, saveText, sideOpen, setSideOpen, tabNote, onFontUp, onFontDn, api }) {
+export default function ExamView({ paper, flat, attempt, candidate, lang, setLang, curIndex, left, save, sideOpen, setSideOpen, tabNote, onFontUp, onFontDn, api }) {
   const qbodyRef = useRef(null)
 
   // New question (or language) → scroll the question body back to the top,
@@ -119,11 +119,13 @@ export default function ExamView({ paper, flat, attempt, lang, setLang, curIndex
     return { name: s.name, si, total: list.length, done: k.an + k.am }
   })
   const answered = c.an + c.am
-  const initials = STUDENT.name
-    .split(' ')
+  const initials = candidate.name
+    .split(/\s+/)
+    .filter(Boolean)
     .map((w) => w[0])
     .slice(0, 2)
     .join('')
+    .toUpperCase()
 
   return (
     <section id="v-exam" className="exam">
@@ -137,14 +139,15 @@ export default function ExamView({ paper, flat, attempt, lang, setLang, curIndex
             <div className="cand">
               <b id="e-title">{paper.title}</b>
               <span id="e-cand">
-                {STUDENT.name} · {STUDENT.roll}
+                {candidate.name}
+                {candidate.id ? ' · ' + candidate.id : ''}
               </span>
             </div>
           </div>
           <div className="top-tools">
-            <span className={'save-state' + (saveText.indexOf('Offline') === 0 ? ' off' : '')} id="save-state" aria-live="polite">
+            <span className={'save-state' + (save.off ? ' off' : '')} id="save-state" aria-live="polite">
               <i></i>
-              <span>{saveText}</span>
+              <span>{save.text}</span>
             </span>
             {paper.languages.length > 1 ? (
               <div className="seg on-navy" id="lang-seg" role="group" aria-label="Question language">
@@ -251,8 +254,8 @@ export default function ExamView({ paper, flat, attempt, lang, setLang, curIndex
                 {initials}
               </span>
               <div>
-                <b>{STUDENT.name}</b>
-                <span>{STUDENT.roll}</span>
+                <b>{candidate.name}</b>
+                <span>{candidate.id}</span>
               </div>
               <div className="progress-num">
                 <b>{answered}</b>

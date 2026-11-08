@@ -1,63 +1,80 @@
-import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './StudentHome.css'
 import LogoSprite from '../../components/LogoSprite.jsx'
-import { ASSIGNED, LIVE, MODES, REQUESTS, SERIES, SETTINGS, liveState } from '../../data/studentDemo.js'
-import { fmt } from '../../lib/format.js'
 import { usePageMeta } from '../../lib/hooks.js'
 import { clearSession, loadSession } from '../../lib/session.js'
-import { useToast } from '../../lib/useToast.jsx'
-import SectionHead from './SectionHead.jsx'
-import { LiveHero, UpcomingLive } from './sections/LiveSection.jsx'
 import PageHeader from './sections/PageHeader.jsx'
-import PerformanceSection from './sections/PerformanceSection.jsx'
-import ResultsSection from './sections/ResultsSection.jsx'
-import SeriesSection from './sections/SeriesSection.jsx'
 import Sidebar from './sections/Sidebar.jsx'
 import SideCards from './sections/SideCards.jsx'
-import VideoDialog from './sections/VideoDialog.jsx'
+import TestsSection, { TestHero } from './sections/TestsSection.jsx'
+import { groupTests, heroTest, statusNow, useTests } from './useTests.js'
 
-const initialModes = Object.fromEntries(Object.entries(MODES).map(([k, v]) => [k, { ...v }]))
-const initialLive = LIVE.map((t) => ({ ...t }))
-const initialRequests = REQUESTS.map((r) => ({ ...r }))
-const TOTAL = SERIES.length
-const SPY = ['top', 'series', 'live', 'results']
+const SPY = ['top', 'tests']
+const EXAMS = { neet: 'NEET', 'jee-main': 'JEE Main', 'jee-advanced': 'JEE Advanced' }
 
-function pickLive(live) {
-  const open = live.find((t) => liveState(t) === 'open')
-  const next = live.filter((t) => liveState(t) === 'upcoming').sort((a, b) => new Date(a.start) - new Date(b.start))
-  const hero = open || next[0]
-  return { hero, rest: next.filter((t) => t !== hero) }
+/* The signed-in student as the dashboard shows them. */
+function meOf(user) {
+  const name = (user && user.name) || 'Student'
+  const exam = user && EXAMS[user.exam]
+  const sub = user && user.subscription && user.subscription.status === 'active' ? user.subscription : null
+  return {
+    name,
+    first: name.split(' ')[0],
+    email: (user && user.email) || '',
+    examText: exam ? exam + (user.targetYear ? ' ' + user.targetYear : '') : '',
+    batch: sub ? sub.batch.name : '',
+    subscription: sub,
+  }
+}
+
+/* Headline numbers, all from the real test list. */
+function statsOf(status, tests, groups) {
+  if (status !== 'ready') {
+    return [
+      { v: '—', label: 'Tests done' },
+      { v: '—', label: 'Available now' },
+      { v: '—', label: 'Average score' },
+      { v: '—', label: 'Last score' },
+    ]
+  }
+  const done = groups.done
+  const pcts = done.filter((t) => t.attempt.maxScore > 0).map((t) => (t.attempt.score / t.attempt.maxScore) * 100)
+  const last = done[0]
+  return [
+    { v: done.length, unit: '/ ' + tests.length, label: 'Tests done' },
+    { v: groups.open.length + groups['in-progress'].length, label: 'Available now' },
+    pcts.length ? { v: Math.round(pcts.reduce((a, b) => a + b, 0) / pcts.length), unit: '%', label: 'Average score' } : { v: '—', label: 'Average score' },
+    last ? { v: last.attempt.score, unit: '/ ' + last.attempt.maxScore, label: 'Last score' } : { v: '—', label: 'Last score' },
+  ]
 }
 
 /* design/student-home.html -> route "/student" */
 export default function StudentHome() {
   usePageMeta({ title: 'My Testverse — Dashboard' })
 
-  const [mode, setMode] = useState('course')
-  const [modes, setModes] = useState(initialModes)
-  const [live, setLive] = useState(initialLive)
-  const [requests, setRequests] = useState(initialRequests)
-  const [now, setNow] = useState(() => Date.now())
+  const [tick, setTick] = useState(() => Date.now())
   const [sheetOpen, setSheetOpen] = useState(false)
   const [active, setActive] = useState('top')
-  const [videoOpen, setVideoOpen] = useState(false)
-  const { toast, node } = useToast()
   const routerNavigate = useNavigate()
+  const { status, tests, offset, error, reload, refresh } = useTests()
 
-  // Signed-in student's name over the demo account (the route requires a session)
-  const account = loadSession()
-  const me = account ? { ...modes[mode], name: account.name, first: account.name.split(' ')[0] } : modes[mode]
-  const limit = me.course ? SETTINGS.videoLimit.course : SETTINGS.videoLimit.direct
-  const videoLeft = Math.max(0, limit - me.videosUsed)
-  const done = SERIES.filter((t) => t.status === 'done').length
-  const { hero, rest } = pickLive(live)
+  const me = meOf(loadSession())
+  const now = tick + offset
+  const groups = useMemo(() => groupTests(tests, now), [tests, now])
+  const hero = heroTest(groups)
+  const stale = tests.some((t) => statusNow(t, now).stale)
 
-  // 1s ticker for countdowns / entry windows
+  // 1s ticker for countdowns
   useEffect(() => {
-    const id = setInterval(() => setNow(Date.now()), 1000)
+    const id = setInterval(() => setTick(Date.now()), 1000)
     return () => clearInterval(id)
   }, [])
+
+  // A test opened, closed or ran out of time: ask the server for the new state
+  useEffect(() => {
+    if (stale) refresh()
+  }, [stale, refresh, tick])
 
   // Highlight the nav item for the section in view
   useEffect(() => {
@@ -75,83 +92,42 @@ export default function StudentHome() {
       if (el) io.observe(el)
     })
     return () => io.disconnect()
-  }, [mode])
+  }, [])
 
   function navigate(id) {
     setActive(id)
     setSheetOpen(false)
   }
 
-  function register(id) {
-    const t = live.find((x) => x.id === id)
-    setLive((list) => list.map((x) => (x.id === id ? { ...x, registered: true } : x)))
-    toast(liveState(t) === 'open' ? 'Registered. Opening the test…' : 'Registered for ' + t.title + '. We’ll remind you before it starts.')
-  }
-
-  function sendVideo({ subject, chapter, note }) {
-    setModes((m) => ({ ...m, [mode]: { ...m[mode], videosUsed: m[mode].videosUsed + 1 } }))
-    setRequests((r) => [{ text: (chapter.trim() || 'Your question') + (note.trim() ? ': ' + note.trim() : ''), subject, status: 'new', when: new Date().toISOString() }, ...r])
-    setVideoOpen(false)
-    toast('Request sent. We’ll send your video within ' + SETTINGS.videoHours + ' hours.')
-  }
-
   return (
     <div className="tv-studenthome">
       <LogoSprite />
 
-      <Sidebar me={me} active={active} onNavigate={navigate} sheetOpen={sheetOpen} setSheetOpen={setSheetOpen} onLogout={() => {
+      <Sidebar
+        me={me}
+        active={active}
+        onNavigate={navigate}
+        sheetOpen={sheetOpen}
+        setSheetOpen={setSheetOpen}
+        onLogout={() => {
           clearSession()
           routerNavigate('/login', { replace: true, viewTransition: true })
-        }} />
+        }}
+      />
 
       <div className="shell">
         <div className="content">
           <main className="layout" id="main">
             <div className="main-col">
-              <PageHeader me={me} done={done} total={TOTAL} />
+              <PageHeader me={me} stats={statsOf(status, tests, groups)} />
 
-              <LiveHero hero={hero} now={now} onRegister={register} />
+              <TestHero test={hero} now={now} />
 
-              {me.course && ASSIGNED.length ? (
-                <section className="section" id="assigned" aria-labelledby="assigned-title">
-                  <SectionHead id="assigned-title" title="Assigned to you" desc="Personal and batch tests from your Studyverse teachers." />
-                  <ul className="grid assigned-grid">
-                    {ASSIGNED.map((a) => {
-                      const hrs = (new Date(a.due).getTime() - now) / 36e5
-                      return (
-                        <li className="card assigned-card" key={a.id}>
-                          <div className="assigned-top">
-                            <span className="meta">{a.from}</span>
-                            {hrs < 24 ? <span className="status status-amber">Due in {Math.max(1, Math.round(hrs))} h</span> : null}
-                          </div>
-                          <h3>{a.title}</h3>
-                          <p className="meta">
-                            {a.meta} · due {fmt(a.due)}
-                          </p>
-                          <Link className="btn btn-dark btn-sm" to={'/test?test=' + a.id}>
-                            Start test
-                          </Link>
-                        </li>
-                      )
-                    })}
-                  </ul>
-                </section>
-              ) : null}
-
-              <SeriesSection me={me} done={done} total={TOTAL} />
-
-              <UpcomingLive rest={rest} onRegister={register} />
-
-              {me.bought ? (
-                <>
-                  <ResultsSection />
-                  <PerformanceSection />
-                </>
-              ) : null}
+              <TestsSection status={status} error={error} groups={groups} total={tests.length} now={now} onRetry={() => reload()} />
             </div>
 
-            <aside className="rail" aria-label="Video solutions and sharing">
-              <SideCards me={me} requests={requests} videoLeft={videoLeft} onOpenVideo={() => setVideoOpen(true)} />
+            <aside className="rail" aria-label="Solutions and your batch">
+              <SideCards me={me} latestDone={groups.done[0] || null} />
             </aside>
           </main>
 
@@ -166,32 +142,6 @@ export default function StudentHome() {
           </footer>
         </div>
       </div>
-
-      <div className="demo" role="region" aria-label="Demo controls">
-        <b>Demo: view as</b>
-        <div className="demo-seg">
-          {['course', 'direct', 'new'].map((m) => (
-            <button
-              key={m}
-              type="button"
-              aria-pressed={mode === m ? 'true' : 'false'}
-              onClick={() => {
-                setMode(m)
-                window.scrollTo(0, 0)
-              }}
-            >
-              <span className="long">{m === 'course' ? 'Course (LMS) student' : m === 'direct' ? 'Direct student' : 'New, not bought yet'}</span>
-              <span className="short">{m === 'course' ? 'Course student' : m === 'direct' ? 'Direct' : 'New student'}</span>
-            </button>
-          ))}
-        </div>
-        <span className="demo-note">Sample data only</span>
-      </div>
-
-      {/* Mounted only while open, so every request starts with fresh fields. */}
-      {videoOpen ? <VideoDialog onClose={() => setVideoOpen(false)} me={me} onSend={sendVideo} /> : null}
-
-      {node}
     </div>
   )
 }

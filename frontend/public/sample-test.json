@@ -1,0 +1,87 @@
+{
+  "languages": ["en", "hi"],
+  "sections": [
+    {
+      "name": "Physics",
+      "questions": [
+        {
+          "type": "single",
+          "chapter": "Kinetic Theory of Gases",
+          "text": {
+            "en": "The rms speed of the molecules of a gas at temperature $T$ is $v$. If the temperature is made $4T$, the rms speed becomes:",
+            "hi": "तापमान $T$ पर किसी गैस के अणुओं की वर्ग-माध्य-मूल चाल $v$ है। ताप $4T$ करने पर यह चाल हो जाएगी:"
+          },
+          "options": ["$v/2$", "$v$", "$2v$", "$4v$"],
+          "answer": "C",
+          "solution": "$v_{rms} = \\sqrt{3RT/M}$, so $v_{rms} \\propto \\sqrt{T}$. Making $T$ four times doubles the speed: $2v$.",
+          "video": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        },
+        {
+          "type": "multiple",
+          "chapter": "Circular Motion",
+          "text": "For a particle in uniform circular motion, which statements are correct?",
+          "options": [
+            "Its speed is constant",
+            "Its velocity is constant",
+            "Its acceleration points towards the centre",
+            "Its acceleration is zero"
+          ],
+          "answer": ["A", "C"],
+          "solution": "Speed stays the same but the direction of velocity keeps changing, so there is a centripetal acceleration towards the centre."
+        },
+        {
+          "type": "integer",
+          "chapter": "Laws of Motion",
+          "text": "A force of $8\\,\\text{N}$ acts on a body of mass $2\\,\\text{kg}$. Find its acceleration in $\\text{m/s}^2$.",
+          "answer": 4,
+          "solution": "$a = F/m = 8/2 = 4\\,\\text{m/s}^2$."
+        }
+      ]
+    },
+    {
+      "name": "Chemistry",
+      "questions": [
+        {
+          "type": "single",
+          "chapter": "Redox Reactions",
+          "text": {
+            "en": "The oxidation state of Mn in $KMnO_4$ is:",
+            "hi": "$KMnO_4$ में Mn की ऑक्सीकरण अवस्था है:"
+          },
+          "options": ["+2", "+4", "+6", "+7"],
+          "answer": "D",
+          "solution": "$+1 + x + 4(-2) = 0$, so $x = +7$."
+        },
+        {
+          "type": "numerical",
+          "chapter": "Some Basic Concepts",
+          "text": "Find the molar mass of $CO_2$ in g/mol (C = 12, O = 16).",
+          "answer": 44,
+          "tolerance": 0.1,
+          "marks": { "correct": 4, "wrong": -1 },
+          "solution": "$12 + 2 \\times 16 = 44$ g/mol."
+        }
+      ]
+    },
+    {
+      "name": "Maths",
+      "questions": [
+        {
+          "type": "single",
+          "chapter": "Quadratic Equations",
+          "text": "The roots of $x^2 - 5x + 6 = 0$ are:",
+          "options": ["1 and 6", "2 and 3", "-2 and -3", "3 and 4"],
+          "answer": "B",
+          "solution": "$x^2 - 5x + 6 = (x - 2)(x - 3)$."
+        },
+        {
+          "type": "integer",
+          "chapter": "Permutations",
+          "text": "In how many ways can 3 different books be arranged on a shelf?",
+          "answer": 6,
+          "solution": "$3! = 6$."
+        }
+      ]
+    }
+  ]
+}
