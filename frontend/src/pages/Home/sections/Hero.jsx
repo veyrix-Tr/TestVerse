@@ -1,6 +1,7 @@
 import { EXAMS } from '../../../data/exams.js'
 import { useCountdown } from '../../../lib/hooks.js'
 import { pad } from '../../../lib/format.js'
+import { Link } from 'react-router-dom'
 
 function Countdown({ iso }) {
   const { d, h, m, s, done } = useCountdown(iso)
@@ -50,15 +51,15 @@ export default function Hero({ exam, onChoose, signupHref }) {
             6 part tests, 3 half-syllabus tests and 2 full-syllabus tests, set by experienced faculty and run on a real CBT screen. Plus all-India live tests, so you know exactly where you stand.
           </p>
           <div className="hero-ctas">
-            <a className="btn btn-gold btn-lg" href={signupHref} data-signup>
+            <Link className="btn btn-gold btn-lg" to={signupHref} data-signup>
               Get the test series
-            </a>
+            </Link>
             <a className="btn btn-ghost btn-lg" href="#plan">
               See what's included
             </a>
           </div>
           <p className="hero-note">
-            In a Studyverse course? <a href="/login">Log in with the same account.</a>
+            In a Studyverse course? <Link to="/login">Log in with the same account.</Link>
           </p>
         </div>
 

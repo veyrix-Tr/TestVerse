@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 /* design/testverse-home.html <header class="site-header"> + mobile menu script */
 export default function SiteHeader() {
@@ -7,11 +8,11 @@ export default function SiteHeader() {
   return (
     <header className="site-header">
       <div className="wrap">
-        <a className="brand" href="/" aria-label="Testverse by Studyverse, home">
+        <Link className="brand" to="/" aria-label="Testverse by Studyverse, home">
           <svg className="tv-logo" style={{ height: '44px' }} viewBox="0 0 1784 409" role="img" aria-label="Testverse by Studyverse">
             <use href="#tv-logo" />
           </svg>
-        </a>
+        </Link>
         <nav className="nav" aria-label="Main">
           <a href="#plan">Test plan</a>
           <a href="#why">Why Testverse</a>
@@ -19,23 +20,20 @@ export default function SiteHeader() {
           <a href="#refer">Refer &amp; earn</a>
         </nav>
         <div className="header-actions">
-          <a className="btn btn-ghost login" href="/login">
+          <Link className="btn btn-ghost login" to="/login">
             Log in
-          </a>
-          <a className="btn btn-gold" href="/signup">
+          </Link>
+          <Link className="btn btn-gold" to="/signup">
             Sign up
-          </a>
+          </Link>
           <button
             className="menu-btn"
             type="button"
             aria-expanded={open ? 'true' : 'false'}
             aria-controls="mobile-nav"
-            aria-label={open ? 'Close menu' : 'Open menu'}
             onClick={() => setOpen((v) => !v)}
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-              <path d="M4 7h16M4 12h16M4 17h16" />
-            </svg>
+            {open ? 'Close' : 'Menu'}
           </button>
         </div>
       </div>
@@ -44,7 +42,7 @@ export default function SiteHeader() {
         <a href="#why">Why Testverse</a>
         <a href="#analysis">Analysis</a>
         <a href="#refer">Refer &amp; earn</a>
-        <a href="/login">Log in</a>
+        <Link to="/login">Log in</Link>
       </nav>
     </header>
   )

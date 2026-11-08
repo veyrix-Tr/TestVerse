@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import './Test.css'
 import LogoSprite from '../../components/LogoSprite.jsx'
-import MathText, { esc } from '../../lib/MathText.jsx'
+import MathText from '../../lib/MathText.jsx'
+import { esc } from '../../lib/esc.js'
 import { hms } from '../../lib/format.js'
 import { usePageMeta } from '../../lib/hooks.js'
 import { loadJSON, removeKey, saveJSON } from '../../lib/storage.js'
@@ -103,18 +104,17 @@ export default function Test() {
   const qidNow = () => flat[curIndexRef.current].q.id
 
   /* ---------- persistence (design persist/queueSave) ---------- */
-  function write(a) {
+  const write = useCallback((a) => {
     saveJSON(KEY, a)
     setSaveText(navigator.onLine ? 'Saved' : 'Offline · saved on this device')
-  }
+  }, [KEY])
 
   useEffect(() => {
     if (view !== 'exam' || !attempt || attempt.submittedAt) return
     setSaveText('Saving…')
     const t = setTimeout(() => write(attempt), 400)
     return () => clearTimeout(t)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [attempt, view])
+  }, [attempt, view, write])
 
   /* Adds time on the current question (design leaveCurrent). Pure: safe in updaters. */
   function addLeaveTime(a) {
@@ -346,9 +346,8 @@ export default function Test() {
     return () => {
       window.removeEventListener('online', sync)
       window.removeEventListener('offline', sync)
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }
-  }, [view])
+  }, [view, write])
 
   // Warn before leaving an unfinished test, flushing the current answer first
   useEffect(() => {
@@ -363,6 +362,21 @@ export default function Test() {
     window.addEventListener('beforeunload', onUnload)
     return () => window.removeEventListener('beforeunload', onUnload)
   })
+
+  // Same flush when leaving through a <Link>: in-app navigation skips beforeunload
+  // and the unmount clears the pending debounced save
+  const viewRef = useRef(view)
+  const addLeaveTimeRef = useRef(addLeaveTime)
+  viewRef.current = view
+  addLeaveTimeRef.current = addLeaveTime
+  useEffect(() => {
+    return () => {
+      if (viewRef.current !== 'exam') return
+      const a = attemptRef.current
+      if (!a || a.submittedAt) return
+      saveJSON(KEY, addLeaveTimeRef.current(a))
+    }
+  }, [KEY])
 
   // Dialogs (design showModal/close)
   useEffect(() => {
@@ -447,7 +461,7 @@ export default function Test() {
         <div className="dh">
           <h2 id="ds-t">Submit the test?</h2>
           <button className="close" type="button" aria-label="Close" onClick={() => setSubmitOpen(false)}>
-            ×
+            Close
           </button>
         </div>
         <div className="db" id="ds-body">
@@ -502,7 +516,7 @@ export default function Test() {
         <div className="dh">
           <h2 id="dr-t">{report ? `Report a problem with Q.${report.q}` : 'Report a problem'}</h2>
           <button className="close" type="button" aria-label="Close" onClick={() => setReport(null)}>
-            ×
+            Close
           </button>
         </div>
         <div className="db">
@@ -546,7 +560,7 @@ export default function Test() {
         <div className="dh">
           <h2 id="dv-t">Request a video solution</h2>
           <button className="close" type="button" aria-label="Close" onClick={() => setVideo(null)}>
-            ×
+            Close
           </button>
         </div>
         <div className="db">

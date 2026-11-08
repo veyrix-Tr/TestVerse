@@ -78,8 +78,8 @@ export default function Admin() {
             <span data-st="2">2 Files</span>
             <span data-st="3">3 Review</span>
           </div>
-          <button className="close" type="button" data-close aria-label="Close">
-            ×
+          <button className="close" type="button" data-close aria-label="Close dialog">
+            Close
           </button>
         </div>
         <div className="dlg-body" id="dt-body"></div>
@@ -95,8 +95,8 @@ export default function Admin() {
       <dialog id="dlg-form" aria-labelledby="df-title">
         <div className="dlg-head">
           <h2 id="df-title"></h2>
-          <button className="close" type="button" data-close aria-label="Close">
-            ×
+          <button className="close" type="button" data-close aria-label="Close dialog">
+            Close
           </button>
         </div>
         <div className="dlg-body" id="df-body"></div>

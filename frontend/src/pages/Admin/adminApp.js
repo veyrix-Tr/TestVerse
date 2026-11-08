@@ -94,8 +94,8 @@ function seed() {
 }
 
 var db;
-function load() { try { db = JSON.parse(localStorage.getItem(STORE_KEY)); } catch (e) { db = null; } if (!db || !db.exams || !db.groups || !db.requests) db = seed(); }
-function save() { try { localStorage.setItem(STORE_KEY, JSON.stringify(db)); } catch (e) {} }
+function load() { try { db = JSON.parse(localStorage.getItem(STORE_KEY)); } catch { db = null; } if (!db || !db.exams || !db.groups || !db.requests) db = seed(); }
+function save() { try { localStorage.setItem(STORE_KEY, JSON.stringify(db)); } catch {} }
 load();
 
 /* ---------- helpers ---------- */
@@ -166,7 +166,7 @@ var VIEWS = {};
 function go(view) {
   ui.view = VIEWS[view] ? view : 'dashboard';
   $$('.side [data-view]').forEach(function (b) { b.setAttribute('aria-current', b.dataset.view === ui.view ? 'page' : 'false'); });
-  if (location.hash.slice(1) !== ui.view) { try { history.replaceState(null, '', '#' + ui.view); } catch (e) { /* not allowed in some previews */ } }
+  if (location.hash.slice(1) !== ui.view) { try { history.replaceState(null, '', '#' + ui.view); } catch { /* not allowed in some previews */ } }
   render();
 }
 function render() {
@@ -174,7 +174,7 @@ function render() {
   var openReq = db.requests.filter(function (r) { return r.status === 'new' || r.status === 'progress'; }).length;
   var rc = $('[data-count="requests"]'); rc.textContent = openReq; rc.hidden = !openReq;
   $('#view').innerHTML = VIEWS[ui.view]();
-  bind[ui.view] && bind[ui.view]();
+  if (bind[ui.view]) bind[ui.view]();
 }
 
 var bind = {};
@@ -199,14 +199,14 @@ VIEWS.dashboard = function () {
   });
   return '<div class="head"><div><h1>Dashboard</h1><p>What needs attention before your next test.</p></div>' +
     '<div class="actions"><button class="btn btn-primary" type="button" data-upload>Upload a test</button></div></div>' +
-    '<div class="grid g4" style="margin-bottom: 16px">' +
+    '<div class="grid g4" style="margin-bottom: 20px">' +
     stat(published, 'tests live or scheduled') + stat(upcoming.length, 'upcoming live tests') +
     stat(db.students.filter(function (s) { return s.bought; }).length, 'students who bought (demo)') +
     stat(db.coupons.filter(function (c) { return c.active; }).length, 'active coupons') + '</div>' +
     '<div class="grid g2">' +
-    '<section class="card"><h2>Needs attention</h2>' + (alerts.length ? alerts.map(function (a) { return '<div class="alert ' + a[0] + '"><span style="flex: 1">' + esc(a[1]) + '</span><button class="btn btn-outline btn-sm" type="button" data-goto="' + a[2] + '">Fix</button></div>'; }).join('') : '<div class="alert a-ok">Everything is ready.</div>') + '</section>' +
+    '<section class="card"><h2>Needs attention</h2><div class="attn">' + (alerts.length ? alerts.map(function (a) { return '<div class="alert ' + a[0] + '"><span>' + esc(a[1]) + '</span><button class="btn btn-outline btn-sm" type="button" data-goto="' + a[2] + '">Fix</button></div>'; }).join('') : '<div class="alert a-ok"><span>Everything is ready.</span></div>') + '</div></section>' +
     '<section class="card"><h2>Upcoming live tests</h2>' + (upcoming.length ? upcoming.slice(0, 4).map(function (x) {
-      return '<div style="display: flex; justify-content: space-between; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line)"><div><b>' + esc(x.title) + '</b><span class="hint" style="display: block; margin: 0">' + esc(examLabel(x.exam)) + ' · ' + when(x.start) + '</span></div><button class="btn btn-outline btn-sm" type="button" data-edit-live="' + esc(x.id) + '">Change date</button></div>';
+      return '<div class="list-row"><div><b>' + esc(x.title) + '</b><span class="hint" style="display: block; margin: 0">' + esc(examLabel(x.exam)) + ' · ' + when(x.start) + '</span></div><button class="btn btn-outline btn-sm" type="button" data-edit-live="' + esc(x.id) + '">Change date</button></div>';
     }).join('') : '<p class="hint">No live tests scheduled.</p>') + '</section></div>';
   function stat(n, l) { return '<div class="card stat"><b>' + n + '</b><span>' + l + '</span></div>'; }
 };
@@ -719,7 +719,7 @@ function drawWizard() {
             var miss = qs.filter(function (q) { var a = q.answer != null ? q.answer : (q.correctAnswer != null ? q.correctAnswer : q.correct); return a == null || a === ''; }).length;
             x.parsed = qs.length; x.missing = miss;
             out.innerHTML = '<div class="alert ' + (miss ? 'a-warn' : 'a-ok') + '" style="margin-top: 6px">Found ' + qs.length + ' questions' + (miss ? '; ' + miss + ' have no answer.' : ', all with answers.') + '</div>';
-          } catch (e) { out.innerHTML = '<div class="alert a-err" style="margin-top: 6px">Couldn\u2019t read this JSON file. Check it\u2019s a question list.</div>'; x.file = ''; }
+          } catch { out.innerHTML = '<div class="alert a-err" style="margin-top: 6px">Couldn\u2019t read this JSON file. Check it\u2019s a question list.</div>'; x.file = ''; }
         };
         r.readAsText(f);
       } else {
@@ -866,6 +866,6 @@ export default function mountAdmin(el) {
   once($('#dt-back'), function () { if (wz.step > 1) { wz.step--; drawWizard(); } });
 
   var startView = 'dashboard';
-  try { startView = location.hash.slice(1) || 'dashboard'; } catch (e) { /* ignore */ }
+  try { startView = location.hash.slice(1) || 'dashboard'; } catch { /* ignore */ }
   go(startView);
 }

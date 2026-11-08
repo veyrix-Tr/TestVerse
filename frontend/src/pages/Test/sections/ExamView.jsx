@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { AR_OPTIONS, Q_TYPE_LABELS, STUDENT } from '../data/papers.js'
-import { esc } from '../../../lib/MathText.jsx'
+import { esc } from '../../../lib/esc.js'
 import MathText from '../../../lib/MathText.jsx'
 import { hms } from '../../../lib/format.js'
 import { STATUS_LABEL, countsOf, statusOf } from '../status.js'
@@ -105,7 +105,7 @@ export default function ExamView({ paper, flat, attempt, lang, setLang, curIndex
             </button>
           ))}
           <button type="button" className="wide" data-key="back" onClick={() => api.pressKey('back')}>
-            ⌫ Backspace
+            Backspace
           </button>
         </div>
         <span style={{ fontSize: '13px', color: 'var(--muted)' }}>{q.type === 'numerical' ? 'Give the answer to 2 decimal places if needed.' : 'Whole number only.'}</span>
@@ -129,9 +129,9 @@ export default function ExamView({ paper, flat, attempt, lang, setLang, curIndex
               <span>{saveText}</span>
             </span>
             {paper.languages.length > 1 ? (
-              <div className="seg" id="lang-seg" role="group" aria-label="Question language" style={{ background: 'var(--navy-2)', borderColor: 'var(--navy-line)' }}>
+              <div className="seg on-navy" id="lang-seg" role="group" aria-label="Question language">
                 {paper.languages.map((l) => (
-                  <button key={l} type="button" data-lang={l} aria-pressed={lang === l ? 'true' : 'false'} style={{ color: '#C9D0EC' }} onClick={() => setLang(l)}>
+                  <button key={l} type="button" data-lang={l} aria-pressed={lang === l ? 'true' : 'false'} onClick={() => setLang(l)}>
                     {l === 'hi' ? 'हिंदी' : 'EN'}
                   </button>
                 ))}
@@ -156,7 +156,7 @@ export default function ExamView({ paper, flat, attempt, lang, setLang, curIndex
           {paper.sections.map((s, si) => (
             <button key={si} type="button" role="tab" data-sec={si} aria-selected={f.si === si ? 'true' : 'false'} onClick={() => api.goSection(si)}>
               {s.name}
-              <small>({s.questions.length})</small>
+              <small>{s.questions.length}</small>
             </button>
           ))}
         </div>
@@ -169,8 +169,7 @@ export default function ExamView({ paper, flat, attempt, lang, setLang, curIndex
               Question {curIndex + 1} of {flat.length}
             </b>
             <span id="q-meta">
-              {f.sec} · {Q_TYPE_LABELS[q.type]} · +{q.marks.correct}
-              {q.marks.wrong ? ' / ' + q.marks.wrong : ' / 0'}
+              {`${f.sec} · ${Q_TYPE_LABELS[q.type]} · +${q.marks.correct} / ${q.marks.wrong || 0}`}
             </span>
           </div>
           <div className="qbody" id="q-body" ref={qbodyRef}>

@@ -1,4 +1,5 @@
 import { EXAMS } from '../../../data/exams.js'
+import { Link } from 'react-router-dom'
 
 /* design/testverse-home.html <section id="plan"> — test plan track */
 export default function TestPlan({ exam, onChoose, signupHref }) {
@@ -80,11 +81,11 @@ export default function TestPlan({ exam, onChoose, signupHref }) {
           </div>
           <div className="plan-foot">
             <p>Take any test whenever you're ready. Every test has the same CBT screen, real marking, and full analysis with solutions. Coupon and referral codes are accepted at checkout.</p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px', alignItems: 'center' }}>
-              <span style={{ fontFamily: 'var(--display)', fontSize: '22px', fontWeight: 700 }}>[PRICE]</span>
-              <a className="btn btn-dark" href={signupHref} data-signup>
+            <div className="plan-buy">
+              <span className="plan-price">[PRICE]</span>
+              <Link className="btn btn-dark" to={signupHref} data-signup>
                 Get the test series
-              </a>
+              </Link>
             </div>
           </div>
         </div>

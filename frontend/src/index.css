@@ -18,7 +18,9 @@ body {
 .tv-checkout,
 .tv-studenthome,
 .tv-test,
-.tv-admin {
+.tv-admin,
+.tv-login,
+.tv-signup {
   min-height: 100vh;
 }
 

@@ -1,4 +1,5 @@
 import { EXAM, SERIES } from '../../../data/studentDemo.js'
+import { Link } from 'react-router-dom'
 
 function shortName(t) {
   return { part: 'Part ', half: 'Half ', full: 'Full ' }[t.kind] + t.n
@@ -44,10 +45,10 @@ export default function SeriesSection({ me, done }) {
       )
     const href = t.status === 'done' ? '/test?test=' + t.id + '&view=result' : '/test?test=' + t.id
     return (
-      <a className={cls} href={href} title={t.chapters} style={{ textDecoration: 'none' }} key={t.id}>
+      <Link className={cls} to={href} title={t.chapters} style={{ textDecoration: 'none' }} key={t.id}>
         <b>{shortName(t)}</b>
         <span>{label}</span>
-      </a>
+      </Link>
     )
   }
 
@@ -85,9 +86,9 @@ export default function SeriesSection({ me, done }) {
           <p>
             <b style={{ color: 'var(--ink)' }}>{suggested.title}</b> · {suggested.chapters}
           </p>
-          <a className="btn btn-primary" href={'/test?test=' + suggested.id}>
+          <Link className="btn btn-primary" to={'/test?test=' + suggested.id}>
             {suggested.status === 'progress' ? 'Resume test' : 'Start ' + suggested.title}
-          </a>
+          </Link>
         </div>
       ) : null}
       {!me.bought ? (
@@ -96,9 +97,9 @@ export default function SeriesSection({ me, done }) {
             Get all 11 tests for {EXAM.label}
           </b>
           <span className="hint">6 part tests, 3 half-syllabus tests and 2 full-syllabus tests, with full analysis and solutions. Coupon and referral codes accepted.</span>
-          <a className="btn btn-primary" href={'/checkout?exam=' + EXAM.id}>
+          <Link className="btn btn-primary" to={'/checkout?exam=' + EXAM.id}>
             Get the test series
-          </a>
+          </Link>
           <span className="hint">All-India live tests are open to you now. Register above.</span>
         </div>
       ) : null}

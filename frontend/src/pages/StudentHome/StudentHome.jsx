@@ -10,6 +10,7 @@ import SeriesSection from './sections/SeriesSection.jsx'
 import SideCards from './sections/SideCards.jsx'
 import StudentHeader from './sections/StudentHeader.jsx'
 import VideoDialog from './sections/VideoDialog.jsx'
+import { Link } from 'react-router-dom'
 
 const initialModes = Object.fromEntries(Object.entries(MODES).map(([k, v]) => [k, { ...v }]))
 const initialLive = LIVE.map((t) => ({ ...t }))
@@ -90,7 +91,7 @@ export default function StudentHome() {
         <div className="in">
           <span id="announce-text">{SETTINGS.announcement}</span>
           <button type="button" id="announce-x" aria-label="Dismiss announcement" onClick={() => setAnnounceHidden(true)}>
-            ×
+            Dismiss
           </button>
         </div>
       </div>
@@ -142,15 +143,17 @@ export default function StudentHome() {
                   return (
                     <div className="as" key={a.id}>
                       <div>
-                        <strong>{a.title}</strong>
+                        <strong>
+                          {a.title}
+                          {hrs < 24 ? <span className="pill p-new">Due today</span> : null}
+                        </strong>
                         <span>
                           {a.from} · {a.meta} · due {fmt(a.due)}
-                          {hrs < 24 ? ' (today)' : ''}
                         </span>
                       </div>
-                      <a className="btn btn-dark btn-sm" href={'/test?test=' + a.id}>
+                      <Link className="btn btn-dark btn-sm" to={'/test?test=' + a.id}>
                         Start test
-                      </a>
+                      </Link>
                     </div>
                   )
                 })}
@@ -198,9 +201,9 @@ export default function StudentHome() {
                           <td>{r.acc}%</td>
                           <td>{r.rank ? r.rank : <span className="hint">—</span>}</td>
                           <td style={{ textAlign: 'right' }}>
-                            <a className="btn btn-outline btn-sm" href="/test?test=P4&view=result">
+                            <Link className="btn btn-outline btn-sm" to="/test?test=P4&view=result">
                               View analysis
-                            </a>
+                            </Link>
                           </td>
                         </tr>
                       ))}
@@ -304,7 +307,9 @@ export default function StudentHome() {
         </div>
       </div>
 
-      <VideoDialog open={videoOpen} onClose={() => setVideoOpen(false)} me={me} onSend={sendVideo} />
+      {/* Mounted only while open, so every request starts with fresh fields
+          (the design resets them in openVideo()). */}
+      {videoOpen ? <VideoDialog onClose={() => setVideoOpen(false)} me={me} onSend={sendVideo} /> : null}
 
       {node}
     </div>

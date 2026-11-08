@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { hms } from '../../../lib/format.js'
 import { Q_TYPE_LABELS } from '../data/papers.js'
+import { Link } from 'react-router-dom'
 
 function timeLeftOf(a) {
   return a.startedAt + a.durationMs - Date.now()
@@ -29,23 +30,21 @@ export default function InstructionsView({ paper, flat, attempt, lang, setLang, 
     <section id="v-instr">
       <div className="bar">
         <div className="in">
-          <a className="brand" href="/student">
+          <Link className="brand" to="/student">
             <svg className="tv-logo" style={{ height: '34px' }} viewBox="0 0 1784 409" role="img" aria-label="Testverse by Studyverse">
               <use href="#tv-logo" />
             </svg>
-          </a>
-          <a href="/student" style={{ marginLeft: 'auto', color: '#C9D0EC', fontSize: '14px' }}>
-            ← Back to home
-          </a>
+          </Link>
+          <Link className="back-link" to="/student">
+            Back to home
+          </Link>
         </div>
       </div>
       <div className="wrap" id="instr">
-        <div>
-          <h1 style={{ fontSize: '28px' }}>{paper.title}</h1>
-          <p style={{ color: 'var(--muted)', marginTop: '4px' }}>
-            {paper.exam}
-            {paper.note ? ' · ' + paper.note : ''}
-          </p>
+        <div className="page-head">
+          <span className="eyebrow">Instructions</span>
+          <h1>{paper.title}</h1>
+          <p>{paper.note ? `${paper.exam} · ${paper.note}` : paper.exam}</p>
         </div>
 
         {resuming ? (
@@ -90,13 +89,13 @@ export default function InstructionsView({ paper, flat, attempt, lang, setLang, 
                   <tr key={i}>
                     <td>{Q_TYPE_LABELS[q.type]}</td>
                     <td>
-                      +{q.marks.correct}
+                      {'+' + q.marks.correct}
                       {q.marks.partial ? (
                         <>
                           {' '}
                           (all correct options)
                           <br />
-                          <span style={{ color: 'var(--muted)', fontSize: '13px' }}>+1 for each correct option if you choose only some and no wrong one</span>
+                          <span style={{ color: 'var(--muted)', fontSize: '13px', fontVariantNumeric: 'normal' }}>+1 for each correct option if you choose only some and no wrong one</span>
                         </>
                       ) : null}
                     </td>
@@ -145,9 +144,9 @@ export default function InstructionsView({ paper, flat, attempt, lang, setLang, 
           </div>
         </section>
 
-        <section className="card" style={{ display: 'grid', gap: '14px' }}>
+        <section className="card start-card">
           {paper.languages.length > 1 ? (
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'center' }}>
+            <div className="lang-row">
               <b>Question language</b>
               <div className="seg" role="group" aria-label="Question language">
                 {paper.languages.map((l) => (
@@ -156,7 +155,7 @@ export default function InstructionsView({ paper, flat, attempt, lang, setLang, 
                   </button>
                 ))}
               </div>
-              <span style={{ fontSize: '13px', color: 'var(--muted)' }}>You can switch during the test.</span>
+              <span>You can switch during the test.</span>
             </div>
           ) : null}
           <div className={'notice ' + (online ? 'n-ok' : 'n-err')} id="net" role="status">
@@ -174,9 +173,9 @@ export default function InstructionsView({ paper, flat, attempt, lang, setLang, 
 
         <p className="demo-note">
           Demo paper. Try{' '}
-          <a href="/test?test=JA1">
+          <Link to="/test?test=JA1">
             the JEE Advanced demo
-          </a>{' '}
+          </Link>{' '}
           for multiple-correct, integer and numerical questions.
         </p>
       </div>

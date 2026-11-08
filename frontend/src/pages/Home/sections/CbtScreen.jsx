@@ -13,27 +13,15 @@ export default function CbtScreen({ exam }) {
           <p className="lead">Practising on paper doesn't prepare you for a computer-based test under time pressure. Every test here runs on an NTA-style CBT screen.</p>
           <ul className="checks">
             <li>
-              <svg viewBox="0 0 24 24" fill="none" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M5 12l5 5L20 7" />
-              </svg>
               <span>Countdown timer and subject-wise sections</span>
             </li>
             <li>
-              <svg viewBox="0 0 24 24" fill="none" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M5 12l5 5L20 7" />
-              </svg>
               <span>Question palette: answered, not answered, not visited, marked for review</span>
             </li>
             <li>
-              <svg viewBox="0 0 24 24" fill="none" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M5 12l5 5L20 7" />
-              </svg>
               <span>Mark for review, clear response, save and next</span>
             </li>
             <li>
-              <svg viewBox="0 0 24 24" fill="none" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M5 12l5 5L20 7" />
-              </svg>
               <span>The real marking scheme, including negative marking</span>
             </li>
           </ul>

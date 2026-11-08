@@ -3,6 +3,7 @@ import './Checkout.css'
 import LogoSprite from '../../components/LogoSprite.jsx'
 import { usePageMeta } from '../../lib/hooks.js'
 import { money } from '../../lib/format.js'
+import { Link } from 'react-router-dom'
 
 /* ------------------------------------------------------------------
    EXAMPLE SETTINGS FOR THE DESIGN ONLY.
@@ -141,16 +142,12 @@ export default function Checkout() {
 
       <header className="top">
         <div className="in">
-          <a className="brand" href="/">
+          <Link className="brand" to="/">
             <svg className="tv-logo" style={{ height: '38px' }} viewBox="0 0 1784 409" role="img" aria-label="Testverse by Studyverse">
               <use href="#tv-logo" />
             </svg>
-          </a>
+          </Link>
           <span className="secure">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <rect x="5" y="11" width="14" height="10" rx="2" />
-              <path d="M8 11V7a4 4 0 0 1 8 0v4" />
-            </svg>
             <span>Secure checkout</span>
           </span>
         </div>
@@ -164,9 +161,10 @@ export default function Checkout() {
           <section className="card" aria-labelledby="s1">
             <div className="step-head">
               <span className={'num' + (signedIn ? ' done' : '')} id="n1">
-                {signedIn ? '✓' : '1'}
+                1
               </span>
               <h2 id="s1">Your account</h2>
+              {signedIn && <span className="step-state">Done</span>}
             </div>
             <div id="signin" hidden={signedIn}>
               <div style={{ display: 'grid', gap: '14px' }}>
@@ -189,9 +187,6 @@ export default function Checkout() {
               </div>
             </div>
             <div id="signed" className="signed" hidden={!signedIn}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M5 12l5 5L20 7" />
-              </svg>
               <span>
                 Signed in as <b>[Student name]</b>
               </span>
@@ -202,9 +197,10 @@ export default function Checkout() {
           <section className="card" aria-labelledby="s2">
             <div className="step-head">
               <span className={'num' + (aboutDone ? ' done' : '')} id="n2">
-                {aboutDone ? '✓' : '2'}
+                2
               </span>
               <h2 id="s2">About you</h2>
+              {aboutDone && <span className="step-state">Done</span>}
             </div>
             <p className="hint" id="about-locked" hidden={signedIn}>
               Sign in first.
@@ -335,9 +331,7 @@ export default function Checkout() {
         {/* Summary */}
         <aside className="summary" aria-labelledby="sum">
           <section className="card">
-            <h2 id="sum" style={{ fontSize: '19px' }}>
-              Order summary
-            </h2>
+            <h2 id="sum">Order summary</h2>
 
             <div className="lines">
               <div className="line">
@@ -422,24 +416,26 @@ export default function Checkout() {
               <p className="fine">One code per order: a coupon or a friend's referral code.</p>
             </div>
 
-            <label className="credits" id="credits-box" hidden={!(CONFIG.creditBalance > 0)}>
+            <label className="credits" id="credits-box" hidden={!signedIn || !(CONFIG.creditBalance > 0)}>
               <input type="checkbox" id="use-credits" checked={useCredits} onChange={(e) => setUseCredits(e.target.checked)} />
               <span>
                 Use my credits. You have <b id="credit-bal">{money(CONFIG.creditBalance)}</b> available. Credits work on top of a code.
               </span>
             </label>
 
-            <div className="total">
-              <span>Total</span>
-              <b id="total">{exam ? money(t.total) : '—'}</b>
-            </div>
+            <div className="paybox">
+              <div className="total">
+                <span>Total</span>
+                <b id="total">{exam ? money(t.total) : '—'}</b>
+              </div>
 
-            <button className="btn btn-gold btn-block" type="button" id="pay" disabled={payDisabled} onClick={pay}>
-              {payLabel}
-            </button>
-            <p className="fine" id="pay-note">
-              {signedIn && exam && complete ? 'UPI, card or net banking. You’ll get a receipt by SMS and email.' : 'Sign in, fill in your details and choose your exam to continue. Payment by UPI, card or net banking.'}
-            </p>
+              <button className="btn btn-gold btn-block" type="button" id="pay" disabled={payDisabled} onClick={pay}>
+                {payLabel}
+              </button>
+              <p className="fine" id="pay-note">
+                {signedIn && exam && complete ? 'UPI, card or net banking. You’ll get a receipt by SMS and email.' : 'Sign in, fill in your details and choose your exam to continue. Payment by UPI, card or net banking.'}
+              </p>
+            </div>
           </section>
         </aside>
       </main>
@@ -448,21 +444,17 @@ export default function Checkout() {
       <main className="page" id="done" hidden={!paid}>
         <div className="success">
           <section className="card">
-            <span className="tick">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M5 12l5 5L20 7" />
-              </svg>
-            </span>
-            <h1 style={{ fontSize: '28px' }}>You're in</h1>
-            <p style={{ color: 'var(--muted)' }} id="done-text">
-              {paid ? doneText : ''}
-            </p>
-            <a className="btn btn-primary" href="/student">
+            <div className="success-head">
+              <p className="eyebrow">Payment confirmed</p>
+              <h1>You're in</h1>
+              <p id="done-text">{paid ? doneText : ''}</p>
+            </div>
+            <Link className="btn btn-primary" to="/student">
               Start Part Test 1
-            </a>
+            </Link>
             <div className="refbox">
               <h3>Invite friends, earn credits</h3>
-              <p style={{ color: 'var(--gold-ink)', fontSize: '15px' }}>
+              <p>
                 Your friends get <b id="r-disc">{money(CONFIG.referral.friendDiscount)}</b> off with your code. You get <b id="r-credit">{money(CONFIG.referral.referrerCredit)}</b> in credits every time one of them buys.
               </p>
               <div className="refcode">

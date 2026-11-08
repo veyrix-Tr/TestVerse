@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 /* design/testverse-home.html <section class="wrap final"> */
 export default function FinalCta({ signupHref }) {
   return (
@@ -5,9 +7,9 @@ export default function FinalCta({ signupHref }) {
       <div className="final-card">
         <h2>Find out where you stand before the exam does.</h2>
         <p>Get the 11-test series for your exam today.</p>
-        <a className="btn btn-gold btn-lg" href={signupHref} data-signup>
+        <Link className="btn btn-gold btn-lg" to={signupHref} data-signup>
           Get the test series
-        </a>
+        </Link>
       </div>
     </section>
   )

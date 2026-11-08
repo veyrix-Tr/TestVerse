@@ -17,39 +17,21 @@ export default function Analysis({ exam }) {
             <p className="lead">After every test you get:</p>
             <ul className="checks">
               <li>
-                <svg viewBox="0 0 24 24" fill="none" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M5 12l5 5L20 7" />
-                </svg>
                 <span>Score, accuracy and, for live tests, your all-India rank</span>
               </li>
               <li>
-                <svg viewBox="0 0 24 24" fill="none" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M5 12l5 5L20 7" />
-                </svg>
                 <span>Subject-wise and chapter-wise performance</span>
               </li>
               <li>
-                <svg viewBox="0 0 24 24" fill="none" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M5 12l5 5L20 7" />
-                </svg>
                 <span>Time spent per question, and marks lost to negative marking</span>
               </li>
               <li>
-                <svg viewBox="0 0 24 24" fill="none" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M5 12l5 5L20 7" />
-                </svg>
                 <span>Every question with your answer, the correct answer and the full solution</span>
               </li>
               <li>
-                <svg viewBox="0 0 24 24" fill="none" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M5 12l5 5L20 7" />
-                </svg>
                 <span>Your progress across all 11 tests in the plan</span>
               </li>
               <li>
-                <svg viewBox="0 0 24 24" fill="none" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M5 12l5 5L20 7" />
-                </svg>
                 <span>Stuck on a question? Request a video solution from our faculty, even for a photo of a question from your book</span>
               </li>
             </ul>

@@ -5,7 +5,7 @@ import { EXAM, SETTINGS } from '../../../data/studentDemo.js'
   design/student-home.html <dialog id="dlg-video"> — photo of a question +
   subject/chapter/note, 10 MB check, real FileReader preview.
 */
-export default function VideoDialog({ open, onClose, me, onSend }) {
+export default function VideoDialog({ onClose, me, onSend }) {
   const ref = useRef(null)
   const limit = me.course ? SETTINGS.videoLimit.course : SETTINGS.videoLimit.direct
   const [photo, setPhoto] = useState(null)
@@ -16,18 +16,9 @@ export default function VideoDialog({ open, onClose, me, onSend }) {
   const [err, setErr] = useState('')
 
   useEffect(() => {
-    if (open) {
-      setPhoto(null)
-      setPreview(null)
-      setChapter('')
-      setNote('')
-      setErr('')
-    }
     const d = ref.current
-    if (!d) return
-    if (open && !d.open) d.showModal()
-    if (!open && d.open) d.close()
-  }, [open])
+    if (d && !d.open) d.showModal()
+  }, [])
 
   function onPhoto(e) {
     const f = e.target.files[0]
@@ -60,7 +51,7 @@ export default function VideoDialog({ open, onClose, me, onSend }) {
       <div className="dh">
         <h2 id="dv-title">Request a video solution</h2>
         <button className="close" type="button" data-close aria-label="Close" onClick={onClose}>
-          ×
+          Close
         </button>
       </div>
       <div className="db">

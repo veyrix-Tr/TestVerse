@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { EXAM, NOTES } from '../../../data/studentDemo.js'
 import { rupee } from '../../../lib/format.js'
+import { Link } from 'react-router-dom'
 
 /*
   design/student-home.html <header class="top"> — credits chip, notifications
@@ -10,6 +11,7 @@ import { rupee } from '../../../lib/format.js'
 export default function StudentHeader({ me, dot, notesOpen, menuOpen, setNotesOpen, setMenuOpen, onLogout }) {
   const notesRef = useRef(null)
   const menuRef = useRef(null)
+  const unread = NOTES.filter((n) => n.unread).length
 
   useEffect(() => {
     function onDocClick(e) {
@@ -40,15 +42,15 @@ export default function StudentHeader({ me, dot, notesOpen, menuOpen, setNotesOp
   return (
     <header className="top">
       <div className="in">
-        <a className="brand" href="/student" aria-label="Testverse home">
-          <svg className="tv-logo" style={{ height: '38px' }} viewBox="0 0 1784 409" role="img" aria-label="Testverse by Studyverse">
+        <Link className="brand" to="/student" aria-label="Testverse home">
+          <svg className="tv-logo" style={{ height: '34px' }} viewBox="0 0 1784 409" role="img" aria-label="Testverse by Studyverse">
             <use href="#tv-logo" />
           </svg>
-        </a>
+        </Link>
         <nav className="mainnav" aria-label="Main">
-          <a href="/student" aria-current="page">
+          <Link to="/student" aria-current="page">
             Home
-          </a>
+          </Link>
           <a href="#series">My test series</a>
           <a href="#live">Live tests</a>
           <a href="#results">Results</a>
@@ -56,10 +58,6 @@ export default function StudentHeader({ me, dot, notesOpen, menuOpen, setNotesOp
         </nav>
         <div className="top-right">
           <a className="credit-chip" href="#refer" title="Your credits">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" aria-hidden="true">
-              <circle cx="12" cy="12" r="9" />
-              <path d="M9 9h6M9 13h6M12 9v8" />
-            </svg>
             <span id="credits">{rupee(me.credits)}</span>
             <span className="label">credits</span>
           </a>
@@ -67,17 +65,17 @@ export default function StudentHeader({ me, dot, notesOpen, menuOpen, setNotesOp
             className="icon-btn"
             type="button"
             id="bell"
-            aria-label="Notifications"
+            aria-label={dot ? 'Notifications, ' + unread + ' unread' : 'Notifications'}
             aria-expanded={notesOpen ? 'true' : 'false'}
             onClick={(e) => {
               e.stopPropagation()
               toggle('notes')
             }}
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-            </svg>
-            <span className="dot" id="bell-dot" hidden={!dot} />
+            Alerts
+            <span className="dot" id="bell-dot" hidden={!dot} aria-label={unread + ' unread'}>
+              {unread}
+            </span>
           </button>
           <button
             className="avatar"

@@ -1,8 +1,10 @@
-import MathText, { esc } from '../../../lib/MathText.jsx'
+import MathText from '../../../lib/MathText.jsx'
+import { esc } from '../../../lib/esc.js'
 import { mmss } from '../../../lib/format.js'
 import { AR_OPTIONS } from '../data/papers.js'
 import { computeResult } from '../scoring.js'
 import { hasAnswer } from '../answers.js'
+import { Link } from 'react-router-dom'
 
 function letter(i) {
   return String.fromCharCode(65 + i)
@@ -38,7 +40,7 @@ export default function ResultView({ paper, flat, attempt, reviewFilter, setRevi
   const chapters = Object.keys(R.chapters)
     .map((k) => ({ name: k, ...R.chapters[k] }))
     .sort((a, b) => b.lost - a.lost)
-  const colour = (p) => (p >= 75 ? '#1E7A46' : p >= 50 ? 'var(--blue)' : 'var(--orange)')
+  const colour = (p) => (p >= 75 ? 'var(--green)' : p >= 50 ? 'var(--blue)' : 'var(--amber)')
   const lang = attempt.lang || 'en'
 
   const list = R.items.filter((it) => {
@@ -53,20 +55,21 @@ export default function ResultView({ paper, flat, attempt, reviewFilter, setRevi
     <section id="v-result">
       <div className="bar">
         <div className="in">
-          <a className="brand" href="/student">
+          <Link className="brand" to="/student">
             <svg className="tv-logo" style={{ height: '34px' }} viewBox="0 0 1784 409" role="img" aria-label="Testverse by Studyverse">
               <use href="#tv-logo" />
             </svg>
-          </a>
-          <a href="/student" style={{ marginLeft: 'auto', color: '#C9D0EC', fontSize: '14px' }}>
-            ← Back to home
-          </a>
+          </Link>
+          <Link className="back-link" to="/student">
+            Back to home
+          </Link>
         </div>
       </div>
 
       <div className="res-wrap" id="result">
         <div className="res-head">
           <div>
+            <span className="eyebrow">Result and analysis</span>
             <h1>
               {paper.title}: your result
             </h1>
@@ -78,9 +81,9 @@ export default function ResultView({ paper, flat, attempt, reviewFilter, setRevi
             </p>
           </div>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-            <a className="btn btn-outline" href="/student">
+            <Link className="btn btn-outline" to="/student">
               Back to home
-            </a>
+            </Link>
           </div>
         </div>
 
@@ -121,6 +124,7 @@ export default function ResultView({ paper, flat, attempt, reviewFilter, setRevi
         <div className="two">
           <section className="card">
             <h2>Section-wise</h2>
+            <div className="section-rows">
             {paper.sections.map((s) => {
               const S = R.sections[s.name]
               const p = S.max ? Math.max(0, Math.round((S.marks / S.max) * 100)) : 0
@@ -135,12 +139,13 @@ export default function ResultView({ paper, flat, attempt, reviewFilter, setRevi
                       {S.marks}/{S.max}
                     </b>
                   </div>
-                  <p style={{ fontSize: '12px', color: 'var(--muted)', margin: '-4px 0 12px' }}>
+                  <p className="bar-meta">
                     {S.correct} correct · {S.wrong} wrong · {S.skipped} skipped · {mmss(S.time)}
                   </p>
                 </div>
               )
             })}
+            </div>
           </section>
 
           <section className="card">
@@ -180,8 +185,8 @@ export default function ResultView({ paper, flat, attempt, reviewFilter, setRevi
                 <tr>
                   <th>Chapter</th>
                   <th>Section</th>
-                  <th>Correct</th>
-                  <th>Marks lost</th>
+                  <th className="n">Correct</th>
+                  <th className="n">Marks lost</th>
                 </tr>
               </thead>
               <tbody>
@@ -189,10 +194,10 @@ export default function ResultView({ paper, flat, attempt, reviewFilter, setRevi
                   <tr key={c.name + c.sec}>
                     <td>{c.name}</td>
                     <td>{c.sec}</td>
-                    <td>
+                    <td className="n">
                       {c.right} / {c.n}
                     </td>
-                    <td>{c.lost ? <b style={{ color: 'var(--orange-ink)' }}>{c.lost}</b> : '0'}</td>
+                    <td className="n">{c.lost ? <b className="lost">{c.lost}</b> : '0'}</td>
                   </tr>
                 ))}
               </tbody>
@@ -200,9 +205,9 @@ export default function ResultView({ paper, flat, attempt, reviewFilter, setRevi
           </div>
         </section>
 
-        <section style={{ display: 'grid', gap: '12px' }}>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'space-between', alignItems: 'center' }}>
-            <h2 style={{ fontSize: '20px' }}>Questions and solutions</h2>
+        <section style={{ display: 'grid', gap: '16px' }}>
+          <div className="review-head">
+            <h2>Questions and solutions</h2>
             <div className="seg" role="group" aria-label="Show">
               {[
                 ['all', 'All'],
@@ -226,19 +231,19 @@ export default function ResultView({ paper, flat, attempt, reviewFilter, setRevi
                 return (
                   <article className="rq" key={q.id}>
                     <div className="rq-top">
-                      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
-                        <b style={{ fontFamily: 'var(--display)' }}>Q.{it.n}</b>
+                      <div className="rq-id">
+                        <b>Q.{it.n}</b>
                         <span className={'pill ' + L[0]}>
                           {L[1]} · {it.sc.marks > 0 ? '+' : ''}
                           {it.sc.marks}
                         </span>
                         {it.r && it.r.marked ? <span className="pill p-skipped">Marked</span> : null}
                       </div>
-                      <span style={{ fontSize: '13px', color: 'var(--muted)' }}>
+                      <span className="rq-meta">
                         {it.f.sec} · {q.chapter} · {mmss(it.time)}
                       </span>
                     </div>
-                    <div style={{ fontSize: '16px', lineHeight: 1.6 }}>
+                    <div className="rq-text">
                       <MathText html={esc(tx(q.text, lang))} />
                     </div>
                     {q.type === 'ar' ? (
@@ -278,7 +283,7 @@ export default function ResultView({ paper, flat, attempt, reviewFilter, setRevi
                       {'\n'}
                       <MathText html={esc(q.solution)} />
                     </div>
-                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                    <div className="rq-actions">
                       <button className="btn btn-outline btn-sm" type="button" onClick={() => onVideo(it)}>
                         Request video solution
                       </button>

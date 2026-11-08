@@ -1,14 +1,5 @@
 import { useEffect, useRef } from 'react'
 
-/* Escape like the design's esc() — React would otherwise inject the string as
-   HTML only through dangerouslySetInnerHTML, so we escape first. */
-export function esc(v) {
-  return String(v == null ? '' : v).replace(
-    /[&<>"']/g,
-    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c],
-  )
-}
-
 /*
   Renders HTML that may contain $...$ formulas, then runs KaTeX auto-render on
   it (the design calls its math() helper the same way). The HTML string is set

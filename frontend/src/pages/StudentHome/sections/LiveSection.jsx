@@ -1,5 +1,6 @@
 import { liveState } from '../../../data/studentDemo.js'
 import { fmt, pad } from '../../../lib/format.js'
+import { Link } from 'react-router-dom'
 
 /* design/student-home.html liveSection() — live hero + upcoming list */
 export default function LiveSection({ live, now, onRegister }) {
@@ -11,7 +12,7 @@ export default function LiveSection({ live, now, onRegister }) {
   const rest = next.filter((t) => t !== hero)
 
   return (
-    <section id="live" style={{ display: 'grid', gap: '14px' }}>
+    <section id="live" style={{ display: 'grid', gap: '24px' }}>
       {hero ? <LiveHero hero={hero} now={now} onRegister={onRegister} /> : null}
 
       {rest.length ? (
@@ -82,15 +83,15 @@ function LiveHero({ hero, now, onRegister }) {
         {isOpen ? (
           <>
             {hero.registered ? (
-              <a className="btn btn-gold" href={'/test?test=' + hero.id}>
+              <Link className="btn btn-gold" to={'/test?test=' + hero.id}>
                 Start live test
-              </a>
+              </Link>
             ) : (
               <button className="btn btn-gold" type="button" data-register={hero.id} onClick={() => onRegister(hero.id)}>
                 Register and start
               </button>
             )}
-            <span style={{ fontSize: '13px', color: '#C9D0EC' }}>
+            <span className="live-note">
               Entry closes in <b>{Math.floor(left / 60)} min {pad(left % 60)} s</b>
             </span>
           </>
@@ -115,7 +116,7 @@ function LiveHero({ hero, now, onRegister }) {
               </div>
             </div>
             {hero.registered ? (
-              <span style={{ fontSize: '13px', color: 'var(--gold)' }}>✓ You’re registered. We’ll remind you.</span>
+              <span className="live-note ok">You’re registered. We’ll remind you.</span>
             ) : (
               <button className="btn btn-gold" type="button" data-register={hero.id} onClick={() => onRegister(hero.id)}>
                 Register free
