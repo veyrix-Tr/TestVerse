@@ -1,0 +1,297 @@
+[
+  {
+    "type": "single",
+    "chapter": "Units and Measurements",
+    "text": "In a new system of units, the fundamental quantities chosen are force $(F)$, velocity $(V)$ and time $(T)$. The dimensional formula of pressure in this system is:",
+    "options": [
+      "$[FV^{-1}T^{-2}]$",
+      "$[FV^{2}T^{2}]$",
+      "$[FV^{-2}T^{-2}]$",
+      "$[FV^{-2}T^{-1}]$"
+    ],
+    "answer": "C",
+    "solution": "Length has dimensions $[VT]$, so area is $[V^2T^2]$. Pressure $= \\dfrac{\\text{force}}{\\text{area}} = [FV^{-2}T^{-2}]$."
+  },
+  {
+    "type": "single",
+    "chapter": "Motion in a Plane",
+    "text": "A particle is projected from the ground with speed $u$ at an angle of $60^\\circ$ with the horizontal. The ratio of the radius of curvature of its path at the point of projection to the radius of curvature at the highest point is:",
+    "options": [
+      "8",
+      "4",
+      "2",
+      "$\\frac{1}{8}$"
+    ],
+    "answer": "A",
+    "solution": "At projection: speed $u$, normal acceleration $g\\cos\\theta$, so $r_1 = \\dfrac{u^2}{g\\cos\\theta}$. At the top: speed $u\\cos\\theta$, normal acceleration $g$, so $r_2 = \\dfrac{u^2\\cos^2\\theta}{g}$. Ratio $= \\dfrac{1}{\\cos^3\\theta} = \\dfrac{1}{(1/2)^3} = 8$."
+  },
+  {
+    "type": "single",
+    "chapter": "Laws of Motion",
+    "text": "A block of mass $2$ kg rests on a rough horizontal floor with coefficient of static friction $0.75$. A force $F$ is applied on the block at an adjustable angle above the horizontal. The minimum value of $F$ (over all possible angles) that can just make the block start sliding is: (Take $g = 10\\ \\text{m s}^{-2}$)",
+    "options": [
+      "15 N",
+      "12 N",
+      "9 N",
+      "20 N"
+    ],
+    "answer": "B",
+    "solution": "For pull at angle $\\theta$: $F\\cos\\theta = \\mu(mg - F\\sin\\theta)$, so $F = \\dfrac{\\mu mg}{\\cos\\theta + \\mu\\sin\\theta}$. Its minimum is $\\dfrac{\\mu mg}{\\sqrt{1+\\mu^2}} = \\dfrac{15}{1.25} = 12$ N (at $\\tan\\theta = \\mu$, i.e. $\\theta = 37^\\circ$)."
+  },
+  {
+    "type": "single",
+    "chapter": "Work, Energy and Power",
+    "text": "A particle of mass $1$ kg moves along the x-axis under a conservative force with potential energy $U(x) = x^2 - 4x + 3$ (in joule, $x$ in metre). If the total mechanical energy of the particle is $5$ J, its maximum speed is:",
+    "options": [
+      "$3\\ \\text{m s}^{-1}$",
+      "$\\sqrt{10}\\ \\text{m s}^{-1}$",
+      "$2\\sqrt{2}\\ \\text{m s}^{-1}$",
+      "$2\\sqrt{3}\\ \\text{m s}^{-1}$"
+    ],
+    "answer": "D",
+    "solution": "$U$ is minimum where $dU/dx = 2x - 4 = 0$, i.e. $x = 2$ m, giving $U_{min} = 4 - 8 + 3 = -1$ J. Maximum KE $= 5 - (-1) = 6$ J, so $\\frac{1}{2}(1)v^2 = 6$ and $v = \\sqrt{12} = 2\\sqrt{3}\\ \\text{m s}^{-1}$."
+  },
+  {
+    "type": "single",
+    "chapter": "System of Particles and Rotational Motion",
+    "text": "A uniform solid sphere spinning with angular speed $\\omega_0$ about a horizontal axis through its centre (centre at rest) is gently placed on a rough horizontal floor. By the time it starts rolling without slipping, the fraction of its initial kinetic energy lost to friction is:",
+    "options": [
+      "$\\frac{5}{7}$",
+      "$\\frac{2}{7}$",
+      "$\\frac{3}{7}$",
+      "$\\frac{2}{5}$"
+    ],
+    "answer": "A",
+    "solution": "Angular momentum about the contact point is conserved: $\\frac{2}{5}mR^2\\omega_0 = \\frac{7}{5}mR^2\\omega$, so $\\omega = \\frac{2}{7}\\omega_0$. $K_i = \\frac{1}{5}mR^2\\omega_0^2$, $K_f = \\frac{1}{2}\\cdot\\frac{7}{5}mR^2\\omega^2 = \\frac{2}{35}mR^2\\omega_0^2$. $K_f/K_i = \\frac{2}{7}$, so the fraction lost is $\\frac{5}{7}$."
+  },
+  {
+    "type": "single",
+    "chapter": "Gravitation",
+    "text": "A satellite of mass $m$ moves in a circular orbit of radius $2R$ about the Earth (radius $R$, acceleration due to gravity at the surface $g$). The minimum energy required to shift it to a circular orbit of radius $3R$ is:",
+    "options": [
+      "$\\frac{mgR}{6}$",
+      "$\\frac{mgR}{24}$",
+      "$\\frac{mgR}{12}$",
+      "$\\frac{mgR}{3}$"
+    ],
+    "answer": "C",
+    "solution": "Total energy in orbit of radius $r$ is $-\\dfrac{GMm}{2r}$. $\\Delta E = \\dfrac{GMm}{2}\\left(\\dfrac{1}{2R} - \\dfrac{1}{3R}\\right) = \\dfrac{GMm}{12R} = \\dfrac{mgR}{12}$ (using $GM = gR^2$)."
+  },
+  {
+    "type": "single",
+    "chapter": "Mechanical Properties of Fluids",
+    "text": "Given below are two statements:\nStatement I: The pressure at a point in a fluid at rest is the same in all directions.\nStatement II: In the steady streamline flow of an ideal fluid through a horizontal pipe of varying cross-section, both the speed and the pressure of the fluid are greater at the narrower section.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "C",
+    "solution": "Statement I is Pascal's law for a fluid at rest: true. By continuity the speed is greater at the narrower section, but by Bernoulli's theorem (horizontal pipe) the pressure is then smaller there, so Statement II is false."
+  },
+  {
+    "type": "single",
+    "chapter": "Thermodynamics",
+    "text": "One mole of an ideal monatomic gas undergoes a process in which its pressure is directly proportional to its volume $(P = kV)$. The molar heat capacity of the gas for this process is:",
+    "options": [
+      "$\\frac{3}{2}R$",
+      "$2R$",
+      "$\\frac{5}{2}R$",
+      "$3R$"
+    ],
+    "answer": "B",
+    "solution": "$W = \\int P\\,dV = \\frac{k}{2}(V_2^2 - V_1^2) = \\frac{1}{2}(P_2V_2 - P_1V_1) = \\frac{1}{2}R\\Delta T$. So $Q = C_V\\Delta T + \\frac{1}{2}R\\Delta T$ and $C = \\frac{3}{2}R + \\frac{1}{2}R = 2R$."
+  },
+  {
+    "type": "single",
+    "chapter": "Oscillations",
+    "text": "A block of mass $m$ attached to a light spring of force constant $k$ oscillates with time period $T$. The spring is cut into three equal parts and the same block is now attached to two of these parts connected in parallel. The new time period of oscillation is:",
+    "options": [
+      "$\\frac{T}{\\sqrt{3}}$",
+      "$T\\sqrt{\\frac{2}{3}}$",
+      "$T\\sqrt{6}$",
+      "$\\frac{T}{\\sqrt{6}}$"
+    ],
+    "answer": "D",
+    "solution": "Each one-third piece has spring constant $3k$. Two in parallel give $k' = 6k$. Since $T \\propto 1/\\sqrt{k}$, $T' = \\dfrac{T}{\\sqrt{6}}$."
+  },
+  {
+    "type": "single",
+    "chapter": "Waves",
+    "text": "A string of length $1$ m and linear mass density $5\\ \\text{g m}^{-1}$ is fixed at both ends. Two consecutive resonant frequencies of the string are $420$ Hz and $490$ Hz. The tension in the string is:",
+    "options": [
+      "98 N",
+      "49 N",
+      "196 N",
+      "24.5 N"
+    ],
+    "answer": "A",
+    "solution": "Consecutive harmonics differ by the fundamental, so $f_1 = 70$ Hz. Wave speed $v = 2Lf_1 = 140\\ \\text{m s}^{-1}$. Tension $= \\mu v^2 = 5\\times10^{-3}\\times 19600 = 98$ N."
+  },
+  {
+    "type": "single",
+    "chapter": "Electric Charges and Fields",
+    "text": "An electric dipole of dipole moment $\\vec{p} = (2\\hat{i} + 3\\hat{j})\\ \\mu\\text{C m}$ is placed in a uniform electric field $\\vec{E} = 4\\times10^{5}\\,\\hat{i}\\ \\text{N C}^{-1}$. The torque acting on the dipole is:",
+    "options": [
+      "$+1.2\\,\\hat{k}$ N m",
+      "$-1.2\\,\\hat{k}$ N m",
+      "$+0.8\\,\\hat{k}$ N m",
+      "$-0.8\\,\\hat{k}$ N m"
+    ],
+    "answer": "B",
+    "solution": "$\\vec{\\tau} = \\vec{p}\\times\\vec{E} = (2\\hat{i} + 3\\hat{j})\\times10^{-6}\\times 4\\times10^{5}\\,\\hat{i} = 1.2\\,(\\hat{j}\\times\\hat{i}) = -1.2\\,\\hat{k}$ N m (the $\\hat{i}\\times\\hat{i}$ term vanishes)."
+  },
+  {
+    "type": "single",
+    "chapter": "Moving Charges and Magnetism",
+    "text": "Given below are two statements: one is labelled as Assertion A and the other is labelled as Reason R.\nAssertion A: A proton and an $\\alpha$-particle having the same kinetic energy enter a uniform magnetic field perpendicular to it; they move on circular paths of equal radii.\nReason R: The radius of the circular path of a charged particle of mass $m$, charge $q$ and kinetic energy $K$ moving perpendicular to a uniform magnetic field $B$ is $r = \\dfrac{\\sqrt{2mK}}{qB}$.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both A and R are true and R is the correct explanation of A",
+      "Both A and R are true but R is NOT the correct explanation of A",
+      "A is true but R is false",
+      "A is false but R is true"
+    ],
+    "answer": "A",
+    "solution": "$r = \\dfrac{mv}{qB} = \\dfrac{\\sqrt{2mK}}{qB}$, so R is true. For the $\\alpha$-particle $m \\to 4m$ and $q \\to 2e$: $r_\\alpha = \\dfrac{\\sqrt{8mK}}{2eB} = \\dfrac{\\sqrt{2mK}}{eB} = r_p$. A is true and follows directly from R."
+  },
+  {
+    "type": "single",
+    "chapter": "Electromagnetic Induction",
+    "text": "A conducting rod of length $1$ m rotates with angular speed $10\\ \\text{rad s}^{-1}$ about an axis through one of its ends, in a plane perpendicular to a uniform magnetic field of $0.2$ T. The potential difference between the midpoint of the rod and its free end is:",
+    "options": [
+      "0.25 V",
+      "1.0 V",
+      "0.5 V",
+      "0.75 V"
+    ],
+    "answer": "D",
+    "solution": "emf between radii $r_1$ and $r_2$ is $\\int_{r_1}^{r_2} B\\omega r\\,dr = \\frac{1}{2}B\\omega(r_2^2 - r_1^2)$. With $r_1 = 0.5$ m, $r_2 = 1$ m: $\\frac{1}{2}(0.2)(10)(1 - 0.25) = 0.75$ V."
+  },
+  {
+    "type": "single",
+    "chapter": "Alternating Current",
+    "text": "In a series LCR circuit connected to an AC source, the rms voltages across the resistor, the inductor and the capacitor are $30$ V, $90$ V and $50$ V respectively. The rms voltage of the source and the power factor of the circuit are respectively:",
+    "options": [
+      "170 V and 1",
+      "50 V and 0.8",
+      "50 V and 0.6",
+      "70 V and 0.6"
+    ],
+    "answer": "C",
+    "solution": "$V = \\sqrt{V_R^2 + (V_L - V_C)^2} = \\sqrt{30^2 + 40^2} = 50$ V. Power factor $= \\cos\\phi = V_R/V = 30/50 = 0.6$."
+  },
+  {
+    "type": "single",
+    "chapter": "Electromagnetic Waves",
+    "text": "Match List-I with List-II:\nList-I (Electromagnetic wave)\n(A) Microwaves\n(B) Infrared waves\n(C) Ultraviolet rays\n(D) X-rays\nList-II (Source / property)\n(I) Produced by hot bodies and vibrations of atoms and molecules\n(II) Produced by bombarding a metal target with high-energy electrons\n(III) Produced by special vacuum tubes such as the klystron and magnetron\n(IV) Largely absorbed by the ozone layer of the atmosphere\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-I, B-III, C-IV, D-II",
+      "A-III, B-I, C-IV, D-II",
+      "A-III, B-I, C-II, D-IV",
+      "A-II, B-I, C-IV, D-III"
+    ],
+    "answer": "B",
+    "solution": "Microwaves come from klystron/magnetron valves (III); infrared from hot bodies and molecular vibrations (I); UV is largely absorbed by the ozone layer (IV); X-rays are produced when high-energy electrons strike a metal target (II)."
+  },
+  {
+    "type": "single",
+    "chapter": "Ray Optics and Optical Instruments",
+    "text": "A thin equiconvex lens made of glass of refractive index $1.5$ has a focal length of $20$ cm in air. When it is completely immersed in a liquid of refractive index $1.6$, its focal length becomes:",
+    "options": [
+      "$+80$ cm",
+      "$+160$ cm",
+      "$-80$ cm",
+      "$-160$ cm"
+    ],
+    "answer": "D",
+    "solution": "In air: $\\frac{1}{20} = (1.5 - 1)\\frac{2}{R}$, so $R = 20$ cm. In liquid: $\\frac{1}{f} = \\left(\\frac{1.5}{1.6} - 1\\right)\\frac{2}{20} = -\\frac{1}{16}\\times\\frac{1}{10} = -\\frac{1}{160}$, so $f = -160$ cm (diverging)."
+  },
+  {
+    "type": "single",
+    "chapter": "Wave Optics",
+    "text": "In a Young's double-slit experiment with two identical slits, the maximum intensity on the screen is $I_0$. The intensity at a point on the screen where the path difference between the two waves is $\\frac{\\lambda}{3}$ is:",
+    "options": [
+      "$\\frac{3I_0}{4}$",
+      "$\\frac{I_0}{2}$",
+      "$\\frac{I_0}{4}$",
+      "$\\frac{I_0}{8}$"
+    ],
+    "answer": "C",
+    "solution": "Phase difference $\\phi = \\frac{2\\pi}{\\lambda}\\cdot\\frac{\\lambda}{3} = \\frac{2\\pi}{3}$. $I = I_0\\cos^2\\frac{\\phi}{2} = I_0\\cos^2 60^\\circ = \\frac{I_0}{4}$."
+  },
+  {
+    "type": "single",
+    "chapter": "Dual Nature of Radiation and Matter",
+    "text": "A proton, starting from rest, is accelerated through a potential difference $V$ and acquires de Broglie wavelength $\\lambda$. Through what potential difference must an $\\alpha$-particle, starting from rest, be accelerated so that its de Broglie wavelength is also $\\lambda$? (Take $m_\\alpha = 4m_p$.)",
+    "options": [
+      "$\\frac{V}{8}$",
+      "$\\frac{V}{4}$",
+      "$\\frac{V}{2}$",
+      "$2V$"
+    ],
+    "answer": "A",
+    "solution": "$\\lambda = \\dfrac{h}{\\sqrt{2mqV}}$. Equal wavelengths need $m_p eV = (4m_p)(2e)V'$, so $V' = \\dfrac{V}{8}$."
+  },
+  {
+    "type": "single",
+    "chapter": "Nuclei",
+    "text": "A nucleus of mass number $240$ with binding energy per nucleon $7.6$ MeV splits into two nuclei of mass number $120$ each, each having binding energy per nucleon $8.5$ MeV. The energy released in this fission is:",
+    "options": [
+      "108 MeV",
+      "432 MeV",
+      "204 MeV",
+      "216 MeV"
+    ],
+    "answer": "D",
+    "solution": "Energy released $=$ (final BE) $-$ (initial BE) $= 2\\times120\\times8.5 - 240\\times7.6 = 2040 - 1824 = 216$ MeV."
+  },
+  {
+    "type": "single",
+    "chapter": "Semiconductor Electronics",
+    "text": "Choose the correct statements:\nA. When a p-n junction is forward biased, the width of its depletion layer decreases.\nB. A Zener diode used as a voltage regulator is operated in the reverse breakdown region.\nC. In an intrinsic semiconductor, the number of free electrons is equal to the number of holes.\nD. Doping pure silicon with a pentavalent impurity produces a p-type semiconductor.\nChoose the correct answer from the options given below:",
+    "options": [
+      "A and D only",
+      "A, B and C only",
+      "B, C and D only",
+      "A, B, C and D"
+    ],
+    "answer": "B",
+    "solution": "A, B and C are correct. D is wrong: a pentavalent (donor) impurity such as P or As gives extra electrons and makes silicon n-type; a trivalent impurity makes it p-type."
+  },
+  {
+    "type": "integer",
+    "chapter": "System of Particles and Rotational Motion",
+    "text": "A uniform circular disc of mass $16$ kg and radius $1$ m lies in a plane. A circular portion of radius $0.5$ m is removed from it such that the rim of the removed portion passes through the centre of the disc. The moment of inertia of the remaining part about an axis through the centre of the original disc and perpendicular to its plane is $\\frac{x}{2}\\ \\text{kg m}^2$. The value of $x$ is ______.",
+    "answer": 13,
+    "solution": "Full disc: $I = \\frac{1}{2}(16)(1)^2 = 8$. Removed part has mass $16/4 = 4$ kg, centre at $0.5$ m: $I' = \\frac{1}{2}(4)(0.5)^2 + 4(0.5)^2 = 0.5 + 1 = 1.5$. Remaining $= 8 - 1.5 = 6.5 = \\frac{13}{2}\\ \\text{kg m}^2$, so $x = 13$."
+  },
+  {
+    "type": "integer",
+    "chapter": "Kinetic Theory",
+    "text": "The rms speed of oxygen $(O_2)$ molecules at $927^\\circ$C is equal to the rms speed of helium $(He)$ atoms at temperature $T$. The value of $T$ in kelvin is ______. (Molar masses: $O_2 = 32\\ \\text{g mol}^{-1}$, $He = 4\\ \\text{g mol}^{-1}$)",
+    "answer": 150,
+    "solution": "$v_{rms} = \\sqrt{3RT/M}$, so equal speeds need $T_1/M_1 = T_2/M_2$: $\\dfrac{1200}{32} = \\dfrac{T}{4}$, giving $T = 150$ K."
+  },
+  {
+    "type": "integer",
+    "chapter": "Electrostatic Potential and Capacitance",
+    "text": "An air-filled parallel plate capacitor has capacitance $14\\ \\mu\\text{F}$ and plate separation $d$. A dielectric slab of dielectric constant $4$, having the same area as the plates and thickness $\\frac{3d}{4}$, is inserted between the plates. The new capacitance (in $\\mu$F) is ______.",
+    "answer": 32,
+    "solution": "$C = \\dfrac{\\varepsilon_0 A}{d - t + t/K} = \\dfrac{\\varepsilon_0 A}{\\frac{d}{4} + \\frac{3d}{16}} = \\dfrac{16}{7}\\cdot\\dfrac{\\varepsilon_0 A}{d} = \\dfrac{16}{7}\\times 14 = 32\\ \\mu\\text{F}$."
+  },
+  {
+    "type": "integer",
+    "chapter": "Current Electricity",
+    "text": "The resistance of a metal wire varies with temperature as $R_t = R_0(1 + \\alpha t)$, where $R_0$ is its resistance at $0^\\circ$C and $t$ is in $^\\circ$C. Its resistance is $20\\ \\Omega$ at $20^\\circ$C and $25\\ \\Omega$ at $70^\\circ$C. The temperature (in $^\\circ$C) at which its resistance becomes $30\\ \\Omega$ is ______.",
+    "answer": 120,
+    "solution": "$20 = R_0(1 + 20\\alpha)$ and $25 = R_0(1 + 70\\alpha)$. Dividing: $25 + 500\\alpha = 20 + 1400\\alpha$, so $\\alpha = \\frac{1}{180}\\ ^\\circ\\text{C}^{-1}$ and $R_0 = 18\\ \\Omega$. Then $30 = 18\\left(1 + \\frac{t}{180}\\right)$ gives $t = 120^\\circ$C."
+  },
+  {
+    "type": "integer",
+    "chapter": "Atoms",
+    "text": "The wavelength of the first line of the Balmer series ($n = 3 \\rightarrow n = 2$) of the hydrogen atom is $656$ nm. The wavelength (in nm) of the photon emitted in the same transition ($n = 3 \\rightarrow n = 2$) of a singly ionised helium ion $(He^+)$ is ______. (Ignore nuclear motion.)",
+    "answer": 164,
+    "solution": "For hydrogen-like species $\\dfrac{1}{\\lambda} = RZ^2\\left(\\dfrac{1}{n_1^2} - \\dfrac{1}{n_2^2}\\right)$, so $\\lambda \\propto \\dfrac{1}{Z^2}$. For $He^+$ $(Z = 2)$: $\\lambda = \\dfrac{656}{4} = 164$ nm."
+  }
+]

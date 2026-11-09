@@ -1,0 +1,197 @@
+[
+  {
+    "type": "single",
+    "chapter": "Structure of Atom",
+    "text": "The wavelength of the first line ($H_\\alpha$, $n = 3 \\rightarrow n = 2$) of the Balmer series of the hydrogen atom is 656 nm. The wavelength of the corresponding transition ($n = 3 \\rightarrow n = 2$) in the $He^+$ ion is",
+    "options": ["328 nm", "164 nm", "656 nm", "2624 nm"],
+    "answer": "B",
+    "solution": "For hydrogen-like species, $\\frac{1}{\\lambda} = R_H Z^2 \\left(\\frac{1}{n_1^2} - \\frac{1}{n_2^2}\\right)$, so for the same transition $\\lambda \\propto \\frac{1}{Z^2}$. For $He^+$, $Z = 2$: $\\lambda = \\frac{656}{4} = 164$ nm."
+  },
+  {
+    "type": "single",
+    "chapter": "Classification of Elements and Periodicity in Properties",
+    "text": "The correct order of first ionisation enthalpy of the elements B, C, N and O is",
+    "options": ["$B \\lt C \\lt N \\lt O$", "$C \\lt B \\lt O \\lt N$", "$O \\lt B \\lt C \\lt N$", "$B \\lt C \\lt O \\lt N$"],
+    "answer": "D",
+    "solution": "Ionisation enthalpy generally increases across period 2, but N (half-filled $2p^3$, extra stability) has a higher value than O, in which removal of a paired $2p$ electron is easier due to electron-electron repulsion. Values (kJ/mol): B 801, C 1086, O 1314, N 1402. Order: $B \\lt C \\lt O \\lt N$."
+  },
+  {
+    "type": "single",
+    "chapter": "Chemical Bonding and Molecular Structure",
+    "text": "Given below are two statements:\nStatement I: The dipole moment of $NF_3$ is lower than that of $NH_3$.\nStatement II: In $NH_3$, the orbital dipole due to the lone pair acts in the direction opposite to the resultant dipole of the three N–H bonds.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": ["Both Statement I and Statement II are true", "Both Statement I and Statement II are false", "Statement I is true but Statement II is false", "Statement I is false but Statement II is true"],
+    "answer": "C",
+    "solution": "In $NH_3$ the lone-pair orbital dipole and the resultant N–H bond dipole point in the same direction and add up ($\\mu = 1.47$ D). In $NF_3$ the N–F bond dipoles point away from N, opposite to the lone-pair dipole, so they partly cancel ($\\mu = 0.23$ D). Statement I is true; Statement II describes $NF_3$, not $NH_3$, so it is false."
+  },
+  {
+    "type": "single",
+    "chapter": "Chemical Thermodynamics",
+    "text": "For the reaction $N_2(g) + 3H_2(g) \\rightarrow 2NH_3(g)$, $\\Delta H = -92.4$ kJ at 298 K. The value of $\\Delta U$ for the reaction at the same temperature is ($R = 8.314$ J K$^{-1}$ mol$^{-1}$)",
+    "options": ["$-87.4$ kJ", "$-97.4$ kJ", "$-92.4$ kJ", "$-89.9$ kJ"],
+    "answer": "A",
+    "solution": "$\\Delta n_g = 2 - 4 = -2$. $\\Delta U = \\Delta H - \\Delta n_g RT = -92.4 - (-2)(8.314 \\times 10^{-3})(298) = -92.4 + 4.96 = -87.4$ kJ."
+  },
+  {
+    "type": "single",
+    "chapter": "Equilibrium",
+    "text": "A buffer solution contains 0.20 M $CH_3COOH$ and 0.10 M $CH_3COONa$. If $pK_a$ of acetic acid is 4.74, the pH of the buffer is (log 2 = 0.30)",
+    "options": ["5.04", "4.74", "4.44", "3.44"],
+    "answer": "C",
+    "solution": "Henderson equation: $pH = pK_a + \\log\\frac{[\\text{salt}]}{[\\text{acid}]} = 4.74 + \\log\\frac{0.10}{0.20} = 4.74 - 0.30 = 4.44$."
+  },
+  {
+    "type": "single",
+    "chapter": "Solutions",
+    "text": "Assuming complete dissociation of all electrolytes, which of the following aqueous solutions has the highest boiling point?",
+    "options": ["0.10 m glucose", "0.10 m $K_2SO_4$", "0.10 m NaCl", "0.05 m $Al_2(SO_4)_3$"],
+    "answer": "B",
+    "solution": "$\\Delta T_b = i K_b m$, so compare $i \\times m$: glucose $1 \\times 0.10 = 0.10$; $K_2SO_4$ $3 \\times 0.10 = 0.30$; NaCl $2 \\times 0.10 = 0.20$; $Al_2(SO_4)_3$ $5 \\times 0.05 = 0.25$. The largest value is for 0.10 m $K_2SO_4$."
+  },
+  {
+    "type": "single",
+    "chapter": "Electrochemistry",
+    "text": "Given below are two statements:\nStatement I: For a weak electrolyte such as acetic acid, the limiting molar conductivity $\\Lambda_m^\\circ$ cannot be obtained accurately by extrapolating the plot of $\\Lambda_m$ versus $\\sqrt{c}$ to zero concentration.\nStatement II: Using Kohlrausch's law, $\\Lambda_m^\\circ(CH_3COOH)$ can be calculated from the $\\Lambda_m^\\circ$ values of HCl, NaCl and $CH_3COONa$.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": ["Both Statement I and Statement II are true", "Both Statement I and Statement II are false", "Statement I is true but Statement II is false", "Statement I is false but Statement II is true"],
+    "answer": "A",
+    "solution": "For a weak electrolyte $\\Lambda_m$ rises very steeply at low concentration (degree of dissociation increases), so the plot is not linear and cannot be extrapolated: Statement I is true. By Kohlrausch's law, $\\Lambda_m^\\circ(CH_3COOH) = \\Lambda_m^\\circ(CH_3COONa) + \\Lambda_m^\\circ(HCl) - \\Lambda_m^\\circ(NaCl)$: Statement II is true."
+  },
+  {
+    "type": "single",
+    "chapter": "Chemical Kinetics",
+    "text": "A first-order reaction is 90% complete in 46 min. The half-life of the reaction is (ln 2 = 0.693, log 10 = 1)",
+    "options": ["23.0 min", "27.7 min", "6.9 min", "13.8 min"],
+    "answer": "D",
+    "solution": "$k = \\frac{2.303}{t}\\log\\frac{[R]_0}{[R]} = \\frac{2.303}{46}\\log 10 = 0.0501$ min$^{-1}$. $t_{1/2} = \\frac{0.693}{k} = \\frac{0.693 \\times 46}{2.303} = 13.8$ min."
+  },
+  {
+    "type": "single",
+    "chapter": "p-Block Elements",
+    "text": "Match List-I with List-II:\nList-I (Molecule)\n(A) $XeF_4$\n(B) $SF_4$\n(C) $ClF_3$\n(D) $XeO_3$\nList-II (Shape)\n(I) See-saw\n(II) Square planar\n(III) Trigonal pyramidal\n(IV) T-shaped\nChoose the correct answer from the options given below:",
+    "options": ["A-I, B-II, C-IV, D-III", "A-II, B-I, C-IV, D-III", "A-II, B-IV, C-I, D-III", "A-III, B-I, C-IV, D-II"],
+    "answer": "B",
+    "solution": "$XeF_4$: 4 bp + 2 lp, square planar. $SF_4$: 4 bp + 1 lp, see-saw. $ClF_3$: 3 bp + 2 lp, T-shaped. $XeO_3$: 3 bp + 1 lp on Xe, trigonal pyramidal. So A-II, B-I, C-IV, D-III."
+  },
+  {
+    "type": "single",
+    "chapter": "The d- and f-Block Elements",
+    "text": "Consider the following statements:\nA. Among the 3d series elements, zinc has the lowest enthalpy of atomisation.\nB. $Cr^{2+}$ is a stronger reducing agent than $Fe^{2+}$.\nC. Due to lanthanoid contraction, Zr and Hf have almost identical atomic radii.\nD. $Cu^+$ is stable in aqueous solution.\nChoose the correct answer from the options given below:",
+    "options": ["A, B and C only", "A, B and D only", "B and C only", "A and D only"],
+    "answer": "A",
+    "solution": "A: true, Zn ($3d^{10}4s^2$) has no unpaired electrons for metallic bonding, so its enthalpy of atomisation is the lowest. B: true, $E^\\circ(Cr^{3+}/Cr^{2+}) = -0.41$ V while $E^\\circ(Fe^{3+}/Fe^{2+}) = +0.77$ V. C: true (Zr 160 pm, Hf 159 pm). D: false, $Cu^+$ disproportionates in water to $Cu^{2+}$ and Cu. Correct: A, B and C only."
+  },
+  {
+    "type": "single",
+    "chapter": "Coordination Compounds",
+    "text": "The correct IUPAC name of $[Co(NH_3)_4(H_2O)Cl]Cl_2$ is",
+    "options": ["aquatetraamminechloridocobalt(III) chloride", "tetraammineaquachloridocobalt(II) chloride", "tetraammineaquachloridocobaltate(III) chloride", "tetraammineaquachloridocobalt(III) chloride"],
+    "answer": "D",
+    "solution": "Ligands are named in alphabetical order ignoring prefixes: ammine, aqua, chlorido. Oxidation state of Co: $x + 0 + 0 - 1 = +2$, so $x = +3$. The complex ion is a cation, so the metal name is unchanged (no '-ate'). Name: tetraammineaquachloridocobalt(III) chloride."
+  },
+  {
+    "type": "single",
+    "chapter": "Principles Related to Practical Chemistry",
+    "text": "In the qualitative analysis of cations, solid $NH_4Cl$ is added before $NH_4OH$ while testing for Group III. This is done to",
+    "options": ["increase the concentration of $OH^-$ ions so that $Fe(OH)_3$ is precipitated completely", "oxidise $Fe^{2+}$ to $Fe^{3+}$", "suppress the ionisation of $NH_4OH$ so that hydroxides of later-group cations such as $Zn^{2+}$, $Mn^{2+}$ and $Mg^{2+}$ are not precipitated", "convert $Al^{3+}$ into soluble aluminate"],
+    "answer": "C",
+    "solution": "$NH_4^+$ from $NH_4Cl$ suppresses the ionisation of $NH_4OH$ (common ion effect), lowering $[OH^-]$. Only the hydroxides with very low $K_{sp}$ ($Fe(OH)_3$, $Al(OH)_3$, $Cr(OH)_3$) then precipitate, while those of Group IV/VI cations stay in solution. (Oxidation of $Fe^{2+}$ is done with conc. $HNO_3$.)"
+  },
+  {
+    "type": "single",
+    "chapter": "Organic Chemistry: Some Basic Principles and Techniques",
+    "text": "The IUPAC name of the compound $CH_2=CH-CH(CH_3)-CH_2OH$ is",
+    "options": ["3-methylbut-1-en-4-ol", "2-methylbut-3-en-1-ol", "1-hydroxy-2-methylbut-3-ene", "3-(hydroxymethyl)but-1-ene"],
+    "answer": "B",
+    "solution": "The principal functional group (–OH) is a suffix and gets the lowest locant: number from the $CH_2OH$ carbon. C1 bears OH, C2 bears $CH_3$, and the double bond is between C3 and C4. Name: 2-methylbut-3-en-1-ol."
+  },
+  {
+    "type": "single",
+    "chapter": "Organic Chemistry: Some Basic Principles and Techniques",
+    "text": "Given below are two statements: one is labelled as Assertion A and the other is labelled as Reason R.\nAssertion A: When an organic compound containing both nitrogen and sulphur is fused with a small amount of sodium, the Lassaigne's extract may give a blood-red colour with $Fe^{3+}$ instead of Prussian blue.\nReason R: Under these conditions nitrogen and sulphur together form sodium thiocyanate, which gives $[Fe(SCN)]^{2+}$ with $Fe^{3+}$, and no free cyanide ions are available.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": ["Both A and R are true and R is the correct explanation of A", "Both A and R are true but R is NOT the correct explanation of A", "A is true but R is false", "A is false but R is true"],
+    "answer": "A",
+    "solution": "With limited sodium, $Na + C + N + S \\rightarrow NaSCN$. Thiocyanate gives the blood-red complex $[Fe(SCN)]^{2+}$ with $Fe^{3+}$; since no free $CN^-$ is present, Prussian blue is not formed. R correctly explains A."
+  },
+  {
+    "type": "single",
+    "chapter": "Hydrocarbons",
+    "text": "An alkene with molecular formula $C_5H_{10}$ on ozonolysis (followed by Zn/$H_2O$) gives a mixture of propanone and ethanal. The alkene is",
+    "options": ["pent-2-ene", "2-methylbut-1-ene", "3-methylbut-1-ene", "2-methylbut-2-ene"],
+    "answer": "D",
+    "solution": "Joining the carbonyl carbons of $(CH_3)_2C=O$ and $CH_3CHO$ by a double bond gives $(CH_3)_2C=CH-CH_3$, i.e. 2-methylbut-2-ene. (Pent-2-ene gives ethanal + propanal; 2-methylbut-1-ene gives methanal + butanone; 3-methylbut-1-ene gives methanal + 2-methylpropanal.)"
+  },
+  {
+    "type": "single",
+    "chapter": "Haloalkanes and Haloarenes",
+    "text": "Consider the following bromides:\n(I) $C_6H_5CH_2Br$\n(II) $C_6H_5CH(CH_3)Br$\n(III) $C_6H_5C(CH_3)_2Br$\n(IV) $CH_3CH_2Br$\nThe correct order of decreasing reactivity towards $S_N1$ reaction is",
+    "options": ["I $\\gt$ II $\\gt$ III $\\gt$ IV", "IV $\\gt$ I $\\gt$ II $\\gt$ III", "III $\\gt$ II $\\gt$ I $\\gt$ IV", "III $\\gt$ I $\\gt$ II $\\gt$ IV"],
+    "answer": "C",
+    "solution": "$S_N1$ rate depends on carbocation stability. All three benzylic cations are resonance-stabilised; additional methyl groups add +I and hyperconjugative stabilisation: tertiary benzylic (III) $\\gt$ secondary benzylic (II) $\\gt$ primary benzylic (I) $\\gt$ primary alkyl (IV). Order: III $\\gt$ II $\\gt$ I $\\gt$ IV."
+  },
+  {
+    "type": "single",
+    "chapter": "Alcohols, Phenols and Ethers",
+    "text": "The correct order of decreasing acidic strength of the following compounds is\n(I) Phenol\n(II) 4-Nitrophenol\n(III) 4-Methylphenol\n(IV) 3-Nitrophenol",
+    "options": ["II $\\gt$ IV $\\gt$ I $\\gt$ III", "IV $\\gt$ II $\\gt$ I $\\gt$ III", "II $\\gt$ IV $\\gt$ III $\\gt$ I", "I $\\gt$ III $\\gt$ IV $\\gt$ II"],
+    "answer": "A",
+    "solution": "The para-nitro group stabilises phenoxide by both –R and –I effects (p$K_a$ 7.1); the meta-nitro group acts only by –I (p$K_a$ 8.3); phenol p$K_a$ 10.0; the electron-donating methyl group destabilises the phenoxide ion (p$K_a$ 10.2). Order: II $\\gt$ IV $\\gt$ I $\\gt$ III."
+  },
+  {
+    "type": "single",
+    "chapter": "Aldehydes, Ketones and Carboxylic Acids",
+    "text": "Match List-I with List-II:\nList-I (Named reaction)\n(A) Cannizzaro reaction\n(B) Etard reaction\n(C) Rosenmund reduction\n(D) Stephen reaction\nList-II (Reaction)\n(I) $RCOCl + H_2$ in presence of $Pd-BaSO_4$\n(II) $RCN$ with $SnCl_2$/HCl followed by hydrolysis\n(III) Toluene with $CrO_2Cl_2$ followed by hydrolysis\n(IV) HCHO with concentrated NaOH\nChoose the correct answer from the options given below:",
+    "options": ["A-IV, B-II, C-I, D-III", "A-IV, B-III, C-I, D-II", "A-I, B-III, C-IV, D-II", "A-II, B-III, C-I, D-IV"],
+    "answer": "B",
+    "solution": "Cannizzaro: aldehyde without α-H (HCHO) + conc. NaOH (IV). Etard: toluene + chromyl chloride gives benzaldehyde (III). Rosenmund: acyl chloride + $H_2$/Pd-$BaSO_4$ gives aldehyde (I). Stephen: nitrile + $SnCl_2$/HCl, then hydrolysis, gives aldehyde (II). So A-IV, B-III, C-I, D-II."
+  },
+  {
+    "type": "single",
+    "chapter": "Amines",
+    "text": "Which of the following amines reacts with benzenesulphonyl chloride (Hinsberg's reagent) to give a product that is insoluble in aqueous KOH?",
+    "options": ["Propan-1-amine", "N,N-Dimethylethanamine", "Aniline", "N-Methylethanamine"],
+    "answer": "D",
+    "solution": "Secondary amines give N,N-disubstituted sulphonamides with no H on nitrogen, so they are not acidic and do not dissolve in alkali. N-Methylethanamine ($CH_3NHC_2H_5$) is secondary. Primary amines (propan-1-amine, aniline) give alkali-soluble sulphonamides; the tertiary amine does not react."
+  },
+  {
+    "type": "single",
+    "chapter": "Biomolecules",
+    "text": "Consider the following statements:\nA. Glucose does not give Schiff's test and does not form the hydrogensulphite addition product with $NaHSO_3$, although it contains an aldehyde group.\nB. Sucrose is a reducing sugar.\nC. In the $\\alpha$-helix structure of proteins, the polypeptide chain is stabilised by hydrogen bonds between the N–H and C=O groups of amino acid residues of the same chain.\nD. In DNA, adenine pairs with uracil.\nChoose the correct answer from the options given below:",
+    "options": ["A, B and C only", "B and D only", "A and C only", "A, C and D only"],
+    "answer": "C",
+    "solution": "A: true, glucose exists mainly in the cyclic hemiacetal form, so the free –CHO tests fail. B: false, in sucrose the glycosidic link joins C1 of glucose and C2 of fructose, so it is non-reducing. C: true (NCERT description of the $\\alpha$-helix). D: false, in DNA adenine pairs with thymine; uracil occurs in RNA. Correct: A and C only."
+  },
+  {
+    "type": "integer",
+    "chapter": "Some Basic Concepts of Chemistry",
+    "text": "The density of a 3.0 M aqueous solution of NaOH is 1.12 g mL$^{-1}$. The molality of this solution is ______ mol kg$^{-1}$. (Molar mass of NaOH = 40 g mol$^{-1}$)",
+    "answer": 3,
+    "solution": "Take 1 L of solution: mass = 1120 g; NaOH = 3.0 mol = 120 g; mass of water = 1120 - 120 = 1000 g = 1 kg. Molality = 3.0/1 = 3 mol kg$^{-1}$."
+  },
+  {
+    "type": "integer",
+    "chapter": "Chemical Bonding and Molecular Structure",
+    "text": "According to molecular orbital theory, the number of species having a bond order of 2.5 among the following is ______.\n$O_2^+$, NO, $N_2^+$, CN, $O_2^-$, $N_2^-$, $NO^+$, $CN^-$, $C_2$",
+    "answer": 5,
+    "solution": "Bond orders: $O_2^+$ (15 e) 2.5; NO (15 e) 2.5; $N_2^+$ (13 e) 2.5; CN (13 e) 2.5; $O_2^-$ (17 e) 1.5; $N_2^-$ (15 e) 2.5; $NO^+$ (14 e) 3; $CN^-$ (14 e) 3; $C_2$ (12 e) 2. Species with bond order 2.5: $O_2^+$, NO, $N_2^+$, CN, $N_2^-$ = 5."
+  },
+  {
+    "type": "integer",
+    "chapter": "Electrochemistry",
+    "text": "For the cell $Zn(s) | Zn^{2+}(0.01\\text{ M}) || Cu^{2+}(1.0\\text{ M}) | Cu(s)$, $E^\\circ_{cell} = 1.10$ V at 298 K. The emf of the cell at 298 K is $x \\times 10^{-3}$ V. The value of $x$ is ______. (Take $\\frac{2.303RT}{F} = 0.059$ V)",
+    "answer": 1159,
+    "solution": "Cell reaction: $Zn + Cu^{2+} \\rightarrow Zn^{2+} + Cu$, $n = 2$. $E = E^\\circ - \\frac{0.059}{2}\\log\\frac{[Zn^{2+}]}{[Cu^{2+}]} = 1.10 - 0.0295 \\log(0.01) = 1.10 + 0.059 = 1.159$ V $= 1159 \\times 10^{-3}$ V."
+  },
+  {
+    "type": "integer",
+    "chapter": "Coordination Compounds",
+    "text": "The total number of unpaired electrons in the complexes $[Fe(CN)_6]^{3-}$, $[CoF_6]^{3-}$, $[Ni(CO)_4]$ and $[MnCl_4]^{2-}$ taken together is ______.",
+    "answer": 10,
+    "solution": "$[Fe(CN)_6]^{3-}$: $Fe^{3+}$ $d^5$, strong field (low spin $t_{2g}^5$): 1. $[CoF_6]^{3-}$: $Co^{3+}$ $d^6$, weak field (high spin): 4. $[Ni(CO)_4]$: Ni(0), $sp^3$ with $3d^{10}$: 0. $[MnCl_4]^{2-}$: $Mn^{2+}$ $d^5$, tetrahedral high spin: 5. Total = 1 + 4 + 0 + 5 = 10."
+  },
+  {
+    "type": "integer",
+    "chapter": "Aldehydes, Ketones and Carboxylic Acids",
+    "text": "The number of compounds among the following that give a positive iodoform test is ______.\nEthanol, methanol, propan-2-ol, propanone, ethanal, benzaldehyde, acetophenone, pentan-3-one, butan-2-ol, propanal",
+    "answer": 6,
+    "solution": "The iodoform test is given by compounds with a $CH_3CO-$ group or a $CH_3CH(OH)-$ group (oxidised to $CH_3CO-$ by NaOI). Positive: ethanol, propan-2-ol, propanone, ethanal, acetophenone, butan-2-ol = 6. Negative: methanol, benzaldehyde, pentan-3-one ($C_2H_5COC_2H_5$), propanal."
+  }
+]

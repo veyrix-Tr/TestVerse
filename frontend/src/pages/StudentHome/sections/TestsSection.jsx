@@ -103,6 +103,7 @@ export function TestHero({ test, now }) {
         <p className="hero-eyebrow">
           {live ? <span className="live-dot" aria-hidden="true"></span> : null}
           {eyebrow}
+          {test.isFree ? ' · Free mock' : ''}
           {test.subject ? ' · ' + test.subject : ''}
         </p>
         <h2 id="hero-title">{test.title}</h2>
@@ -123,6 +124,7 @@ function Tile({ t, now }) {
     <>
       <span className="tt-top">
         <span className="tt-subject">{t.subject}</span>
+        {t.isFree ? <span className="chip chip-gold">Free</span> : null}
       </span>
       <span className="tile-name">{t.title}</span>
       <span className="tt-facts">{facts(t)}</span>

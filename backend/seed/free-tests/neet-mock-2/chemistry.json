@@ -1,0 +1,587 @@
+[
+  {
+    "type": "single",
+    "chapter": "Some Basic Concepts of Chemistry",
+    "text": "What volume of $0.1\\ \\text{M}\\ H_2SO_4$ is required to completely neutralise $20\\ \\text{mL}$ of $0.15\\ \\text{M}\\ NaOH$?",
+    "options": [
+      "30 mL",
+      "15 mL",
+      "7.5 mL",
+      "20 mL"
+    ],
+    "answer": "B",
+    "solution": "Moles of NaOH $= 20 \\times 0.15 = 3$ mmol. Since $H_2SO_4 + 2NaOH \\rightarrow Na_2SO_4 + 2H_2O$, moles of $H_2SO_4$ needed $= 1.5$ mmol. Volume $= 1.5/0.1 = 15$ mL."
+  },
+  {
+    "type": "single",
+    "chapter": "Some Basic Concepts of Chemistry",
+    "text": "Which of the following contains the largest number of atoms?",
+    "options": [
+      "4 g of $H_2$",
+      "8 g of $CH_4$",
+      "11 g of $CO_2$",
+      "27 g of $H_2O$"
+    ],
+    "answer": "D",
+    "solution": "Moles of atoms: $H_2$: $(4/2)\\times 2 = 4$; $CH_4$: $(8/16)\\times 5 = 2.5$; $CO_2$: $(11/44)\\times 3 = 0.75$; $H_2O$: $(27/18)\\times 3 = 4.5$. So 27 g of water has the most atoms."
+  },
+  {
+    "type": "single",
+    "chapter": "Structure of Atom",
+    "text": "An atomic orbital has two radial nodes and one angular node. The orbital is:",
+    "options": [
+      "3p",
+      "3d",
+      "4p",
+      "4d"
+    ],
+    "answer": "C",
+    "solution": "Angular nodes $= l = 1$ (a p orbital). Radial nodes $= n - l - 1 = 2$, so $n = 4$. The orbital is 4p."
+  },
+  {
+    "type": "single",
+    "chapter": "Structure of Atom",
+    "text": "According to Bohr's theory, the ratio of the radius of the second orbit of $He^+$ to the radius of the third orbit of $Li^{2+}$ is:",
+    "options": [
+      "2 : 3",
+      "3 : 2",
+      "4 : 9",
+      "8 : 27"
+    ],
+    "answer": "A",
+    "solution": "$r \\propto n^2/Z$. For $He^+$ ($n=2, Z=2$): $4/2 = 2$. For $Li^{2+}$ ($n=3, Z=3$): $9/3 = 3$. Ratio $= 2 : 3$."
+  },
+  {
+    "type": "single",
+    "chapter": "Classification of Elements and Periodicity in Properties",
+    "text": "The correct order of first ionisation enthalpy of Be, B, N and O is:",
+    "options": [
+      "Be $\\lt$ B $\\lt$ N $\\lt$ O",
+      "B $\\lt$ Be $\\lt$ N $\\lt$ O",
+      "Be $\\lt$ B $\\lt$ O $\\lt$ N",
+      "B $\\lt$ Be $\\lt$ O $\\lt$ N"
+    ],
+    "answer": "D",
+    "solution": "B (2p electron, shielded by 2s) has lower IE than Be (stable $2s^2$). O has lower IE than N because N has a stable half-filled $2p^3$ configuration, while removing a paired electron from O is easier. Order: B $\\lt$ Be $\\lt$ O $\\lt$ N."
+  },
+  {
+    "type": "single",
+    "chapter": "Classification of Elements and Periodicity in Properties",
+    "text": "Given below are two statements:\nStatement I: The electron gain enthalpy of oxygen is less negative than that of sulphur.\nStatement II: Because oxygen is very small, the incoming electron experiences strong repulsion from the electrons already present in its compact 2p subshell.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "A",
+    "solution": "$\\Delta_{eg}H$ of O is about $-141$ kJ/mol and that of S about $-200$ kJ/mol, so Statement I is true. The reason is the small size of O and the resulting high electron–electron repulsion in the 2p subshell, so Statement II is also true."
+  },
+  {
+    "type": "single",
+    "chapter": "Chemical Bonding and Molecular Structure",
+    "text": "According to molecular orbital theory, which of the following species is diamagnetic?",
+    "options": [
+      "$O_2^-$",
+      "$O_2^{2-}$",
+      "$B_2$",
+      "$N_2^+$"
+    ],
+    "answer": "B",
+    "solution": "$O_2^{2-}$ (18 electrons) has completely filled $\\pi^*2p$ orbitals, so no unpaired electrons: diamagnetic. $O_2^-$ (1 unpaired), $B_2$ (2 unpaired in $\\pi 2p$) and $N_2^+$ (1 unpaired) are paramagnetic."
+  },
+  {
+    "type": "single",
+    "chapter": "Chemical Bonding and Molecular Structure",
+    "text": "Match List-I (molecule) with List-II (number of lone pairs on the central atom):\nList-I\n(A) $\n(B) $\n(C) $\n(D) $\nList-II\n(I) Zero\n(II) One\n(III) Two\n(IV) Three\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-III, B-IV, C-II, D-I",
+      "A-IV, B-II, C-III, D-I",
+      "A-IV, B-III, C-II, D-I",
+      "A-II, B-III, C-IV, D-I"
+    ],
+    "answer": "C",
+    "solution": "Xe has 8 valence electrons; 2 are used in Xe–F bonds, leaving 3 lone pairs. Cl has 7; 3 bonds leave 2 lone pairs. N has 5; 3 bonds leave 1 lone pair. B has 3, all used in bonds, so no lone pair. So A-IV, B-III, C-II, D-I."
+  },
+  {
+    "type": "single",
+    "chapter": "Chemical Bonding and Molecular Structure",
+    "text": "In which of the following pairs do both species have the same hybridisation of the central atom?",
+    "options": [
+      "$NH_3$ and $BF_3$",
+      "$SF_4$ and $CH_4$",
+      "$PCl_5$ and $SF_6$",
+      "$XeF_2$ and $I_3^-$"
+    ],
+    "answer": "D",
+    "solution": "$XeF_2$ (2 bp + 3 lp) and $I_3^-$ (2 bp + 3 lp on central I) are both $sp^3d$. The others: $NH_3$ $sp^3$ / $BF_3$ $sp^2$; $SF_4$ $sp^3d$ / $CH_4$ $sp^3$; $PCl_5$ $sp^3d$ / $SF_6$ $sp^3d^2$."
+  },
+  {
+    "type": "single",
+    "chapter": "Chemical Bonding and Molecular Structure",
+    "text": "Given below are two statements: one is labelled as Assertion A and the other is labelled as Reason R.\nAssertion A: $NF_3$ has a much smaller dipole moment than $NH_3$.\nReason R: In $NF_3$, the orbital dipole due to the lone pair on nitrogen acts in the same direction as the resultant of the N–F bond dipoles.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both A and R are true and R is the correct explanation of A",
+      "Both A and R are true but R is NOT the correct explanation of A",
+      "A is true but R is false",
+      "A is false but R is true"
+    ],
+    "answer": "C",
+    "solution": "A is true ($NH_3$: $4.90\\times10^{-30}$ C m; $NF_3$: $0.80\\times10^{-30}$ C m). In $NF_3$ the N–F bond dipoles point towards F, opposite to the lone-pair orbital dipole, so they partly cancel. R (same direction) is false; that is the situation in $NH_3$."
+  },
+  {
+    "type": "single",
+    "chapter": "Chemical Thermodynamics",
+    "text": "For the reaction $N_2(g) + 3H_2(g) \\rightarrow 2NH_3(g)$, $\\Delta H = -92.4\\ \\text{kJ}$ at 298 K. The value of $\\Delta U$ for the reaction at the same temperature is ($R = 8.314\\ \\text{J K}^{-1}\\text{mol}^{-1}$):",
+    "options": [
+      "$-97.4$ kJ",
+      "$-87.4$ kJ",
+      "$-92.4$ kJ",
+      "$-89.9$ kJ"
+    ],
+    "answer": "B",
+    "solution": "$\\Delta n_g = 2 - 4 = -2$. $\\Delta U = \\Delta H - \\Delta n_g RT = -92.4 - (-2)(8.314\\times298\\times10^{-3}) = -92.4 + 4.96 = -87.4$ kJ."
+  },
+  {
+    "type": "single",
+    "chapter": "Chemical Thermodynamics",
+    "text": "For a reaction, $\\Delta H = +30\\ \\text{kJ mol}^{-1}$ and $\\Delta S = +75\\ \\text{J K}^{-1}\\text{mol}^{-1}$. Assuming $\\Delta H$ and $\\Delta S$ do not change with temperature, the reaction becomes spontaneous above:",
+    "options": [
+      "250 K",
+      "4000 K",
+      "400 K",
+      "0.4 K"
+    ],
+    "answer": "C",
+    "solution": "Spontaneous when $\\Delta G = \\Delta H - T\\Delta S \\lt 0$, i.e. $T \\gt \\Delta H/\\Delta S = 30000/75 = 400$ K."
+  },
+  {
+    "type": "single",
+    "chapter": "Equilibrium",
+    "text": "50 mL of $0.3\\ \\text{M}$ acetic acid is mixed with 50 mL of $0.1\\ \\text{M}$ NaOH. The pH of the resulting solution is ($pK_a$ of acetic acid $= 4.74$, $\\log 2 = 0.30$):",
+    "options": [
+      "4.74",
+      "5.04",
+      "3.74",
+      "4.44"
+    ],
+    "answer": "D",
+    "solution": "Acid = 15 mmol, NaOH = 5 mmol. After reaction: 10 mmol $CH_3COOH$ and 5 mmol $CH_3COO^-$, an acidic buffer. $pH = pK_a + \\log(5/10) = 4.74 - 0.30 = 4.44$."
+  },
+  {
+    "type": "single",
+    "chapter": "Equilibrium",
+    "text": "The solubility product of $Mg(OH)_2$ is $1.2\\times10^{-11}$. Its molar solubility in a solution buffered at pH 12 is:",
+    "options": [
+      "$1.2\\times10^{-7}\\ \\text{M}$",
+      "$1.2\\times10^{-9}\\ \\text{M}$",
+      "$1.2\\times10^{-5}\\ \\text{M}$",
+      "$1.44\\times10^{-4}\\ \\text{M}$"
+    ],
+    "answer": "A",
+    "solution": "At pH 12, $[OH^-] = 10^{-2}$ M. $K_{sp} = s[OH^-]^2$, so $s = 1.2\\times10^{-11}/10^{-4} = 1.2\\times10^{-7}$ M."
+  },
+  {
+    "type": "single",
+    "chapter": "Redox Reactions",
+    "text": "Which of the following reactions is NOT a disproportionation reaction?",
+    "options": [
+      "$2H_2O_2 \\rightarrow 2H_2O + O_2$",
+      "$2KClO_3 \\rightarrow 2KCl + 3O_2$",
+      "$3ClO^- \\rightarrow 2Cl^- + ClO_3^-$",
+      "$P_4 + 3OH^- + 3H_2O \\rightarrow PH_3 + 3H_2PO_2^-$"
+    ],
+    "answer": "B",
+    "solution": "In disproportionation the same element is both oxidised and reduced. In the decomposition of $KClO_3$, Cl is reduced (+5 to −1) while O is oxidised (−2 to 0): two different elements. In the others, O (−1), Cl (+1) and P (0) respectively disproportionate."
+  },
+  {
+    "type": "single",
+    "chapter": "Solutions",
+    "text": "A weak electrolyte $AB_2$ dissociates in water as $AB_2 \\rightleftharpoons A^{2+} + 2B^-$. If it is 40% dissociated in a dilute solution, its van't Hoff factor is:",
+    "options": [
+      "1.4",
+      "2.2",
+      "1.8",
+      "0.6"
+    ],
+    "answer": "C",
+    "solution": "One formula unit gives 3 ions. $i = 1 + (n-1)\\alpha = 1 + (3-1)(0.4) = 1.8$."
+  },
+  {
+    "type": "single",
+    "chapter": "Solutions",
+    "text": "Given below are two statements:\nStatement I: The value of Henry's law constant $ for a gas in a liquid increases with an increase in temperature.\nStatement II: The higher the value of $ at a given pressure, the higher is the solubility of the gas in the liquid.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "C",
+    "solution": "$ increases with temperature, which is why the solubility of gases decreases as temperature rises, so Statement I is true. By Henry's law  = K_H x$, so at a given pressure a higher $ means a lower mole fraction of dissolved gas, i.e. lower solubility. Statement II is false."
+  },
+  {
+    "type": "single",
+    "chapter": "Electrochemistry",
+    "text": "The emf of the cell $Mg(s)\\,|\\,Mg^{2+}(0.001\\ \\text{M})\\,||\\,Cu^{2+}(0.1\\ \\text{M})\\,|\\,Cu(s)$ at 298 K is ($E^\\circ_{cell} = 2.71$ V, $2.303RT/F = 0.059$ V):",
+    "options": [
+      "2.769 V",
+      "2.651 V",
+      "2.710 V",
+      "2.828 V"
+    ],
+    "answer": "A",
+    "solution": "Cell reaction: $Mg + Cu^{2+} \\rightarrow Mg^{2+} + Cu$, $n = 2$. $E = E^\\circ - \\frac{0.059}{2}\\log\\frac{[Mg^{2+}]}{[Cu^{2+}]} = 2.71 - 0.0295\\log(10^{-2}) = 2.71 + 0.059 = 2.769$ V."
+  },
+  {
+    "type": "single",
+    "chapter": "Electrochemistry",
+    "text": "The limiting molar conductivities ($\\Lambda^\\circ_m$) of HCl, NaCl and $CH_3COONa$ are 425.9, 126.4 and 91.0 $\\text{S cm}^2\\text{mol}^{-1}$ respectively. The molar conductivity of $0.001\\ \\text{M}$ acetic acid is $39.05\\ \\text{S cm}^2\\text{mol}^{-1}$. The degree of dissociation of acetic acid at this concentration is:",
+    "options": [
+      "0.085",
+      "0.01",
+      "0.9",
+      "0.1"
+    ],
+    "answer": "D",
+    "solution": "By Kohlrausch's law, $\\Lambda^\\circ_m(CH_3COOH) = \\Lambda^\\circ(HCl) + \\Lambda^\\circ(CH_3COONa) - \\Lambda^\\circ(NaCl) = 425.9 + 91.0 - 126.4 = 390.5$. $\\alpha = 39.05/390.5 = 0.1$."
+  },
+  {
+    "type": "single",
+    "chapter": "Chemical Kinetics",
+    "text": "A first order reaction has a half-life of 30 minutes. The percentage of the reactant that has decomposed after 2 hours is:",
+    "options": [
+      "87.5%",
+      "93.75%",
+      "75%",
+      "6.25%"
+    ],
+    "answer": "B",
+    "solution": "2 hours = 4 half-lives. Fraction left $= (1/2)^4 = 1/16 = 6.25\\%$. Decomposed $= 100 - 6.25 = 93.75\\%$."
+  },
+  {
+    "type": "single",
+    "chapter": "Chemical Kinetics",
+    "text": "For a reaction $A \\rightarrow$ Products, the rate constant has the unit $\\text{mol}^{-1}\\,\\text{L}\\,\\text{s}^{-1}$. If the concentration of A is tripled, the rate of the reaction becomes:",
+    "options": [
+      "3 times",
+      "27 times",
+      "9 times",
+      "unchanged"
+    ],
+    "answer": "C",
+    "solution": "For order $n$, unit of $k$ is $(\\text{mol L}^{-1})^{1-n}\\text{s}^{-1}$; $\\text{mol}^{-1}\\text{L s}^{-1}$ means $n = 2$. Rate $= k[A]^2$, so tripling [A] increases the rate $3^2 = 9$ times."
+  },
+  {
+    "type": "single",
+    "chapter": "p-Block Elements",
+    "text": "Which of the following oxoacids of phosphorus contains a P–P bond?",
+    "options": [
+      "$H_4P_2O_7$",
+      "$H_3PO_2$",
+      "$(HPO_3)_3$",
+      "$H_4P_2O_6$"
+    ],
+    "answer": "D",
+    "solution": "Hypophosphoric acid, $H_4P_2O_6$, has two P atoms (each +4) joined directly by a P–P bond. Pyrophosphoric acid and cyclotrimetaphosphoric acid have P–O–P links, and $H_3PO_2$ has only one P atom."
+  },
+  {
+    "type": "single",
+    "chapter": "p-Block Elements",
+    "text": "Consider the following statements:\nA. Nitrogen does not form pentahalides.\nB. The stability of the +5 oxidation state decreases down group 15.\nC. Among the halogens, $F_2$ has the highest bond dissociation enthalpy.\nD. Ozone is thermodynamically unstable with respect to oxygen.\nChoose the correct answer from the options given below:",
+    "options": [
+      "A and C only",
+      "A, B and D only",
+      "B, C and D only",
+      "A, B, C and D"
+    ],
+    "answer": "B",
+    "solution": "A is true (N has no d orbitals to expand its octet). B is true (inert pair effect). C is false: the order is $Cl_2 \\gt Br_2 \\gt F_2 \\gt I_2$, with $F_2$ low due to lone pair repulsion. D is true (decomposition of $O_3$ to $O_2$ is exothermic and $\\Delta G$ is negative)."
+  },
+  {
+    "type": "single",
+    "chapter": "The d- and f-Block Elements",
+    "text": "A transition metal ion has a spin-only magnetic moment of 3.87 BM. The ion is:",
+    "options": [
+      "$Fe^{3+}$",
+      "$Ni^{2+}$",
+      "$Cr^{3+}$",
+      "$Cu^{2+}$"
+    ],
+    "answer": "C",
+    "solution": "$\\mu = \\sqrt{n(n+2)} = 3.87$ BM gives $n = 3$ unpaired electrons. $Cr^{3+}$ is $3d^3$ (3 unpaired). $Fe^{3+}$ $3d^5$ (5), $Ni^{2+}$ $3d^8$ (2), $Cu^{2+}$ $3d^9$ (1)."
+  },
+  {
+    "type": "single",
+    "chapter": "The d- and f-Block Elements",
+    "text": "Given below are two statements:\nStatement I: When a yellow solution of potassium chromate is acidified, it turns orange due to the formation of dichromate ions.\nStatement II: In the interconversion of chromate and dichromate ions, the oxidation state of chromium remains +6.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "A",
+    "solution": "$2CrO_4^{2-} + 2H^+ \\rightarrow Cr_2O_7^{2-} + H_2O$: yellow chromate gives orange dichromate in acid (Statement I true). Cr is +6 in both ions, so this is not a redox change (Statement II true)."
+  },
+  {
+    "type": "single",
+    "chapter": "The d- and f-Block Elements",
+    "text": "Which of the following lanthanoid ions acts as a strong oxidising agent in aqueous solution?",
+    "options": [
+      "$Eu^{2+}$",
+      "$Ce^{4+}$",
+      "$Yb^{2+}$",
+      "$Sm^{2+}$"
+    ],
+    "answer": "B",
+    "solution": "The characteristic oxidation state of lanthanoids is +3. $Ce^{4+}$ readily gains an electron to become $Ce^{3+}$, so it is a good oxidising agent. $Eu^{2+}$, $Yb^{2+}$ and $Sm^{2+}$ readily lose an electron to become +3, so they are reducing agents."
+  },
+  {
+    "type": "single",
+    "chapter": "Coordination Compounds",
+    "text": "The IUPAC name of $[Co(NH_3)_5Cl]Cl_2$ is:",
+    "options": [
+      "Pentaamminechlorocobalt(II) chloride",
+      "Chloridopentaamminecobalt(III) chloride",
+      "Pentaamminechloridocobalt(II) chloride",
+      "Pentaamminechloridocobalt(III) chloride"
+    ],
+    "answer": "D",
+    "solution": "Complex ion charge is +2 (two $Cl^-$ outside). $x + 5(0) + (-1) = +2$, so Co is +3. Ligands go in alphabetical order (ammine before chlorido): pentaamminechloridocobalt(III) chloride."
+  },
+  {
+    "type": "single",
+    "chapter": "Coordination Compounds",
+    "text": "Which of the following complex ions/compounds is optically active?",
+    "options": [
+      "cis-$[Co(en)_2Cl_2]^+$",
+      "trans-$[Co(en)_2Cl_2]^+$",
+      "cis-$[Co(NH_3)_4Cl_2]^+$",
+      "cis-$[Pt(NH_3)_2Cl_2]$"
+    ],
+    "answer": "A",
+    "solution": "The cis isomer of $[Co(en)_2Cl_2]^+$ has no plane of symmetry and exists as non-superimposable mirror images. The trans isomer has a mirror plane, cis-$[Co(NH_3)_4Cl_2]^+$ has a mirror plane, and square planar Pt(II) complexes are planar, so all three are optically inactive."
+  },
+  {
+    "type": "single",
+    "chapter": "Coordination Compounds",
+    "text": "The numbers of unpaired electrons in $[Fe(CN)_6]^{3-}$ and $[FeF_6]^{3-}$ respectively are:",
+    "options": [
+      "5 and 1",
+      "1 and 5",
+      "0 and 4",
+      "1 and 3"
+    ],
+    "answer": "B",
+    "solution": "Fe(III) is $3d^5$. $CN^-$ is a strong field ligand, so pairing occurs: $t_{2g}^5e_g^0$, 1 unpaired electron. $F^-$ is a weak field ligand: $t_{2g}^3e_g^2$, 5 unpaired electrons."
+  },
+  {
+    "type": "single",
+    "chapter": "Organic Chemistry: Some Basic Principles and Techniques",
+    "text": "Which of the following carbocations is the most stable?",
+    "options": [
+      "$\\overset{+}{C}H_3$",
+      "$CH_3\\overset{+}{C}H_2$",
+      "$(CH_3)_3\\overset{+}{C}$",
+      "$(C_6H_5)_3\\overset{+}{C}$"
+    ],
+    "answer": "D",
+    "solution": "In the triphenylmethyl cation the positive charge is delocalised by resonance over three benzene rings, which stabilises it far more than hyperconjugation does in alkyl carbocations. Order: $(C_6H_5)_3C^+ \\gt (CH_3)_3C^+ \\gt CH_3CH_2^+ \\gt CH_3^+$."
+  },
+  {
+    "type": "single",
+    "chapter": "Organic Chemistry: Some Basic Principles and Techniques",
+    "text": "The IUPAC name of $CH_3COCH_2CH_2COOH$ is:",
+    "options": [
+      "2-Oxopentanoic acid",
+      "4-Oxopentanoic acid",
+      "Pentan-2-on-5-oic acid",
+      "1-Carboxybutan-3-one"
+    ],
+    "answer": "B",
+    "solution": "The carboxylic acid is the principal group, so its carbon is C1; the five-carbon chain gives pentanoic acid. The ketone C=O is at C4 and is named as the prefix 'oxo': 4-oxopentanoic acid."
+  },
+  {
+    "type": "single",
+    "chapter": "Organic Chemistry: Some Basic Principles and Techniques",
+    "text": "Kjeldahl's method can be used to estimate nitrogen in which of the following compounds?",
+    "options": [
+      "Nitrobenzene",
+      "Pyridine",
+      "Aniline",
+      "Azobenzene"
+    ],
+    "answer": "C",
+    "solution": "Kjeldahl's method does not work for nitro and azo compounds or for nitrogen in a ring (e.g. pyridine), because this nitrogen is not converted to ammonium sulphate on digestion. Aniline ($-NH_2$ group) can be estimated."
+  },
+  {
+    "type": "single",
+    "chapter": "Hydrocarbons",
+    "text": "An alkene of molecular formula $C_5H_{10}$ on ozonolysis followed by treatment with $Zn/H_2O$ gives a mixture of propanone and ethanal. The alkene is:",
+    "options": [
+      "Pent-2-ene",
+      "2-Methylbut-1-ene",
+      "3-Methylbut-1-ene",
+      "2-Methylbut-2-ene"
+    ],
+    "answer": "D",
+    "solution": "Joining the carbonyl carbons of $(CH_3)_2C=O$ and $CH_3CHO$ with a double bond gives $(CH_3)_2C=CHCH_3$, i.e. 2-methylbut-2-ene. Pent-2-ene gives ethanal + propanal; 2-methylbut-1-ene gives butanone + methanal; 3-methylbut-1-ene gives 2-methylpropanal + methanal."
+  },
+  {
+    "type": "single",
+    "chapter": "Hydrocarbons",
+    "text": "Which of the following species is aromatic?",
+    "options": [
+      "Cyclopentadienyl anion",
+      "Cyclopenta-1,3-diene",
+      "Cyclohepta-1,3,5-triene",
+      "Cycloocta-1,3,5,7-tetraene"
+    ],
+    "answer": "A",
+    "solution": "The cyclopentadienyl anion is planar, cyclic, fully conjugated (the negative carbon is $sp^2$) and has $6\\pi$ electrons ($4n+2$, $n=1$): aromatic. Cyclopentadiene and cycloheptatriene each have an $sp^3$ carbon breaking conjugation; cyclooctatetraene has $8\\pi$ electrons and is non-planar."
+  },
+  {
+    "type": "single",
+    "chapter": "Haloalkanes and Haloarenes",
+    "text": "Which of the following reacts fastest with aqueous KOH by the $S_N2$ mechanism?",
+    "options": [
+      "$CH_3Cl$",
+      "$CH_3I$",
+      "$(CH_3)_2CHCl$",
+      "$(CH_3)_3CI$"
+    ],
+    "answer": "B",
+    "solution": "$S_N2$ is fastest for the least hindered substrate (methyl) with the best leaving group. Iodide is a better leaving group than chloride (weaker C–I bond), so $CH_3I$ reacts fastest."
+  },
+  {
+    "type": "single",
+    "chapter": "Haloalkanes and Haloarenes",
+    "text": "Match List-I with List-II:\nList-I (Name of reaction)\n(A) Finkelstein reaction\n(B) Swarts reaction\n(C) Wurtz–Fittig reaction\n(D) Sandmeyer reaction\nList-II (Reaction)\n(I) $ArN_2^+Cl^- \\xrightarrow{Cu_2Cl_2/HCl} ArCl$\n(II) $R{-}Cl \\xrightarrow{NaI,\\ \\text{dry acetone}} R{-}I$\n(III) $CH_3Br \\xrightarrow{AgF} CH_3F$\n(IV) $ArX + RX \\xrightarrow{Na,\\ \\text{dry ether}} Ar{-}R$\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-III, B-II, C-IV, D-I",
+      "A-II, B-III, C-I, D-IV",
+      "A-II, B-III, C-IV, D-I",
+      "A-IV, B-III, C-II, D-I"
+    ],
+    "answer": "C",
+    "solution": "Finkelstein: halide exchange with NaI in dry acetone (II). Swarts: alkyl fluoride from AgF (III). Wurtz–Fittig: aryl halide + alkyl halide with Na (IV). Sandmeyer: diazonium salt with $Cu_2Cl_2/HCl$ (I)."
+  },
+  {
+    "type": "single",
+    "chapter": "Alcohols, Phenols and Ethers",
+    "text": "The correct order of acidic strength of the following compounds is:",
+    "options": [
+      "4-Nitrophenol $\\gt$ 2,4,6-trinitrophenol $\\gt$ phenol $\\gt$ 4-methylphenol",
+      "2,4,6-Trinitrophenol $\\gt$ 4-nitrophenol $\\gt$ 4-methylphenol $\\gt$ phenol",
+      "Phenol $\\gt$ 4-methylphenol $\\gt$ 4-nitrophenol $\\gt$ 2,4,6-trinitrophenol",
+      "2,4,6-Trinitrophenol $\\gt$ 4-nitrophenol $\\gt$ phenol $\\gt$ 4-methylphenol"
+    ],
+    "answer": "D",
+    "solution": "Electron-withdrawing $-NO_2$ groups stabilise the phenoxide ion and increase acidity (three in picric acid, one in 4-nitrophenol). The electron-donating $-CH_3$ group destabilises the phenoxide, so 4-methylphenol is less acidic than phenol."
+  },
+  {
+    "type": "single",
+    "chapter": "Alcohols, Phenols and Ethers",
+    "text": "Given below are two statements: one is labelled as Assertion A and the other is labelled as Reason R.\nAssertion A: Anisole on heating with HI gives phenol and methyl iodide, not iodobenzene and methanol.\nReason R: The aryl carbon–oxygen bond has partial double bond character and is stronger than the methyl carbon–oxygen bond.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both A and R are true and R is the correct explanation of A",
+      "Both A and R are true but R is NOT the correct explanation of A",
+      "A is true but R is false",
+      "A is false but R is true"
+    ],
+    "answer": "A",
+    "solution": "Resonance of the oxygen lone pair with the benzene ring gives the $C_{aryl}{-}O$ bond partial double bond character, so it does not break. $I^-$ attacks the methyl carbon of the protonated ether, giving $C_6H_5OH + CH_3I$. R correctly explains A."
+  },
+  {
+    "type": "single",
+    "chapter": "Aldehydes, Ketones and Carboxylic Acids",
+    "text": "Which of the following aldehydes undergoes the Cannizzaro reaction on treatment with concentrated NaOH?",
+    "options": [
+      "$CH_3CHO$",
+      "$(CH_3)_2CHCHO$",
+      "$(CH_3)_3CCHO$",
+      "$CH_3CH_2CHO$"
+    ],
+    "answer": "C",
+    "solution": "The Cannizzaro reaction is given by aldehydes with no $\\alpha$-hydrogen. 2,2-Dimethylpropanal, $(CH_3)_3CCHO$, has no $\\alpha$-H. The other three have $\\alpha$-hydrogens and undergo aldol reactions instead."
+  },
+  {
+    "type": "single",
+    "chapter": "Aldehydes, Ketones and Carboxylic Acids",
+    "text": "Acetophenone and benzophenone can be distinguished by:",
+    "options": [
+      "Tollens' test",
+      "Fehling's test",
+      "2,4-Dinitrophenylhydrazine test",
+      "Iodoform test"
+    ],
+    "answer": "D",
+    "solution": "Acetophenone ($C_6H_5COCH_3$) has a $CH_3CO-$ group and gives a yellow precipitate of iodoform with NaOI; benzophenone does not. Both are ketones, so neither reduces Tollens' or Fehling's reagent, and both give 2,4-DNP derivatives."
+  },
+  {
+    "type": "single",
+    "chapter": "Aldehydes, Ketones and Carboxylic Acids",
+    "text": "The correct order of acidic strength is:",
+    "options": [
+      "$ClCH_2COOH \\gt FCH_2COOH \\gt HCOOH \\gt CH_3COOH$",
+      "$FCH_2COOH \\gt ClCH_2COOH \\gt HCOOH \\gt CH_3COOH$",
+      "$FCH_2COOH \\gt ClCH_2COOH \\gt CH_3COOH \\gt HCOOH$",
+      "$HCOOH \\gt FCH_2COOH \\gt ClCH_2COOH \\gt CH_3COOH$"
+    ],
+    "answer": "B",
+    "solution": "The $-I$ effect of F is greater than that of Cl, so fluoroacetic acid ($pK_a$ 2.57) is stronger than chloroacetic acid (2.86). Formic acid (3.75) is stronger than acetic acid (4.76) because $CH_3$ ($+I$) destabilises the carboxylate ion."
+  },
+  {
+    "type": "single",
+    "chapter": "Amines",
+    "text": "Which of the following amines reacts with benzenesulphonyl chloride (Hinsberg's reagent) to give a product that is insoluble in aqueous alkali?",
+    "options": [
+      "N-Ethylethanamine",
+      "Ethanamine",
+      "N,N-Dimethylethanamine",
+      "Aniline"
+    ],
+    "answer": "A",
+    "solution": "A secondary amine forms an N,N-dialkylsulphonamide with no H on nitrogen, so it is not acidic and does not dissolve in alkali. Primary amines (ethanamine, aniline) give sulphonamides with an acidic N–H that dissolve in alkali; tertiary amines do not react."
+  },
+  {
+    "type": "single",
+    "chapter": "Amines",
+    "text": "Propanamide on treatment with bromine and aqueous NaOH gives:",
+    "options": [
+      "Propan-1-amine",
+      "Propanenitrile",
+      "Ethanamine",
+      "Butan-1-amine"
+    ],
+    "answer": "C",
+    "solution": "Hoffmann bromamide degradation gives a primary amine with one carbon fewer than the amide: $CH_3CH_2CONH_2 + Br_2 + 4NaOH \\rightarrow CH_3CH_2NH_2 + Na_2CO_3 + 2NaBr + 2H_2O$. The product is ethanamine."
+  },
+  {
+    "type": "single",
+    "chapter": "Biomolecules",
+    "text": "On prolonged heating with HI, glucose gives:",
+    "options": [
+      "n-Hexane",
+      "Sorbitol",
+      "Gluconic acid",
+      "2-Iodohexane"
+    ],
+    "answer": "A",
+    "solution": "Prolonged heating with HI reduces glucose completely to n-hexane. This shows that the six carbon atoms of glucose are joined in a straight chain."
+  },
+  {
+    "type": "single",
+    "chapter": "Biomolecules",
+    "text": "Consider the following statements about nucleic acids:\nA. The sugar present in DNA is 2-deoxy-D-ribose.\nB. Uracil is one of the bases present in DNA.\nC. In DNA, adenine pairs with thymine.\nD. RNA contains thymine in place of uracil.\nChoose the correct answer from the options given below:",
+    "options": [
+      "A and C only",
+      "A, B and C only",
+      "B and D only",
+      "A, C and D only"
+    ],
+    "answer": "A",
+    "solution": "DNA contains 2-deoxy-D-ribose and the bases A, G, C and T, with A pairing with T (A and C true). Uracil is found in RNA, which has uracil in place of thymine, so B and D are false."
+  }
+]

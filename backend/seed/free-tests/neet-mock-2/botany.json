@@ -1,0 +1,587 @@
+[
+  {
+    "type": "single",
+    "chapter": "The Living World",
+    "text": "Given below are two statements:\nStatement I: Families Convolvulaceae and Solanaceae are included in the order Polymoniales mainly on the basis of floral characters.\nStatement II: As we go higher from species to kingdom, the number of common characteristics shared by the members goes on increasing.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "C",
+    "solution": "NCERT places Convolvulaceae and Solanaceae in the order Polymoniales mainly on floral characters, so Statement I is true. Going up from species to kingdom, the number of common characteristics decreases, not increases, so Statement II is false."
+  },
+  {
+    "type": "single",
+    "chapter": "Biological Classification",
+    "text": "How many of the following statements are correct?\n(a) Viroids lack the protein coat that is found in viruses.\n(b) The causal agent of potato spindle tuber disease is a free RNA of low molecular weight.\n(c) Bacteriophages usually have single-stranded RNA as their genetic material.\n(d) W.M. Stanley showed that viruses could be crystallised and that the crystals consist largely of proteins.\n(e) In a lichen, the algal component is called the mycobiont.",
+    "options": [
+      "Two",
+      "Three",
+      "Four",
+      "Five"
+    ],
+    "answer": "B",
+    "solution": "(a), (b) and (d) are correct. Bacteriophages usually have double-stranded DNA, so (c) is wrong. In lichens the algal partner is the phycobiont and the fungal partner is the mycobiont, so (e) is wrong. That makes three correct statements."
+  },
+  {
+    "type": "single",
+    "chapter": "Biological Classification",
+    "text": "Match List-I with List-II:\nList-I\n(A) Ascospores produced endogenously in asci\n(B) Sex organs absent; plasmogamy by fusion of two somatic cells\n(C) Only the asexual or vegetative phase is known\n(D) Aseptate, coenocytic mycelium\nList-II\n(I) Colletotrichum\n(II) Albugo\n(III) Claviceps\n(IV) Puccinia\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-IV, B-III, C-I, D-II",
+      "A-III, B-IV, C-II, D-I",
+      "A-I, B-IV, C-III, D-II",
+      "A-III, B-IV, C-I, D-II"
+    ],
+    "answer": "D",
+    "solution": "Claviceps belongs to Ascomycetes (ascospores in asci). Puccinia belongs to Basidiomycetes (no sex organs, somatic fusion). Colletotrichum belongs to Deuteromycetes (only the asexual phase is known). Albugo belongs to Phycomycetes (aseptate, coenocytic). So A-III, B-IV, C-I, D-II."
+  },
+  {
+    "type": "single",
+    "chapter": "Plant Kingdom",
+    "text": "Given below are two statements: one is labelled as Assertion A and the other is labelled as Reason R.\nAssertion A: In gymnosperms, the male and female gametophytes do not have an independent free-living existence.\nReason R: The gametophytes of gymnosperms remain within the sporangia retained on the sporophyte.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both A and R are true and R is the correct explanation of A",
+      "Both A and R are true but R is NOT the correct explanation of A",
+      "A is true but R is false",
+      "A is false but R is true"
+    ],
+    "answer": "A",
+    "solution": "Unlike bryophytes and pteridophytes, gymnosperm gametophytes are not free-living. NCERT gives the reason directly: they remain within the sporangia, which stay on the sporophyte. So both are true and R explains A."
+  },
+  {
+    "type": "single",
+    "chapter": "Plant Kingdom",
+    "text": "Choose the correct statements:\nA. Sphagnum is used as a packing material for trans-shipment of living material because of its capacity to hold water.\nB. In mosses, the protonema develops directly from a spore.\nC. Gemmae of liverworts are green, multicellular, asexual buds that develop in gemma cups.\nD. In pteridophytes, the main plant body is the gametophyte.\nE. Selaginella and Salvinia are heterosporous pteridophytes.\nChoose the correct answer from the options given below:",
+    "options": [
+      "A, B and D only",
+      "A, B, C and E only",
+      "B, C and D only",
+      "A, C, D and E only"
+    ],
+    "answer": "B",
+    "solution": "A, B, C and E are correct NCERT statements. In pteridophytes the main plant body is the sporophyte (it has roots, stem and leaves), so D is wrong."
+  },
+  {
+    "type": "single",
+    "chapter": "Morphology of Flowering Plants",
+    "text": "How many of the following are modifications of the stem?\nTendrils of cucumber, thorns of Bougainvillea, spines of cactus, phyllode of Australian acacia, flattened green structure of Opuntia, offset of Eichhornia, tendrils of pea, fleshy cylindrical green structure of Euphorbia",
+    "options": [
+      "Three",
+      "Four",
+      "Five",
+      "Six"
+    ],
+    "answer": "C",
+    "solution": "Stem modifications are cucumber tendrils, Bougainvillea thorns, Opuntia's flattened stem, the Eichhornia offset and Euphorbia's fleshy cylindrical stem, which makes 5. Cactus spines, the acacia phyllode (petiole) and pea tendrils are leaf modifications."
+  },
+  {
+    "type": "single",
+    "chapter": "Morphology of Flowering Plants",
+    "text": "Given below are two statements:\nStatement I: In Fabaceae, the ovary is superior, monocarpellary and unilocular with many ovules on a marginal placenta.\nStatement II: In Liliaceae, the stamens are epipetalous and the seeds are non-endospermous.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "C",
+    "solution": "The Fabaceae gynoecium is superior, monocarpellary and unilocular with marginal placentation, so Statement I is true. In Liliaceae the six stamens (3+3) are epiphyllous (attached to the tepals) and the seed is endospermous, so Statement II is false."
+  },
+  {
+    "type": "single",
+    "chapter": "Morphology of Flowering Plants",
+    "text": "Given below are two statements: one is labelled as Assertion A and the other is labelled as Reason R.\nAssertion A: In a maize grain, the seed coat is membranous and generally fused with the fruit wall.\nReason R: In maize, the outer covering of the endosperm separates it from the embryo by a proteinous layer called the aleurone layer.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both A and R are true and R is the correct explanation of A",
+      "Both A and R are true but R is NOT the correct explanation of A",
+      "A is true but R is false",
+      "A is false but R is true"
+    ],
+    "answer": "B",
+    "solution": "NCERT states both facts about cereal seeds such as maize. The aleurone layer is about the endosperm and has nothing to do with the seed coat fusing with the fruit wall. So both are true, but R does not explain A."
+  },
+  {
+    "type": "single",
+    "chapter": "Anatomy of Flowering Plants",
+    "text": "Choose the correct statements:\nA. In a dicot root, suberin in the form of casparian strips is deposited on the tangential as well as radial walls of endodermal cells.\nB. Lateral roots are initiated in the pericycle.\nC. A monocot root usually has two to four xylem patches.\nD. In a dicot stem, the endodermis is rich in starch grains and is called the starch sheath.\nE. Phloem parenchyma is present in the vascular bundles of a monocot stem.\nChoose the correct answer from the options given below:",
+    "options": [
+      "A, B and C only",
+      "B, D and E only",
+      "A, C and D only",
+      "A, B and D only"
+    ],
+    "answer": "D",
+    "solution": "A, B and D are correct. A monocot root is polyarch (usually more than six xylem bundles); two to four patches is the dicot root condition, so C is wrong. Phloem parenchyma is absent in monocot stem bundles, so E is wrong."
+  },
+  {
+    "type": "single",
+    "chapter": "Anatomy of Flowering Plants",
+    "text": "Match List-I with List-II:\nList-I\n(A) Bulliform cells\n(B) Casparian strips\n(C) Phloem fibres\n(D) Subsidiary cells\nList-II\n(I) Specialised epidermal cells in the vicinity of guard cells\n(II) Generally absent in primary phloem\n(III) Suberin deposition in the endodermis\n(IV) Inward curling of grass leaves under water stress\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-III, B-IV, C-II, D-I",
+      "A-IV, B-III, C-II, D-I",
+      "A-IV, B-III, C-I, D-II",
+      "A-I, B-III, C-II, D-IV"
+    ],
+    "answer": "B",
+    "solution": "When bulliform cells lose water and go flaccid, grass leaves curl inward (A-IV). Casparian strips are suberin deposits on endodermal walls (B-III). Phloem (bast) fibres are generally absent in primary phloem but present in secondary phloem (C-II). Subsidiary cells are specialised epidermal cells near the guard cells (D-I)."
+  },
+  {
+    "type": "single",
+    "chapter": "Cell: The Unit of Life",
+    "text": "How many of the following statements about prokaryotic cells are correct?\n(a) Mesosomes help in cell wall formation and in DNA replication and its distribution to daughter cells.\n(b) Gas vacuoles are found in blue-green and in purple and green photosynthetic bacteria.\n(c) Fimbriae are elongated tubular structures made of a special protein.\n(d) Inclusion bodies lie free in the cytoplasm and are not bounded by any membrane.\n(e) The 50S and 30S subunits together form the 70S ribosome.",
+    "options": [
+      "One",
+      "Two",
+      "Three",
+      "Four"
+    ],
+    "answer": "D",
+    "solution": "(a), (b), (d) and (e) are correct. Pili are the elongated tubular structures made of a special protein. Fimbriae are small bristle-like fibres that help bacteria attach to surfaces, so (c) is wrong. That makes four correct statements."
+  },
+  {
+    "type": "single",
+    "chapter": "Cell: The Unit of Life",
+    "text": "Match List-I with List-II:\nList-I\n(A) Tonoplast\n(B) Cis face of Golgi apparatus\n(C) Nucleolus\n(D) Centriole\nList-II\n(I) Site of active ribosomal RNA synthesis\n(II) Cartwheel arrangement of nine peripheral triplet fibrils\n(III) Forming face\n(IV) Transport of ions against a concentration gradient into the vacuole\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-IV, B-III, C-I, D-II",
+      "A-III, B-IV, C-I, D-II",
+      "A-IV, B-III, C-II, D-I",
+      "A-II, B-III, C-I, D-IV"
+    ],
+    "answer": "A",
+    "solution": "The tonoplast moves ions into the vacuole against a concentration gradient (A-IV). The cis face of the Golgi is the forming face (B-III). The nucleolus is the site of active rRNA synthesis (C-I). A centriole has a cartwheel of nine peripheral triplet fibrils (D-II)."
+  },
+  {
+    "type": "single",
+    "chapter": "Cell: The Unit of Life",
+    "text": "Given below are two statements:\nStatement I: In plant cells, the vacuole can occupy up to 90 percent of the volume of the cell.\nStatement II: The quasi-fluid nature of the lipid in the plasma membrane enables lateral movement of proteins within the overall bilayer.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "A",
+    "solution": "Both are NCERT statements. A plant cell vacuole can take up to 90% of the cell volume. In the fluid mosaic model, the quasi-fluid lipid lets proteins move sideways within the bilayer, which is what we call membrane fluidity."
+  },
+  {
+    "type": "single",
+    "chapter": "Cell Cycle and Cell Division",
+    "text": "Given below are two statements: one is labelled as Assertion A and the other is labelled as Reason R.\nAssertion A: Following the S phase, the amount of DNA per cell doubles but the chromosome number remains the same.\nReason R: In animal cells, the centriole duplicates in the cytoplasm during the S phase.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both A and R are true and R is the correct explanation of A",
+      "Both A and R are true but R is NOT the correct explanation of A",
+      "A is true but R is false",
+      "A is false but R is true"
+    ],
+    "answer": "B",
+    "solution": "DNA is replicated in S phase, so the DNA content doubles, but the two sister chromatids stay joined, so the chromosome number does not change (A is true). The centriole also duplicates in S phase (R is true), but that has nothing to do with the DNA content or chromosome number."
+  },
+  {
+    "type": "single",
+    "chapter": "Cell Cycle and Cell Division",
+    "text": "Choose the correct statements:\nA. In plant cells, wall formation starts in the centre of the cell and grows outward; the cell plate represents the middle lamella.\nB. The free-nuclear liquid endosperm of coconut is an example of a multinucleate condition called syncytium.\nC. Complete disintegration of the nuclear envelope marks the end of metaphase.\nD. During anaphase, chromosomes cluster at opposite spindle poles and the nucleolus reappears.\nE. Golgi complexes and endoplasmic reticulum are not seen in cells at the end of prophase.\nChoose the correct answer from the options given below:",
+    "options": [
+      "A, B and C only",
+      "A, B and E only",
+      "B, C and D only",
+      "A, D and E only"
+    ],
+    "answer": "B",
+    "solution": "A, B and E are correct. The nuclear envelope disintegrates completely at the start of metaphase, not the end, so C is wrong. Chromosomes cluster at the poles and the nucleolus reappears in telophase, not anaphase, so D is wrong."
+  },
+  {
+    "type": "single",
+    "chapter": "Photosynthesis in Higher Plants",
+    "text": "In a $C_3$ plant, how many molecules of ATP and NADPH are needed in the Calvin cycle to fix 18 molecules of $CO_2$?",
+    "options": [
+      "36 ATP and 54 NADPH",
+      "54 ATP and 54 NADPH",
+      "36 ATP and 24 NADPH",
+      "54 ATP and 36 NADPH"
+    ],
+    "answer": "D",
+    "solution": "Each $CO_2$ fixed needs 3 ATP and 2 NADPH. For 18 $CO_2$ that is $18 \\times 3 = 54$ ATP and $18 \\times 2 = 36$ NADPH. This is enough for 3 molecules of glucose."
+  },
+  {
+    "type": "single",
+    "chapter": "Photosynthesis in Higher Plants",
+    "text": "Given below are two statements:\nStatement I: In the Z-scheme of the light reaction, the splitting of water is associated with PS I.\nStatement II: The stroma lamellae lack PS II as well as NADP reductase, so only cyclic photophosphorylation occurs there.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "D",
+    "solution": "Water splitting happens on the inner side of the thylakoid membrane and is linked to PS II, which takes electrons from water to replace its own. So Statement I is false. Stroma lamellae lack PS II and NADP reductase, so only cyclic flow (ATP only) happens there, and Statement II is true."
+  },
+  {
+    "type": "single",
+    "chapter": "Photosynthesis in Higher Plants",
+    "text": "Choose the correct statements:\nA. In $C_4$ plants, the primary $CO_2$ acceptor is a 3-carbon molecule, phosphoenol pyruvate, present in mesophyll cells.\nB. Mesophyll cells of $C_4$ plants are rich in RuBisCO.\nC. Bundle sheath cells of $C_4$ plants have thick walls impervious to gaseous exchange and no intercellular spaces.\nD. Photorespiration produces ATP but no NADPH.\nE. In photorespiration, RuBP binds $O_2$ to form one molecule of PGA and one of phosphoglycolate.\nChoose the correct answer from the options given below:",
+    "options": [
+      "A, B and C only",
+      "B, C and D only",
+      "A, C and E only",
+      "A, D and E only"
+    ],
+    "answer": "C",
+    "solution": "A, C and E are correct. $C_4$ mesophyll cells lack RuBisCO, which is in the bundle sheath, so B is wrong. Photorespiration makes neither ATP nor NADPH, so D is wrong."
+  },
+  {
+    "type": "single",
+    "chapter": "Respiration in Plants",
+    "text": "Match List-I with List-II:\nList-I\n(A) Complex I\n(B) Complex IV\n(C) Complex V\n(D) Cytochrome c\nList-II\n(I) Cytochromes a and a3 with two copper centres\n(II) NADH dehydrogenase\n(III) Mobile carrier between complex III and complex IV\n(IV) ATP synthase with $F_0$ and $F_1$ parts\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-II, B-III, C-IV, D-I",
+      "A-II, B-I, C-IV, D-III",
+      "A-I, B-II, C-IV, D-III",
+      "A-II, B-I, C-III, D-IV"
+    ],
+    "answer": "B",
+    "solution": "Complex I is NADH dehydrogenase. Complex IV (cytochrome c oxidase) contains cytochromes a and a3 and two copper centres. Complex V is ATP synthase ($F_0$ and $F_1$). Cytochrome c is a small protein on the outer surface of the inner membrane that carries electrons between complexes III and IV. So A-II, B-I, C-IV, D-III."
+  },
+  {
+    "type": "single",
+    "chapter": "Respiration in Plants",
+    "text": "Given below are two statements: one is labelled as Assertion A and the other is labelled as Reason R.\nAssertion A: The respiratory pathway is better considered an amphibolic pathway than a purely catabolic one.\nReason R: Fatty acids are broken down to acetyl CoA before entering the pathway, and acetyl CoA is withdrawn from the pathway when the organism needs to synthesise fatty acids.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both A and R are true and R is the correct explanation of A",
+      "Both A and R are true but R is NOT the correct explanation of A",
+      "A is true but R is false",
+      "A is false but R is true"
+    ],
+    "answer": "A",
+    "solution": "The same intermediate, acetyl CoA, is used both when fatty acids are broken down and when they are built. So the pathway takes part in both catabolism and anabolism, which is what amphibolic means. R explains A."
+  },
+  {
+    "type": "single",
+    "chapter": "Plant Growth and Development",
+    "text": "How many of the following are effects of ethylene?\n(a) Rapid internode/petiole elongation in deep water rice plants\n(b) Induction of flowering in mango\n(c) Promotion of root growth and root hair formation\n(d) Increase in the length of grape stalks\n(e) Nutrient mobilisation that delays leaf senescence\n(f) Initiation of germination in peanut seeds",
+    "options": [
+      "Four",
+      "Three",
+      "Five",
+      "Two"
+    ],
+    "answer": "A",
+    "solution": "(a), (b), (c) and (f) are effects of ethylene. Gibberellins lengthen grape stalks (d), and cytokinins drive nutrient mobilisation that delays leaf senescence (e). That makes four."
+  },
+  {
+    "type": "single",
+    "chapter": "Plant Growth and Development",
+    "text": "Given below are two statements:\nStatement I: Heterophylly in cotton, coriander and larkspur, where leaves of the juvenile plant differ in shape from those of the mature plant, is an example of plasticity.\nStatement II: In arithmetic growth, following mitotic cell division, only one daughter cell continues to divide while the other differentiates and matures.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "A",
+    "solution": "NCERT uses heterophylly in cotton, coriander and larkspur as an example of plasticity, so Statement I is true. NCERT describes arithmetic growth exactly as in Statement II, which gives a linear curve $L_t = L_0 + rt$. Both are true."
+  },
+  {
+    "type": "single",
+    "chapter": "Sexual Reproduction in Flowering Plants",
+    "text": "Choose the correct statements:\nA. Pollen grains of rice and wheat lose viability within 30 minutes of their release.\nB. The intine of the pollen grain is made of sporopollenin.\nC. In over 60 percent of angiosperms, pollen grains are shed at the 3-celled stage.\nD. Cells of the tapetum generally have more than one nucleus.\nE. Germ pores are regions on the pollen wall where sporopollenin is absent.\nChoose the correct answer from the options given below:",
+    "options": [
+      "A, B and D only",
+      "B, C and E only",
+      "A, C and D only",
+      "A, D and E only"
+    ],
+    "answer": "D",
+    "solution": "A, D and E are correct. Sporopollenin is in the exine, while the intine is made of cellulose and pectin, so B is wrong. In over 60% of angiosperms pollen is shed at the 2-celled stage, so C is wrong."
+  },
+  {
+    "type": "single",
+    "chapter": "Sexual Reproduction in Flowering Plants",
+    "text": "The primary endosperm nucleus of an angiosperm has 36 chromosomes. What will be the chromosome numbers in an antipodal cell, the zygote and a nucellus cell of the same plant, respectively?",
+    "options": [
+      "24, 24, 12",
+      "12, 24, 24",
+      "12, 36, 24",
+      "18, 24, 24"
+    ],
+    "answer": "B",
+    "solution": "The endosperm is triploid, so $3n = 36$ and $n = 12$. Antipodal cells are haploid (12), the zygote is diploid (24), and the nucellus is maternal sporophytic tissue, so it is also diploid (24)."
+  },
+  {
+    "type": "single",
+    "chapter": "Sexual Reproduction in Flowering Plants",
+    "text": "Given below are two statements:\nStatement I: In water hyacinth and water lily, pollination takes place through water.\nStatement II: In sea-grasses such as Zostera, the pollen grains are long and ribbon-like and are carried passively inside the water.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "D",
+    "solution": "Water hyacinth and water lily flowers rise above the water and are pollinated by insects or wind, so Statement I is false. In sea-grasses the pollen is released under water, and in many species it is long and ribbon-like and drifts passively, so Statement II is true."
+  },
+  {
+    "type": "single",
+    "chapter": "Sexual Reproduction in Flowering Plants",
+    "text": "Match List-I with List-II:\nList-I\n(A) Persistent residual nucellus (perisperm)\n(B) Thalamus contributes to fruit formation\n(C) Fruit develops without fertilisation\n(D) Viable seed recovered after about 2000 years\nList-II\n(I) Phoenix dactylifera\n(II) Banana\n(III) Cashew\n(IV) Black pepper\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-III, B-IV, C-II, D-I",
+      "A-IV, B-II, C-III, D-I",
+      "A-IV, B-III, C-II, D-I",
+      "A-I, B-III, C-II, D-IV"
+    ],
+    "answer": "C",
+    "solution": "Black pepper and beet keep perisperm (A-IV). Cashew is a false fruit because the thalamus contributes to it (B-III). Banana is parthenocarpic (C-II). A roughly 2000-year-old date palm (Phoenix dactylifera) seed was recovered near the Dead Sea and was still viable (D-I)."
+  },
+  {
+    "type": "single",
+    "chapter": "Principles of Inheritance and Variation",
+    "text": "Two genes A/a and B/b assort independently and show complete dominance. In the cross AaBb $\\times$ Aabb, what fraction of the offspring will show the dominant phenotype for both traits?",
+    "options": [
+      "9/16",
+      "1/4",
+      "3/16",
+      "3/8"
+    ],
+    "answer": "D",
+    "solution": "Aa $\\times$ Aa gives a dominant phenotype with probability $3/4$. Bb $\\times$ bb gives a dominant phenotype with probability $1/2$. Because the genes assort independently, multiply: $3/4 \\times 1/2 = 3/8$."
+  },
+  {
+    "type": "single",
+    "chapter": "Principles of Inheritance and Variation",
+    "text": "A colour-blind man marries a woman with normal vision whose father was colour blind. What is the probability that a son born to them will be colour blind?",
+    "options": [
+      "1/2",
+      "1/4",
+      "0",
+      "1"
+    ],
+    "answer": "A",
+    "solution": "Colour blindness is X-linked recessive. The woman got her X from her colour-blind father, so she is a carrier (^CX^c$). A son gets his X chromosome only from his mother (his Y comes from the father), so the chance that a son is colour blind is 1/2."
+  },
+  {
+    "type": "single",
+    "chapter": "Principles of Inheritance and Variation",
+    "text": "Choose the correct statements:\nA. In honey bees, males have 16 chromosomes and produce sperms by mitosis.\nB. A male honey bee has a grandfather and can have grandsons, but has no father and cannot have sons.\nC. In birds, the female is heterogametic with ZW sex chromosomes.\nD. In grasshoppers, the females have only one X chromosome.\nE. Morgan found the recombination frequency between the genes for white eye and miniature wing in Drosophila to be 1.3 percent.\nChoose the correct answer from the options given below:",
+    "options": [
+      "A, B and D only",
+      "A, B and C only",
+      "B, C and E only",
+      "A, C and E only"
+    ],
+    "answer": "B",
+    "solution": "A, B and C are correct. Grasshoppers have XO sex determination, where males have one X and females are XX, so D is wrong. Morgan found 37.2% recombination between white eye and miniature wing; the 1.3% figure is for white eye and yellow body. So E is wrong."
+  },
+  {
+    "type": "single",
+    "chapter": "Principles of Inheritance and Variation",
+    "text": "Given below are two statements:\nStatement I: Alpha thalassaemia is controlled by two closely linked genes, HBA1 and HBA2, on chromosome 16 of each parent.\nStatement II: Thalassaemia is a qualitative problem of synthesising an incorrectly functioning globin, whereas sickle-cell anaemia is a quantitative problem of synthesising too few globin molecules.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "C",
+    "solution": "Statement I matches NCERT. Statement II has the two diseases the wrong way round: thalassaemia is the quantitative problem (too few globin molecules), and sickle-cell anaemia is the qualitative problem (a faulty globin). So I is true and II is false."
+  },
+  {
+    "type": "single",
+    "chapter": "Principles of Inheritance and Variation",
+    "text": "Given below are two statements: one is labelled as Assertion A and the other is labelled as Reason R.\nAssertion A: Dominance is not an autonomous feature of a gene; it also depends on the particular phenotype we choose to examine.\nReason R: In pea, the gene B shows complete dominance for seed shape (round over wrinkled) but incomplete dominance for starch grain size, with Bb seeds having starch grains of intermediate size.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both A and R are true and R is the correct explanation of A",
+      "Both A and R are true but R is NOT the correct explanation of A",
+      "A is true but R is false",
+      "A is false but R is true"
+    ],
+    "answer": "A",
+    "solution": "The same allele pair (B, b) looks completely dominant when we score seed shape and incompletely dominant when we score starch grain size. That shows dominance depends on which phenotype is examined. So R explains A."
+  },
+  {
+    "type": "single",
+    "chapter": "Molecular Basis of Inheritance",
+    "text": "A double-stranded DNA segment is 1200 base pairs long and 30 percent of its bases are adenine. How many hydrogen bonds hold its two strands together?",
+    "options": [
+      "2400",
+      "3120",
+      "2880",
+      "3600"
+    ],
+    "answer": "C",
+    "solution": "Total bases = 2400. A = T = 30% each = 720, so there are 720 A-T pairs. That leaves 1200 − 720 = 480 G-C pairs. Hydrogen bonds = $720 \\times 2 + 480 \\times 3 = 1440 + 1440 = 2880$."
+  },
+  {
+    "type": "single",
+    "chapter": "Molecular Basis of Inheritance",
+    "text": "How many of the following statements about the lac operon are correct?\n(a) The repressor is synthesised constitutively from the i gene.\n(b) Permease increases the permeability of the cell to beta-galactosides.\n(c) Regulation of the lac operon by the repressor is referred to as positive regulation.\n(d) Transacetylase is coded by the y gene.\n(e) In the presence of the inducer, the repressor is inactivated by interaction with the inducer.",
+    "options": [
+      "Two",
+      "Four",
+      "Five",
+      "Three"
+    ],
+    "answer": "D",
+    "solution": "(a), (b) and (e) are correct. Control by the repressor is negative regulation, so (c) is wrong. The y gene codes for permease and the a gene codes for transacetylase, so (d) is wrong. That makes three correct statements."
+  },
+  {
+    "type": "single",
+    "chapter": "Molecular Basis of Inheritance",
+    "text": "Match List-I with List-II:\nList-I\n(A) RNA polymerase I\n(B) RNA polymerase II\n(C) RNA polymerase III\n(D) Rho factor\nList-II\n(I) Termination of transcription in bacteria\n(II) tRNA, 5S rRNA and snRNAs\n(III) 28S, 18S and 5.8S rRNAs\n(IV) Heterogeneous nuclear RNA (hnRNA)\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-III, B-IV, C-II, D-I",
+      "A-IV, B-III, C-II, D-I",
+      "A-III, B-II, C-IV, D-I",
+      "A-II, B-IV, C-III, D-I"
+    ],
+    "answer": "A",
+    "solution": "In eukaryotes, RNA pol I makes 28S, 18S and 5.8S rRNA, RNA pol II makes hnRNA (the precursor of mRNA), and RNA pol III makes tRNA, 5S rRNA and snRNAs. In bacteria the rho factor ends transcription. So A-III, B-IV, C-II, D-I."
+  },
+  {
+    "type": "single",
+    "chapter": "Molecular Basis of Inheritance",
+    "text": "The template strand of a short transcription unit has the sequence 5'-TGACCGAT-3'. What will be the sequence of the transcribed RNA?",
+    "options": [
+      "5'-ACUGGCUA-3'",
+      "5'-AUCGGUCA-3'",
+      "5'-UGACCGAU-3'",
+      "5'-ATCGGTCA-3'"
+    ],
+    "answer": "B",
+    "solution": "RNA is complementary and antiparallel to the template. Read the template 3' to 5' (T A G C C A G T) and write the complementary bases with U instead of T. This gives the RNA 5'-AUCGGUCA-3', which matches the coding strand 5'-ATCGGTCA-3' with T replaced by U."
+  },
+  {
+    "type": "single",
+    "chapter": "Molecular Basis of Inheritance",
+    "text": "E. coli cells grown for many generations in a medium with $^{15}NH_4Cl$ as the only nitrogen source are moved to a medium with $^{14}NH_4Cl$. The cells divide every 20 minutes. After 80 minutes, what proportions of hybrid ($^{15}N$/$^{14}N$) and light ($^{14}N$/$^{14}N$) DNA will be seen on CsCl density gradient centrifugation?",
+    "options": [
+      "25% hybrid, 75% light",
+      "50% hybrid, 50% light",
+      "6.25% hybrid, 93.75% light",
+      "12.5% hybrid, 87.5% light"
+    ],
+    "answer": "D",
+    "solution": "80 minutes is 4 generations, which gives $2^4 = 16$ DNA molecules. With semiconservative replication, the two original heavy strands stay in only 2 hybrid molecules. So hybrid = $2/16$ = 12.5% and light = 87.5%."
+  },
+  {
+    "type": "single",
+    "chapter": "Molecular Basis of Inheritance",
+    "text": "How many of the following statements about DNA fingerprinting are correct?\n(a) During density gradient centrifugation, satellite DNA forms the major peak and bulk DNA forms the small peaks.\n(b) Satellite DNA sequences normally do not code for any proteins.\n(c) The technique was initially developed by Alec Jeffreys, using a satellite DNA called VNTR as a probe.\n(d) The size of a VNTR varies from 0.1 to 20 kb.\n(e) An allelic sequence variation is described as a DNA polymorphism if more than one variant at a locus occurs in the human population with a frequency greater than 0.01.\n(f) DNA fingerprinting identifies differences in the 99.9 per cent of the base sequence that is the same in all humans.",
+    "options": [
+      "Two",
+      "Three",
+      "Four",
+      "Five"
+    ],
+    "answer": "C",
+    "solution": "(b), (c), (d) and (e) are correct. Bulk DNA forms the major peak and the repetitive satellite DNA forms the small peaks, so (a) is wrong. DNA fingerprinting looks for differences in specific regions of repetitive DNA, not in the 99.9 per cent of the sequence shared by all humans, so (f) is wrong. That makes four."
+  },
+  {
+    "type": "single",
+    "chapter": "Microbes in Human Welfare",
+    "text": "Match List-I with List-II:\nList-I\n(A) Monascus purpureus\n(B) Trichoderma polysporum\n(C) Clostridium butylicum\n(D) Propionibacterium sharmanii\nList-II\n(I) Butyric acid\n(II) Large holes in Swiss cheese\n(III) Blood-cholesterol lowering agents\n(IV) Cyclosporin A\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-IV, B-III, C-I, D-II",
+      "A-III, B-IV, C-I, D-II",
+      "A-III, B-IV, C-II, D-I",
+      "A-I, B-IV, C-III, D-II"
+    ],
+    "answer": "B",
+    "solution": "Monascus purpureus gives statins, which lower blood cholesterol (A-III). Trichoderma polysporum gives cyclosporin A, an immunosuppressant (B-IV). Clostridium butylicum makes butyric acid (C-I). Propionibacterium sharmanii releases $CO_2$, which makes the large holes in Swiss cheese (D-II)."
+  },
+  {
+    "type": "single",
+    "chapter": "Microbes in Human Welfare",
+    "text": "Given below are two statements:\nStatement I: The BOD test measures the rate of uptake of oxygen by micro-organisms in a sample of water; the greater the BOD of waste water, the more is its polluting potential.\nStatement II: In anaerobic sludge digesters, aerobic bacteria digest the bacteria and fungi present in the sludge, producing gases such as methane, hydrogen sulphide and carbon dioxide.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "C",
+    "solution": "Statement I matches NCERT. In the anaerobic sludge digesters, other bacteria that grow anaerobically (not aerobic bacteria) digest the bacteria and fungi in the sludge and produce biogas. So Statement II is false."
+  },
+  {
+    "type": "single",
+    "chapter": "Organisms and Populations",
+    "text": "Match List-I with List-II:\nList-I\n(A) Balanus and Chthamalus on rocky sea coasts of Scotland\n(B) Mediterranean orchid Ophrys and its bee pollinator\n(C) Sea anemone and clown fish\n(D) Human liver fluke\nList-II\n(I) Commensalism\n(II) Competition\n(III) Parasitism involving two intermediate hosts\n(IV) Mutualism showing sexual deceit\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-I, B-IV, C-II, D-III",
+      "A-II, B-I, C-IV, D-III",
+      "A-II, B-IV, C-III, D-I",
+      "A-II, B-IV, C-I, D-III"
+    ],
+    "answer": "D",
+    "solution": "Connell found that the larger barnacle Balanus pushes Chthamalus out (competition, A-II). An Ophrys petal looks like a female bee and lures males to pseudocopulate (sexual deceit, B-IV). Clown fish gain protection from the anemone's stinging tentacles and the anemone is unaffected (commensalism, C-I). The human liver fluke needs a snail and a fish as intermediate hosts (D-III)."
+  },
+  {
+    "type": "single",
+    "chapter": "Organisms and Populations",
+    "text": "A pond has 50 frogs at the start of a year. During the year, 15 frogs are born, 5 die, 4 immigrate into the pond and 2 emigrate out. What is the population size at the end of the year, and what is the birth rate?",
+    "options": [
+      "62; 0.3 offspring per frog per year",
+      "62; 0.38 offspring per frog per year",
+      "58; 0.3 offspring per frog per year",
+      "66; 0.3 offspring per frog per year"
+    ],
+    "answer": "A",
+    "solution": "$N_{t+1} = N_t + [(B + I) - (D + E)] = 50 + [(15 + 4) - (5 + 2)] = 62$. Birth rate counts births only, per existing member: $15/50 = 0.3$ offspring per frog per year."
+  },
+  {
+    "type": "single",
+    "chapter": "Ecosystem",
+    "text": "Choose the correct statements regarding decomposition:\nA. Humus is highly resistant to microbial action and undergoes decomposition at an extremely slow rate.\nB. Decomposition is slower if the detritus is rich in lignin and chitin.\nC. Fragmentation of detritus is carried out by bacterial and fungal enzymes.\nD. During leaching, water-soluble inorganic nutrients go down into the soil horizon and get precipitated as unavailable salts.\nE. Low temperature and anaerobiosis stimulate decomposition.\nChoose the correct answer from the options given below:",
+    "options": [
+      "A, B and D only",
+      "A, C and D only",
+      "B, C and E only",
+      "A, B and E only"
+    ],
+    "answer": "A",
+    "solution": "A, B and D are correct. Fragmentation is done by detritivores such as earthworms; bacterial and fungal enzymes carry out catabolism. So C is wrong. Low temperature and anaerobiosis slow decomposition and let organic matter build up, so E is wrong."
+  },
+  {
+    "type": "single",
+    "chapter": "Ecosystem",
+    "text": "Given below are two statements:\nStatement I: In some ecosystems, the pyramid of energy may be inverted.\nStatement II: In the sea, the pyramid of biomass is generally inverted because the biomass of fishes far exceeds that of phytoplankton.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "D",
+    "solution": "Some energy is always lost as heat at each step, so the pyramid of energy is always upright and can never be inverted. Statement I is false. In the sea, fish biomass is far greater than phytoplankton biomass, so the pyramid of biomass is inverted. Statement II is true."
+  },
+  {
+    "type": "single",
+    "chapter": "Biodiversity and Conservation",
+    "text": "The species-area relationship on a logarithmic scale is $\\log S = \\log C + Z \\log A$. Choose the correct statements:\nA. Z is the slope of the line (regression coefficient).\nB. Z values generally lie between 0.1 and 0.2, regardless of the taxonomic group or the region.\nC. When the analysis covers very large areas such as entire continents, the slope is much steeper, with Z values of 0.6 to 1.2.\nD. Alexander von Humboldt observed that, within a region, species richness decreases with increasing explored area.\nE. For frugivorous birds and mammals in the tropical forests of different continents, the slope is found to be 1.15.\nChoose the correct answer from the options given below:",
+    "options": [
+      "A, B and D only",
+      "B, C and E only",
+      "A, B, C and E only",
+      "A, C, D and E only"
+    ],
+    "answer": "C",
+    "solution": "A, B, C and E are correct NCERT statements. Humboldt observed that species richness increases with explored area, but only up to a limit, so D is wrong."
+  },
+  {
+    "type": "single",
+    "chapter": "Biodiversity and Conservation",
+    "text": "Given below are two statements:\nStatement I: The three biodiversity hotspots that cover India's high biodiversity regions are the Western Ghats and Sri Lanka, Indo-Burma and Himalaya.\nStatement II: All the biodiversity hotspots of the world put together cover more than 20 percent of the earth's land area.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "C",
+    "solution": "Statement I matches NCERT. All the hotspots together cover less than 2% of the earth's land area, yet they hold very high species richness. So Statement II is false."
+  }
+]

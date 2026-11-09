@@ -1,17 +1,18 @@
 const prisma = require('../lib/prisma');
 const { stripAnswers } = require('../lib/paperFormat');
 const { scoreAttempt, cleanResponses } = require('../lib/scoring');
+const { visibleTo } = require('../lib/access');
 
 // Answers are still accepted this long after the deadline (slow networks,
 // the browser's own auto-submit). Past it, the attempt is submitted with
 // whatever was last saved — on the next read or write, no cron needed.
 const GRACE_MS = 2 * 60 * 1000;
 
-// Every published test is open to every signed-in student for now.
-// LATER: also require the student's batch to be one the test is given to.
-const findTest = (req) =>
+// A student only reaches tests meant for them (lib/access.js); anything else
+// is "not found". Admins can open any test, e.g. to preview it.
+const findTest = async (req) =>
   prisma.test.findFirst({
-    where: { id: req.params.id, ...(req.user.role === 'admin' ? {} : { status: 'published' }) },
+    where: { id: req.params.id, ...(req.user.role === 'admin' ? {} : await visibleTo(req.user.id)) },
   });
 
 const meta = (t) => ({
@@ -19,6 +20,7 @@ const meta = (t) => ({
   title:         t.title,
   subject:       t.subject,
   exam:          t.exam,
+  isFree:        t.isFree,
   durationMin:   t.durationMin,
   questionCount: t.questionCount,
   totalMarks:    t.totalMarks,
@@ -71,11 +73,11 @@ const resultPayload = (test, attempt) => ({
   attempt: publicAttempt(attempt),
 });
 
-// GET /api/tests — published tests with this student's status and score
+// GET /api/tests — the published tests meant for this student, with their status and score
 const listTests = async (req, res) => {
   try {
     const tests = await prisma.test.findMany({
-      where:   { status: 'published' },
+      where:   await visibleTo(req.user.id),
       orderBy: [{ opensAt: 'asc' }, { createdAt: 'desc' }],
       include: { attempts: { where: { userId: req.user.id } } },
     });

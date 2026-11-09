@@ -8,8 +8,10 @@ import { checkSession } from './lib/session.js'
     test.html           -> /test
     admin.html          -> /admin
   /login, /signup and /subscribe have no design file.
-  /student needs a signed-in session (email + password, see lib/session.js)
-  and an active batch; /subscribe is where a new student buys one.
+  /student needs a signed-in student session (email + password, see
+  lib/session.js). Without an active batch it shows only the free mock tests
+  (the server decides which tests each student gets); /subscribe is where a
+  student buys a batch.
   Query strings (?ref=, ?exam=, ?test=P4&view=result …) are kept as-is.
   A data router (createBrowserRouter) is used because <Link viewTransition>
   only animates under RouterProvider. Each page is loaded on demand; the
@@ -29,13 +31,11 @@ async function requireSession({ request }) {
   return redirect('/login?next=' + encodeURIComponent(pathname + search))
 }
 
-/* Signed in AND holding an active batch, else on to /subscribe. Admins don't
-   buy batches, so they go to their console. */
-async function requireSubscription(args) {
+/* Signed-in students, with or without a batch. Admins go to their console. */
+async function requireStudent(args) {
   const user = await checkSession()
   if (!user) return requireSession(args)
-  if (user.role === 'admin') return redirect('/admin')
-  return user.subscription?.status === 'active' ? null : redirect('/subscribe')
+  return user.role === 'admin' ? redirect('/admin') : null
 }
 
 /* The batch page is for signed-in students who don't have a batch yet. */
@@ -72,7 +72,7 @@ const router = createBrowserRouter([
   { path: '/signup', ...page(() => import('./pages/Signup/Signup.jsx')) },
   { path: '/subscribe', loader: requireNoSubscription, ...page(() => import('./pages/Subscribe/Subscribe.jsx')) },
   { path: '/checkout', element: <Navigate to="/subscribe" replace /> },
-  { path: '/student', loader: requireSubscription, ...page(() => import('./pages/StudentHome/StudentHome.jsx')) },
+  { path: '/student', loader: requireStudent, ...page(() => import('./pages/StudentHome/StudentHome.jsx')) },
   { path: '/test', loader: requireSession, ...testPage },
   { path: '/admin', loader: requireAdmin, ...page(() => import('./pages/Admin/Admin.jsx')) },
   { path: '*', element: <Navigate to="/" replace /> },

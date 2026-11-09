@@ -108,6 +108,14 @@ p { margin: 0; }
 .sum-price b.tbd { font: 600 15px/1.3 var(--body); color: var(--on-navy-muted); letter-spacing: 0; text-align: right; }
 .err { margin-bottom: 16px; padding: 12px 14px; border-radius: 10px; font-size: 14px; background: var(--red-soft); color: var(--red); }
 .sum-note { margin-top: 14px; font-size: 13px; color: var(--on-navy-muted); text-align: center; }
+.btn-outline { background: var(--card); color: var(--ink); border-color: var(--field); }
+.btn-outline:hover { background: var(--soft); }
+.free-card {
+  margin-top: 16px; padding: 20px 22px; border-radius: 16px; background: var(--card);
+  border: 1px solid var(--line); box-shadow: var(--shadow-sm); display: grid; gap: 14px;
+}
+.free-card b { display: block; font: 600 16px/1.3 var(--display); color: var(--ink); }
+.free-card span { display: block; margin-top: 4px; font-size: 14px; color: var(--muted); }
 
 @media (max-width: 1080px) {
   .layout { grid-template-columns: 1fr; }

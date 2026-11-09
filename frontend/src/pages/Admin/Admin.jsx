@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { usePageMeta } from '../../lib/hooks.js'
 import { clearSession, loadSession } from '../../lib/session.js'
 import mountAdmin from './adminApp.js'
+import StudentsAdmin from './StudentsAdmin.jsx'
 import TestsAdmin from './TestsAdmin.jsx'
 import { loadTestCount } from './testsApi.js'
 
@@ -16,9 +17,10 @@ import { loadTestCount } from './testsApi.js'
   (#dashboard, #tests, …) and every interaction are the design's own script,
   mounted by mountAdmin() below — see adminApp.js.
 
-  Exception: the "Tests" view is real and API-backed. adminApp reports the
-  current view through onView; while it is "tests", #view is hidden and the
-  React <TestsAdmin/> screen renders in its place.
+  Exceptions: the "Tests" and "Students & groups" views are real and
+  API-backed. adminApp reports the current view through onView; while it is
+  "tests" or "students", #view is hidden and the React <TestsAdmin/> or
+  <StudentsAdmin/> screen renders in its place.
 */
 export default function Admin() {
   usePageMeta({ title: 'Admin — Testverse by Studyverse' })
@@ -27,6 +29,7 @@ export default function Admin() {
   const navigate = useNavigate()
   const [view, setView] = useState(null)
   const [testCount, setTestCount] = useState(null)
+  const [studentsKey, setStudentsKey] = useState(0) // bumped to go back to the list when "Students & groups" is clicked again
   const me = loadSession() // the route loader only lets admins in
   const initials = (me?.name || 'Admin')
     .split(/\s+/)
@@ -53,6 +56,7 @@ export default function Admin() {
   }, [])
 
   const showTests = view === 'tests'
+  const showStudents = view === 'students'
 
   return (
     <div className="tv-admin" ref={rootRef}>
@@ -74,7 +78,9 @@ export default function Admin() {
           id="admin-nav"
           aria-label="Admin sections"
           onClick={(e) => {
-            if (e.target.closest('[data-view]')) {
+            const item = e.target.closest('[data-view]')
+            if (item) {
+              if (item.dataset.view === 'students') setStudentsKey((k) => k + 1)
               setMenuOpen(false)
               window.scrollTo(0, 0)
             }
@@ -131,10 +137,15 @@ export default function Admin() {
             </button>
           </div>
         </nav>
-        <main className="main" id="view" tabIndex={-1} hidden={showTests}></main>
+        <main className="main" id="view" tabIndex={-1} hidden={showTests || showStudents}></main>
         {showTests && (
           <main className="main" id="tests-view">
             <TestsAdmin onCount={setTestCount} />
+          </main>
+        )}
+        {showStudents && (
+          <main className="main" id="students-view">
+            <StudentsAdmin key={studentsKey} />
           </main>
         )}
       </div>

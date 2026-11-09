@@ -9,6 +9,7 @@
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
     "create-admin": "node scripts/createAdmin.js",
+    "seed:free-tests": "node scripts/seedFreeTests.js",
     "postinstall": "prisma generate"
   },
   "keywords": [

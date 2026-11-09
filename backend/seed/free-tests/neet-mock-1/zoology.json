@@ -1,0 +1,587 @@
+[
+  {
+    "type": "single",
+    "chapter": "Animal Kingdom",
+    "text": "Match List-I with List-II:\nList-I\n(A) Pleurobrachia\n(B) Ascaris\n(C) Pila\n(D) Balanoglossus\nList-II\n(I) Excretion through proboscis gland\n(II) Well-marked bioluminescence\n(III) Pseudocoelomate body\n(IV) File-like rasping organ (radula) in the mouth\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-II, B-III, C-I, D-IV",
+      "A-IV, B-III, C-II, D-I",
+      "A-II, B-I, C-IV, D-III",
+      "A-II, B-III, C-IV, D-I"
+    ],
+    "answer": "D",
+    "solution": "Pleurobrachia is a ctenophore, a group in which bioluminescence is well marked. Ascaris (Aschelminthes) is pseudocoelomate. Pila (Mollusca) has a radula in its mouth. Balanoglossus (Hemichordata) excretes through the proboscis gland. So A-II, B-III, C-IV, D-I."
+  },
+  {
+    "type": "single",
+    "chapter": "Animal Kingdom",
+    "text": "Given below are two statements:\nStatement I: In cartilaginous fishes (Chondrichthyes), the notochord persists throughout life.\nStatement II: In bony fishes (Osteichthyes), the heart is three-chambered.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "C",
+    "solution": "NCERT says that in Chondrichthyes the notochord persists throughout life, so Statement I is true. Fishes, both cartilaginous and bony, have a two-chambered heart (one auricle and one ventricle), so Statement II is false."
+  },
+  {
+    "type": "single",
+    "chapter": "Animal Kingdom",
+    "text": "How many of the following animals are cold-blooded (poikilothermous)?\nPteropus, Chelone, Hyla, Exocoetus, Columba, Delphinus, Calotes, Naja",
+    "options": [
+      "4",
+      "5",
+      "6",
+      "3"
+    ],
+    "answer": "B",
+    "solution": "Chelone (turtle), Calotes (garden lizard) and Naja (cobra) are reptiles, Hyla (tree frog) is an amphibian and Exocoetus (flying fish) is a bony fish. All five are cold-blooded. Pteropus (flying fox) and Delphinus (dolphin) are mammals and Columba (pigeon) is a bird, so these three are warm-blooded. Answer: 5."
+  },
+  {
+    "type": "single",
+    "chapter": "Animal Kingdom",
+    "text": "Choose the correct statements:\nA. In sponges, choanocytes (collar cells) line the spongocoel and the canals.\nB. Cnidoblasts of coelenterates are used for anchorage, defence and capture of prey.\nC. Platyhelminthes are pseudocoelomate animals.\nD. Flame cells help in osmoregulation and excretion in Platyhelminthes.\nE. Arthropods have a closed type of circulatory system.\nChoose the correct answer from the options given below:",
+    "options": [
+      "A, C and D only",
+      "B, D and E only",
+      "A, B and D only",
+      "A, B, C and D only"
+    ],
+    "answer": "C",
+    "solution": "A, B and D are NCERT statements. C is wrong because flatworms are acoelomate. E is wrong because arthropods have an open circulatory system. So the answer is A, B and D only."
+  },
+  {
+    "type": "single",
+    "chapter": "Structural Organisation in Animals",
+    "text": "Which one of the following statements about the cockroach (Periplaneta americana) is correct?",
+    "options": [
+      "Malpighian tubules are present at the junction of the foregut and the midgut",
+      "Each compound eye consists of about 2000 hexagonal ommatidia",
+      "The ventral nerve cord has three ganglia in the abdomen and six in the thorax",
+      "The mushroom-shaped gland is present in the 2nd and 3rd abdominal segments"
+    ],
+    "answer": "B",
+    "solution": "Each compound eye of a cockroach has about 2000 hexagonal ommatidia, which gives mosaic vision. Malpighian tubules lie at the junction of the midgut and the hindgut. The nerve cord has three ganglia in the thorax and six in the abdomen. The mushroom-shaped gland lies in the 6th and 7th abdominal segments."
+  },
+  {
+    "type": "single",
+    "chapter": "Structural Organisation in Animals",
+    "text": "Match List-I with List-II:\nList-I\n(A) Areolar tissue\n(B) Adipose tissue\n(C) Dense regular connective tissue\n(D) Cuboidal epithelium\nList-II\n(I) Tendons and ligaments\n(II) Present beneath the skin; supporting framework for epithelium\n(III) Specialised to store fats\n(IV) Ducts of glands and tubular parts of nephrons\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-III, B-II, C-I, D-IV",
+      "A-II, B-III, C-IV, D-I",
+      "A-I, B-III, C-II, D-IV",
+      "A-II, B-III, C-I, D-IV"
+    ],
+    "answer": "D",
+    "solution": "Areolar tissue lies beneath the skin and supports epithelium. Adipose tissue stores fat. Dense regular tissue forms tendons and ligaments. Cuboidal epithelium lines the ducts of glands and the tubular parts of nephrons. So A-II, B-III, C-I, D-IV."
+  },
+  {
+    "type": "single",
+    "chapter": "Biomolecules",
+    "text": "Given below are two statements: one is labelled as Assertion A and the other is labelled as Reason R.\nAssertion A: Malonate inhibits the activity of the enzyme succinic dehydrogenase.\nReason R: Malonate closely resembles the substrate succinate in structure and competes with it for the active site of the enzyme.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both A and R are true and R is the correct explanation of A",
+      "Both A and R are true but R is NOT the correct explanation of A",
+      "A is true but R is false",
+      "A is false but R is true"
+    ],
+    "answer": "A",
+    "solution": "Malonate is the NCERT example of a competitive inhibitor. It looks like succinate, binds to the active site of succinic dehydrogenase and blocks the substrate. Both statements are true, and R explains A."
+  },
+  {
+    "type": "single",
+    "chapter": "Biomolecules",
+    "text": "Match List-I with List-II:\nList-I\n(A) Oxidoreductases\n(B) Transferases\n(C) Hydrolases\n(D) Lyases\nList-II\n(I) Remove groups from substrates by mechanisms other than hydrolysis, leaving double bonds\n(II) Catalyse oxidation-reduction between two substrates S and S'\n(III) Catalyse transfer of a group G (other than hydrogen) between a pair of substrates\n(IV) Catalyse hydrolysis of ester, ether, peptide and glycosidic bonds\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-III, B-II, C-IV, D-I",
+      "A-II, B-III, C-I, D-IV",
+      "A-II, B-III, C-IV, D-I",
+      "A-I, B-III, C-IV, D-II"
+    ],
+    "answer": "C",
+    "solution": "Oxidoreductases carry out redox reactions (II). Transferases transfer a group other than hydrogen (III). Hydrolases break bonds by hydrolysis (IV). Lyases remove groups without hydrolysis and leave double bonds (I). So A-II, B-III, C-IV, D-I."
+  },
+  {
+    "type": "single",
+    "chapter": "Biomolecules",
+    "text": "Choose the correct statements:\nA. In a polysaccharide chain such as glycogen, the right end is called the reducing end and the left end the non-reducing end.\nB. Cellulose gives a blue colour with iodine because it holds $I_2$ in its helices.\nC. Collagen is the most abundant protein in the animal world.\nD. RuBisCO is the most abundant protein in the whole of the biosphere.\nE. Inulin is a polymer of glucose.\nChoose the correct answer from the options given below:",
+    "options": [
+      "A, C and D only",
+      "A, B and E only",
+      "B, C and D only",
+      "C, D and E only"
+    ],
+    "answer": "A",
+    "solution": "A, C and D are NCERT facts. B is wrong: starch forms helices that hold $I_2$ and turn blue, but cellulose has no complex helices and cannot hold $I_2$. E is wrong because inulin is a polymer of fructose. Answer: A, C and D only."
+  },
+  {
+    "type": "single",
+    "chapter": "Breathing and Exchange of Gases",
+    "text": "Given below are two statements:\nStatement I: The partial pressures of oxygen and carbon dioxide in the alveolar air are about 104 mm Hg and 40 mm Hg respectively.\nStatement II: Under normal physiological conditions, every 100 mL of deoxygenated blood delivers approximately 4 mL of $CO_2$ to the alveoli.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "A",
+    "solution": "According to the NCERT table, alveolar $pO_2$ is 104 mm Hg and $pCO_2$ is 40 mm Hg. NCERT also says that every 100 mL of deoxygenated blood delivers about 4 mL of $CO_2$ to the alveoli. Both statements are true."
+  },
+  {
+    "type": "single",
+    "chapter": "Breathing and Exchange of Gases",
+    "text": "In a healthy adult, tidal volume = 500 mL, inspiratory reserve volume = 3000 mL, expiratory reserve volume = 1100 mL and residual volume = 1200 mL. The inspiratory capacity and the functional residual capacity respectively are:",
+    "options": [
+      "4600 mL and 2300 mL",
+      "3500 mL and 1600 mL",
+      "5800 mL and 2300 mL",
+      "3500 mL and 2300 mL"
+    ],
+    "answer": "D",
+    "solution": "Inspiratory capacity = TV + IRV = 500 + 3000 = 3500 mL. Functional residual capacity = ERV + RV = 1100 + 1200 = 2300 mL."
+  },
+  {
+    "type": "single",
+    "chapter": "Body Fluids and Circulation",
+    "text": "Match List-I with List-II:\nList-I\n(A) P-wave\n(B) QRS complex\n(C) T-wave\n(D) End of the T-wave\nList-II\n(I) Depolarisation of the ventricles\n(II) End of systole\n(III) Depolarisation (excitation) of the atria\n(IV) Return of the ventricles from excited to normal state\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-I, B-III, C-IV, D-II",
+      "A-III, B-I, C-IV, D-II",
+      "A-III, B-I, C-II, D-IV",
+      "A-III, B-IV, C-I, D-II"
+    ],
+    "answer": "B",
+    "solution": "The P-wave shows atrial depolarisation and the QRS complex shows ventricular depolarisation. The T-wave shows the ventricles returning to the normal state (repolarisation), and the end of the T-wave marks the end of systole. So A-III, B-I, C-IV, D-II."
+  },
+  {
+    "type": "single",
+    "chapter": "Body Fluids and Circulation",
+    "text": "Given below are two statements:\nStatement I: The plasma of a person with blood group O contains both anti-A and anti-B antibodies.\nStatement II: Erythroblastosis foetalis can occur when an Rh-negative foetus is carried by an Rh-positive mother.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "C",
+    "solution": "Blood group O has no A or B antigens on its RBCs, and its plasma has both anti-A and anti-B, so Statement I is true. Erythroblastosis foetalis happens when an Rh-negative mother carries an Rh-positive foetus, the reverse of what Statement II says. So Statement II is false."
+  },
+  {
+    "type": "single",
+    "chapter": "Body Fluids and Circulation",
+    "text": "Choose the correct statements about the human heart:\nA. The SA node can generate the maximum number of action potentials, i.e., 70-75 per minute.\nB. The duration of one cardiac cycle is 0.8 second.\nC. Atrial systole increases the flow of blood into the ventricles by about 70 per cent.\nD. The first heart sound (lub) is associated with the closure of the semilunar valves.\nE. The cardiac output of a healthy individual averages about 5 litres per minute.\nChoose the correct answer from the options given below:",
+    "options": [
+      "A, B and C only",
+      "B, D and E only",
+      "A, B and E only",
+      "A, C and E only"
+    ],
+    "answer": "C",
+    "solution": "A, B and E are correct (72 beats/min × 70 mL is about 5 L/min). C is wrong because atrial systole adds only about 30 per cent to ventricular filling. D is wrong because 'lub' comes from the closure of the AV (tricuspid and bicuspid) valves; 'dub' comes from the semilunar valves."
+  },
+  {
+    "type": "single",
+    "chapter": "Excretory Products and their Elimination",
+    "text": "Given below are two statements:\nStatement I: The descending limb of the loop of Henle is impermeable to water but permeable to electrolytes.\nStatement II: The increasing osmolarity towards the inner medullary interstitium is mainly caused by NaCl and urea.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "D",
+    "solution": "The descending limb is permeable to water and almost impermeable to electrolytes; the ascending limb is the reverse. So Statement I is false. The medullary osmotic gradient (300 to about 1200 $\\text{mOsmol L}^{-1}$) is mainly due to NaCl and urea, so Statement II is true."
+  },
+  {
+    "type": "single",
+    "chapter": "Excretory Products and their Elimination",
+    "text": "Match List-I with List-II:\nList-I\n(A) Protonephridia\n(B) Nephridia\n(C) Malpighian tubules\n(D) Antennal glands\nList-II\n(I) Prawn\n(II) Planaria\n(III) Cockroach\n(IV) Earthworm\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-II, B-IV, C-III, D-I",
+      "A-IV, B-II, C-III, D-I",
+      "A-II, B-III, C-IV, D-I",
+      "A-I, B-IV, C-III, D-II"
+    ],
+    "answer": "A",
+    "solution": "Planaria uses protonephridia (flame cells) and the earthworm uses nephridia. Cockroaches and other insects use Malpighian tubules, and crustaceans like the prawn use antennal (green) glands. So A-II, B-IV, C-III, D-I."
+  },
+  {
+    "type": "single",
+    "chapter": "Excretory Products and their Elimination",
+    "text": "Choose the correct statements regarding renal function in humans:\nA. GFR in a healthy individual is about 125 mL per minute, i.e., 180 litres per day.\nB. Nearly 99 per cent of the glomerular filtrate is reabsorbed by the renal tubules.\nC. Atrial natriuretic factor (ANF) causes vasoconstriction and thereby increases blood pressure.\nD. Angiotensin II activates the adrenal cortex to release aldosterone.\nE. A fall in GFR can activate the JG cells to release renin.\nChoose the correct answer from the options given below:",
+    "options": [
+      "A, B and C only",
+      "A, C, D and E only",
+      "B, C and E only",
+      "A, B, D and E only"
+    ],
+    "answer": "D",
+    "solution": "A, B, D and E are NCERT statements. C is wrong: ANF causes vasodilation and lowers blood pressure, which is why it checks the renin-angiotensin mechanism. Answer: A, B, D and E only."
+  },
+  {
+    "type": "single",
+    "chapter": "Locomotion and Movement",
+    "text": "Given below are two statements:\nStatement I: During contraction of a skeletal muscle fibre, the length of the A-band decreases.\nStatement II: During muscle contraction, $Ca^{2+}$ binds to tropomyosin and unmasks the myosin-binding sites on actin.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "B",
+    "solution": "During contraction the A-band keeps its length while the I-bands shorten, so Statement I is false. $Ca^{2+}$ binds to a subunit of troponin, not tropomyosin, and this removes the masking of the active sites, so Statement II is also false."
+  },
+  {
+    "type": "single",
+    "chapter": "Locomotion and Movement",
+    "text": "How many of the following statements about the human skeleton are correct?\n(i) The skull is composed of 22 bones.\n(ii) The vertebral column is formed by 26 serially arranged units.\n(iii) The 8th, 9th and 10th pairs of ribs are called floating ribs.\n(iv) Each limb is made of 30 bones.\n(v) The pectoral girdle is formed by the ilium, ischium and pubis.\n(vi) A single U-shaped hyoid bone is present at the base of the buccal cavity.",
+    "options": [
+      "3",
+      "5",
+      "4",
+      "2"
+    ],
+    "answer": "C",
+    "solution": "(i) 8 cranial + 14 facial = 22, correct. (ii) Correct. (iii) Wrong: ribs 8 to 10 are vertebrochondral (false) ribs, and the 11th and 12th pairs are floating ribs. (iv) Correct. (v) Wrong: ilium, ischium and pubis form the pelvic girdle (coxal bone). (vi) Correct. So 4 are correct."
+  },
+  {
+    "type": "single",
+    "chapter": "Locomotion and Movement",
+    "text": "Match List-I with List-II:\nList-I\n(A) Myasthenia gravis\n(B) Muscular dystrophy\n(C) Tetany\n(D) Gout\nList-II\n(I) Rapid spasms in muscle due to low $Ca^{2+}$ in body fluid\n(II) Inflammation of joints due to accumulation of uric acid crystals\n(III) Autoimmune disorder affecting the neuromuscular junction\n(IV) Progressive degeneration of skeletal muscle, mostly due to a genetic disorder\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-IV, B-III, C-I, D-II",
+      "A-III, B-IV, C-I, D-II",
+      "A-III, B-IV, C-II, D-I",
+      "A-I, B-IV, C-III, D-II"
+    ],
+    "answer": "B",
+    "solution": "Myasthenia gravis is an autoimmune disease of the neuromuscular junction (III). Muscular dystrophy is genetic degeneration of skeletal muscle (IV). Tetany is caused by low $Ca^{2+}$ (I). Gout is caused by uric acid crystals in the joints (II)."
+  },
+  {
+    "type": "single",
+    "chapter": "Neural Control and Coordination",
+    "text": "Given below are two statements: one is labelled as Assertion A and the other is labelled as Reason R.\nAssertion A: In a resting neuron, the outer surface of the axonal membrane is positively charged with respect to the inner surface.\nReason R: The sodium-potassium pump transports 3 $Na^+$ outwards for every 2 $K^+$ into the cell.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both A and R are true and R is the correct explanation of A",
+      "Both A and R are true but R is NOT the correct explanation of A",
+      "A is true but R is false",
+      "A is false but R is true"
+    ],
+    "answer": "A",
+    "solution": "NCERT explains that the Na-K pump moves 3 $Na^+$ out for every 2 $K^+$ in. As a result, the outer surface carries a positive charge and the inner surface a negative charge, so the membrane is polarised. Both statements are true, and R explains A."
+  },
+  {
+    "type": "single",
+    "chapter": "Neural Control and Coordination",
+    "text": "Match List-I with List-II:\nList-I\n(A) Hypothalamus\n(B) Corpus callosum\n(C) Medulla oblongata\n(D) Limbic system\nList-II\n(I) Connects the right and left cerebral hemispheres\n(II) Along with hypothalamus, regulates sexual behaviour and expression of emotional reactions\n(III) Centres controlling respiration, cardiovascular reflexes and gastric secretions\n(IV) Controls body temperature and the urge for eating and drinking\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-II, B-I, C-III, D-IV",
+      "A-IV, B-III, C-I, D-II",
+      "A-IV, B-I, C-II, D-III",
+      "A-IV, B-I, C-III, D-II"
+    ],
+    "answer": "D",
+    "solution": "The hypothalamus controls body temperature, eating and drinking (IV). The corpus callosum connects the two cerebral hemispheres (I). The medulla holds the respiratory, cardiovascular and gastric centres (III). The limbic system, together with the hypothalamus, governs sexual behaviour and emotions (II)."
+  },
+  {
+    "type": "single",
+    "chapter": "Chemical Coordination and Integration",
+    "text": "Match List-I with List-II:\nList-I\n(A) Melatonin\n(B) Thyrocalcitonin\n(C) Thymosins\n(D) Erythropoietin\nList-II\n(I) Differentiation of T-lymphocytes\n(II) Regulation of the 24-hour (diurnal) rhythm of the body\n(III) Stimulates erythropoiesis\n(IV) Regulates blood calcium levels\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-II, B-IV, C-I, D-III",
+      "A-IV, B-II, C-I, D-III",
+      "A-II, B-IV, C-III, D-I",
+      "A-II, B-I, C-IV, D-III"
+    ],
+    "answer": "A",
+    "solution": "Melatonin from the pineal gland regulates the diurnal rhythm. Thyrocalcitonin (TCT) from the thyroid regulates blood calcium. Thymosins from the thymus help T-lymphocytes differentiate. Erythropoietin from the JG cells of the kidney stimulates RBC formation. So A-II, B-IV, C-I, D-III."
+  },
+  {
+    "type": "single",
+    "chapter": "Chemical Coordination and Integration",
+    "text": "Given below are two statements:\nStatement I: Hormones which interact with membrane-bound receptors normally do not enter the target cell, but generate second messengers such as cyclic AMP.\nStatement II: Steroid hormones and iodothyronines interact with intracellular receptors and mostly regulate gene expression.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "A",
+    "solution": "Both statements describe the two mechanisms of hormone action in NCERT. Protein and peptide hormones act through membrane receptors and second messengers such as cAMP, IP3 and $Ca^{2+}$. Steroid hormones and thyroid hormones bind intracellular receptors and act on genes. Both are true."
+  },
+  {
+    "type": "single",
+    "chapter": "Chemical Coordination and Integration",
+    "text": "Choose the correct statements:\nA. Low secretion of growth hormone results in stunted growth called pituitary dwarfism.\nB. Diabetes insipidus is caused by insufficient secretion of insulin.\nC. Graves' disease (exophthalmic goitre) is a form of hypothyroidism.\nD. Hypothyroidism during pregnancy causes defective development of the growing baby, leading to cretinism.\nE. Excess secretion of growth hormone in adults, especially in middle age, causes acromegaly.\nChoose the correct answer from the options given below:",
+    "options": [
+      "A, B and D only",
+      "A, D and E only",
+      "C, D and E only",
+      "A, B, C and E only"
+    ],
+    "answer": "B",
+    "solution": "A, D and E are correct. B is wrong because diabetes insipidus comes from a defect in the synthesis or release of ADH (vasopressin), not insulin. C is wrong because Graves' disease is a form of hyperthyroidism. Answer: A, D and E only."
+  },
+  {
+    "type": "single",
+    "chapter": "Human Reproduction",
+    "text": "Given below are two statements:\nStatement I: Each primary spermatocyte contains 23 chromosomes.\nStatement II: The release of sperms from the seminiferous tubules is called spermiation.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "D",
+    "solution": "Primary spermatocytes are diploid with 46 chromosomes. Only after meiosis I do the secondary spermatocytes have 23. So Statement I is false. The release of sperms from the seminiferous tubules is called spermiation, so Statement II is true. (Spermiogenesis is the change of spermatids into sperms.)"
+  },
+  {
+    "type": "single",
+    "chapter": "Human Reproduction",
+    "text": "Choose the correct statements about the human menstrual cycle:\nA. The menstrual phase, when menstrual flow occurs, lasts for 3-5 days.\nB. Both LH and FSH attain a peak level in the middle of the cycle (about the 14th day).\nC. The corpus luteum secretes large amounts of progesterone, which is essential for maintenance of the endometrium.\nD. Regeneration of the endometrium in the follicular phase is brought about by a high level of progesterone.\nE. The rapid secretion of LH (LH surge) induces rupture of the Graafian follicle and release of the ovum.\nChoose the correct answer from the options given below:",
+    "options": [
+      "A, B and D only",
+      "B, C, D and E only",
+      "A, C and D only",
+      "A, B, C and E only"
+    ],
+    "answer": "D",
+    "solution": "A, B, C and E follow NCERT. D is wrong: in the follicular phase the endometrium regenerates under the rising level of oestrogens from the growing follicles. Progesterone comes from the corpus luteum in the luteal phase. Answer: A, B, C and E only."
+  },
+  {
+    "type": "single",
+    "chapter": "Human Reproduction",
+    "text": "Match List-I with List-II:\nList-I\n(A) Morula\n(B) Trophoblast\n(C) Inner cell mass\n(D) Chorionic villi\nList-II\n(I) Outer layer of the blastocyst that gets attached to the endometrium\n(II) Embryo with 8 to 16 blastomeres\n(III) Finger-like projections that appear on the trophoblast after implantation\n(IV) Cells that get differentiated as the embryo\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-I, B-II, C-IV, D-III",
+      "A-II, B-IV, C-I, D-III",
+      "A-II, B-I, C-IV, D-III",
+      "A-II, B-I, C-III, D-IV"
+    ],
+    "answer": "C",
+    "solution": "The morula is the 8-16 cell stage (II). The trophoblast is the outer layer of the blastocyst that attaches to the endometrium (I). The inner cell mass becomes the embryo (IV). Chorionic villi are finger-like projections that grow from the trophoblast after implantation (III)."
+  },
+  {
+    "type": "single",
+    "chapter": "Human Reproduction",
+    "text": "Which of the following statements about human oogenesis is incorrect?",
+    "options": [
+      "Oogenesis is initiated during the embryonic development stage, when a couple of million oogonia are formed within each fetal ovary",
+      "No more oogonia are formed and added after birth",
+      "The secondary oocyte completes its second meiotic division before it is released from the ovary",
+      "The primary oocytes enter prophase-I of meiosis and get temporarily arrested at that stage"
+    ],
+    "answer": "C",
+    "solution": "The secondary oocyte is released at ovulation while still in meiosis II. It completes the second meiotic division only when a sperm enters it during fertilisation, forming the ovum and a second polar body. The other three statements are correct."
+  },
+  {
+    "type": "single",
+    "chapter": "Reproductive Health",
+    "text": "Match List-I with List-II:\nList-I\n(A) Multiload 375\n(B) Progestasert\n(C) Saheli\n(D) Lippes loop\nList-II\n(I) Non-medicated IUD\n(II) Non-steroidal oral contraceptive taken once a week\n(III) Hormone-releasing IUD\n(IV) Copper-releasing IUD\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-III, B-IV, C-II, D-I",
+      "A-IV, B-III, C-II, D-I",
+      "A-IV, B-III, C-I, D-II",
+      "A-I, B-III, C-II, D-IV"
+    ],
+    "answer": "B",
+    "solution": "Multiload 375 is a copper-releasing IUD (IV). Progestasert is a hormone-releasing IUD (III). Saheli is a non-steroidal pill taken once a week (II). The Lippes loop is a non-medicated IUD (I)."
+  },
+  {
+    "type": "single",
+    "chapter": "Reproductive Health",
+    "text": "Given below are two statements:\nStatement I: In intra-uterine transfer (IUT), embryos with up to 8 blastomeres are transferred into the fallopian tube.\nStatement II: In intra-cytoplasmic sperm injection (ICSI), the sperm is directly injected into the uterus of the female.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "B",
+    "solution": "Embryos with up to 8 blastomeres go into the fallopian tube in ZIFT. In IUT, embryos with more than 8 blastomeres go into the uterus. So Statement I is false. In ICSI, the sperm is injected directly into the ovum in the laboratory, not into the uterus, so Statement II is also false."
+  },
+  {
+    "type": "single",
+    "chapter": "Reproductive Health",
+    "text": "How many of the following sexually transmitted infections are completely curable if detected early and treated properly?\nGonorrhoea, Syphilis, Genital herpes, Chlamydiasis, Hepatitis-B, Trichomoniasis, Genital warts, HIV infection",
+    "options": [
+      "4",
+      "6",
+      "3",
+      "5"
+    ],
+    "answer": "D",
+    "solution": "NCERT: except for hepatitis-B, genital herpes and HIV infections, other STIs are completely curable if detected early and treated properly. That leaves gonorrhoea, syphilis, chlamydiasis, trichomoniasis and genital warts, which is 5."
+  },
+  {
+    "type": "single",
+    "chapter": "Evolution",
+    "text": "In a large, randomly mating population that is in Hardy-Weinberg equilibrium for a gene with two alleles, 16% of the individuals show the recessive phenotype. The frequency of heterozygous individuals in this population is:",
+    "options": [
+      "0.48",
+      "0.24",
+      "0.36",
+      "0.16"
+    ],
+    "answer": "A",
+    "solution": "$q^2 = 0.16$, so $q = 0.4$ and $p = 1 - 0.4 = 0.6$. Heterozygote frequency $= 2pq = 2 \\times 0.6 \\times 0.4 = 0.48$."
+  },
+  {
+    "type": "single",
+    "chapter": "Evolution",
+    "text": "Which one of the following is an example of analogous structures, reflecting convergent evolution?",
+    "options": [
+      "Forelimbs of whales, bats and cheetahs",
+      "Wings of a butterfly and of a bird",
+      "Thorns of Bougainvillea and tendrils of Cucurbita",
+      "Hearts of different vertebrates"
+    ],
+    "answer": "B",
+    "solution": "The wings of a butterfly and a bird do the same job but have different structure and origin, so they are analogous structures produced by convergent evolution. Vertebrate forelimbs, Bougainvillea thorns with Cucurbita tendrils, and vertebrate hearts are all homologous structures, which point to divergent evolution."
+  },
+  {
+    "type": "single",
+    "chapter": "Evolution",
+    "text": "Match List-I with List-II:\nList-I\n(A) Homo habilis\n(B) Homo erectus\n(C) Neanderthal man\n(D) Dryopithecus\nList-II\n(I) Brain capacity 650-800 cc; probably did not eat meat\n(II) Brain capacity about 900 cc; probably ate meat\n(III) Brain size 1400 cc; used hides to protect the body and buried their dead\n(IV) Hairy, walked like gorillas and chimpanzees; existed about 15 mya\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-II, B-I, C-III, D-IV",
+      "A-I, B-III, C-II, D-IV",
+      "A-I, B-II, C-III, D-IV",
+      "A-IV, B-II, C-III, D-I"
+    ],
+    "answer": "C",
+    "solution": "Homo habilis had a 650-800 cc brain and probably did not eat meat. Homo erectus (about 1.5 mya) had a brain of about 900 cc and probably ate meat. Neanderthals had a 1400 cc brain, used hides and buried their dead. Dryopithecus (about 15 mya) was hairy and walked like gorillas and chimpanzees. So A-I, B-II, C-III, D-IV."
+  },
+  {
+    "type": "single",
+    "chapter": "Human Health and Disease",
+    "text": "Match List-I with List-II:\nList-I\n(A) Salmonella typhi\n(B) Haemophilus influenzae\n(C) Wuchereria bancrofti\n(D) Microsporum\nList-II\n(I) Ringworm\n(II) Elephantiasis (filariasis)\n(III) Pneumonia\n(IV) Typhoid\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-III, B-IV, C-II, D-I",
+      "A-IV, B-III, C-I, D-II",
+      "A-IV, B-II, C-III, D-I",
+      "A-IV, B-III, C-II, D-I"
+    ],
+    "answer": "D",
+    "solution": "Salmonella typhi causes typhoid and Haemophilus influenzae causes pneumonia (along with Streptococcus pneumoniae). Wuchereria causes filariasis (elephantiasis), and Microsporum is one of the fungi that cause ringworm. So A-IV, B-III, C-II, D-I."
+  },
+  {
+    "type": "single",
+    "chapter": "Human Health and Disease",
+    "text": "Given below are two statements:\nStatement I: Plasmodium enters the human body as gametocytes through the bite of an infected female Anopheles mosquito.\nStatement II: The rupture of RBCs infected by Plasmodium releases a toxic substance, haemozoin, which is responsible for the chill and high fever recurring every three to four days.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "D",
+    "solution": "Plasmodium enters the human body as sporozoites. Gametocytes form later in the RBCs and are taken up by the mosquito. So Statement I is false. Statement II is true as written in NCERT."
+  },
+  {
+    "type": "single",
+    "chapter": "Human Health and Disease",
+    "text": "Choose the correct statements about immunity:\nA. Each antibody molecule has four peptide chains and is represented as $H_2L_2$.\nB. Colostrum secreted by the mother during the initial days of lactation has abundant IgA antibodies.\nC. Mucosa-associated lymphoid tissue (MALT) constitutes about 50 per cent of the lymphoid tissue in the human body.\nD. Virus-infected cells secrete interferons, which protect non-infected cells from further viral infection.\nE. Active immunity is quick and gives a full response immediately.\nChoose the correct answer from the options given below:",
+    "options": [
+      "A, B, C and D only",
+      "A, B and E only",
+      "B, C, D and E only",
+      "A, C and E only"
+    ],
+    "answer": "A",
+    "solution": "A, B, C and D are NCERT statements. E is wrong: active immunity is slow and takes time to give its full effective response. Passive immunity, from ready-made antibodies, is the quick one. Answer: A, B, C and D only."
+  },
+  {
+    "type": "single",
+    "chapter": "Human Health and Disease",
+    "text": "Which one of the following is correctly matched?",
+    "options": [
+      "Cocaine – obtained from the latex of Papaver somniferum",
+      "Heroin – chemically diacetylmorphine; acts as a depressant",
+      "Cannabinoids – obtained from the coca plant Erythroxylum coca",
+      "Smack – a cannabinoid obtained from the inflorescences of Cannabis sativa"
+    ],
+    "answer": "B",
+    "solution": "Heroin (smack) is diacetylmorphine, made by acetylating morphine from the poppy (Papaver somniferum). It is a depressant that slows down body functions. Cocaine comes from Erythroxylum coca, and cannabinoids come from Cannabis sativa. Smack is heroin, not a cannabinoid."
+  },
+  {
+    "type": "single",
+    "chapter": "Biotechnology: Principles and Processes",
+    "text": "Given below are two statements:\nStatement I: EcoRI cuts the DNA between bases G and A only when the sequence GAATTC is present in the DNA.\nStatement II: In the naming of restriction enzymes, the Roman numerals following the name indicate the number of recognition sites the enzyme has in a DNA molecule.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "C",
+    "solution": "Statement I is the NCERT description of EcoRI. Statement II is false: the Roman numerals show the order in which the enzymes were isolated from that bacterial strain."
+  },
+  {
+    "type": "single",
+    "chapter": "Biotechnology: Principles and Processes",
+    "text": "A foreign DNA fragment is ligated into the PstI site of the vector pBR322, and the recombinant plasmid is introduced into E. coli cells. The transformed cells carrying the recombinant plasmid will:",
+    "options": [
+      "grow on ampicillin but not on tetracycline",
+      "grow on both ampicillin and tetracycline",
+      "grow on tetracycline but not on ampicillin",
+      "grow on neither antibiotic"
+    ],
+    "answer": "C",
+    "solution": "In pBR322 the PstI site (like PvuI) lies inside the ampicillin resistance gene ($amp^R$). An insert at this site inactivates $amp^R$ by insertional inactivation, while $tet^R$ stays intact. Recombinant cells therefore grow on tetracycline but not on ampicillin."
+  },
+  {
+    "type": "single",
+    "chapter": "Biotechnology: Principles and Processes",
+    "text": "Choose the correct statements about agarose gel electrophoresis of DNA:\nA. DNA fragments, being positively charged, move towards the cathode.\nB. Smaller DNA fragments move farther through the gel than larger ones.\nC. Agarose is a natural polymer extracted from sea weeds.\nD. Separated DNA fragments can be seen in visible light without any staining.\nE. DNA stained with ethidium bromide appears as bright orange coloured bands under UV radiation.\nChoose the correct answer from the options given below:",
+    "options": [
+      "A, B and C only",
+      "B, D and E only",
+      "A, C and E only",
+      "B, C and E only"
+    ],
+    "answer": "D",
+    "solution": "DNA is negatively charged and moves towards the anode, so A is wrong. Pure DNA cannot be seen in visible light; it is visible only after ethidium bromide staining and UV exposure, so D is wrong. B, C and E are correct."
+  },
+  {
+    "type": "single",
+    "chapter": "Biotechnology and its Applications",
+    "text": "Given below are two statements:\nStatement I: The Bt toxin protein exists as an inactive protoxin, which is converted into the active form by the alkaline pH of the insect gut.\nStatement II: The proteins encoded by the genes cryIAc and cryIIAb control cotton bollworms, while that of cryIAb controls corn borer.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "A",
+    "solution": "Both statements are taken from NCERT. The protoxin is solubilised and activated by the alkaline pH of the insect gut, binds to the midgut epithelium, makes pores and kills the insect. cryIAc and cryIIAb target cotton bollworms and cryIAb targets corn borer."
+  },
+  {
+    "type": "single",
+    "chapter": "Biotechnology and its Applications",
+    "text": "Match List-I with List-II:\nList-I\n(A) ADA deficiency treatment\n(B) Rosie\n(C) ELISA\n(D) RNA interference\nList-II\n(I) Silencing of a specific mRNA by a complementary dsRNA\n(II) Early detection of pathogens based on antigen-antibody interaction\n(III) Gene therapy using lymphocytes\n(IV) Milk containing human alpha-lactalbumin\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-III, B-IV, C-II, D-I",
+      "A-IV, B-III, C-II, D-I",
+      "A-III, B-IV, C-I, D-II",
+      "A-II, B-IV, C-III, D-I"
+    ],
+    "answer": "A",
+    "solution": "ADA deficiency was the first disease treated by gene therapy, using lymphocytes given a functional ADA cDNA. Rosie, the transgenic cow, gave milk with human alpha-lactalbumin. ELISA works on antigen-antibody interaction. RNAi silences a specific mRNA with a complementary dsRNA. So A-III, B-IV, C-II, D-I."
+  },
+  {
+    "type": "single",
+    "chapter": "Biotechnology and its Applications",
+    "text": "Given below are two statements: one is labelled as Assertion A and the other is labelled as Reason R.\nAssertion A: Mature human insulin does not contain the C-peptide that is present in proinsulin.\nReason R: In 1983, Eli Lilly prepared two DNA sequences corresponding to the A and B chains of human insulin and introduced them into plasmids of E. coli.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both A and R are true and R is the correct explanation of A",
+      "Both A and R are true but R is NOT the correct explanation of A",
+      "A is true but R is false",
+      "A is false but R is true"
+    ],
+    "answer": "B",
+    "solution": "Insulin is made as a pro-hormone. The extra C-peptide is removed during maturation, so A is true. R is also true, since Eli Lilly made the A and B chains separately and joined them by disulphide bonds. But R describes how insulin is produced commercially and does not explain why mature insulin lacks the C-peptide."
+  }
+]

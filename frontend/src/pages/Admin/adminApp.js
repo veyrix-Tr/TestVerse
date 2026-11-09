@@ -22,7 +22,7 @@ var dlgTest = null,
    only signed-in admins can change it, and the website and student app read
    from the same place, so a change here shows up everywhere.
    ====================================================================== */
-var STORE_KEY = 'sv-admin-demo-v3';
+var STORE_KEY = 'sv-admin-demo-v4'; /* v4: demo students & groups removed (now real) */
 function seed() {
   return {
     exams: {
@@ -40,22 +40,7 @@ function seed() {
       t('jee-main', 'part', 2, 'WPE, Rotation; Bonding, Thermodynamics; Sequences, Trigonometry', 'draft'),
       { id: 'L1', exam: 'neet', kind: 'live', slot: null, title: 'NEET Full Syllabus Live Test', chapters: 'Full syllabus', questions: 180, minutes: 180, status: 'scheduled', start: '2026-11-01T14:00', window: 30, resultAt: '2026-11-01T20:00', file: 'neet-live-01.docx', missing: 0 },
       { id: 'L2', exam: 'jee-main', kind: 'live', slot: null, title: 'JEE Main Full Syllabus Live Test', chapters: 'Full syllabus', questions: 75, minutes: 180, status: 'scheduled', start: '2026-11-08T09:00', window: 30, resultAt: '2026-11-08T18:00', file: 'jee-main-live-01.docx', missing: 0 },
-      { id: 'A1', exam: 'neet', kind: 'assigned', slot: null, title: 'Organic Chemistry Revision Test', chapters: 'GOC, Hydrocarbons', questions: 30, minutes: 45, status: 'published', file: 'organic-revision-riya.docx', missing: 0, audience: { type: 'students', groupIds: [], studentIds: ['S1'] }, opens: '2026-11-02T08:00', due: '2026-11-05T22:00' },
-      { id: 'A2', exam: 'neet', kind: 'assigned', slot: null, title: 'Weekly Batch Test 1', chapters: 'Laws of Motion, Chemical Bonding, Cell', questions: 45, minutes: 60, status: 'draft', file: 'batch-week-1.docx', missing: 0, audience: { type: 'groups', groupIds: ['G1'], studentIds: [] }, opens: '2026-11-07T18:00', due: '' },
       { id: 'L3', exam: 'neet', kind: 'live', slot: null, title: 'NEET Half Syllabus Live Test', chapters: 'Class 11', questions: 180, minutes: 180, status: 'draft', start: '2026-11-15T14:00', window: 30, resultAt: '2026-11-15T20:00', file: '', missing: 0 }
-    ],
-    students: [
-      { id: 'S1', name: 'Riya Sharma', phone: '98xxxxxx10', exam: 'neet', city: 'Jodhpur', lms: true, bought: true, tests: 5, joined: '2026-10-12' },
-      { id: 'S2', name: 'Aarav Mehta', phone: '97xxxxxx44', exam: 'jee-main', city: 'Jaipur', lms: true, bought: true, tests: 2, joined: '2026-10-15' },
-      { id: 'S3', name: 'Sana Khan', phone: '99xxxxxx02', exam: 'neet', city: 'Kota', lms: false, bought: false, tests: 0, joined: '2026-10-20' },
-      { id: 'S4', name: 'Kabir Singh', phone: '96xxxxxx71', exam: 'jee-advanced', city: 'Bikaner', lms: false, bought: true, tests: 1, joined: '2026-10-22' },
-      { id: 'S5', name: 'Priya Choudhary', phone: '95xxxxxx38', exam: 'neet', city: 'Jodhpur', lms: true, bought: true, tests: 4, joined: '2026-10-09' },
-      { id: 'S6', name: 'Arjun Rathore', phone: '94xxxxxx56', exam: 'neet', city: 'Pali', lms: true, bought: true, tests: 3, joined: '2026-10-11' },
-      { id: 'S7', name: 'Ishaan Verma', phone: '93xxxxxx27', exam: 'jee-main', city: 'Jodhpur', lms: true, bought: true, tests: 2, joined: '2026-10-14' }
-    ],
-    groups: [
-      { id: 'G1', name: 'NEET 2027 course batch', studentIds: ['S1', 'S5', 'S6'] },
-      { id: 'G2', name: 'JEE Main course batch', studentIds: ['S2', 'S7'] }
     ],
     video: {
       channel: 'https://www.youtube.com/@[your-channel]',
@@ -88,7 +73,7 @@ function seed() {
 }
 
 var db;
-function load() { try { db = JSON.parse(localStorage.getItem(STORE_KEY)); } catch { db = null; } if (!db || !db.exams || !db.groups || !db.requests) db = seed(); }
+function load() { try { db = JSON.parse(localStorage.getItem(STORE_KEY)); } catch { db = null; } if (!db || !db.exams || !db.requests) db = seed(); delete db.students; delete db.groups; }
 function save() { try { localStorage.setItem(STORE_KEY, JSON.stringify(db)); } catch {} }
 load();
 
@@ -104,33 +89,7 @@ function when(iso) {
   return d.toLocaleString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit' });
 }
 function examLabel(id) { return id === 'all' ? 'All exams' : (db.exams[id] ? db.exams[id].label : id); }
-var KIND = { part: 'Part test', half: 'Half syllabus', full: 'Full syllabus', live: 'Live test', assigned: 'Assigned test' };
-function studentById(id) { return db.students.filter(function (s) { return s.id === id; })[0]; }
-function groupById(id) { return db.groups.filter(function (g) { return g.id === id; })[0]; }
-function audienceText(x) {
-  var ex = examLabel(x.exam);
-  if (x.kind === 'live') return 'All ' + ex + ' students';
-  if (x.kind !== 'assigned') return ex + ' series buyers';
-  var a = x.audience || { type: 'all' };
-  if (a.type === 'groups') {
-    var names = (a.groupIds || []).map(function (id) { var g = groupById(id); return g ? g.name : null; }).filter(Boolean);
-    return names.length ? 'Group: ' + names.join(', ') : 'No group chosen';
-  }
-  if (a.type === 'students') {
-    var st = (a.studentIds || []).map(function (id) { var s = studentById(id); return s ? s.name : null; }).filter(Boolean);
-    if (!st.length) return 'No student chosen';
-    return st.length === 1 ? st[0] : st.length + ' students';
-  }
-  return 'All ' + ex + ' students';
-}
-function audienceCount(x) {
-  if (x.kind !== 'assigned') return null;
-  var a = x.audience || { type: 'all' }, ids = {};
-  if (a.type === 'groups') (a.groupIds || []).forEach(function (g) { var gg = groupById(g); if (gg) gg.studentIds.forEach(function (s) { ids[s] = 1; }); });
-  else if (a.type === 'students') (a.studentIds || []).forEach(function (s) { ids[s] = 1; });
-  else db.students.forEach(function (s) { if (s.exam === x.exam) ids[s.id] = 1; });
-  return Object.keys(ids).length;
-}
+var KIND = { part: 'Part test', half: 'Half syllabus', full: 'Full syllabus', live: 'Live test' };
 var SLOTS = { part: 6, half: 3, full: 2 };
 function statusPill(s) {
   var map = { published: ['p-published', 'Published'], scheduled: ['p-scheduled', 'Scheduled'], draft: ['p-draft', 'Draft'] };
@@ -155,7 +114,7 @@ function nextFreeSlot(exam, kind) {
 }
 
 /* ---------- router ---------- */
-var ui = { view: 'dashboard', testExam: 'all', testKind: 'all', seriesExam: 'neet', studentQ: '' };
+var ui = { view: 'dashboard', testExam: 'all', testKind: 'all', seriesExam: 'neet' };
 var VIEWS = {};
 function go(view) {
   ui.view = VIEWS[view] ? view : 'dashboard';
@@ -195,8 +154,7 @@ VIEWS.dashboard = function () {
   return '<div class="head"><div><h1>Dashboard</h1><p>What needs attention before your next test.</p></div>' +
     '<div class="actions"><button class="btn btn-primary" type="button" data-upload>Upload a test</button></div></div>' +
     '<div class="stats">' +
-    stat(published, 'Tests live or scheduled', db.tests.length + ' tests in total') + stat(upcoming.length, 'Upcoming live tests', upcoming[0] ? 'Next: ' + when(upcoming[0].start) : 'None scheduled') +
-    stat(db.students.filter(function (s) { return s.bought; }).length, 'Students who bought', 'Of ' + db.students.length + ' signed up (demo)') + '</div>' +
+    stat(published, 'Tests live or scheduled', db.tests.length + ' tests in total') + stat(upcoming.length, 'Upcoming live tests', upcoming[0] ? 'Next: ' + when(upcoming[0].start) : 'None scheduled') + '</div>' +
     '<div class="dash">' +
     '<section class="sect"><div class="sect-head"><div><h2>Needs attention</h2><p>' + (alerts.length ? alerts.length + ' item' + (alerts.length === 1 ? '' : 's') + ' to sort out before your next test.' : 'Nothing is blocking your next test.') + '</p></div></div><div class="card attn">' + (alerts.length ? alerts.map(function (a) { return '<div class="alert ' + a[0] + '"><span>' + esc(a[1]) + '</span><button class="btn btn-outline btn-sm" type="button" data-goto="' + a[2] + '">Fix</button></div>'; }).join('') : '<div class="alert a-ok"><span>Everything is ready.</span></div>') + '</div></section>' +
     '<section class="sect"><div class="sect-head"><div><h2>Upcoming live tests</h2><p>The next one shows on the website countdown.</p></div></div><div class="card list-card">' + (upcoming.length ? upcoming.slice(0, 4).map(function (x) {
@@ -375,67 +333,10 @@ bind.requests = function () {
   });
 };
 
-/* ---------- Students ---------- */
-VIEWS.students = function () {
-  var q = ui.studentQ.toLowerCase();
-  var list = db.students.filter(function (s) { return !q || (s.name + ' ' + s.phone + ' ' + s.city).toLowerCase().indexOf(q) >= 0; });
-  return '<div class="head"><div><h1>Students &amp; groups</h1><p>Everyone who signed up, from the website or the LMS link. Groups let you send a test to many students at once.</p></div>' +
-    '<div class="actions"><button class="btn btn-primary" type="button" id="new-group">New group</button><button class="btn btn-outline" type="button" id="export">Export CSV</button></div></div>' +
-    '<section class="sect"><div class="sect-head"><div><h2>Groups</h2><p>Send a test to everyone in a group at once.</p></div></div>' +
-    (db.groups.length ? '<div class="group-grid">' + db.groups.map(function (g, i) {
-      return '<div class="card group">' +
-        '<div><b>' + esc(g.name) + '</b><span class="meta"><strong>' + g.studentIds.length + ' students</strong> · ' + esc(g.studentIds.map(function (id) { var s = studentById(id); return s ? s.name : ''; }).filter(Boolean).join(', ')) + '</span></div>' +
-        '<div class="row-actions"><button class="btn btn-outline btn-sm" type="button" data-g-edit="' + i + '">Edit</button><button class="btn btn-danger btn-sm" type="button" data-g-del="' + i + '">Delete</button></div></div>';
-    }).join('') + '</div>' : '<p class="hint">No groups yet.</p>') + '</section>' +
-    '<section class="sect"><div class="sect-head"><div><h2>All students</h2><p>' + list.length + ' of ' + db.students.length + ' shown.</p></div></div>' +
-    '<div class="filters"><label class="l sr" for="sq">Search students</label><input class="input search" id="sq" placeholder="Search name, mobile or city" value="' + esc(ui.studentQ) + '"></div>' +
-    '<div class="table-wrap"><table><thead><tr><th>Student</th><th>Exam</th><th>City</th><th>Type</th><th>Test series</th><th>Tests taken</th><th>Joined</th></tr></thead><tbody>' +
-    (list.length ? list.map(function (s) {
-      return '<tr><td><b>' + esc(s.name) + '</b><span class="sub">' + esc(s.phone) + '</span></td><td>' + esc(examLabel(s.exam)) + '</td><td>' + esc(s.city) + '</td><td>' + (s.lms ? '<span class="pill p-scheduled">LMS</span>' : '<span class="pill p-draft">Direct</span>') + '</td><td>' + (s.bought ? '<span class="pill p-published">Bought</span>' : '<span class="pill p-draft">Not bought</span>') + '</td><td>' + s.tests + '</td><td>' + esc(s.joined) + '</td></tr>';
-    }).join('') : '<tr><td colspan="8" class="hint">No students match.</td></tr>') + '</tbody></table></div></section>' +
-    '<p class="hint foot-note">Sample students for the demo. Mobile numbers are partly hidden for staff who don\u2019t need them.</p>';
-};
-bind.students = function () {
-  $('#new-group').addEventListener('click', function () { groupDialog(-1); });
-  $$('[data-g-edit]').forEach(function (b) { b.addEventListener('click', function () { groupDialog(Number(b.dataset.gEdit)); }); });
-  $$('[data-g-del]').forEach(function (b) {
-    b.addEventListener('click', function () {
-      var g = db.groups[Number(b.dataset.gDel)];
-      var used = db.tests.some(function (t) { return t.audience && t.audience.type === 'groups' && t.audience.groupIds.indexOf(g.id) >= 0; });
-      if (!confirm('Delete group "' + g.name + '"?' + (used ? ' Tests already given to this group stay with those students.' : ''))) return;
-      db.groups.splice(Number(b.dataset.gDel), 1); save(); render(); toast('Group deleted');
-    });
-  });
-  var inp = $('#sq');
-  inp.addEventListener('input', function () { ui.studentQ = inp.value; var pos = inp.selectionStart; render(); var n = $('#sq'); n.focus(); n.setSelectionRange(pos, pos); });
-  $('#export').addEventListener('click', function () {
-    var rows = [['Name', 'Mobile', 'Exam', 'City', 'Type', 'Bought', 'Tests taken', 'Joined']].concat(db.students.map(function (s) { return [s.name, s.phone, examLabel(s.exam), s.city, s.lms ? 'LMS' : 'Direct', s.bought ? 'Yes' : 'No', s.tests, s.joined]; }));
-    var csv = rows.map(function (r) { return r.map(function (v) { return '"' + String(v).replace(/"/g, '""') + '"'; }).join(','); }).join('\n');
-    var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' })); a.download = 'students.csv'; a.click();
-  });
-};
-
-function groupDialog(i) {
-  var g = i >= 0 ? db.groups[i] : { id: 'G' + Date.now(), name: '', studentIds: [] };
-  var lms = db.students.filter(function (s) { return s.lms; });
-  formDialog(i >= 0 ? 'Edit group' : 'New group',
-    field('Group name', '<input class="input" id="g-name" value="' + esc(g.name) + '" placeholder="e.g. NEET 2027 course batch">') +
-    '<div><label class="l" for="g-q">Students (Studyverse course students)</label><input class="input" id="g-q" placeholder="Search" style="margin-bottom: 8px">' +
-    '<div style="max-height: 260px; overflow-y: auto; border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px">' +
-    lms.map(function (s) {
-      return '<label class="check" data-gs-row="' + esc((s.name + ' ' + s.city + ' ' + s.phone).toLowerCase()) + '" style="padding: 6px 0"><input type="checkbox" data-gs value="' + s.id + '"' + (g.studentIds.indexOf(s.id) >= 0 ? ' checked' : '') + '> ' + esc(s.name) + ' <span class="hint" style="margin: 0">· ' + esc(examLabel(s.exam)) + ', ' + esc(s.city) + '</span></label>';
-    }).join('') + '</div></div>',
-    function () {
-      var name = $('#g-name').value.trim(), ids = $$('[data-gs]:checked').map(function (c) { return c.value; });
-      if (!name) return 'Give the group a name.';
-      if (!ids.length) return 'Add at least one student.';
-      var n = { id: g.id, name: name, studentIds: ids };
-      if (i >= 0) db.groups[i] = n; else db.groups.push(n);
-      save(); render(); toast('Group "' + name + '" saved');
-    });
-  var q = $('#g-q');
-  q.addEventListener('input', function () { var v = q.value.trim().toLowerCase(); $$('[data-gs-row]').forEach(function (r) { r.hidden = v && r.dataset.gsRow.indexOf(v) < 0; }); });
-}
+/* ---------- Students & groups ----------
+   Real, API-backed screen: Admin.jsx renders <StudentsAdmin/> beside #view
+   while this view is active, so #view stays empty here. */
+VIEWS.students = function () { return ''; };
 
 /* ---------- Website info ---------- */
 VIEWS.website = function () {
@@ -518,10 +419,6 @@ function applyDefaults(x) {
   x.questions = part ? e.partQuestions : e.questions;
   x.minutes = part ? e.partMinutes : e.minutes;
   if (x.kind === 'live') { x.slot = null; x.title = x.title || e.label + ' Live Test'; }
-  else if (x.kind === 'assigned') {
-    x.slot = null; x.questions = e.partQuestions; x.minutes = e.partMinutes; x.title = x.title || 'Assigned Test';
-    x.audience = x.audience || { type: 'students', groupIds: [], studentIds: [] };
-  }
   else { x.slot = x.slot || nextFreeSlot(x.exam, x.kind); x.title = KIND[x.kind].replace(' test', ' Test').replace('Half syllabus', 'Half Syllabus Test').replace('Full syllabus', 'Full Syllabus Test') + (x.slot ? ' ' + x.slot : ''); }
 }
 function drawWizard() {
@@ -536,7 +433,7 @@ function drawWizard() {
     }
     b.innerHTML = '<div class="form">' +
       field('Exam', '<select class="input" id="w-exam"' + (wz.editing ? ' disabled' : '') + '>' + examOptions(x.exam) + '</select>') +
-      field('Type', '<select class="input" id="w-kind"' + (wz.editing ? ' disabled' : '') + '>' + ['part', 'half', 'full', 'live', 'assigned'].map(function (k) { return '<option value="' + k + '"' + (x.kind === k ? ' selected' : '') + '>' + KIND[k] + '</option>'; }).join('') + '</select>') +
+      field('Type', '<select class="input" id="w-kind"' + (wz.editing ? ' disabled' : '') + '>' + ['part', 'half', 'full', 'live'].map(function (k) { return '<option value="' + k + '"' + (x.kind === k ? ' selected' : '') + '>' + KIND[k] + '</option>'; }).join('') + '</select>') +
       (SLOTS[x.kind] ? field('Position in the series', '<select class="input" id="w-slot">' + slotOpts + '</select>', 'e.g. Part Test 3 of 6.') : '') +
       field('Title (shown to students)', '<input class="input" id="w-title" value="' + esc(x.title) + '">') +
       '<div class="full">' + field('Syllabus covered', '<textarea class="input" id="w-ch" placeholder="Chapters in this test, by subject">' + esc(x.chapters) + '</textarea>') + '</div>' +
@@ -546,11 +443,7 @@ function drawWizard() {
         field('Start date and time', '<input class="input" type="datetime-local" id="w-start" value="' + esc(x.start) + '">') +
         field('Entry window (minutes)', '<input class="input" type="number" min="0" id="w-window" value="' + x.window + '">') +
         field('Rank published at', '<input class="input" type="datetime-local" id="w-result" value="' + esc(x.resultAt) + '">') : '') +
-      (x.kind === 'assigned' ? audienceUI(x) +
-        field('Available from', '<input class="input" type="datetime-local" id="w-opens" value="' + esc(x.opens || '') + '">', 'Leave empty to open as soon as you publish.') +
-        field('Due by (optional)', '<input class="input" type="datetime-local" id="w-due" value="' + esc(x.due || '') + '">') : '') +
       '</div><div class="alert a-err" id="w-err" hidden></div>';
-    if (x.kind === 'assigned') bindAudience();
     if (!wz.editing) {
       $('#w-exam').addEventListener('change', function () { readStep1(); x.exam = this.value; x.slot = null; x.title = ''; applyDefaults(x); drawWizard(); });
       $('#w-kind').addEventListener('change', function () { readStep1(); x.kind = this.value; x.slot = null; x.title = ''; applyDefaults(x); drawWizard(); });
@@ -603,9 +496,7 @@ function drawWizard() {
       row('Exam', examLabel(x.exam)) + row('Type', KIND[x.kind] + (x.slot ? ' ' + x.slot + ' of ' + SLOTS[x.kind] : '')) + row('Title', x.title) +
       row('Questions', x.questions) + row('Duration', x.minutes + ' minutes') +
       (x.kind === 'live' ? row('Starts', when(x.start)) + row('Entry window', x.window + ' minutes') + row('Rank published', when(x.resultAt)) : '') +
-      (x.kind === 'assigned' ? row('Given to', audienceText(x) + ' (' + audienceCount(x) + ' student' + (audienceCount(x) === 1 ? '' : 's') + ')') + row('Opens', x.opens ? when(x.opens) : 'When published') + row('Due', x.due ? when(x.due) : 'No due date') : '') +
       row('Question paper', x.file) + row('Solutions', x.solutions || 'Not added') + '</div>' +
-      (x.kind === 'assigned' ? '<label class="check" style="margin-top: 4px"><input type="checkbox" id="w-notify" checked> Notify these students in the app and by SMS when published</label>' : '') +
       '<div>' + checks.map(function (c) { return '<div class="alert ' + c[0] + '">' + esc(c[1]) + '</div>'; }).join('') + '</div>';
     var canPublish = !x.missing;
     setNext([
@@ -615,38 +506,6 @@ function drawWizard() {
   }
   function row(k, v) { return '<div><span>' + esc(k) + '</span><span>' + esc(v) + '</span></div>'; }
 }
-function audienceUI(x) {
-  var a = x.audience || { type: 'students', groupIds: [], studentIds: [] };
-  var radio = function (v, label) { return '<label class="check"><input type="radio" name="w-aud" value="' + v + '"' + (a.type === v ? ' checked' : '') + '> ' + label + '</label>'; };
-  var lms = db.students.filter(function (s) { return s.lms; });
-  return '<div class="full" style="display: grid; gap: 10px; border: 1px solid var(--line); border-radius: 12px; padding: 14px">' +
-    '<b>Who gets this test?</b>' +
-    '<div style="display: flex; flex-wrap: wrap; gap: 18px">' + radio('students', 'Individual students') + radio('groups', 'Groups') + radio('all', 'All ' + esc(examLabel(x.exam)) + ' students') + '</div>' +
-    '<div data-aud-pane="students"' + (a.type === 'students' ? '' : ' hidden') + ' style="display: grid; gap: 8px">' +
-      '<label class="l" for="w-sq" style="margin: 0">Search Studyverse course (LMS) students</label>' +
-      '<input class="input" id="w-sq" placeholder="Name, mobile or city">' +
-      '<div style="max-height: 200px; overflow-y: auto; border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px">' +
-      (lms.length ? lms.map(function (s) {
-        return '<label class="check" data-s-row="' + esc((s.name + ' ' + s.phone + ' ' + s.city).toLowerCase()) + '" style="padding: 6px 0"><input type="checkbox" data-aud-s value="' + s.id + '"' + ((a.studentIds || []).indexOf(s.id) >= 0 ? ' checked' : '') + '> ' + esc(s.name) + ' <span class="hint" style="margin: 0">· ' + esc(examLabel(s.exam)) + ', ' + esc(s.city) + '</span></label>';
-      }).join('') : '<p class="hint">No LMS students yet.</p>') + '</div>' +
-      '<p class="hint" style="margin: 0">Personal tests are for Studyverse course students only for now.</p></div>' +
-    '<div data-aud-pane="groups"' + (a.type === 'groups' ? '' : ' hidden') + ' style="display: grid; gap: 6px">' +
-      (db.groups.length ? db.groups.map(function (g) {
-        return '<label class="check"><input type="checkbox" data-aud-g value="' + g.id + '"' + ((a.groupIds || []).indexOf(g.id) >= 0 ? ' checked' : '') + '> ' + esc(g.name) + ' <span class="hint" style="margin: 0">· ' + g.studentIds.length + ' students</span></label>';
-      }).join('') : '<p class="hint">No groups yet. Create one under Students &amp; groups.</p>') + '</div>' +
-    '<div data-aud-pane="all"' + (a.type === 'all' ? '' : ' hidden') + '><p class="hint" style="margin: 0">Every student preparing for ' + esc(examLabel(x.exam)) + ' will see this test, in addition to their test series.</p></div>' +
-    '</div>';
-}
-function bindAudience() {
-  $$('input[name="w-aud"]').forEach(function (r) {
-    r.addEventListener('change', function () { $$('[data-aud-pane]').forEach(function (p) { p.hidden = p.dataset.audPane !== r.value; }); });
-  });
-  var sq = $('#w-sq');
-  if (sq) sq.addEventListener('input', function () {
-    var q = sq.value.trim().toLowerCase();
-    $$('[data-s-row]').forEach(function (row) { row.hidden = q && row.dataset.sRow.indexOf(q) < 0; });
-  });
-}
 function readStep1(validate) {
   var x = wz.x;
   var t = $('#w-title'); if (!t) return true;
@@ -654,24 +513,12 @@ function readStep1(validate) {
   x.questions = Number($('#w-q').value); x.minutes = Number($('#w-m').value);
   var sl = $('#w-slot'); if (sl) x.slot = Number(sl.value);
   if (x.kind === 'live') { x.start = $('#w-start').value; x.window = Number($('#w-window').value) || 0; x.resultAt = $('#w-result').value; }
-  if (x.kind === 'assigned') {
-    var typeEl = $('input[name="w-aud"]:checked');
-    x.audience = {
-      type: typeEl ? typeEl.value : 'all',
-      groupIds: $$('[data-aud-g]:checked').map(function (c) { return c.value; }),
-      studentIds: $$('[data-aud-s]:checked').map(function (c) { return c.value; })
-    };
-    x.opens = $('#w-opens').value; x.due = $('#w-due').value;
-  }
   if (!validate) return true;
   var err = '';
   if (!x.title) err = 'Add a title.';
   else if (!(x.questions > 0) || !(x.minutes > 0)) err = 'Enter the number of questions and the duration.';
   else if (SLOTS[x.kind] && !x.slot) err = 'All ' + SLOTS[x.kind] + ' ' + KIND[x.kind].toLowerCase() + ' positions for ' + examLabel(x.exam) + ' are already used. Edit an existing one instead.';
   else if (x.kind === 'live' && !x.start) err = 'Choose when the live test starts.';
-  else if (x.kind === 'assigned' && x.audience.type === 'groups' && !x.audience.groupIds.length) err = 'Choose at least one group.';
-  else if (x.kind === 'assigned' && x.audience.type === 'students' && !x.audience.studentIds.length) err = 'Choose at least one student.';
-  else if (x.kind === 'assigned' && x.due && x.opens && new Date(x.due) <= new Date(x.opens)) err = 'The due date must be after the test opens.';
   else if (x.kind === 'live' && x.resultAt && new Date(x.resultAt) <= new Date(x.start)) err = 'The rank must be published after the test starts.';
   if (err) { var e = $('#w-err'); e.textContent = err; e.hidden = false; return false; }
   return true;
@@ -688,12 +535,10 @@ function commit(status) {
   var x = wz.x; x.status = status;
   var clean = { id: x.id || (x.exam + '-' + x.kind + '-' + (x.slot || Date.now())), exam: x.exam, kind: x.kind, slot: x.slot, title: x.title, chapters: x.chapters, questions: x.questions, minutes: x.minutes, status: status, file: x.file, solutions: x.solutions || '', missing: x.missing || 0 };
   if (x.kind === 'live') { clean.start = x.start; clean.window = x.window; clean.resultAt = x.resultAt; }
-  if (x.kind === 'assigned') { clean.audience = x.audience; clean.opens = x.opens; clean.due = x.due; }
-  var notify = $('#w-notify') && $('#w-notify').checked && status !== 'draft';
   var i = db.tests.findIndex(function (y) { return y.id === clean.id; });
   if (i >= 0) db.tests[i] = clean; else db.tests.push(clean);
   save(); dlgTest.close(); render();
-  toast(clean.title + (status === 'draft' ? ' saved as draft' : status === 'scheduled' ? ' scheduled for ' + when(clean.start) : ' published' + (clean.kind === 'assigned' ? ' to ' + audienceText(clean) : '')) + (notify ? '. Students notified.' : ''));
+  toast(clean.title + (status === 'draft' ? ' saved as draft' : status === 'scheduled' ? ' scheduled for ' + when(clean.start) : ' published'));
 }
 
 /* ---------- mount (called by Admin.jsx once the shell is in the DOM) ----------

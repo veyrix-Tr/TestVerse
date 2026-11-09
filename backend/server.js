@@ -19,6 +19,8 @@ app.use(cors({ origin: allowedOrigins }));
 // get a larger limit. This must come before the general parser.
 app.use('/api/admin', express.json({ limit: '5mb' }));
 app.use(express.json({ limit: '100kb' }));
+// Express 5 leaves req.body undefined when nothing was sent (DELETE, empty POST)
+app.use((req, res, next) => { if (req.body === undefined) req.body = {}; next(); });
 
 // Routes
 app.get('/', (req, res) => {
@@ -33,6 +35,9 @@ app.use('/api/auth', authRoutes);
 
 const adminTestRoutes = require('./routes/adminTestRoutes');
 app.use('/api/admin', adminTestRoutes);
+
+const adminStudentRoutes = require('./routes/adminStudentRoutes');
+app.use('/api/admin', adminStudentRoutes);
 
 const testRoutes = require('./routes/testRoutes');
 app.use('/api/tests', testRoutes);

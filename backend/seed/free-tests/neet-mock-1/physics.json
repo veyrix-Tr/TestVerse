@@ -1,0 +1,587 @@
+[
+  {
+    "type": "single",
+    "chapter": "Units and Measurements",
+    "text": "If $\\varepsilon_0$ is the permittivity of free space and $E$ is an electric field, the dimensional formula of $\\frac{1}{2}\\varepsilon_0 E^2$ is:",
+    "options": [
+      "$[ML^{2}T^{-1}]$",
+      "$[MLT^{-2}]$",
+      "$[ML^2T^{-2}]$",
+      "$[ML^{-1}T^{-2}]$"
+    ],
+    "answer": "D",
+    "solution": "$\\frac{1}{2}\\varepsilon_0E^2$ is the energy density of the electric field, i.e. energy per unit volume. Its dimensions are $[ML^2T^{-2}]/[L^3] = [ML^{-1}T^{-2}]$."
+  },
+  {
+    "type": "single",
+    "chapter": "Units and Measurements",
+    "text": "A physical quantity is given by $P = \\dfrac{a^3 b^2}{c\\sqrt{d}}$. The percentage errors in the measurement of $a$, $b$, $c$ and $d$ are 1%, 2%, 3% and 4% respectively. The maximum percentage error in $P$ is:",
+    "options": [
+      "7%",
+      "10%",
+      "14%",
+      "12%"
+    ],
+    "answer": "D",
+    "solution": "$\\frac{\\Delta P}{P} = 3\\frac{\\Delta a}{a} + 2\\frac{\\Delta b}{b} + \\frac{\\Delta c}{c} + \\frac{1}{2}\\frac{\\Delta d}{d} = 3(1) + 2(2) + 3 + \\frac{1}{2}(4) = 12\\%$."
+  },
+  {
+    "type": "single",
+    "chapter": "Motion in a Straight Line",
+    "text": "The position of a particle moving along the x-axis is given by $x = 2t^3 - 9t^2 + 12t$, where $x$ is in metre and $t$ in second. The distance travelled by the particle from $t = 0$ to $t = 3$ s is:",
+    "options": [
+      "11 m",
+      "9 m",
+      "10 m",
+      "13 m"
+    ],
+    "answer": "A",
+    "solution": "$v = 6t^2 - 18t + 12 = 6(t-1)(t-2)$, so the particle turns back at $t = 1$ s and $t = 2$ s. $x(0) = 0$, $x(1) = 5$ m, $x(2) = 4$ m, $x(3) = 9$ m. Distance $= 5 + 1 + 5 = 11$ m (the displacement is only 9 m)."
+  },
+  {
+    "type": "single",
+    "chapter": "Motion in a Plane",
+    "text": "The horizontal range of a projectile is $4\\sqrt{3}$ times its maximum height. The angle of projection with the horizontal is:",
+    "options": [
+      "$45^\\circ$",
+      "$30^\\circ$",
+      "$60^\\circ$",
+      "$\\tan^{-1}(4)$"
+    ],
+    "answer": "B",
+    "solution": "$\\frac{R}{H} = \\frac{u^2\\sin 2\\theta/g}{u^2\\sin^2\\theta/2g} = 4\\cot\\theta$. Setting $4\\cot\\theta = 4\\sqrt{3}$ gives $\\cot\\theta = \\sqrt{3}$, so $\\theta = 30^\\circ$."
+  },
+  {
+    "type": "single",
+    "chapter": "Laws of Motion",
+    "text": "Two blocks of masses 5 kg and 3 kg are connected by a light inextensible string passing over a smooth, light pulley and released from rest. The tension in the string is (take $g = 10\\ \\text{m s}^{-2}$):",
+    "options": [
+      "40 N",
+      "30 N",
+      "37.5 N",
+      "50 N"
+    ],
+    "answer": "C",
+    "solution": "$a = \\frac{(5-3)g}{5+3} = 2.5\\ \\text{m s}^{-2}$. $T = \\frac{2m_1m_2g}{m_1+m_2} = \\frac{2 \\times 5 \\times 3 \\times 10}{8} = 37.5$ N."
+  },
+  {
+    "type": "single",
+    "chapter": "Laws of Motion",
+    "text": "A block of mass 2 kg rests on a rough inclined plane making an angle of $30^\\circ$ with the horizontal. The coefficient of static friction between the block and the plane is 0.7. The frictional force acting on the block is (take $g = 10\\ \\text{m s}^{-2}$):",
+    "options": [
+      "10 N",
+      "12.1 N",
+      "17.3 N",
+      "14 N"
+    ],
+    "answer": "A",
+    "solution": "Maximum static friction $= \\mu_s mg\\cos 30^\\circ = 0.7 \\times 20 \\times 0.866 \\approx 12.1$ N. The force tending to slide the block is $mg\\sin 30^\\circ = 10$ N, which is less than 12.1 N, so the block stays at rest and static friction adjusts to exactly 10 N."
+  },
+  {
+    "type": "single",
+    "chapter": "Work, Energy and Power",
+    "text": "A body of mass $m$ starting from rest is accelerated uniformly to a speed $v_1$ in time $t_1$. The instantaneous power delivered to the body at time $t$ is:",
+    "options": [
+      "$\\dfrac{m v_1 t}{t_1}$",
+      "$\\dfrac{m v_1^2 t^2}{t_1^2}$",
+      "$\\dfrac{m v_1^2 t}{t_1^2}$",
+      "$\\dfrac{m v_1^2 t}{2t_1^2}$"
+    ],
+    "answer": "C",
+    "solution": "Acceleration $a = v_1/t_1$, so force $F = mv_1/t_1$ and velocity at time $t$ is $v = v_1t/t_1$. Power $P = Fv = \\frac{m v_1^2 t}{t_1^2}$."
+  },
+  {
+    "type": "single",
+    "chapter": "Work, Energy and Power",
+    "text": "A ball of mass 1 kg moving with speed 6 m/s collides head-on elastically with a stationary ball of mass 2 kg. The fraction of the initial kinetic energy transferred to the 2 kg ball is:",
+    "options": [
+      "$\\dfrac{8}{9}$",
+      "$\\dfrac{1}{9}$",
+      "$\\dfrac{4}{9}$",
+      "$\\dfrac{2}{3}$"
+    ],
+    "answer": "A",
+    "solution": "After an elastic collision the 2 kg ball moves with $v = \\frac{2m_1u}{m_1+m_2} = \\frac{2 \\times 1 \\times 6}{3} = 4$ m/s. Its KE $= \\frac{1}{2}(2)(16) = 16$ J, while initial KE $= 18$ J. Fraction $= 16/18 = 8/9$."
+  },
+  {
+    "type": "single",
+    "chapter": "System of Particles and Rotational Motion",
+    "text": "A solid cylinder starts from rest and rolls without slipping down an inclined plane from a vertical height of 3 m. Its speed at the bottom of the incline is (take $g = 10\\ \\text{m s}^{-2}$):",
+    "options": [
+      "$2\\sqrt{10}$ m/s",
+      "$\\sqrt{60}$ m/s",
+      "$\\sqrt{30}$ m/s",
+      "$\\sqrt{300/7}$ m/s"
+    ],
+    "answer": "A",
+    "solution": "$mgh = \\frac{1}{2}mv^2\\left(1 + \\frac{k^2}{R^2}\\right)$ with $k^2/R^2 = 1/2$ for a solid cylinder. So $v^2 = \\frac{4gh}{3} = \\frac{4 \\times 10 \\times 3}{3} = 40$, giving $v = 2\\sqrt{10}$ m/s."
+  },
+  {
+    "type": "single",
+    "chapter": "System of Particles and Rotational Motion",
+    "text": "Given below are two statements:\nStatement I: If the net external torque acting on a system is zero, the angular momentum of the system remains constant.\nStatement II: When a spinning ice skater pulls her arms close to her body, her rotational kinetic energy remains unchanged.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "C",
+    "solution": "Statement I is the law of conservation of angular momentum, so it is true. When the skater pulls her arms in, $I$ decreases and $\\omega$ increases with $L = I\\omega$ constant; rotational KE $= L^2/2I$ increases (she does work pulling her arms in), so Statement II is false."
+  },
+  {
+    "type": "single",
+    "chapter": "Gravitation",
+    "text": "Let $R$ be the radius of the Earth. The height above the Earth's surface at which the acceleration due to gravity equals its value at a depth $R/2$ below the surface is:",
+    "options": [
+      "$\\sqrt{2}R$",
+      "$R/2$",
+      "$R$",
+      "$(\\sqrt{2}-1)R$"
+    ],
+    "answer": "D",
+    "solution": "At depth $d$: $g' = g(1 - d/R) = g/2$. At height $h$: $g' = \\frac{g}{(1+h/R)^2}$. Setting $(1 + h/R)^2 = 2$ gives $h = (\\sqrt{2} - 1)R$."
+  },
+  {
+    "type": "single",
+    "chapter": "Gravitation",
+    "text": "Given below are two statements:\nStatement I: The escape speed of a body from the surface of the Earth depends on the angle at which the body is projected.\nStatement II: A geostationary satellite revolves around the Earth in the equatorial plane from west to east with a period of 24 hours.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "D",
+    "solution": "Escape speed $v_e = \\sqrt{2GM/R}$ comes from energy conservation, so it does not depend on the direction of projection: Statement I is false. A geostationary satellite moves in the equatorial plane in the same sense as Earth's rotation (west to east) with a 24 h period: Statement II is true."
+  },
+  {
+    "type": "single",
+    "chapter": "Mechanical Properties of Solids",
+    "text": "Given below are two statements:\nStatement I: The Young's modulus of a wire depends on its length and area of cross-section.\nStatement II: The Young's modulus of a perfectly rigid body is zero.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "B",
+    "solution": "Young's modulus is a property of the material, independent of the wire's dimensions, so Statement I is false. A perfectly rigid body has zero strain for any stress, so $Y = \\text{stress}/\\text{strain}$ is infinite, not zero: Statement II is also false."
+  },
+  {
+    "type": "single",
+    "chapter": "Mechanical Properties of Fluids",
+    "text": "Eight identical spherical rain drops, each falling with a terminal velocity of 5 cm/s, coalesce to form a single bigger drop. The terminal velocity of the bigger drop is:",
+    "options": [
+      "20 cm/s",
+      "10 cm/s",
+      "40 cm/s",
+      "80 cm/s"
+    ],
+    "answer": "A",
+    "solution": "Volume is conserved: $\\frac{4}{3}\\pi R^3 = 8 \\cdot \\frac{4}{3}\\pi r^3$, so $R = 2r$. Terminal velocity $v_t \\propto r^2$, so $v' = 4 \\times 5 = 20$ cm/s."
+  },
+  {
+    "type": "single",
+    "chapter": "Thermal Properties of Matter",
+    "text": "10 g of ice at $0^\\circ$C is mixed with 10 g of water at $50^\\circ$C in an insulated container. The mass of ice that melts is (specific heat of water = 1 cal $\\text{g}^{-1}\\ {}^\\circ\\text{C}^{-1}$, latent heat of fusion of ice = 80 cal $\\text{g}^{-1}$):",
+    "options": [
+      "5 g",
+      "10 g",
+      "3.75 g",
+      "6.25 g"
+    ],
+    "answer": "D",
+    "solution": "Heat released by water cooling to $0^\\circ$C $= 10 \\times 1 \\times 50 = 500$ cal. Melting all the ice would need $10 \\times 80 = 800$ cal, which is more than available, so the final temperature is $0^\\circ$C and the ice melted $= 500/80 = 6.25$ g."
+  },
+  {
+    "type": "single",
+    "chapter": "Thermodynamics",
+    "text": "A Carnot engine has an efficiency of 40% when its sink is at 300 K. By how much must the temperature of the source be increased so that the efficiency becomes 50%, with the sink temperature unchanged?",
+    "options": [
+      "50 K",
+      "100 K",
+      "150 K",
+      "250 K"
+    ],
+    "answer": "B",
+    "solution": "$\\eta = 1 - T_2/T_1$. Initially $0.4 = 1 - 300/T_1$, so $T_1 = 500$ K. For 50%: $T_1' = 300/0.5 = 600$ K. Increase $= 100$ K."
+  },
+  {
+    "type": "single",
+    "chapter": "Thermodynamics",
+    "text": "Match List-I (process undergone by an ideal gas) with List-II (property of the process):\nList-I\n(A) Isothermal process\n(B) Adiabatic process\n(C) Isochoric process\n(D) Isobaric process\nList-II\n(I) Work done by the gas is zero\n(II) No heat is exchanged with the surroundings\n(III) Change in internal energy is zero\n(IV) Work done by the gas $= nR\\Delta T$\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-III, B-II, C-IV, D-I",
+      "A-II, B-III, C-I, D-IV",
+      "A-III, B-II, C-I, D-IV",
+      "A-I, B-II, C-III, D-IV"
+    ],
+    "answer": "C",
+    "solution": "Isothermal: $T$ constant so $\\Delta U = 0$ (III). Adiabatic: $Q = 0$ (II). Isochoric: $\\Delta V = 0$ so $W = 0$ (I). Isobaric: $W = P\\Delta V = nR\\Delta T$ (IV)."
+  },
+  {
+    "type": "single",
+    "chapter": "Kinetic Theory",
+    "text": "One mole of a monoatomic ideal gas is mixed with one mole of a rigid diatomic ideal gas. The ratio of specific heats $\\gamma = C_p/C_v$ for the mixture is:",
+    "options": [
+      "1.67",
+      "1.40",
+      "1.50",
+      "1.54"
+    ],
+    "answer": "C",
+    "solution": "$C_v(\\text{mix}) = \\frac{1 \\cdot \\frac{3}{2}R + 1 \\cdot \\frac{5}{2}R}{2} = 2R$ and $C_p = C_v + R = 3R$. So $\\gamma = 3R/2R = 1.5$."
+  },
+  {
+    "type": "single",
+    "chapter": "Oscillations",
+    "text": "A particle executes simple harmonic motion with amplitude $A$. At what distance from the mean position is its kinetic energy equal to its potential energy?",
+    "options": [
+      "$\\dfrac{A}{2}$",
+      "$\\dfrac{A}{\\sqrt{2}}$",
+      "$\\dfrac{A}{\\sqrt{3}}$",
+      "$\\dfrac{A}{4}$"
+    ],
+    "answer": "B",
+    "solution": "PE $= \\frac{1}{2}kx^2$ and total energy $= \\frac{1}{2}kA^2$. KE = PE means PE is half the total: $\\frac{1}{2}kx^2 = \\frac{1}{4}kA^2$, so $x = A/\\sqrt{2}$."
+  },
+  {
+    "type": "single",
+    "chapter": "Oscillations",
+    "text": "Given below are two statements: one is labelled as Assertion A and the other is labelled as Reason R.\nAssertion A: The time period of a simple pendulum suspended in a lift decreases when the lift accelerates upwards.\nReason R: In a lift accelerating upwards with acceleration $a$, the effective acceleration due to gravity is $g + a$.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both A and R are true and R is the correct explanation of A",
+      "Both A and R are true but R is NOT the correct explanation of A",
+      "A is true but R is false",
+      "A is false but R is true"
+    ],
+    "answer": "A",
+    "solution": "In the frame of a lift accelerating upward, the bob feels an extra pseudo force $ma$ downward, so $g_{\\text{eff}} = g + a$. Since $T = 2\\pi\\sqrt{L/g_{\\text{eff}}}$, the period decreases. Both are true and R explains A."
+  },
+  {
+    "type": "single",
+    "chapter": "Waves",
+    "text": "The fundamental frequency of an open organ pipe is 300 Hz. The frequency of the first overtone of a closed organ pipe of the same length is (assume the same speed of sound):",
+    "options": [
+      "150 Hz",
+      "450 Hz",
+      "300 Hz",
+      "600 Hz"
+    ],
+    "answer": "B",
+    "solution": "Open pipe: $v/2L = 300$ Hz, so the closed pipe's fundamental is $v/4L = 150$ Hz. A closed pipe has only odd harmonics, so its first overtone is $3 \\times 150 = 450$ Hz."
+  },
+  {
+    "type": "single",
+    "chapter": "Electric Charges and Fields",
+    "text": "Two identical small conducting spheres carry charges $+8\\ \\mu$C and $-2\\ \\mu$C and attract each other with a force $F$ when separated by a distance $r$. They are brought into contact and then placed again at separation $r$. The new force between them is:",
+    "options": [
+      "$\\dfrac{F}{16}$, repulsive",
+      "$\\dfrac{9F}{16}$, attractive",
+      "$\\dfrac{9F}{16}$, repulsive",
+      "$\\dfrac{16F}{9}$, repulsive"
+    ],
+    "answer": "C",
+    "solution": "Initially $F \\propto 8 \\times 2 = 16$ (attractive). On contact the total charge $+6\\ \\mu$C is shared equally, $+3\\ \\mu$C each. New force $\\propto 3 \\times 3 = 9$, and like charges repel, so $F' = 9F/16$, repulsive."
+  },
+  {
+    "type": "single",
+    "chapter": "Electric Charges and Fields",
+    "text": "A point charge $q$ is placed at one corner of a cube. The total electric flux through the cube is:",
+    "options": [
+      "$\\dfrac{q}{6\\varepsilon_0}$",
+      "$\\dfrac{q}{\\varepsilon_0}$",
+      "$\\dfrac{q}{8\\varepsilon_0}$",
+      "$\\dfrac{q}{24\\varepsilon_0}$"
+    ],
+    "answer": "C",
+    "solution": "Eight such cubes placed around the corner would enclose the charge completely and carry total flux $q/\\varepsilon_0$. By symmetry each cube gets $\\frac{q}{8\\varepsilon_0}$."
+  },
+  {
+    "type": "single",
+    "chapter": "Electrostatic Potential and Capacitance",
+    "text": "A 4 $\\mu$F capacitor is charged to 50 V and then connected across an uncharged 1 $\\mu$F capacitor. The energy lost in the process is:",
+    "options": [
+      "1 mJ",
+      "5 mJ",
+      "4 mJ",
+      "0.8 mJ"
+    ],
+    "answer": "A",
+    "solution": "Initial energy $= \\frac{1}{2}(4\\times10^{-6})(50)^2 = 5$ mJ. Common potential $= \\frac{200\\ \\mu C}{5\\ \\mu F} = 40$ V, so final energy $= \\frac{1}{2}(5\\times10^{-6})(40)^2 = 4$ mJ. Energy lost $= 1$ mJ."
+  },
+  {
+    "type": "single",
+    "chapter": "Electrostatic Potential and Capacitance",
+    "text": "Given below are two statements: one is labelled as Assertion A and the other is labelled as Reason R.\nAssertion A: Two equipotential surfaces can never intersect each other.\nReason R: The electric field at any point is always parallel to the equipotential surface passing through that point.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both A and R are true and R is the correct explanation of A",
+      "Both A and R are true but R is NOT the correct explanation of A",
+      "A is true but R is false",
+      "A is false but R is true"
+    ],
+    "answer": "C",
+    "solution": "If two equipotential surfaces intersected, the point of intersection would have two potentials and two field directions, which is impossible, so A is true. The electric field is always perpendicular (normal) to an equipotential surface, not parallel, so R is false."
+  },
+  {
+    "type": "single",
+    "chapter": "Current Electricity",
+    "text": "A uniform wire of resistance 12 $\\Omega$ is bent into a circle. The effective resistance between two points on the circle that subtend an angle of $90^\\circ$ at the centre is:",
+    "options": [
+      "3 $\\Omega$",
+      "2.25 $\\Omega$",
+      "6 $\\Omega$",
+      "1.5 $\\Omega$"
+    ],
+    "answer": "B",
+    "solution": "The two arcs are one quarter and three quarters of the wire: 3 $\\Omega$ and 9 $\\Omega$ in parallel. $R = \\frac{3 \\times 9}{3 + 9} = 2.25\\ \\Omega$."
+  },
+  {
+    "type": "single",
+    "chapter": "Current Electricity",
+    "text": "A cell drives a current of 1 A through an external resistance of 4 $\\Omega$ and a current of 0.5 A through an external resistance of 9 $\\Omega$. The emf and internal resistance of the cell are:",
+    "options": [
+      "6 V, 2 $\\Omega$",
+      "4.5 V, 0.5 $\\Omega$",
+      "5 V, 0.5 $\\Omega$",
+      "5 V, 1 $\\Omega$"
+    ],
+    "answer": "D",
+    "solution": "$E = 1(4 + r)$ and $E = 0.5(9 + r)$. So $4 + r = 4.5 + 0.5r$, giving $r = 1\\ \\Omega$ and $E = 5$ V."
+  },
+  {
+    "type": "single",
+    "chapter": "Current Electricity",
+    "text": "Choose the correct statements:\nA. The drift speed of free electrons in a metallic conductor is much smaller than their average thermal speed.\nB. The resistivity of a metal increases with increase in temperature.\nC. The resistivity of a conductor is directly proportional to its length.\nD. Kirchhoff's junction rule is a consequence of the conservation of charge.\nChoose the correct answer from the options given below:",
+    "options": [
+      "A, B, C and D",
+      "A and C only",
+      "B, C and D only",
+      "A, B and D only"
+    ],
+    "answer": "D",
+    "solution": "Drift speeds are around $10^{-4}$ m/s while thermal speeds are around $10^5$ m/s (A true). For metals $\\rho$ increases with temperature (B true). Resistivity is a material property and does not depend on length; resistance does (C false). The junction rule expresses charge conservation (D true)."
+  },
+  {
+    "type": "single",
+    "chapter": "Moving Charges and Magnetism",
+    "text": "A proton and an alpha particle having equal kinetic energies enter a uniform magnetic field perpendicular to it. The ratio of the radii of their circular paths $r_p : r_\\alpha$ is:",
+    "options": [
+      "2 : 1",
+      "1 : 2",
+      "1 : 1",
+      "1 : $\\sqrt{2}$"
+    ],
+    "answer": "C",
+    "solution": "$r = \\frac{mv}{qB} = \\frac{\\sqrt{2mK}}{qB}$. For the proton $r_p \\propto \\frac{\\sqrt{m}}{e}$; for the alpha particle $r_\\alpha \\propto \\frac{\\sqrt{4m}}{2e} = \\frac{\\sqrt{m}}{e}$. So $r_p : r_\\alpha = 1 : 1$."
+  },
+  {
+    "type": "single",
+    "chapter": "Moving Charges and Magnetism",
+    "text": "A galvanometer of resistance 50 $\\Omega$ gives full-scale deflection for a current of 5 mA. To convert it into a voltmeter of range 0 to 10 V, the resistance required is:",
+    "options": [
+      "2000 $\\Omega$ in series",
+      "1950 $\\Omega$ in series",
+      "1950 $\\Omega$ in parallel",
+      "2050 $\\Omega$ in series"
+    ],
+    "answer": "B",
+    "solution": "A voltmeter needs a high resistance in series: $R = \\frac{V}{I_g} - G = \\frac{10}{5\\times10^{-3}} - 50 = 2000 - 50 = 1950\\ \\Omega$."
+  },
+  {
+    "type": "single",
+    "chapter": "Magnetism and Matter",
+    "text": "Match List-I with List-II:\nList-I\n(A) Diamagnetic material\n(B) Paramagnetic material\n(C) Ferromagnetic material\n(D) Superconductor\nList-II\n(I) Magnetic susceptibility $\\chi = -1$\n(II) $\\chi$ small and positive\n(III) $\\chi$ small and negative\n(IV) $\\chi$ large and positive\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-III, B-II, C-IV, D-I",
+      "A-II, B-III, C-IV, D-I",
+      "A-III, B-IV, C-II, D-I",
+      "A-I, B-II, C-IV, D-III"
+    ],
+    "answer": "A",
+    "solution": "Diamagnetics have small negative $\\chi$ (III), paramagnetics small positive $\\chi$ (II), ferromagnetics large positive $\\chi$ (IV). A superconductor expels the field completely (perfect diamagnet), so $\\chi = -1$ (I)."
+  },
+  {
+    "type": "single",
+    "chapter": "Electromagnetic Induction",
+    "text": "Choose the correct statements:\nA. Lenz's law is a consequence of the law of conservation of energy.\nB. The SI unit of self-inductance, the henry, is equivalent to Wb $\\text{A}^{-1}$.\nC. Eddy current losses in a transformer core are reduced by using a laminated core.\nD. The emf induced in a coil depends on the magnetic flux linked with it and not on the rate of change of that flux.\nChoose the correct answer from the options given below:",
+    "options": [
+      "A, B, C and D",
+      "A and D only",
+      "B, C and D only",
+      "A, B and C only"
+    ],
+    "answer": "D",
+    "solution": "A is true (the opposing induced current means work must be done, so energy is conserved). B is true since $L = \\Phi/I$. C is true because laminations increase resistance to eddy currents. D is false: by Faraday's law, $\\varepsilon = -d\\Phi/dt$ depends on the rate of change of flux."
+  },
+  {
+    "type": "single",
+    "chapter": "Alternating Current",
+    "text": "A series LCR circuit with $R = 30\\ \\Omega$, $X_L = 80\\ \\Omega$ and $X_C = 40\\ \\Omega$ is connected to a 200 V (rms) ac source. The average power dissipated in the circuit is:",
+    "options": [
+      "800 W",
+      "480 W",
+      "640 W",
+      "360 W"
+    ],
+    "answer": "B",
+    "solution": "$Z = \\sqrt{R^2 + (X_L - X_C)^2} = \\sqrt{900 + 1600} = 50\\ \\Omega$. $I_{\\text{rms}} = 200/50 = 4$ A. Average power $= I_{\\text{rms}}^2R = 16 \\times 30 = 480$ W."
+  },
+  {
+    "type": "single",
+    "chapter": "Alternating Current",
+    "text": "A step-down transformer reduces the voltage from 2200 V to 220 V. It delivers 1760 W to a resistive load and its efficiency is 80%. The current in the primary coil is:",
+    "options": [
+      "10 A",
+      "0.8 A",
+      "8 A",
+      "1 A"
+    ],
+    "answer": "D",
+    "solution": "Input power $= \\frac{1760}{0.8} = 2200$ W. Primary current $= \\frac{2200\\ \\text{W}}{2200\\ \\text{V}} = 1$ A. (The secondary current is $1760/220 = 8$ A.)"
+  },
+  {
+    "type": "single",
+    "chapter": "Electromagnetic Waves",
+    "text": "Match List-I (electromagnetic wave) with List-II (application):\nList-I\n(A) Microwaves\n(B) Ultraviolet rays\n(C) X-rays\n(D) Infrared rays\nList-II\n(I) Remote switches of household electronic devices\n(II) Radar systems used in aircraft navigation\n(III) LASIK eye surgery\n(IV) Detecting fractures of bones\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-II, B-III, C-IV, D-I",
+      "A-I, B-III, C-IV, D-II",
+      "A-II, B-IV, C-III, D-I",
+      "A-III, B-II, C-IV, D-I"
+    ],
+    "answer": "A",
+    "solution": "Microwaves are used in radar (II), UV in LASIK eye surgery (III), X-rays to detect bone fractures (IV), and infrared in remote controls (I)."
+  },
+  {
+    "type": "single",
+    "chapter": "Ray Optics and Optical Instruments",
+    "text": "A thin biconvex lens with both radii of curvature 20 cm is made of glass of refractive index 1.5. When it is completely immersed in a liquid of refractive index 1.25, its focal length becomes:",
+    "options": [
+      "−50 cm",
+      "20 cm",
+      "100 cm",
+      "50 cm"
+    ],
+    "answer": "D",
+    "solution": "In air: $\\frac{1}{f} = (1.5 - 1)\\left(\\frac{2}{20}\\right)$, so $f = 20$ cm. In the liquid: $\\frac{1}{f'} = \\left(\\frac{1.5}{1.25} - 1\\right)\\left(\\frac{2}{20}\\right) = 0.2 \\times 0.1 = \\frac{1}{50}$, so $f' = 50$ cm (still converging)."
+  },
+  {
+    "type": "single",
+    "chapter": "Ray Optics and Optical Instruments",
+    "text": "Given below are two statements: one is labelled as Assertion A and the other is labelled as Reason R.\nAssertion A: When a ray of light passes from air into glass, its frequency remains unchanged.\nReason R: The wavelength of light in glass is smaller than its wavelength in air.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both A and R are true and R is the correct explanation of A",
+      "Both A and R are true but R is NOT the correct explanation of A",
+      "A is true but R is false",
+      "A is false but R is true"
+    ],
+    "answer": "B",
+    "solution": "Frequency is set by the source and does not change on refraction, so A is true. Since $v = f\\lambda$ and light is slower in glass, $\\lambda$ decreases, so R is also true. But R follows from A rather than explaining it, so R is not the correct explanation."
+  },
+  {
+    "type": "single",
+    "chapter": "Wave Optics",
+    "text": "In Young's double-slit experiment the slit separation is 0.5 mm and the screen is 1 m away from the slits. Light of wavelength 600 nm is used. The distance of the third dark fringe from the central bright fringe is:",
+    "options": [
+      "2.4 mm",
+      "3.6 mm",
+      "3.0 mm",
+      "1.8 mm"
+    ],
+    "answer": "C",
+    "solution": "Fringe width $\\beta = \\frac{\\lambda D}{d} = \\frac{600\\times10^{-9} \\times 1}{0.5\\times10^{-3}} = 1.2$ mm. The $n$th dark fringe is at $\\left(n - \\frac{1}{2}\\right)\\beta$, so the third is at $2.5 \\times 1.2 = 3.0$ mm."
+  },
+  {
+    "type": "single",
+    "chapter": "Wave Optics",
+    "text": "Unpolarised light of intensity $I_0$ passes through two polaroids placed one after the other, with their transmission axes inclined at $60^\\circ$ to each other. The intensity of the light emerging from the second polaroid is:",
+    "options": [
+      "$\\dfrac{I_0}{2}$",
+      "$\\dfrac{I_0}{4}$",
+      "$\\dfrac{I_0}{8}$",
+      "$\\dfrac{3I_0}{8}$"
+    ],
+    "answer": "C",
+    "solution": "The first polaroid transmits $I_0/2$. By Malus' law the second transmits $\\frac{I_0}{2}\\cos^2 60^\\circ = \\frac{I_0}{2} \\times \\frac{1}{4} = \\frac{I_0}{8}$."
+  },
+  {
+    "type": "single",
+    "chapter": "Dual Nature of Radiation and Matter",
+    "text": "When light of wavelength 400 nm falls on a metal surface, the stopping potential is 1.1 V. If light of wavelength 200 nm is used instead, the stopping potential will be (take $hc = 1240$ eV nm):",
+    "options": [
+      "4.2 V",
+      "2.2 V",
+      "3.1 V",
+      "6.2 V"
+    ],
+    "answer": "A",
+    "solution": "Photon energy at 400 nm $= 1240/400 = 3.1$ eV, so the work function is $\\phi = 3.1 - 1.1 = 2.0$ eV. At 200 nm the energy is 6.2 eV, so $eV_0 = 6.2 - 2.0 = 4.2$ eV and $V_0 = 4.2$ V."
+  },
+  {
+    "type": "single",
+    "chapter": "Atoms",
+    "text": "The ratio of the longest wavelength of the Lyman series to the longest wavelength of the Balmer series in the hydrogen spectrum is:",
+    "options": [
+      "27 : 5",
+      "5 : 27",
+      "4 : 9",
+      "3 : 4"
+    ],
+    "answer": "B",
+    "solution": "Lyman longest ($n = 2 \\to 1$): $\\frac{1}{\\lambda_L} = R\\left(1 - \\frac{1}{4}\\right) = \\frac{3R}{4}$. Balmer longest ($3 \\to 2$): $\\frac{1}{\\lambda_B} = R\\left(\\frac{1}{4} - \\frac{1}{9}\\right) = \\frac{5R}{36}$. $\\frac{\\lambda_L}{\\lambda_B} = \\frac{5/36}{3/4} = \\frac{5}{27}$."
+  },
+  {
+    "type": "single",
+    "chapter": "Nuclei",
+    "text": "The activity of a radioactive sample falls from 800 decays/s to 50 decays/s in 20 days. The mean life of the sample is approximately:",
+    "options": [
+      "10 days",
+      "5 days",
+      "3.5 days",
+      "7.2 days"
+    ],
+    "answer": "D",
+    "solution": "$800 \\to 50$ is a factor of $16 = 2^4$, so 4 half-lives pass in 20 days and $T_{1/2} = 5$ days. Mean life $\\tau = \\frac{T_{1/2}}{\\ln 2} = \\frac{5}{0.693} \\approx 7.2$ days."
+  },
+  {
+    "type": "single",
+    "chapter": "Semiconductor Electronics",
+    "text": "The two inputs A and B are fed to a NOR gate. The output of the NOR gate is connected to both inputs of a NAND gate. The final output of the combination is equivalent to that of:",
+    "options": [
+      "an OR gate",
+      "an AND gate",
+      "a NOR gate",
+      "a NAND gate"
+    ],
+    "answer": "A",
+    "solution": "A NAND gate with both inputs tied together acts as a NOT gate. So the output is $\\overline{\\overline{A + B}} = A + B$, an OR gate."
+  },
+  {
+    "type": "single",
+    "chapter": "Semiconductor Electronics",
+    "text": "Given below are two statements:\nStatement I: When a p-n junction is forward biased, the width of its depletion region decreases.\nStatement II: In an intrinsic semiconductor at room temperature, the number density of free electrons equals the number density of holes.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "A",
+    "solution": "In forward bias the applied voltage opposes the barrier potential, so the depletion layer narrows: Statement I is true. In an intrinsic semiconductor every thermally broken bond produces one electron and one hole, so $n_e = n_h = n_i$: Statement II is true."
+  },
+  {
+    "type": "single",
+    "chapter": "Semiconductor Electronics",
+    "text": "A Zener diode with breakdown voltage 6 V is connected in reverse bias across a 1 k$\\Omega$ load resistor. The combination is connected to a 10 V dc supply through a series resistor of 200 $\\Omega$. The current through the Zener diode is:",
+    "options": [
+      "20 mA",
+      "14 mA",
+      "6 mA",
+      "26 mA"
+    ],
+    "answer": "B",
+    "solution": "The load voltage is fixed at 6 V. Current through the series resistor $= \\frac{10 - 6}{200} = 20$ mA, and load current $= \\frac{6}{1000} = 6$ mA. Zener current $= 20 - 6 = 14$ mA."
+  }
+]

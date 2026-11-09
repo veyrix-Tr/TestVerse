@@ -1,0 +1,587 @@
+[
+  {
+    "type": "single",
+    "chapter": "Units and Measurements",
+    "text": "If energy $(E)$, velocity $(v)$ and time $(T)$ are chosen as the fundamental quantities, the dimensional formula of surface tension is:",
+    "options": [
+      "$[E v^{-1} T^{-2}]$",
+      "$[E v^{-2} T^{-1}]$",
+      "$[E v^{-2} T^{-2}]$",
+      "$[E^{-1} v^{2} T^{-2}]$"
+    ],
+    "answer": "C",
+    "solution": "Surface tension $=$ force/length $= [MT^{-2}]$. Since $E = [ML^2T^{-2}]$ and $v = [LT^{-1}]$, mass $[M] = [E v^{-2}]$. Hence surface tension $= [E v^{-2} T^{-2}]$."
+  },
+  {
+    "type": "single",
+    "chapter": "Motion in a Straight Line",
+    "text": "A car starts from rest and accelerates uniformly with acceleration $a$. It then immediately decelerates uniformly at $2a$ until it comes to rest. If it covers a total distance of 300 m in a total time of 30 s, the value of $a$ is:",
+    "options": [
+      "$0.5\\ \\text{m s}^{-2}$",
+      "$1\\ \\text{m s}^{-2}$",
+      "$1.5\\ \\text{m s}^{-2}$",
+      "$2\\ \\text{m s}^{-2}$"
+    ],
+    "answer": "B",
+    "solution": "Area of the v–t triangle: $\\frac{1}{2}v_{max}(30) = 300 \\Rightarrow v_{max} = 20$ m/s. Times: $t_1 = \\frac{20}{a}$, $t_2 = \\frac{20}{2a}$, so $\\frac{30}{a} = 30 \\Rightarrow a = 1\\ \\text{m s}^{-2}$."
+  },
+  {
+    "type": "single",
+    "chapter": "Motion in a Plane",
+    "text": "A projectile is launched from the ground. Its speed at the highest point of its path is $\\sqrt{\\frac{2}{5}}$ times its speed at half the maximum height. The angle of projection with the horizontal is:",
+    "options": [
+      "$30^\\circ$",
+      "$45^\\circ$",
+      "$\\tan^{-1}2$",
+      "$60^\\circ$"
+    ],
+    "answer": "D",
+    "solution": "At the top, $v = u\\cos\\theta$. At height $H/2$: $v^2 = u^2 - gH = u^2 - \\frac{u^2\\sin^2\\theta}{2}$. So $\\frac{\\cos^2\\theta}{1 - \\frac{\\sin^2\\theta}{2}} = \\frac{2}{5}$. Writing $c = \\cos^2\\theta$: $5c = 2 - (1 - c) = 1 + c \\Rightarrow c = \\frac{1}{4}$, so $\\theta = 60^\\circ$."
+  },
+  {
+    "type": "single",
+    "chapter": "Laws of Motion",
+    "text": "A block of mass 2 kg is placed on the smooth inclined face of a wedge of inclination $37^\\circ$. The wedge is given a horizontal acceleration such that the block remains at rest relative to the wedge. The acceleration of the wedge and the normal reaction on the block are respectively: (Take $g = 10\\ \\text{m s}^{-2}$, $\\tan 37^\\circ = \\frac{3}{4}$)",
+    "options": [
+      "$7.5\\ \\text{m s}^{-2}$ and 25 N",
+      "$7.5\\ \\text{m s}^{-2}$ and 16 N",
+      "$13.3\\ \\text{m s}^{-2}$ and 25 N",
+      "$6\\ \\text{m s}^{-2}$ and 20 N"
+    ],
+    "answer": "A",
+    "solution": "In the wedge frame, the pseudo force $ma$ and gravity $mg$ must have a resultant normal to the incline: $\\tan\\theta = \\frac{a}{g} \\Rightarrow a = g\\tan37^\\circ = 7.5\\ \\text{m s}^{-2}$. Normal reaction $N = \\frac{mg}{\\cos37^\\circ} = \\frac{20}{0.8} = 25$ N."
+  },
+  {
+    "type": "single",
+    "chapter": "Laws of Motion",
+    "text": "A curved road of radius 30 m is banked at an angle of $37^\\circ$. The coefficient of static friction between the tyres and the road is 0.5. The maximum speed with which a car can safely negotiate the curve is: (Take $g = 10\\ \\text{m s}^{-2}$, $\\tan 37^\\circ = \\frac{3}{4}$)",
+    "options": [
+      "15 m/s",
+      "$10\\sqrt{3}$ m/s",
+      "$10\\sqrt{6}$ m/s",
+      "$20\\sqrt{2}$ m/s"
+    ],
+    "answer": "C",
+    "solution": "$v_{max}^2 = rg\\,\\frac{\\mu + \\tan\\theta}{1 - \\mu\\tan\\theta} = 300 \\times \\frac{1.25}{0.625} = 600$, so $v_{max} = 10\\sqrt{6} \\approx 24.5$ m/s."
+  },
+  {
+    "type": "single",
+    "chapter": "Work, Energy and Power",
+    "text": "A body of mass 2 kg moves along the x-axis such that its position varies with time as $x = \\frac{t^3}{3}$, where $x$ is in metre and $t$ in second. The work done by the net force on the body during the first 2 s is:",
+    "options": [
+      "8 J",
+      "16 J",
+      "32 J",
+      "64 J"
+    ],
+    "answer": "B",
+    "solution": "$v = \\frac{dx}{dt} = t^2$, so $v(0) = 0$ and $v(2) = 4$ m/s. By the work–energy theorem, $W = \\frac{1}{2}(2)(4)^2 - 0 = 16$ J."
+  },
+  {
+    "type": "single",
+    "chapter": "Work, Energy and Power",
+    "text": "A ball is dropped from a height of 20 m on a horizontal floor. The coefficient of restitution between the ball and the floor is 0.5. The total time taken by the ball before it comes to rest is: (Take $g = 10\\ \\text{m s}^{-2}$)",
+    "options": [
+      "4 s",
+      "3 s",
+      "8 s",
+      "6 s"
+    ],
+    "answer": "D",
+    "solution": "Time of fall $t_0 = \\sqrt{2h/g} = 2$ s, striking speed 20 m/s. After the $n$-th bounce the speed is $20e^n$ and the time in air is $2(20e^n)/g = 4e^n$ s. Total $= 2 + 4(0.5 + 0.25 + \\dots) = 2 + 4 = 6$ s."
+  },
+  {
+    "type": "single",
+    "chapter": "System of Particles and Rotational Motion",
+    "text": "A thin uniform rod of mass $M$ and length $L$ rotates freely in a horizontal plane about a vertical axis through its centre with angular speed $\\omega_0$. Two small rings, each of mass $M/4$, initially held at the centre of the rod, are released and slide along the rod to its two ends. The angular speed of the system when the rings reach the ends is:",
+    "options": [
+      "$\\frac{\\omega_0}{3}$",
+      "$\\frac{2\\omega_0}{5}$",
+      "$\\frac{3\\omega_0}{5}$",
+      "$\\frac{\\omega_0}{4}$"
+    ],
+    "answer": "B",
+    "solution": "$I_i = \\frac{ML^2}{12}$; $I_f = \\frac{ML^2}{12} + 2\\cdot\\frac{M}{4}\\left(\\frac{L}{2}\\right)^2 = \\frac{ML^2}{12} + \\frac{ML^2}{8} = \\frac{5ML^2}{24}$. Conserving angular momentum, $\\omega = \\omega_0\\frac{2/24}{5/24} = \\frac{2\\omega_0}{5}$."
+  },
+  {
+    "type": "single",
+    "chapter": "System of Particles and Rotational Motion",
+    "text": "A solid cylinder of mass 4 kg and radius 0.2 m lies on a rough horizontal surface. A horizontal force of 12 N is applied at its topmost point, perpendicular to its axis, and the cylinder rolls without slipping. The frictional force acting on the cylinder is:",
+    "options": [
+      "Zero",
+      "4 N, opposite to the applied force",
+      "4 N, in the direction of the applied force",
+      "8 N, in the direction of the applied force"
+    ],
+    "answer": "C",
+    "solution": "Take friction $f$ along $F$. Translation: $F + f = ma$. Rotation about the centre: $(F - f)R = \\frac{1}{2}mR^2\\frac{a}{R} \\Rightarrow F - f = \\frac{ma}{2}$. Adding: $2F = \\frac{3ma}{2} \\Rightarrow a = \\frac{4F}{3m} = 4\\ \\text{m s}^{-2}$. Then $f = ma - F = 16 - 12 = 4$ N, positive, so it acts along the applied force."
+  },
+  {
+    "type": "single",
+    "chapter": "System of Particles and Rotational Motion",
+    "text": "Given below are two statements:\nStatement I: When a solid sphere rolls without slipping down a rough inclined plane, its total mechanical energy is conserved.\nStatement II: For bodies rolling without slipping down the same incline, the acceleration $a = \\frac{g\\sin\\theta}{1 + k^2/R^2}$ depends on the shape of the body but not on its mass or radius.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "A",
+    "solution": "Statement I: in pure rolling the contact point is instantaneously at rest, so static friction does no work and mechanical energy is conserved; true. Statement II: $a$ depends only on $k^2/R^2$, which is fixed by the shape; true."
+  },
+  {
+    "type": "single",
+    "chapter": "Gravitation",
+    "text": "A satellite revolves in a circular orbit of radius $2R$ around the Earth, where $R$ is the radius of the Earth. If $v_e$ is the escape speed from the Earth's surface, the minimum additional speed that must be given to the satellite (along its direction of motion) so that it escapes from the Earth's gravitational field is:",
+    "options": [
+      "$\\frac{(\\sqrt{2}-1)v_e}{2}$",
+      "$(\\sqrt{2}-1)v_e$",
+      "$\\frac{v_e}{2}$",
+      "$\\left(1-\\frac{1}{\\sqrt{2}}\\right)v_e$"
+    ],
+    "answer": "A",
+    "solution": "With $v_e = \\sqrt{2GM/R}$: orbital speed $v_0 = \\sqrt{\\frac{GM}{2R}} = \\frac{v_e}{2}$, and escape speed from $r = 2R$ is $\\sqrt{\\frac{2GM}{2R}} = \\frac{v_e}{\\sqrt{2}}$. Additional speed $= \\frac{v_e}{\\sqrt{2}} - \\frac{v_e}{2} = \\frac{(\\sqrt{2}-1)v_e}{2}$."
+  },
+  {
+    "type": "single",
+    "chapter": "Gravitation",
+    "text": "Given below are two statements:\nStatement I: If the radius of the Earth were to shrink to half its present value with its mass unchanged, the acceleration due to gravity on its surface would become double.\nStatement II: The total mechanical energy of a satellite in a circular orbit is equal to the negative of its kinetic energy.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "D",
+    "solution": "Statement I: $g = \\frac{GM}{R^2}$, so halving $R$ makes $g$ four times; false. Statement II: $K = \\frac{GMm}{2r}$ and $E = -\\frac{GMm}{2r} = -K$; true."
+  },
+  {
+    "type": "single",
+    "chapter": "Mechanical Properties of Solids",
+    "text": "Two wires A and B are made of the same material. Their lengths are in the ratio $1:2$ and their diameters are in the ratio $2:3$. Equal loads are suspended from them. The ratio of the elastic potential energy stored per unit volume in A to that in B is:",
+    "options": [
+      "$\\frac{9}{4}$",
+      "$\\frac{16}{81}$",
+      "$\\frac{81}{32}$",
+      "$\\frac{81}{16}$"
+    ],
+    "answer": "D",
+    "solution": "Energy density $u = \\frac{\\sigma^2}{2Y}$ with stress $\\sigma = \\frac{F}{\\pi d^2/4} \\propto \\frac{1}{d^2}$. So $\\frac{\\sigma_A}{\\sigma_B} = \\left(\\frac{3}{2}\\right)^2 = \\frac{9}{4}$ and $\\frac{u_A}{u_B} = \\left(\\frac{9}{4}\\right)^2 = \\frac{81}{16}$. The lengths do not matter."
+  },
+  {
+    "type": "single",
+    "chapter": "Mechanical Properties of Fluids",
+    "text": "Given below are two statements: one is labelled as Assertion A and the other is labelled as Reason R.\nAssertion A: The excess pressure inside a soap bubble is twice the excess pressure inside a drop of the same soap solution having the same radius.\nReason R: Adding soap to water increases its surface tension.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both A and R are true and R is the correct explanation of A",
+      "Both A and R are true but R is NOT the correct explanation of A",
+      "A is true but R is false",
+      "A is false but R is true"
+    ],
+    "answer": "C",
+    "solution": "A soap bubble has two free surfaces, so its excess pressure is $\\frac{4T}{R}$, while a drop has one surface and excess pressure $\\frac{2T}{R}$; A is true. Soap (a surfactant) lowers the surface tension of water, so R is false."
+  },
+  {
+    "type": "single",
+    "chapter": "Thermal Properties of Matter",
+    "text": "A body cools from $100^\\circ$C to $60^\\circ$C in 10 minutes when the surroundings are at $20^\\circ$C. Assuming Newton's law of cooling holds, its temperature after another 10 minutes will be:",
+    "options": [
+      "$20^\\circ$C",
+      "$40^\\circ$C",
+      "$30^\\circ$C",
+      "$45^\\circ$C"
+    ],
+    "answer": "B",
+    "solution": "Using the average form: $\\frac{100-60}{10} = k(80-20) \\Rightarrow k = \\frac{1}{15}\\ \\text{min}^{-1}$. Next interval: $\\frac{60-T}{10} = \\frac{1}{15}\\left(\\frac{60+T}{2} - 20\\right) \\Rightarrow 180 - 3T = T + 20 \\Rightarrow T = 40^\\circ$C. (The exponential form gives the same: the excess temperature halves from 80 to 40 and then to 20, i.e. $T = 40^\\circ$C.)"
+  },
+  {
+    "type": "single",
+    "chapter": "Thermodynamics",
+    "text": "An ideal gas is taken through the cyclic process $A \\rightarrow B \\rightarrow C \\rightarrow A$. State A: $(V = 1\\ \\text{L}, P = 1\\times10^5\\ \\text{Pa})$; state B: $(1\\ \\text{L}, 3\\times10^5\\ \\text{Pa})$; state C: $(4\\ \\text{L}, 1\\times10^5\\ \\text{Pa})$. AB is isochoric, BC is a straight line on the P–V diagram and CA is isobaric. In one complete cycle the net heat exchanged by the gas is:",
+    "options": [
+      "150 J absorbed",
+      "300 J released",
+      "600 J absorbed",
+      "300 J absorbed"
+    ],
+    "answer": "D",
+    "solution": "Net work = area of the triangle $= \\frac{1}{2}(4-1)\\times10^{-3} \\times (3-1)\\times10^5 = 300$ J. With V on the x-axis the cycle (up AB, down-right BC, left CA) is clockwise, so the gas does positive net work. For a cycle $\\Delta U = 0$, so $Q = W = 300$ J absorbed."
+  },
+  {
+    "type": "single",
+    "chapter": "Thermodynamics",
+    "text": "Match List-I (process undergone by an ideal monatomic gas) with List-II (molar heat capacity for that process):\nList-I\n(A) Isothermal\n(B) Adiabatic\n(C) Isobaric\n(D) Isochoric\nList-II\n(I) Zero\n(II) Infinite\n(III) $\\frac{3}{2}R$\n(IV) $\\frac{5}{2}R$\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-II, B-I, C-IV, D-III",
+      "A-I, B-II, C-IV, D-III",
+      "A-II, B-I, C-III, D-IV",
+      "A-I, B-II, C-III, D-IV"
+    ],
+    "answer": "A",
+    "solution": "$C = \\frac{dQ}{n\\,dT}$. Isothermal: $dT = 0$ with $dQ \\ne 0$, so $C \\rightarrow \\infty$. Adiabatic: $dQ = 0$, so $C = 0$. Isobaric: $C_p = \\frac{5}{2}R$. Isochoric: $C_v = \\frac{3}{2}R$. Hence A-II, B-I, C-IV, D-III."
+  },
+  {
+    "type": "single",
+    "chapter": "Kinetic Theory",
+    "text": "The pressure of an ideal gas is halved and its absolute temperature is doubled. The number of collisions made per second by a molecule with other molecules (collision frequency) becomes:",
+    "options": [
+      "$\\frac{1}{2\\sqrt{2}}$ times",
+      "$\\frac{1}{4}$ times",
+      "$\\sqrt{2}$ times",
+      "$2\\sqrt{2}$ times"
+    ],
+    "answer": "A",
+    "solution": "Mean free path $\\lambda = \\frac{k_BT}{\\sqrt{2}\\pi d^2 P} \\propto \\frac{T}{P}$ and mean speed $\\bar{v} \\propto \\sqrt{T}$. Collision frequency $= \\frac{\\bar{v}}{\\lambda} \\propto \\frac{P}{\\sqrt{T}}$, which changes by $\\frac{1/2}{\\sqrt{2}} = \\frac{1}{2\\sqrt{2}}$."
+  },
+  {
+    "type": "single",
+    "chapter": "Oscillations",
+    "text": "Given below are two statements:\nStatement I: For a particle executing simple harmonic motion, the kinetic energy oscillates with a frequency twice the frequency of oscillation of the particle.\nStatement II: The phase difference between the velocity and the acceleration of a particle executing simple harmonic motion is $\\pi$.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "C",
+    "solution": "Statement I: $K = \\frac{1}{2}m\\omega^2A^2\\cos^2\\omega t = \\frac{1}{4}m\\omega^2A^2(1 + \\cos2\\omega t)$, so it varies at $2\\omega$; true. Statement II: $v = A\\omega\\cos\\omega t$ and $a = -A\\omega^2\\sin\\omega t$, which differ in phase by $\\frac{\\pi}{2}$; false."
+  },
+  {
+    "type": "single",
+    "chapter": "Oscillations",
+    "text": "A uniform spring of force constant $k$ is cut into two pieces whose lengths are in the ratio $1:2$. The two pieces are connected in parallel and a block of mass $m$ is attached to them. The time period of small oscillations of the block is:",
+    "options": [
+      "$2\\pi\\sqrt{\\frac{m}{k}}$",
+      "$2\\pi\\sqrt{\\frac{m}{3k}}$",
+      "$2\\pi\\sqrt{\\frac{2m}{9k}}$",
+      "$2\\pi\\sqrt{\\frac{2m}{3k}}$"
+    ],
+    "answer": "C",
+    "solution": "Spring constant is inversely proportional to length: the piece of length $\\frac{L}{3}$ has $3k$ and the piece of length $\\frac{2L}{3}$ has $\\frac{3k}{2}$. In parallel, $k_{eq} = 3k + \\frac{3k}{2} = \\frac{9k}{2}$, so $T = 2\\pi\\sqrt{\\frac{2m}{9k}}$."
+  },
+  {
+    "type": "single",
+    "chapter": "Waves",
+    "text": "The second overtone of an open organ pipe is in unison with the third overtone of a closed organ pipe. The ratio of the length of the open pipe to that of the closed pipe is:",
+    "options": [
+      "$\\frac{6}{7}$",
+      "$\\frac{7}{6}$",
+      "$\\frac{3}{7}$",
+      "$\\frac{12}{7}$"
+    ],
+    "answer": "A",
+    "solution": "Second overtone of the open pipe is the 3rd harmonic: $\\frac{3v}{2L_o}$. Third overtone of the closed pipe is the 7th harmonic: $\\frac{7v}{4L_c}$. Equating, $12L_c = 14L_o \\Rightarrow \\frac{L_o}{L_c} = \\frac{6}{7}$."
+  },
+  {
+    "type": "single",
+    "chapter": "Electric Charges and Fields",
+    "text": "A small ball of mass 10 g carrying a charge of $2\\ \\mu$C hangs from a light insulating thread in a uniform horizontal electric field. In equilibrium the thread makes an angle of $37^\\circ$ with the vertical. The magnitude of the electric field is: (Take $g = 10\\ \\text{m s}^{-2}$, $\\tan 37^\\circ = \\frac{3}{4}$)",
+    "options": [
+      "$3.0\\times10^4$ N/C",
+      "$4.0\\times10^4$ N/C",
+      "$5.0\\times10^4$ N/C",
+      "$3.75\\times10^4$ N/C"
+    ],
+    "answer": "D",
+    "solution": "Equilibrium: $T\\sin\\theta = qE$ and $T\\cos\\theta = mg$, so $E = \\frac{mg\\tan\\theta}{q} = \\frac{0.01\\times10\\times0.75}{2\\times10^{-6}} = 3.75\\times10^4$ N/C."
+  },
+  {
+    "type": "single",
+    "chapter": "Electric Charges and Fields",
+    "text": "Choose the correct statements:\nA. Electrostatic field lines do not form closed loops.\nB. The net electric flux through a closed surface depends on the charges located outside the surface.\nC. The electrostatic field just outside the surface of a charged conductor is normal to the surface.\nD. The electric field inside a uniformly charged thin spherical shell is zero.\nE. The electric field due to a uniformly charged infinite plane sheet decreases inversely with distance from the sheet.\nChoose the correct answer from the options given below:",
+    "options": [
+      "A and C only",
+      "A, C and D only",
+      "A, B and D only",
+      "C, D and E only"
+    ],
+    "answer": "B",
+    "solution": "A is true (the electrostatic field is conservative). B is false: by Gauss's law the flux depends only on the enclosed charge. C is true. D is true (Gauss's law with zero enclosed charge and symmetry). E is false: the field of an infinite sheet, $\\frac{\\sigma}{2\\varepsilon_0}$, is independent of distance. Correct: A, C and D only."
+  },
+  {
+    "type": "single",
+    "chapter": "Electrostatic Potential and Capacitance",
+    "text": "A parallel plate capacitor has a capacitance of $6\\ \\mu$F with air between its plates. A dielectric slab of dielectric constant 4, having the same area as the plates and thickness equal to half the separation between the plates, is inserted between them. The new capacitance is:",
+    "options": [
+      "$12\\ \\mu$F",
+      "$9.6\\ \\mu$F",
+      "$15\\ \\mu$F",
+      "$24\\ \\mu$F"
+    ],
+    "answer": "B",
+    "solution": "$C = \\frac{\\varepsilon_0A}{d - t + t/K} = \\frac{\\varepsilon_0A}{d/2 + d/8} = \\frac{8}{5}C_0 = \\frac{8}{5}\\times6 = 9.6\\ \\mu$F."
+  },
+  {
+    "type": "single",
+    "chapter": "Electrostatic Potential and Capacitance",
+    "text": "A $2\\ \\mu$F capacitor charged to 100 V and a $3\\ \\mu$F capacitor charged to 40 V are connected to each other with the positive plate of each joined to the negative plate of the other. The energy lost in the process is:",
+    "options": [
+      "2.16 mJ",
+      "12.40 mJ",
+      "11.76 mJ",
+      "0.64 mJ"
+    ],
+    "answer": "C",
+    "solution": "Charges: 200 $\\mu$C and 120 $\\mu$C; with opposite plates joined the net charge is 80 $\\mu$C and the common potential is $\\frac{80}{5} = 16$ V. Initial energy $= \\frac{1}{2}(2)(100)^2 + \\frac{1}{2}(3)(40)^2 = 12400\\ \\mu$J; final $= \\frac{1}{2}(5)(16)^2 = 640\\ \\mu$J. Loss $= 11760\\ \\mu$J $= 11.76$ mJ."
+  },
+  {
+    "type": "single",
+    "chapter": "Current Electricity",
+    "text": "Twelve identical cells, each of emf 1.5 V and internal resistance $0.5\\ \\Omega$, are to be arranged in a mixed grouping (equal numbers of cells in series in each row, with the rows connected in parallel) to send current through an external resistance of $1.5\\ \\Omega$. The maximum current that can be obtained through the external resistance is:",
+    "options": [
+      "3 A",
+      "2.4 A",
+      "0.97 A",
+      "4.5 A"
+    ],
+    "answer": "A",
+    "solution": "With $n$ cells per row and $m$ rows ($nm = 12$), the current $I = \\frac{nE}{R + nr/m}$ is maximum when $\\frac{nr}{m} = R$, i.e. $\\frac{0.5n}{m} = 1.5 \\Rightarrow n = 3m$, giving $m = 2$, $n = 6$. Then $I = \\frac{6\\times1.5}{1.5 + 1.5} = 3$ A."
+  },
+  {
+    "type": "single",
+    "chapter": "Current Electricity",
+    "text": "A copper wire is stretched uniformly so that its length becomes twice its original length; its volume and temperature remain unchanged. If the same potential difference is maintained across the wire as before, the drift speed of the free electrons in it:",
+    "options": [
+      "is doubled",
+      "remains unchanged",
+      "becomes one-fourth",
+      "is halved"
+    ],
+    "answer": "D",
+    "solution": "$v_d = \\frac{eE\\tau}{m}$ with $E = \\frac{V}{L}$. Doubling $L$ at the same $V$ halves $E$, so $v_d$ is halved. (Check: $R$ becomes $4R$, $I$ becomes $\\frac{I}{4}$, $A$ becomes $\\frac{A}{2}$, so $v_d = \\frac{I}{neA}$ becomes half.)"
+  },
+  {
+    "type": "single",
+    "chapter": "Current Electricity",
+    "text": "Two cells, one of emf 12 V and internal resistance $2\\ \\Omega$ and the other of emf 6 V and internal resistance $2\\ \\Omega$, are connected in parallel with their positive terminals joined together. This combination is connected across an external resistor of $4\\ \\Omega$. The current through the external resistor is:",
+    "options": [
+      "1.5 A",
+      "2.25 A",
+      "1.8 A",
+      "0.9 A"
+    ],
+    "answer": "C",
+    "solution": "Let $V$ be the terminal voltage. Junction rule: $\\frac{12 - V}{2} + \\frac{6 - V}{2} = \\frac{V}{4}$, so $9 - V = \\frac{V}{4}$ and $V = 7.2$ V. Current through the resistor $= \\frac{7.2}{4} = 1.8$ A."
+  },
+  {
+    "type": "single",
+    "chapter": "Moving Charges and Magnetism",
+    "text": "Choose the correct statements for a charged particle moving in a uniform magnetic field (no other field present):\nA. The kinetic energy of the particle remains constant.\nB. When the velocity is perpendicular to the field, the time period of revolution is independent of the speed of the particle.\nC. When the velocity has a component along the field, the path is a helix.\nD. The magnetic force can change the speed of the particle.\nE. When the velocity is perpendicular to the field, the radius of the circular path is directly proportional to the momentum of the particle.\nChoose the correct answer from the options given below:",
+    "options": [
+      "A, C and D only",
+      "A, B, C and E only",
+      "B, C and E only",
+      "A, B and D only"
+    ],
+    "answer": "B",
+    "solution": "The magnetic force $q\\vec{v}\\times\\vec{B}$ is always perpendicular to $\\vec{v}$, so it does no work: speed and KE stay constant (A true, D false). $T = \\frac{2\\pi m}{qB}$ is independent of speed (B true). The parallel component is unaffected, giving a helix (C true). $r = \\frac{mv}{qB} = \\frac{p}{qB}$ (E true)."
+  },
+  {
+    "type": "single",
+    "chapter": "Moving Charges and Magnetism",
+    "text": "A very long wire carrying current $I$ is bent into a hairpin shape: two long straight parallel portions joined at one end by a semicircular portion of radius $R$, the straight portions being tangent to the semicircle at its ends. The magnitude of the magnetic field at the centre of the semicircle is:",
+    "options": [
+      "$\\frac{\\mu_0 I}{4R}\\left(1 + \\frac{2}{\\pi}\\right)$",
+      "$\\frac{\\mu_0 I}{4R}\\left(1 + \\frac{1}{\\pi}\\right)$",
+      "$\\frac{\\mu_0 I}{2R}\\left(1 + \\frac{2}{\\pi}\\right)$",
+      "$\\frac{\\mu_0 I}{4R}\\left(1 - \\frac{2}{\\pi}\\right)$"
+    ],
+    "answer": "A",
+    "solution": "Semicircle: $\\frac{\\mu_0 I}{4R}$. Each semi-infinite straight portion ends at the foot of the perpendicular from the centre, at distance $R$: $\\frac{\\mu_0 I}{4\\pi R}$ each. All three fields point the same way, so $B = \\frac{\\mu_0 I}{4R} + \\frac{2\\mu_0 I}{4\\pi R} = \\frac{\\mu_0 I}{4R}\\left(1 + \\frac{2}{\\pi}\\right)$."
+  },
+  {
+    "type": "single",
+    "chapter": "Magnetism and Matter",
+    "text": "A bar magnet of magnetic moment $2\\ \\text{A m}^2$ is held in a uniform magnetic field of 0.3 T, initially in stable equilibrium. The work done in rotating it through $60^\\circ$ from this position and the torque acting on it in the new position are respectively:",
+    "options": [
+      "0.6 J and 0.52 N m",
+      "0.3 J and 0.30 N m",
+      "0.3 J and 0.52 N m",
+      "0.52 J and 0.30 N m"
+    ],
+    "answer": "C",
+    "solution": "$W = mB(1 - \\cos60^\\circ) = 2\\times0.3\\times0.5 = 0.3$ J. Torque $\\tau = mB\\sin60^\\circ = 0.6\\times\\frac{\\sqrt{3}}{2} \\approx 0.52$ N m."
+  },
+  {
+    "type": "single",
+    "chapter": "Electromagnetic Induction",
+    "text": "A horizontal conducting rod of length 1 m and mass 0.5 kg slides without friction down a pair of long vertical conducting rails, maintaining contact with them. The rails are connected at the top by a resistor of $2\\ \\Omega$. A uniform horizontal magnetic field of 1 T acts perpendicular to the plane of the rails. Neglecting the resistance of the rod and rails, the terminal speed of the rod is: (Take $g = 10\\ \\text{m s}^{-2}$)",
+    "options": [
+      "2.5 m/s",
+      "5 m/s",
+      "20 m/s",
+      "10 m/s"
+    ],
+    "answer": "D",
+    "solution": "At terminal speed the magnetic force balances gravity: $\\frac{B^2L^2v}{R} = mg \\Rightarrow v = \\frac{mgR}{B^2L^2} = \\frac{0.5\\times10\\times2}{1\\times1} = 10$ m/s."
+  },
+  {
+    "type": "single",
+    "chapter": "Electromagnetic Induction",
+    "text": "Given below are two statements: one is labelled as Assertion A and the other is labelled as Reason R.\nAssertion A: A small bar magnet dropped through a long vertical copper tube falls with an acceleration less than $g$.\nReason R: Eddy currents induced in the walls of the tube produce a magnetic field that opposes the relative motion of the magnet and the tube.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both A and R are true and R is the correct explanation of A",
+      "Both A and R are true but R is NOT the correct explanation of A",
+      "A is true but R is false",
+      "A is false but R is true"
+    ],
+    "answer": "A",
+    "solution": "The changing flux through the copper walls induces eddy currents which, by Lenz's law, oppose the fall of the magnet, so its acceleration is less than $g$ (it may even reach a terminal speed). Both are true and R explains A."
+  },
+  {
+    "type": "single",
+    "chapter": "Alternating Current",
+    "text": "How many of the following statements about a series LCR circuit at resonance are correct?\n(a) The impedance of the circuit is minimum and equal to $R$.\n(b) The power factor of the circuit is unity.\n(c) The voltages across the inductor and the capacitor are equal in magnitude and opposite in phase.\n(d) The voltage across the capacitor can never exceed the source voltage.\n(e) The resonant frequency depends on the resistance $R$.",
+    "options": [
+      "Two",
+      "Three",
+      "Four",
+      "Five"
+    ],
+    "answer": "B",
+    "solution": "At resonance $X_L = X_C$, so $Z = R$ (minimum) and $\\cos\\phi = 1$: (a), (b) true. $V_L$ and $V_C$ are equal and $180^\\circ$ out of phase: (c) true. $V_C = IX_C = QV$ can greatly exceed the source voltage when $Q \\gt 1$: (d) false. $\\omega_0 = \\frac{1}{\\sqrt{LC}}$ does not depend on $R$: (e) false. Three are correct."
+  },
+  {
+    "type": "single",
+    "chapter": "Alternating Current",
+    "text": "An ac source of voltage $v = 250\\sqrt{2}\\sin\\omega t$ volt is connected to a series circuit containing a resistance of $40\\ \\Omega$, an inductor of reactance $50\\ \\Omega$ and a capacitor of reactance $20\\ \\Omega$ (reactances at the source frequency). The average power dissipated in the circuit is:",
+    "options": [
+      "1000 W",
+      "2000 W",
+      "1250 W",
+      "750 W"
+    ],
+    "answer": "A",
+    "solution": "$Z = \\sqrt{40^2 + (50 - 20)^2} = 50\\ \\Omega$. $V_{rms} = 250$ V, so $I_{rms} = 5$ A. $P = I_{rms}^2R = 25\\times40 = 1000$ W (equivalently $V_{rms}I_{rms}\\cos\\phi = 1250\\times0.8$)."
+  },
+  {
+    "type": "single",
+    "chapter": "Electromagnetic Waves",
+    "text": "A plane electromagnetic wave travels in vacuum along the $+x$ direction. At a certain point and instant, its electric field is $9$ V/m directed along $+y$. The magnetic field of the wave at that point and instant is:",
+    "options": [
+      "$3\\times10^{-8}$ T along $-z$",
+      "$3\\times10^{-8}$ T along $+z$",
+      "$2.7\\times10^{9}$ T along $+z$",
+      "$3\\times10^{-8}$ T along $+y$"
+    ],
+    "answer": "B",
+    "solution": "$B = \\frac{E}{c} = \\frac{9}{3\\times10^8} = 3\\times10^{-8}$ T. The direction of propagation is along $\\vec{E}\\times\\vec{B}$; $\\hat{j}\\times\\hat{k} = \\hat{i}$, so $\\vec{B}$ is along $+z$."
+  },
+  {
+    "type": "single",
+    "chapter": "Ray Optics and Optical Instruments",
+    "text": "A thin plano-convex lens of refractive index 1.5 has its curved surface of radius of curvature 30 cm silvered. An object is placed on the axis in front of the plane face. For the final image to coincide with the object, the object must be placed at a distance of:",
+    "options": [
+      "10 cm",
+      "30 cm",
+      "60 cm",
+      "20 cm"
+    ],
+    "answer": "D",
+    "solution": "Power of the system $P = 2P_L + P_M$, with $P_L = \\frac{\\mu - 1}{R} = \\frac{1}{60}\\ \\text{cm}^{-1}$ and $P_M = \\frac{2}{R} = \\frac{1}{15}\\ \\text{cm}^{-1}$. So $P = \\frac{1}{30} + \\frac{1}{15} = \\frac{1}{10}$: it acts as a concave mirror of focal length 10 cm. The image coincides with the object at the centre of curvature, i.e. at 20 cm."
+  },
+  {
+    "type": "single",
+    "chapter": "Ray Optics and Optical Instruments",
+    "text": "An astronomical telescope in normal adjustment has a length of 105 cm and a magnifying power of 20. The eyepiece is now moved so that the final image is formed at the least distance of distinct vision (25 cm). The magnifying power in this new adjustment is:",
+    "options": [
+      "24",
+      "20",
+      "16",
+      "25"
+    ],
+    "answer": "A",
+    "solution": "Normal adjustment: $f_o + f_e = 105$ and $\\frac{f_o}{f_e} = 20$, so $f_o = 100$ cm and $f_e = 5$ cm. With the final image at $D = 25$ cm, $M = \\frac{f_o}{f_e}\\left(1 + \\frac{f_e}{D}\\right) = 20\\times1.2 = 24$."
+  },
+  {
+    "type": "single",
+    "chapter": "Wave Optics",
+    "text": "In Young's double-slit experiment with light of wavelength 600 nm, a thin transparent sheet of refractive index 1.5 is placed over one of the slits. The central bright fringe shifts to the position previously occupied by the fifth bright fringe. The thickness of the sheet is:",
+    "options": [
+      "$3\\ \\mu$m",
+      "$12\\ \\mu$m",
+      "$6\\ \\mu$m",
+      "$1.2\\ \\mu$m"
+    ],
+    "answer": "C",
+    "solution": "The sheet adds an optical path $(\\mu - 1)t$; a shift of 5 fringes requires $(\\mu - 1)t = 5\\lambda \\Rightarrow 0.5t = 3000$ nm $\\Rightarrow t = 6000$ nm $= 6\\ \\mu$m."
+  },
+  {
+    "type": "single",
+    "chapter": "Wave Optics",
+    "text": "Given below are two statements:\nStatement I: When unpolarised light is incident on a glass surface at Brewster's angle, the refracted light is completely plane polarised.\nStatement II: In single-slit diffraction, the angular width of the central maximum decreases when the width of the slit is increased.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "D",
+    "solution": "Statement I: at Brewster's angle the reflected light is completely polarised; the refracted light is only partially polarised, so I is false. Statement II: the angular width of the central maximum is $\\frac{2\\lambda}{a}$, which decreases as $a$ increases; true."
+  },
+  {
+    "type": "single",
+    "chapter": "Dual Nature of Radiation and Matter",
+    "text": "Light of wavelength 310 nm falls on a metal surface of work function 2.0 eV. The de Broglie wavelength of the fastest emitted photoelectrons is approximately: (Take $hc = 1240$ eV nm, and the de Broglie wavelength of an electron of kinetic energy $K$ eV $= \\frac{1.227}{\\sqrt{K}}$ nm)",
+    "options": [
+      "0.61 nm",
+      "0.87 nm",
+      "1.23 nm",
+      "0.43 nm"
+    ],
+    "answer": "B",
+    "solution": "Photon energy $= \\frac{1240}{310} = 4.0$ eV, so $K_{max} = 4.0 - 2.0 = 2.0$ eV. $\\lambda = \\frac{1.227}{\\sqrt{2}} \\approx 0.87$ nm."
+  },
+  {
+    "type": "single",
+    "chapter": "Atoms",
+    "text": "Which transition in a singly ionised helium ion $(He^+)$ emits a photon of the same wavelength as the photon emitted in the $n = 2 \\rightarrow n = 1$ transition of a hydrogen atom?",
+    "options": [
+      "$n = 3 \\rightarrow n = 2$",
+      "$n = 2 \\rightarrow n = 1$",
+      "$n = 4 \\rightarrow n = 2$",
+      "$n = 4 \\rightarrow n = 3$"
+    ],
+    "answer": "C",
+    "solution": "$\\frac{1}{\\lambda} = RZ^2\\left(\\frac{1}{n_1^2} - \\frac{1}{n_2^2}\\right)$. For H (2→1): $R\\cdot\\frac{3}{4}$. For $He^+$ ($Z = 2$) we need $4\\left(\\frac{1}{n_1^2} - \\frac{1}{n_2^2}\\right) = \\frac{3}{4}$, which is satisfied by $n_1 = 2$, $n_2 = 4$: $4\\left(\\frac{1}{4} - \\frac{1}{16}\\right) = \\frac{3}{4}$."
+  },
+  {
+    "type": "single",
+    "chapter": "Nuclei",
+    "text": "Two radioactive samples A and B have half-lives of 20 min and 40 min respectively. Initially they contain equal numbers of undecayed nuclei. After 80 min, the ratio of the activity of A to that of B is:",
+    "options": [
+      "$\\frac{1}{4}$",
+      "$\\frac{1}{8}$",
+      "2",
+      "$\\frac{1}{2}$"
+    ],
+    "answer": "D",
+    "solution": "After 80 min, A has gone through 4 half-lives ($N_A = \\frac{N_0}{16}$) and B through 2 ($N_B = \\frac{N_0}{4}$). Activity $R = \\lambda N$ and $\\lambda_A = 2\\lambda_B$, so $\\frac{R_A}{R_B} = 2\\times\\frac{1/16}{1/4} = \\frac{1}{2}$."
+  },
+  {
+    "type": "single",
+    "chapter": "Semiconductor Electronics",
+    "text": "Inputs A and B are fed to an OR gate, and the output of the OR gate is passed through a NOT gate. The output of the NOT gate and the input A are then fed to an AND gate. The final output Y of the AND gate is:",
+    "options": [
+      "$\\bar{A}\\,\\bar{B}$",
+      "0 for all combinations of inputs",
+      "$A\\bar{B}$",
+      "1 for all combinations of inputs"
+    ],
+    "answer": "B",
+    "solution": "The NOT-OR stage gives $\\overline{A + B} = \\bar{A}\\,\\bar{B}$. Then $Y = A\\cdot\\bar{A}\\,\\bar{B} = 0$, since $A\\bar{A} = 0$. So Y is 0 for every input combination."
+  },
+  {
+    "type": "single",
+    "chapter": "Semiconductor Electronics",
+    "text": "Choose the correct statements:\nA. A p-type semiconductor has holes as majority carriers but is electrically neutral as a whole.\nB. A p-type semiconductor is obtained by doping silicon with a pentavalent impurity such as phosphorus.\nC. A Zener diode used as a voltage regulator is operated in the reverse breakdown region.\nD. The electrical conductivity of an intrinsic semiconductor decreases with an increase in temperature.\nE. The fundamental frequency of the ripple in the output of a full-wave rectifier is twice the frequency of the ac input.\nChoose the correct answer from the options given below:",
+    "options": [
+      "A, B and C only",
+      "C, D and E only",
+      "A, C and E only",
+      "A and E only"
+    ],
+    "answer": "C",
+    "solution": "A is true: each acceptor ion carries an opposite charge, so the crystal is neutral. B is false: a trivalent impurity (B, Al, In) makes p-type. C is true. D is false: more electron–hole pairs are generated at higher temperature, so conductivity increases. E is true: both half-cycles are rectified. Correct: A, C and E only."
+  }
+]

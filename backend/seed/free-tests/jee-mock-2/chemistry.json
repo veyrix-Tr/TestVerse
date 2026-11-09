@@ -1,0 +1,197 @@
+[
+  {
+    "type": "single",
+    "chapter": "Some Basic Concepts of Chemistry",
+    "text": "An aqueous solution of NaOH has a molarity of 2.0 M and a density of $1.08\\ \\text{g mL}^{-1}$. The molality of the solution is (molar mass of NaOH = $40\\ \\text{g mol}^{-1}$):",
+    "options": ["1.85 m", "2.16 m", "2.00 m", "1.08 m"],
+    "answer": "C",
+    "solution": "Take 1 L of solution: mass of solution $= 1000 \\times 1.08 = 1080$ g. Mass of NaOH $= 2 \\times 40 = 80$ g, so mass of water $= 1080 - 80 = 1000$ g $= 1$ kg. Molality $= 2/1 = 2.00$ m."
+  },
+  {
+    "type": "single",
+    "chapter": "Structure of Atom",
+    "text": "The wavelength of the first line of the Balmer series of the hydrogen atom is 656 nm. The wavelength of the first line of the Balmer series of $He^{+}$ ion is:",
+    "options": ["164 nm", "328 nm", "82 nm", "2624 nm"],
+    "answer": "A",
+    "solution": "$\\frac{1}{\\lambda} = R_H Z^2 \\left(\\frac{1}{2^2} - \\frac{1}{3^2}\\right)$ for both, so $\\lambda \\propto 1/Z^2$. For $He^{+}$, $Z = 2$: $\\lambda = 656/4 = 164$ nm."
+  },
+  {
+    "type": "single",
+    "chapter": "Classification of Elements and Periodicity in Properties",
+    "text": "Which of the following represents the correct order of first ionisation enthalpy?",
+    "options": ["$O \\gt N \\gt C$", "$Be \\lt B \\lt C$", "$F \\gt Ne \\gt O$", "$Na \\lt Al \\lt Mg \\lt Si$"],
+    "answer": "D",
+    "solution": "N (half-filled 2p) has higher IE than O, so $O \\gt N$ is wrong. B (removing a 2p electron) has lower IE than Be, so $Be \\lt B$ is wrong. Ne has the highest IE in period 2, so $F \\gt Ne$ is wrong. In period 3, Al (3p electron) has lower IE than Mg (filled 3s), giving Na (496) $\\lt$ Al (577) $\\lt$ Mg (738) $\\lt$ Si (786 kJ/mol)."
+  },
+  {
+    "type": "single",
+    "chapter": "Chemical Bonding and Molecular Structure",
+    "text": "Match List-I (molecule) with List-II (shape):\nList-I\n(A) $XeO_3$\n(B) $ClF_3$\n(C) $XeOF_4$\n(D) $SF_4$\nList-II\n(I) See-saw\n(II) T-shaped\n(III) Square pyramidal\n(IV) Trigonal pyramidal\nChoose the correct answer from the options given below:",
+    "options": ["A-IV, B-I, C-III, D-II", "A-IV, B-II, C-III, D-I", "A-III, B-II, C-IV, D-I", "A-II, B-IV, C-I, D-III"],
+    "answer": "B",
+    "solution": "$XeO_3$: 3 bond pairs + 1 lone pair, trigonal pyramidal. $ClF_3$: 3 bp + 2 lp, T-shaped. $XeOF_4$: 5 bp + 1 lp, square pyramidal. $SF_4$: 4 bp + 1 lp, see-saw. So A-IV, B-II, C-III, D-I."
+  },
+  {
+    "type": "single",
+    "chapter": "Chemical Thermodynamics",
+    "text": "2 mol of an ideal gas is expanded isothermally and reversibly at 300 K from a volume of 10 L to 100 L. The work done on the gas, $w$, is ($R = 8.314\\ \\text{J K}^{-1}\\text{mol}^{-1}$, $\\ln 10 = 2.303$):",
+    "options": ["$-11.49$ kJ", "$+11.49$ kJ", "$-4.99$ kJ", "$-5.74$ kJ"],
+    "answer": "A",
+    "solution": "$w = -nRT \\ln\\frac{V_2}{V_1} = -2 \\times 8.314 \\times 300 \\times 2.303 = -11488$ J $\\approx -11.49$ kJ. It is negative because the gas does work on the surroundings while expanding."
+  },
+  {
+    "type": "single",
+    "chapter": "Equilibrium",
+    "text": "At a certain temperature, $PCl_5(g) \\rightleftharpoons PCl_3(g) + Cl_2(g)$ is found to be 20% dissociated when the total pressure at equilibrium is 2.4 atm. The value of $K_p$ for this reaction at this temperature is:",
+    "options": ["0.096 atm", "0.12 atm", "0.10 atm", "0.40 atm"],
+    "answer": "C",
+    "solution": "Starting with 1 mol $PCl_5$: at equilibrium $PCl_5 = 0.8$, $PCl_3 = 0.2$, $Cl_2 = 0.2$; total 1.2 mol. Partial pressures: $p_{PCl_3} = p_{Cl_2} = \\frac{0.2}{1.2} \\times 2.4 = 0.4$ atm, $p_{PCl_5} = \\frac{0.8}{1.2} \\times 2.4 = 1.6$ atm. $K_p = \\frac{0.4 \\times 0.4}{1.6} = 0.10$ atm."
+  },
+  {
+    "type": "single",
+    "chapter": "Organic Chemistry: Some Basic Principles and Techniques",
+    "text": "Given below are two statements:\nStatement I: If an organic compound contains both nitrogen and sulphur and sodium is not used in excess during fusion, the Lassaigne's extract gives a blood red colour with $Fe^{3+}$ ions due to the formation of $[Fe(SCN)]^{2+}$.\nStatement II: Kjeldahl's method can be used to estimate nitrogen in nitro compounds, azo compounds and pyridine.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": ["Both Statement I and Statement II are true", "Both Statement I and Statement II are false", "Statement I is true but Statement II is false", "Statement I is false but Statement II is true"],
+    "answer": "C",
+    "solution": "With both N and S present (and no excess Na), NaSCN forms in the extract and gives blood red $[Fe(SCN)]^{2+}$ with $Fe^{3+}$, so Statement I is true. Kjeldahl's method does not work for nitro and azo compounds or for N in a ring (pyridine), because that nitrogen is not converted to ammonium sulphate. So Statement II is false."
+  },
+  {
+    "type": "single",
+    "chapter": "Hydrocarbons",
+    "text": "An alkene X with molecular formula $C_6H_{12}$ on reductive ozonolysis ($O_3$ followed by $Zn/H_2O$) gives a single carbonyl compound. This compound gives a positive iodoform test but does not reduce Tollens' reagent. X is:",
+    "options": ["Hex-3-ene", "2,3-Dimethylbut-2-ene", "2-Methylpent-2-ene", "3-Methylpent-2-ene"],
+    "answer": "B",
+    "solution": "A single product means the alkene is symmetrical. Hex-3-ene gives only propanal, which reduces Tollens' reagent and gives no iodoform. $(CH_3)_2C=C(CH_3)_2$ gives two molecules of acetone, a methyl ketone (iodoform positive) that does not reduce Tollens' reagent. The other two alkenes give two different carbonyl compounds. X is 2,3-dimethylbut-2-ene."
+  },
+  {
+    "type": "single",
+    "chapter": "Solutions",
+    "text": "A 0.2 molal aqueous solution of a weak monobasic acid HA freezes at $-0.4092\\ ^{\\circ}\\text{C}$. The degree of dissociation of HA is ($K_f$ of water $= 1.86\\ \\text{K kg mol}^{-1}$):",
+    "options": ["1.1%", "20%", "11%", "10%"],
+    "answer": "D",
+    "solution": "$\\Delta T_f = i K_f m \\Rightarrow i = \\frac{0.4092}{1.86 \\times 0.2} = 1.1$. For $HA \\rightleftharpoons H^+ + A^-$, $i = 1 + \\alpha$, so $\\alpha = 0.1 = 10\\%$."
+  },
+  {
+    "type": "single",
+    "chapter": "Electrochemistry",
+    "text": "The limiting molar conductivities ($\\Lambda_m^{\\circ}$) of HCl, $CH_3COONa$ and NaCl are 426, 91 and 126 $\\text{S cm}^2\\text{mol}^{-1}$ respectively. The molar conductivity of a 0.001 M acetic acid solution is $39.1\\ \\text{S cm}^2\\text{mol}^{-1}$. The dissociation constant of acetic acid at this concentration is approximately:",
+    "options": ["$1.1 \\times 10^{-5}$", "$1.1 \\times 10^{-3}$", "$1.0 \\times 10^{-4}$", "$3.9 \\times 10^{-5}$"],
+    "answer": "A",
+    "solution": "By Kohlrausch's law, $\\Lambda_m^{\\circ}(CH_3COOH) = 426 + 91 - 126 = 391\\ \\text{S cm}^2\\text{mol}^{-1}$. $\\alpha = 39.1/391 = 0.1$. $K_a = \\frac{c\\alpha^2}{1 - \\alpha} = \\frac{0.001 \\times 0.01}{0.9} \\approx 1.1 \\times 10^{-5}$."
+  },
+  {
+    "type": "single",
+    "chapter": "Chemical Kinetics",
+    "text": "The rate constant of a reaction becomes four times when the temperature is raised from $27\\ ^{\\circ}\\text{C}$ to $47\\ ^{\\circ}\\text{C}$. The activation energy of the reaction is ($R = 8.314\\ \\text{J K}^{-1}\\text{mol}^{-1}$, $\\ln 2 = 0.693$):",
+    "options": ["$27.7\\ \\text{kJ mol}^{-1}$", "$55.3\\ \\text{kJ mol}^{-1}$", "$127.4\\ \\text{kJ mol}^{-1}$", "$5.53\\ \\text{kJ mol}^{-1}$"],
+    "answer": "B",
+    "solution": "$\\ln\\frac{k_2}{k_1} = \\frac{E_a}{R}\\left(\\frac{1}{T_1} - \\frac{1}{T_2}\\right)$ with $T_1 = 300$ K, $T_2 = 320$ K: $\\frac{1}{300} - \\frac{1}{320} = \\frac{1}{4800}$. $E_a = \\ln 4 \\times 8.314 \\times 4800 = 1.386 \\times 8.314 \\times 4800 \\approx 55300$ J $= 55.3\\ \\text{kJ mol}^{-1}$."
+  },
+  {
+    "type": "single",
+    "chapter": "p-Block Elements",
+    "text": "Consider the following statements:\nA. $H_2O$ has the highest boiling point among the hydrides of group 16 elements.\nB. The thermal stability of the hydrides of group 15 elements increases from $NH_3$ to $BiH_3$.\nC. HF is the weakest acid among the hydrogen halides in aqueous solution.\nD. Among the oxoacids of chlorine, $HClO_4$ is the strongest acid.\nE. In the solid state, $PCl_5$ exists as $[PCl_4]^{+}[PCl_6]^{-}$.\nChoose the correct answer from the options given below:",
+    "options": ["A, B and C only", "B, D and E only", "A, C and E only", "A, C, D and E only"],
+    "answer": "D",
+    "solution": "A is true (hydrogen bonding in water). B is false: the E–H bond weakens down the group, so thermal stability decreases from $NH_3$ to $BiH_3$. C is true (strong H–F bond). D is true: $ClO_4^-$ is the most resonance-stabilised conjugate base. E is true. Correct: A, C, D and E only."
+  },
+  {
+    "type": "single",
+    "chapter": "The d- and f-Block Elements",
+    "text": "Given below are two statements:\nStatement I: $Mn^{2+}$ compounds are more stable than $Fe^{2+}$ compounds towards oxidation to the +3 state.\nStatement II: The standard electrode potential $E^{\\circ}(Mn^{3+}/Mn^{2+})$ is much more positive than $E^{\\circ}(Fe^{3+}/Fe^{2+})$.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": ["Both Statement I and Statement II are true", "Both Statement I and Statement II are false", "Statement I is true but Statement II is false", "Statement I is false but Statement II is true"],
+    "answer": "A",
+    "solution": "$Mn^{2+}$ is $3d^5$ (stable half-filled), so it resists oxidation, while $Fe^{2+}$ ($3d^6$) readily loses an electron to become $3d^5$ $Fe^{3+}$. Statement I is true. $E^{\\circ}(Mn^{3+}/Mn^{2+}) = +1.57$ V and $E^{\\circ}(Fe^{3+}/Fe^{2+}) = +0.77$ V, so Statement II is also true."
+  },
+  {
+    "type": "single",
+    "chapter": "Coordination Compounds",
+    "text": "Which of the following complex ions exhibits both geometrical and optical isomerism? (en = ethane-1,2-diamine)",
+    "options": ["$[Co(en)_3]^{3+}$", "$[Pt(NH_3)_2Cl_2]$", "$[Co(en)_2Cl_2]^{+}$", "$[Co(NH_3)_4Cl_2]^{+}$"],
+    "answer": "C",
+    "solution": "$[Co(en)_2Cl_2]^{+}$ has cis and trans forms, and the cis form is chiral (non-superimposable mirror images), so it shows both. $[Co(en)_3]^{3+}$ shows only optical isomerism. Square planar $[Pt(NH_3)_2Cl_2]$ and octahedral $[Co(NH_3)_4Cl_2]^{+}$ show only cis-trans isomerism."
+  },
+  {
+    "type": "single",
+    "chapter": "Haloalkanes and Haloarenes",
+    "text": "Given below are two statements: one is labelled as Assertion A and the other is labelled as Reason R.\nAssertion A: p-Nitrochlorobenzene undergoes nucleophilic substitution with aqueous NaOH much more readily than chlorobenzene.\nReason R: The nitro group at the para position withdraws electron density and stabilises the carbanion intermediate formed by attack of the nucleophile through resonance.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": ["Both A and R are true and R is the correct explanation of A", "Both A and R are true but R is NOT the correct explanation of A", "A is true but R is false", "A is false but R is true"],
+    "answer": "A",
+    "solution": "Chlorobenzene needs about 623 K and high pressure to give phenol, while p-nitrochlorobenzene reacts at about 443 K. The reason is that the negative charge of the intermediate carbanion is delocalised onto the o/p-nitro group by resonance, which stabilises it. Both are true and R explains A."
+  },
+  {
+    "type": "single",
+    "chapter": "Alcohols, Phenols and Ethers",
+    "text": "Which pair of reactants is the most suitable for preparing tert-butyl methyl ether, $(CH_3)_3C\\text{–}O\\text{–}CH_3$, by Williamson synthesis?",
+    "options": ["$(CH_3)_3C\\text{–}Br$ and $CH_3ONa$", "$(CH_3)_3C\\text{–}OH$ and $CH_3ONa$", "$CH_3OH$ and $(CH_3)_3C\\text{–}ONa$", "$(CH_3)_3C\\text{–}ONa$ and $CH_3Br$"],
+    "answer": "D",
+    "solution": "Williamson synthesis is an $S_N2$ reaction of an alkoxide with an alkyl halide, so the halide should be primary. With $(CH_3)_3CBr$ the strongly basic $CH_3O^-$ causes elimination, giving 2-methylpropene. Options B and C have no alkyl halide (no leaving group). Use $(CH_3)_3CONa$ with $CH_3Br$."
+  },
+  {
+    "type": "single",
+    "chapter": "Aldehydes, Ketones and Carboxylic Acids",
+    "text": "The correct order of increasing acid strength of the following acids is:\n$CH_3COOH$, $HCOOH$, $ClCH_2COOH$, $FCH_2COOH$",
+    "options": ["$CH_3COOH \\lt ClCH_2COOH \\lt HCOOH \\lt FCH_2COOH$", "$CH_3COOH \\lt HCOOH \\lt ClCH_2COOH \\lt FCH_2COOH$", "$HCOOH \\lt CH_3COOH \\lt FCH_2COOH \\lt ClCH_2COOH$", "$HCOOH \\lt CH_3COOH \\lt ClCH_2COOH \\lt FCH_2COOH$"],
+    "answer": "B",
+    "solution": "The +I effect of $CH_3$ makes acetic acid ($pK_a$ 4.76) weaker than formic acid (3.75). Electron-withdrawing halogens increase acidity, and F (stronger –I effect) more than Cl, so $FCH_2COOH$ ($pK_a \\approx 2.6$) is stronger than $ClCH_2COOH$ ($pK_a$ 2.86), and both are stronger than formic acid. Order: $CH_3COOH \\lt HCOOH \\lt ClCH_2COOH \\lt FCH_2COOH$."
+  },
+  {
+    "type": "single",
+    "chapter": "Amines",
+    "text": "The correct order of basic strength of the following amines in aqueous solution is:",
+    "options": ["$(C_2H_5)_3N \\gt (C_2H_5)_2NH \\gt C_2H_5NH_2 \\gt NH_3$", "$C_2H_5NH_2 \\gt (C_2H_5)_2NH \\gt (C_2H_5)_3N \\gt NH_3$", "$(C_2H_5)_2NH \\gt (C_2H_5)_3N \\gt C_2H_5NH_2 \\gt NH_3$", "$(C_2H_5)_2NH \\gt C_2H_5NH_2 \\gt (C_2H_5)_3N \\gt NH_3$"],
+    "answer": "C",
+    "solution": "In water, basicity depends on the +I effect, solvation of the conjugate acid by H-bonding and steric hindrance together. For ethyl amines the $pK_b$ values are $(C_2H_5)_2NH$ 3.00, $(C_2H_5)_3N$ 3.25, $C_2H_5NH_2$ 3.29, $NH_3$ 4.75. So the order is $2^{\\circ} \\gt 3^{\\circ} \\gt 1^{\\circ} \\gt NH_3$."
+  },
+  {
+    "type": "single",
+    "chapter": "Biomolecules",
+    "text": "Consider the following statements:\nA. Sucrose is a non-reducing sugar.\nB. Glucose gives a positive Schiff's test for aldehydes.\nC. Maltose is made of two $\\alpha$-D-glucose units joined by a C1–C4 glycosidic linkage.\nD. Amylose is a highly branched polymer of $\\alpha$-D-glucose.\nE. The sugar present in DNA is $\\beta$-D-2-deoxyribose.\nChoose the correct answer from the options given below:",
+    "options": ["A, B and C only", "B, D and E only", "A, C, D and E only", "A, C and E only"],
+    "answer": "D",
+    "solution": "A is true: both anomeric carbons are used in the glycosidic bond. B is false: glucose does not give Schiff's test, which is evidence for its cyclic structure. C is true. D is false: amylose is linear (C1–C4 links); amylopectin is the branched one. E is true. Correct: A, C and E only."
+  },
+  {
+    "type": "single",
+    "chapter": "Principles Related to Practical Chemistry",
+    "text": "Match List-I (cation) with List-II (observation in its confirmatory test):\nList-I\n(A) $Fe^{3+}$\n(B) $Ni^{2+}$\n(C) $Cu^{2+}$\n(D) $Pb^{2+}$\nList-II\n(I) Rosy red precipitate with dimethylglyoxime in ammoniacal medium\n(II) Yellow precipitate with potassium chromate\n(III) Prussian blue colour with potassium ferrocyanide\n(IV) Chocolate brown precipitate with potassium ferrocyanide\nChoose the correct answer from the options given below:",
+    "options": ["A-I, B-III, C-IV, D-II", "A-III, B-I, C-IV, D-II", "A-III, B-IV, C-I, D-II", "A-IV, B-I, C-III, D-II"],
+    "answer": "B",
+    "solution": "$Fe^{3+}$ gives Prussian blue $Fe_4[Fe(CN)_6]_3$. $Ni^{2+}$ gives the rosy red nickel dimethylglyoximate. $Cu^{2+}$ gives chocolate brown $Cu_2[Fe(CN)_6]$. $Pb^{2+}$ gives yellow $PbCrO_4$. So A-III, B-I, C-IV, D-II."
+  },
+  {
+    "type": "integer",
+    "chapter": "Chemical Kinetics",
+    "text": "The half-life of a first order reaction is 20 min. The time (in min) required for the concentration of the reactant to fall from 0.8 M to 0.1 M is ______.",
+    "answer": 60,
+    "solution": "0.8 M to 0.1 M is a fall by a factor of 8 $= 2^3$, i.e. 3 half-lives. For a first order reaction the half-life does not depend on concentration, so time $= 3 \\times 20 = 60$ min."
+  },
+  {
+    "type": "integer",
+    "chapter": "Coordination Compounds",
+    "text": "The total number of unpaired electrons in the following complex ions taken together is ______.\n$[Fe(CN)_6]^{4-}$, $[Fe(H_2O)_6]^{3+}$, $[NiCl_4]^{2-}$, $[Cr(NH_3)_6]^{3+}$",
+    "answer": 10,
+    "solution": "$[Fe(CN)_6]^{4-}$: $Fe^{2+}$, $d^6$ with strong field $CN^-$, low spin $t_{2g}^6$: 0. $[Fe(H_2O)_6]^{3+}$: $Fe^{3+}$, $d^5$ high spin: 5. $[NiCl_4]^{2-}$: $Ni^{2+}$, $d^8$, tetrahedral: 2. $[Cr(NH_3)_6]^{3+}$: $Cr^{3+}$, $d^3$: 3. Total $= 0 + 5 + 2 + 3 = 10$."
+  },
+  {
+    "type": "integer",
+    "chapter": "Redox Reactions",
+    "text": "The volume (in mL) of 0.02 M acidified $K_2Cr_2O_7$ solution required to completely oxidise 36 mL of 0.1 M $FeSO_4$ solution is ______.",
+    "answer": 30,
+    "solution": "$Cr_2O_7^{2-} + 6Fe^{2+} + 14H^+ \\rightarrow 2Cr^{3+} + 6Fe^{3+} + 7H_2O$. Moles of $Fe^{2+} = 36 \\times 0.1 = 3.6$ mmol, so dichromate needed $= 3.6/6 = 0.6$ mmol. Volume $= 0.6/0.02 = 30$ mL."
+  },
+  {
+    "type": "integer",
+    "chapter": "Equilibrium",
+    "text": "The dissociation constant of a weak monobasic acid HA is $1.0 \\times 10^{-5}$ at 298 K. The pH of a 0.1 M aqueous solution of its sodium salt NaA at 298 K is ______. ($K_w = 1.0 \\times 10^{-14}$)",
+    "answer": 9,
+    "solution": "$A^-$ hydrolyses: $K_h = K_w/K_a = 10^{-9}$. $[OH^-] = \\sqrt{K_h c} = \\sqrt{10^{-9} \\times 0.1} = 10^{-5}$ M, so pOH = 5 and pH = 9. (Equivalently, pH $= 7 + \\frac{1}{2}pK_a + \\frac{1}{2}\\log c = 7 + 2.5 - 0.5 = 9$.)"
+  },
+  {
+    "type": "integer",
+    "chapter": "Hydrocarbons",
+    "text": "How many of the following species are aromatic?\nBenzene, cyclopentadienyl anion, cycloheptatrienyl (tropylium) cation, cyclooctatetraene, pyridine, furan, cyclopropenyl cation, cyclobutadiene, cyclopentadienyl cation",
+    "answer": 6,
+    "solution": "Aromatic species are cyclic, planar and fully conjugated with $(4n+2)\\pi$ electrons. Benzene (6), cyclopentadienyl anion (6), tropylium cation (6), pyridine (6), furan (6, one O lone pair included) and cyclopropenyl cation (2) are aromatic. Cyclooctatetraene is non-planar (tub-shaped), and cyclobutadiene (4) and the cyclopentadienyl cation (4) are antiaromatic. Count = 6."
+  }
+]

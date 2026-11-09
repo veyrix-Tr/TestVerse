@@ -19,6 +19,13 @@ Create an admin (or turn an existing account into one and set its password):
 ADMIN_EMAIL=you@example.com ADMIN_PASSWORD='a-strong-password' ADMIN_NAME='Studyverse team' npm run create-admin
 ```
 
+Publish the free mock tests (2 NEET, 2 JEE Main; papers in `seed/free-tests/`).
+Run it again after editing a paper; `-- --check` only checks the papers:
+
+```bash
+npm run seed:free-tests
+```
+
 Admins log in on the normal `/login` page and land on `/admin`. Protect admin
 API routes with `requireAuth, requireAdmin` from `middleware/auth.js`.
 
@@ -82,15 +89,44 @@ Papers are JSON in the format described in [`docs/test-format.md`](docs/test-for
 | --- | --- | --- | --- |
 | GET | `/admin/tests` | — | `{ tests }` with `attempts` (started) and `submitted` counts |
 | POST | `/admin/tests/validate` | `{ paper, subject, marking }` | `{ ok: true, summary, paper }` or `{ ok: false, error, errors: [...] }`; saves nothing |
-| POST | `/admin/tests` | `{ title, subject, exam, durationMin, instructions, marking, opensAt, closesAt, paper, publish? }` | `{ test }`. A draft may have no paper; publishing needs one |
+| POST | `/admin/tests` | `{ title, subject, exam, isFree?, durationMin, instructions, marking, opensAt, closesAt, paper, publish? }` | `{ test }`. A draft may have no paper; publishing needs one |
 | GET | `/admin/tests/:id` | — | `{ test }` incl. `paper` (with answers) and `source` (the JSON as given) |
 | PUT | `/admin/tests/:id` | same as create | `{ test }`. 409 if students have started it and the paper or marking changed |
 | POST | `/admin/tests/:id/publish` · `/unpublish` | — | `{ test }` |
 | DELETE | `/admin/tests/:id` | — | Deletes the test and its attempts |
 
 `paper` may be sent as a JSON string (what was pasted) or as parsed JSON.
+`audience` is `{ mode: 'all' | 'custom', batchIds, groupIds, studentIds }`
+(omit it to leave the audience unchanged; it can change even after attempts).
 `marking` is `{ single: {correct, wrong}, multiple: {correct, wrong, partial}, integer: {…}, numerical: {…} }`;
 missing parts use the defaults (+4/−1, +4/−2 with partial, +4/0, +4/0).
+
+## Students & groups — admin `/api/admin` (admins only)
+
+| Method | Path | Body | Result |
+| --- | --- | --- | --- |
+| GET | `/admin/students?q=&batch=&status=active\|pending\|none&group=&offset=&limit=` | — | `{ students, total, summary }`; each with batch, groups and results summary (`stats.submitted`, `avgPct`, `lastAt`) |
+| GET | `/admin/students/:id` | — | `{ student, results, inProgress, assignedTests }` |
+| POST · DELETE | `/admin/students/:id/tests` · `/admin/students/:id/tests/:testId` | `{ testId }` | Give a test to one student / take it back |
+| GET · POST | `/admin/groups` | `{ name, description, studentIds }` | List (with member and test counts) / create |
+| GET · PUT · DELETE | `/admin/groups/:id` | `{ name?, description? }` | Members (with results summary) and tests given / rename / delete |
+| POST · DELETE | `/admin/groups/:id/members` · `/admin/groups/:id/members/:userId` | `{ studentIds }` | Add / remove members |
+| POST · DELETE | `/admin/groups/:id/tests` · `/admin/groups/:id/tests/:testId` | `{ testId }` | Give a test to the group / take it back |
+| GET | `/admin/batches` | — | Every batch with its number of active students |
+
+Giving a test that is open to everyone changes nothing and replies `alreadyOpen: true`.
+
+## Who can take a test
+
+A **free** test (`isFree`) is open to every student of its exam (`jee` covers
+JEE Main and JEE Advanced students; no exam means everyone), with or without a
+batch; its audience doesn't apply. Otherwise a test's audience is **everyone**
+(default) or **chosen people**: any mix of batches, groups and students. A
+student sees and can take a published test when it's free for their exam, it's
+for everyone *of their exam* and they have an *active* batch, their active
+batch is chosen, they're in a chosen group, they're chosen directly, or they've
+already started it (so later changes never hide a result). The rule lives in `lib/access.js` and is applied to every
+student test route; anything else is a 404.
 
 ## Tests — students `/api/tests` (signed in)
 

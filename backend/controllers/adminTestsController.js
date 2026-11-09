@@ -1,6 +1,10 @@
 const { Prisma } = require('@prisma/client');
 const prisma = require('../lib/prisma');
 const { normalizePaper, normalizeMarking } = require('../lib/paperFormat');
+const { AUDIENCE_INCLUDE, publicAudience, readAudience, writeAudience } = require('../lib/audience');
+
+// What every admin test reply loads: attempt count + who it's given to.
+const WITH = { _count: { select: { attempts: true } }, ...AUDIENCE_INCLUDE };
 
 const EXAMS        = ['jee', 'neet'];
 const MAX_DURATION = 600; // minutes
@@ -51,7 +55,8 @@ const readDetails = (b) => {
   if (opensAt === undefined) return { field: 'opensAt', error: 'The opening time is not a valid date.' };
   if (closesAt === undefined) return { field: 'closesAt', error: 'The closing time is not a valid date.' };
   if (opensAt && closesAt && closesAt <= opensAt) return { field: 'closesAt', error: 'The test must close after it opens.' };
-  return { data: { title, subject, exam, durationMin, instructions, opensAt, closesAt } };
+  const isFree = b.isFree === true;
+  return { data: { title, subject, exam, isFree, durationMin, instructions, opensAt, closesAt } };
 };
 
 const summaryOf = (t) => ({
@@ -59,6 +64,7 @@ const summaryOf = (t) => ({
   title:         t.title,
   subject:       t.subject,
   exam:          t.exam,
+  isFree:        t.isFree,
   durationMin:   t.durationMin,
   questionCount: t.questionCount,
   totalMarks:    t.totalMarks,
@@ -68,6 +74,7 @@ const summaryOf = (t) => ({
   closesAt:      t.closesAt,
   hasPaper:      t.paper != null,
   attempts:      t._count ? t._count.attempts : undefined,
+  audience:      t.batches ? publicAudience(t) : { mode: t.audience, batches: [], groups: [], students: [] },
   submitted:     t.submitted,
   createdAt:     t.createdAt,
   updatedAt:     t.updatedAt,
@@ -101,7 +108,7 @@ const listTests = async (req, res) => {
   try {
     const tests = await prisma.test.findMany({
       orderBy: { createdAt: 'desc' },
-      include: { _count: { select: { attempts: true } } },
+      include: WITH,
     });
     const done = await prisma.attempt.groupBy({ by: ['testId'], where: { submittedAt: { not: null } }, _count: { _all: true } });
     const submitted = Object.fromEntries(done.map((d) => [d.testId, d._count._all]));
@@ -127,17 +134,20 @@ const validatePaper = async (req, res) => {
 };
 
 // POST /api/admin/tests
-// Body: { title, subject, exam, durationMin, instructions, marking, opensAt, closesAt, paper, publish? }
+// Body: { title, subject, exam, isFree?, durationMin, instructions, marking, opensAt, closesAt, paper, publish?,
+//         audience?: { mode: 'all'|'custom', batchIds, groupIds, studentIds } }
 const createTest = async (req, res) => {
   try {
     const d = readDetails(req.body);
     if (d.error) return res.status(400).json(d);
+    const a = await readAudience(req.body.audience);
+    if (a.error) return res.status(400).json(a);
     const p = checkPaper(req.body.paper, d.data.subject, req.body.marking);
     if (p.status) return res.status(p.status).json(p.body);
     const publish = req.body.publish === true;
     if (publish && !p.paper) return res.status(400).json({ field: 'paper', error: 'Add the question paper before publishing.' });
 
-    const test = await prisma.test.create({
+    const created = await prisma.test.create({
       data: {
         ...d.data,
         marking:       p.marking,
@@ -150,7 +160,9 @@ const createTest = async (req, res) => {
         createdById:   req.user.id,
       },
     });
-    res.status(201).json({ message: publish ? 'Test published' : 'Draft saved', test: fullOf({ ...test, _count: { attempts: 0 }, submitted: 0 }) });
+    if (a.audience) await prisma.$transaction(writeAudience(prisma, created.id, a.audience));
+    const test = await prisma.test.findUnique({ where: { id: created.id }, include: WITH });
+    res.status(201).json({ message: publish ? 'Test published' : 'Draft saved', test: fullOf({ ...test, submitted: 0 }) });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Could not save the test' });
@@ -160,7 +172,7 @@ const createTest = async (req, res) => {
 // GET /api/admin/tests/:id — everything, including answers and the original JSON
 const getTest = async (req, res) => {
   try {
-    const test = await prisma.test.findUnique({ where: { id: req.params.id }, include: { _count: { select: { attempts: true } } } });
+    const test = await prisma.test.findUnique({ where: { id: req.params.id }, include: WITH });
     if (!test) return res.status(404).json({ error: 'Test not found' });
     res.json({ test: fullOf(test) });
   } catch (error) {
@@ -178,6 +190,8 @@ const updateTest = async (req, res) => {
 
     const d = readDetails(req.body);
     if (d.error) return res.status(400).json(d);
+    const a = await readAudience(req.body.audience);
+    if (a.error) return res.status(400).json(a);
     const p = checkPaper(req.body.paper, d.data.subject, req.body.marking);
     if (p.status) return res.status(p.status).json(p.body);
 
@@ -200,7 +214,10 @@ const updateTest = async (req, res) => {
         totalMarks:    p.summary ? p.summary.totalMarks : 0,
       });
     }
-    const test = await prisma.test.update({ where: { id: existing.id }, data, include: { _count: { select: { attempts: true } } } });
+    await prisma.test.update({ where: { id: existing.id }, data });
+    // The audience can always change (who may take it), even once attempted
+    if (a.audience) await prisma.$transaction(writeAudience(prisma, existing.id, a.audience));
+    const test = await prisma.test.findUnique({ where: { id: existing.id }, include: WITH });
     res.json({ message: 'Test saved', test: fullOf(test) });
   } catch (error) {
     console.error(error);
@@ -214,7 +231,7 @@ const setStatus = (status) => async (req, res) => {
     const test = await prisma.test.findUnique({ where: { id: req.params.id } });
     if (!test) return res.status(404).json({ error: 'Test not found' });
     if (status === 'published' && !test.paper) return res.status(400).json({ field: 'paper', error: 'Add the question paper before publishing.' });
-    const updated = await prisma.test.update({ where: { id: test.id }, data: { status }, include: { _count: { select: { attempts: true } } } });
+    const updated = await prisma.test.update({ where: { id: test.id }, data: { status }, include: WITH });
     res.json({ message: status === 'published' ? 'Test published' : 'Test moved back to drafts', test: summaryOf(updated) });
   } catch (error) {
     console.error(error);

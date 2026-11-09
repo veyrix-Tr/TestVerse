@@ -7,7 +7,8 @@ import { usePageMeta } from '../../lib/hooks.js'
 import { clearSession, getToken, loadSession, saveSession } from '../../lib/session.js'
 
 /*
-  route "/subscribe" — after sign-up a student buys their batch. The batch
+  route "/subscribe" — after sign-up a student buys their batch, or skips
+  ahead to the dashboard to take the free mock tests first. The batch
   isn't chosen here: it follows from the exam and class they gave at sign-up
   (JEE + Class 11 -> "11th JEE"), and the server works it out the same way.
   Payment isn't wired in yet: the server activates the batch at once when
@@ -156,6 +157,15 @@ export default function Subscribe() {
                   <p className="sum-note">Wrong exam or class? Contact us before you pay and we'll change it.</p>
                 </>
               )}
+            </div>
+            <div className="free-card">
+              <div>
+                <b>Not ready to pay yet?</b>
+                <span>Take 2 full-length {batch ? EXAM_NAME[batch.exam] + ' ' : ''}mock tests free, with your score and solutions.</span>
+              </div>
+              <Link className="btn btn-outline btn-block" to="/student" viewTransition>
+                Try the free mocks
+              </Link>
             </div>
           </aside>
         </div>

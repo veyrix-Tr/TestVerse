@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
+import AudienceEditor from './AudienceEditor.jsx'
 import PaperPreview from './PaperPreview.jsx'
+import { EVERYONE, audienceBody, audienceFrom } from './studentsApi.js'
 import {
   DEFAULT_MARKING,
   TYPES,
@@ -69,11 +71,13 @@ export default function TestEditor({ id, onBack, onSaved }) {
   const [title, setTitle] = useState('')
   const [subject, setSubject] = useState('')
   const [exam, setExam] = useState('')
+  const [isFree, setIsFree] = useState(false)
   const [duration, setDuration] = useState('180')
   const [opensAt, setOpensAt] = useState('')
   const [closesAt, setClosesAt] = useState('')
   const [marking, setMarking] = useState(() => markingToForm(DEFAULT_MARKING))
   const [instructions, setInstructions] = useState(null) // null = follow the generated default
+  const [audience, setAudience] = useState(EVERYONE)
   const [paperText, setPaperText] = useState('')
   const [mode, setMode] = useState('paste')
   const [fileName, setFileName] = useState('')
@@ -101,11 +105,13 @@ export default function TestEditor({ id, onBack, onSaved }) {
         setTitle(t.title || '')
         setSubject(t.subject || '')
         setExam(t.exam || '')
+        setIsFree(!!t.isFree)
         setDuration(String(t.durationMin || ''))
         setOpensAt(toLocalInput(t.opensAt))
         setClosesAt(toLocalInput(t.closesAt))
         setMarking(markingToForm(t.marking))
         setInstructions(t.instructions || '')
+        setAudience(audienceFrom(t.audience))
         setPaperText(t.source != null ? JSON.stringify(t.source, null, 2) : '')
         setLoaded(true)
       })
@@ -171,12 +177,14 @@ export default function TestEditor({ id, onBack, onSaved }) {
       title: title.trim(),
       subject: subject.trim(),
       exam,
+      isFree,
       durationMin: Number(duration),
       instructions: instrValue,
       marking: markingFromForm(marking),
       opensAt: fromLocalInput(opensAt),
       closesAt: fromLocalInput(closesAt),
       paper: paperText.trim() ? paperText : null,
+      audience: audienceBody(audience),
     }
   }
 
@@ -273,7 +281,7 @@ export default function TestEditor({ id, onBack, onSaved }) {
         <div className="alert a-info">
           <span>
             {original.attempts} student{original.attempts === 1 ? ' has' : 's have'} already started this test, so its question paper and marking are locked.
-            You can still change the title, instructions and timings.
+            You can still change the title, instructions, timings and who can take it.
           </span>
         </div>
       )}
@@ -331,6 +339,15 @@ export default function TestEditor({ id, onBack, onSaved }) {
                 ))}
               </div>
               {err('exam')}
+              <label className="check ts-free">
+                <input type="checkbox" checked={isFree} onChange={(e) => setIsFree(e.target.checked)} />
+                Free test
+              </label>
+              <p className="hint">
+                {isFree
+                  ? `Every ${exam ? (exam === 'jee' ? 'JEE' : 'NEET') + ' ' : ''}student can take it, with or without a batch.`
+                  : 'Only students with an active batch see it.'}
+              </p>
             </div>
             <div data-field="durationMin">
               <label className="l" htmlFor="ts-duration">
@@ -392,9 +409,29 @@ export default function TestEditor({ id, onBack, onSaved }) {
         </div>
       </section>
 
-      {/* 2. Marking */}
+      {/* 2. Who can take it */}
+      <section className="ts-sect" data-field="audience">
+        <SectHead n="2" title="Who can take this test" text="Everyone, or only the batches, groups and students you choose. You can change this at any time." />
+        {isFree ? (
+          <p className="hint">
+            This is a free test, so every {exam ? (exam === 'jee' ? 'JEE' : 'NEET') + ' ' : ''}student can take it and the audience doesn’t apply.
+            Untick “Free test” to choose who gets it.
+          </p>
+        ) : (
+          <AudienceEditor
+            value={audience}
+            error={fieldErr && fieldErr.field === 'audience' ? fieldErr.message : null}
+            onChange={(a) => {
+              setAudience(a)
+              clearErr('audience')
+            }}
+          />
+        )}
+      </section>
+
+      {/* 3. Marking */}
       <section className="ts-sect" data-field="marking">
-        <SectHead n="2" title="Marking scheme" text="Applies to every question of that type, unless a question sets its own marks." />
+        <SectHead n="3" title="Marking scheme" text="Applies to every question of that type, unless a question sets its own marks." />
         <div className="card ts-mk-card">
           <table className="ts-mk">
             <thead>
@@ -462,10 +499,10 @@ export default function TestEditor({ id, onBack, onSaved }) {
         </div>
       </section>
 
-      {/* 3. Instructions */}
+      {/* 4. Instructions */}
       <section className="ts-sect" data-field="instructions">
         <SectHead
-          n="3"
+          n="4"
           title="Instructions"
           text="Shown to students before they start. One rule per line."
           action={
@@ -499,10 +536,10 @@ export default function TestEditor({ id, onBack, onSaved }) {
         </div>
       </section>
 
-      {/* 4. Question paper */}
+      {/* 5. Question paper */}
       <section className="ts-sect" data-field="paper">
         <SectHead
-          n="4"
+          n="5"
           title="Question paper"
           text="Paste the paper as JSON or upload a .json file. It is checked as you type."
           action={
@@ -636,10 +673,10 @@ export default function TestEditor({ id, onBack, onSaved }) {
         </div>
       </section>
 
-      {/* 5. Preview */}
+      {/* 6. Preview */}
       {shownOk && (
         <section className={'ts-sect' + (paperOk ? '' : ' ts-stale')}>
-          <SectHead n="5" title="Preview" text="The questions as the server read them, with the correct answers highlighted." />
+          <SectHead n="6" title="Preview" text="The questions as the server read them, with the correct answers highlighted." />
           <PaperPreview paper={shownOk.paper} />
         </section>
       )}
@@ -728,6 +765,7 @@ const FIELD_NAME = {
   instructions: 'instructions',
   marking: 'marking scheme',
   paper: 'question paper',
+  audience: 'who can take this test',
 }
 
 const LANG = { en: 'English', hi: 'Hindi' }

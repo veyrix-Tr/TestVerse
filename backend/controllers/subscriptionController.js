@@ -1,5 +1,6 @@
 const prisma = require('../lib/prisma');
 const { publicBatch, publicSubscription } = require('../lib/publicUser');
+const { examFamily } = require('../lib/access');
 
 // Until Cashfree is wired in, MOCK_PAYMENTS=true activates a purchase straight
 // away so the rest of the flow can be built and tested. Never in production.
@@ -7,11 +8,10 @@ const mockPayments = () => process.env.MOCK_PAYMENTS === 'true' && process.env.N
 
 // A student's batch follows from the exam and class they gave at sign-up:
 // JEE Main / JEE Advanced + "Class 11" -> "11th JEE", and so on.
-const batchExam = (exam) => (exam === 'neet' ? 'neet' : exam === 'jee-main' || exam === 'jee-advanced' ? 'jee' : null);
 
 const batchFor = async (userId) => {
   const user = await prisma.user.findUnique({ where: { id: userId }, select: { exam: true, grade: true } });
-  const exam = batchExam(user && user.exam);
+  const exam = examFamily(user && user.exam);
   if (!exam || !user.grade) return null;
   return prisma.batch.findFirst({ where: { exam, grade: user.grade, isActive: true } });
 };

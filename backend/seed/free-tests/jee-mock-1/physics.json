@@ -1,0 +1,197 @@
+[
+  {
+    "type": "single",
+    "chapter": "Units and Measurements",
+    "text": "If force $(F)$, velocity $(v)$ and time $(T)$ are taken as the fundamental quantities, the dimensional formula of Planck's constant $h$ is:",
+    "options": ["$[F v^{2} T]$", "$[F v^{-1} T^{2}]$", "$[F v T^{2}]$", "$[F^{2} v T]$"],
+    "answer": "C",
+    "solution": "$h = E/\\nu$, so $[h] = [E][T]$. Energy $=$ force $\\times$ length and length $= vT$, so $[E] = [F v T]$. Hence $[h] = [F v T^{2}]$."
+  },
+  {
+    "type": "single",
+    "chapter": "Motion in a Plane",
+    "text": "A ball is projected from level ground such that its horizontal range is $4\\sqrt{3}$ times its maximum height. The angle of projection with the horizontal is:",
+    "options": ["$30^\\circ$", "$60^\\circ$", "$45^\\circ$", "$\\tan^{-1}(4\\sqrt{3})$"],
+    "answer": "A",
+    "solution": "$R = \\dfrac{2u^2\\sin\\theta\\cos\\theta}{g}$ and $H = \\dfrac{u^2\\sin^2\\theta}{2g}$, so $\\dfrac{R}{H} = 4\\cot\\theta$. Setting $4\\cot\\theta = 4\\sqrt{3}$ gives $\\cot\\theta = \\sqrt{3}$, i.e. $\\theta = 30^\\circ$."
+  },
+  {
+    "type": "single",
+    "chapter": "Laws of Motion",
+    "text": "A block A of mass 4 kg lies on a rough horizontal table (coefficient of kinetic friction 0.25). It is connected by a light inextensible string passing over a smooth pulley at the edge of the table to a block B of mass 6 kg hanging vertically. When the system is released, the tension in the string is: (Take $g = 10\\ \\text{m s}^{-2}$)",
+    "options": ["24 N", "36 N", "30 N", "40 N"],
+    "answer": "C",
+    "solution": "Friction on A $= 0.25 \\times 40 = 10$ N. Acceleration $a = \\dfrac{60 - 10}{4 + 6} = 5\\ \\text{m s}^{-2}$. For B: $60 - T = 6 \\times 5$, so $T = 30$ N."
+  },
+  {
+    "type": "single",
+    "chapter": "Work, Energy and Power",
+    "text": "A particle of mass 2 kg moves along the x-axis under a force $F = (6x - 2)$ N, where $x$ is in metres. If the particle starts from rest at $x = 1$ m, its speed at $x = 3$ m is:",
+    "options": ["$\\sqrt{10}\\ \\text{m s}^{-1}$", "$2\\sqrt{5}\\ \\text{m s}^{-1}$", "$2\\sqrt{10}\\ \\text{m s}^{-1}$", "$4\\ \\text{m s}^{-1}$"],
+    "answer": "B",
+    "solution": "$W = \\int_1^3 (6x - 2)\\,dx = [3x^2 - 2x]_1^3 = 21 - 1 = 20$ J. By the work-energy theorem, $\\tfrac{1}{2}(2)v^2 = 20$, so $v = \\sqrt{20} = 2\\sqrt{5}\\ \\text{m s}^{-1}$."
+  },
+  {
+    "type": "single",
+    "chapter": "System of Particles and Rotational Motion",
+    "text": "A solid cylinder rolling without slipping on a horizontal surface with a speed of $4\\ \\text{m s}^{-1}$ reaches the bottom of an inclined plane and continues to roll up it without slipping. The maximum vertical height it reaches is: (Take $g = 10\\ \\text{m s}^{-2}$)",
+    "options": ["0.8 m", "1.6 m", "2.4 m", "1.2 m"],
+    "answer": "D",
+    "solution": "Total KE of a rolling solid cylinder $= \\tfrac{1}{2}mv^2\\left(1 + \\tfrac{1}{2}\\right) = \\tfrac{3}{4}mv^2$. Equating to $mgh$: $h = \\dfrac{3v^2}{4g} = \\dfrac{3 \\times 16}{40} = 1.2$ m."
+  },
+  {
+    "type": "single",
+    "chapter": "Gravitation",
+    "text": "A satellite revolves in a circular orbit at a height equal to the radius $R$ of the Earth above its surface. The ratio of the orbital speed of the satellite to the escape speed from the Earth's surface is:",
+    "options": ["$\\dfrac{1}{2}$", "$\\dfrac{1}{\\sqrt{2}}$", "$\\dfrac{1}{4}$", "$\\sqrt{2}$"],
+    "answer": "A",
+    "solution": "Orbital radius $= 2R$, so $v_o = \\sqrt{\\dfrac{GM}{2R}}$. Escape speed $v_e = \\sqrt{\\dfrac{2GM}{R}}$. Ratio $= \\sqrt{\\dfrac{1}{4}} = \\dfrac{1}{2}$."
+  },
+  {
+    "type": "single",
+    "chapter": "Mechanical Properties of Fluids",
+    "text": "Two identical spherical rain drops, each falling through air with terminal velocity $v$, coalesce to form a single bigger drop. The terminal velocity of the bigger drop is:",
+    "options": ["$2v$", "$4^{1/3}v$", "$\\sqrt{2}\\,v$", "$2^{1/3}v$"],
+    "answer": "B",
+    "solution": "Volume is conserved: $R^3 = 2r^3$, so $R = 2^{1/3}r$. Terminal velocity $\\propto$ (radius)$^2$, so $v' = 2^{2/3}v = 4^{1/3}v$."
+  },
+  {
+    "type": "single",
+    "chapter": "Thermodynamics",
+    "text": "Given below are two statements:\nStatement I: In a cyclic process, the net heat absorbed by the system is always zero.\nStatement II: In an isochoric process of an ideal gas, the work done by the gas is zero and the heat supplied equals the change in its internal energy.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": ["Both Statement I and Statement II are true", "Both Statement I and Statement II are false", "Statement I is true but Statement II is false", "Statement I is false but Statement II is true"],
+    "answer": "D",
+    "solution": "In a cycle $\\Delta U = 0$, so net $Q$ = net work done, which is the enclosed area and generally non-zero: Statement I is false. In an isochoric process $W = 0$, so $Q = \\Delta U$: Statement II is true."
+  },
+  {
+    "type": "single",
+    "chapter": "Atoms",
+    "text": "The ratio of the wavelength of the first line of the Lyman series to that of the first line of the Balmer series in the hydrogen spectrum is:",
+    "options": ["$\\dfrac{27}{5}$", "$\\dfrac{5}{27}$", "$\\dfrac{4}{9}$", "$\\dfrac{9}{4}$"],
+    "answer": "B",
+    "solution": "Lyman first line: $\\dfrac{1}{\\lambda_L} = R\\left(1 - \\dfrac{1}{4}\\right) = \\dfrac{3R}{4}$. Balmer first line: $\\dfrac{1}{\\lambda_B} = R\\left(\\dfrac{1}{4} - \\dfrac{1}{9}\\right) = \\dfrac{5R}{36}$. So $\\dfrac{\\lambda_L}{\\lambda_B} = \\dfrac{5/36}{3/4} = \\dfrac{5}{27}$."
+  },
+  {
+    "type": "single",
+    "chapter": "Oscillations",
+    "text": "A simple pendulum has time period $T$ when at rest on the ground. When it is suspended in a lift moving upwards with an acceleration of $g/3$, its time period becomes:",
+    "options": ["$\\dfrac{2}{\\sqrt{3}}\\,T$", "$\\sqrt{\\dfrac{2}{3}}\\,T$", "$\\dfrac{\\sqrt{3}}{2}\\,T$", "$\\sqrt{\\dfrac{3}{2}}\\,T$"],
+    "answer": "C",
+    "solution": "Effective gravity $g_{eff} = g + \\dfrac{g}{3} = \\dfrac{4g}{3}$. Since $T \\propto \\dfrac{1}{\\sqrt{g_{eff}}}$, $T' = T\\sqrt{\\dfrac{3}{4}} = \\dfrac{\\sqrt{3}}{2}\\,T$."
+  },
+  {
+    "type": "single",
+    "chapter": "Waves",
+    "text": "The fundamental frequency of a pipe closed at one end is equal to the frequency of the first overtone of a pipe open at both ends of length 60 cm. Neglecting end corrections, the length of the closed pipe is:",
+    "options": ["15 cm", "30 cm", "60 cm", "7.5 cm"],
+    "answer": "A",
+    "solution": "Closed pipe fundamental: $\\dfrac{v}{4L_c}$. Open pipe first overtone (second harmonic): $\\dfrac{2v}{2L_o} = \\dfrac{v}{L_o}$. Equating, $L_c = \\dfrac{L_o}{4} = 15$ cm."
+  },
+  {
+    "type": "single",
+    "chapter": "Electric Charges and Fields",
+    "text": "A point charge $q$ is placed at one corner of a cube. The electric flux through one of the faces of the cube that does NOT touch the charge is:",
+    "options": ["$\\dfrac{q}{8\\varepsilon_0}$", "$\\dfrac{q}{6\\varepsilon_0}$", "zero", "$\\dfrac{q}{24\\varepsilon_0}$"],
+    "answer": "D",
+    "solution": "Eight such cubes enclose the charge symmetrically, so each cube gets $\\dfrac{q}{8\\varepsilon_0}$. The three faces meeting at the charge have zero flux (field lies in their planes), so each of the other three faces gets $\\dfrac{q}{24\\varepsilon_0}$."
+  },
+  {
+    "type": "single",
+    "chapter": "Electrostatic Potential and Capacitance",
+    "text": "A parallel plate air capacitor has capacitance $C_0$ and plate separation $d$. A dielectric slab of dielectric constant 4, thickness $d/2$ and area equal to that of the plates is inserted between the plates, parallel to them. The new capacitance is:",
+    "options": ["$2.5\\,C_0$", "$1.25\\,C_0$", "$1.6\\,C_0$", "$4\\,C_0$"],
+    "answer": "C",
+    "solution": "$C = \\dfrac{\\varepsilon_0 A}{d - t + t/K} = \\dfrac{\\varepsilon_0 A}{d/2 + d/8} = \\dfrac{\\varepsilon_0 A}{5d/8} = \\dfrac{8}{5}C_0 = 1.6\\,C_0$."
+  },
+  {
+    "type": "single",
+    "chapter": "Current Electricity",
+    "text": "A uniform wire of resistance $R$ is stretched uniformly so that its length becomes three times its original length. It is then cut into three equal parts, which are connected in parallel. The equivalent resistance of the combination is:",
+    "options": ["$R$", "$3R$", "$9R$", "$\\dfrac{R}{3}$"],
+    "answer": "A",
+    "solution": "At constant volume, $R \\propto l^2$, so the stretched wire has resistance $9R$. Each third has $3R$, and three $3R$ resistors in parallel give $R$."
+  },
+  {
+    "type": "single",
+    "chapter": "Moving Charges and Magnetism",
+    "text": "A proton and an $\\alpha$-particle, having the same kinetic energy, enter a uniform magnetic field perpendicular to it. The ratio of the radii of their circular paths $r_p : r_\\alpha$ is:",
+    "options": ["$1 : 2$", "$1 : 1$", "$2 : 1$", "$1 : \\sqrt{2}$"],
+    "answer": "B",
+    "solution": "$r = \\dfrac{mv}{qB} = \\dfrac{\\sqrt{2mK}}{qB}$. For the $\\alpha$-particle $m = 4m_p$ and $q = 2e$, so $r_\\alpha \\propto \\dfrac{\\sqrt{4}}{2} = 1$, same as the proton. Ratio $= 1 : 1$."
+  },
+  {
+    "type": "single",
+    "chapter": "Electromagnetic Induction",
+    "text": "A conducting rod of length 1 m rotates with a constant angular speed of $20\\ \\text{rad s}^{-1}$ about an axis through one of its ends, perpendicular to the rod. A uniform magnetic field of 0.5 T acts parallel to the axis of rotation. The emf induced between the ends of the rod is:",
+    "options": ["10 V", "2.5 V", "20 V", "5 V"],
+    "answer": "D",
+    "solution": "$\\varepsilon = \\tfrac{1}{2}B\\omega l^2 = \\tfrac{1}{2} \\times 0.5 \\times 20 \\times 1^2 = 5$ V."
+  },
+  {
+    "type": "single",
+    "chapter": "Electromagnetic Waves",
+    "text": "Match List-I with List-II:\nList-I (Electromagnetic wave)\n(A) Microwaves\n(B) Infrared waves\n(C) Ultraviolet rays\n(D) X-rays\nList-II (Use)\n(I) Radar systems used in aircraft navigation\n(II) Detecting fractures of bones\n(III) LASIK eye surgery and killing germs in water purifiers\n(IV) Physical therapy (heat lamps)\nChoose the correct answer from the options given below:",
+    "options": ["A-IV, B-I, C-II, D-III", "A-I, B-III, C-IV, D-II", "A-I, B-IV, C-III, D-II", "A-III, B-IV, C-I, D-II"],
+    "answer": "C",
+    "solution": "Microwaves are used in radar (I), infrared lamps in physical therapy (IV), UV in LASIK surgery and water purifiers (III), and X-rays in diagnosing bone fractures (II). So A-I, B-IV, C-III, D-II."
+  },
+  {
+    "type": "single",
+    "chapter": "Ray Optics and Optical Instruments",
+    "text": "Given below are two statements: one is labelled as Assertion A and the other is labelled as Reason R.\nAssertion A: A suitably cut diamond sparkles brilliantly.\nReason R: The critical angle for the diamond-air interface is very small (about $24^\\circ$), so light entering the diamond undergoes multiple total internal reflections.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": ["Both A and R are true and R is the correct explanation of A", "Both A and R are true but R is NOT the correct explanation of A", "A is true but R is false", "A is false but R is true"],
+    "answer": "A",
+    "solution": "Diamond has $n \\approx 2.42$, so its critical angle is about $24^\\circ$. Cutting the faces suitably makes light entering it undergo repeated total internal reflection before emerging, which causes the sparkle. Both A and R are true, and R explains A."
+  },
+  {
+    "type": "single",
+    "chapter": "Dual Nature of Radiation and Matter",
+    "text": "Light of wavelength 310 nm falls on a metal surface of work function 2.0 eV. The stopping potential for the emitted photoelectrons is: (Take $hc = 1240$ eV nm)",
+    "options": ["4 V", "2 V", "6 V", "1 V"],
+    "answer": "B",
+    "solution": "Photon energy $= \\dfrac{1240}{310} = 4.0$ eV. $K_{max} = 4.0 - 2.0 = 2.0$ eV, so the stopping potential is $V_0 = 2$ V."
+  },
+  {
+    "type": "single",
+    "chapter": "Semiconductor Electronics",
+    "text": "Choose the correct statements:\n(A) In an n-type semiconductor, electrons are the majority carriers and the dopant is pentavalent.\n(B) The width of the depletion region of a p-n junction increases under forward bias.\n(C) A Zener diode is used as a voltage regulator when operated in reverse bias.\n(D) The output frequency of a full-wave rectifier is equal to the input ac frequency.\n(E) The energy band gap of silicon is larger than that of germanium.\nChoose the correct answer from the options given below:",
+    "options": ["A, B and C only", "A, C and D only", "B, D and E only", "A, C and E only"],
+    "answer": "D",
+    "solution": "A is true. B is false: forward bias reduces the depletion width. C is true. D is false: a full-wave rectifier's output ripple has twice the input frequency. E is true (Si about 1.1 eV, Ge about 0.7 eV). So A, C and E only."
+  },
+  {
+    "type": "integer",
+    "chapter": "System of Particles and Rotational Motion",
+    "text": "A disc of moment of inertia $I$ is rotating freely with angular speed $\\omega$ about a frictionless vertical axis through its centre. A second disc of moment of inertia $3I$, initially at rest, is gently placed coaxially on it, and the two finally rotate together with a common angular speed. The percentage loss in the kinetic energy of the system is ______.",
+    "answer": 75,
+    "solution": "Angular momentum is conserved: $I\\omega = 4I\\omega'$, so $\\omega' = \\omega/4$. Final KE $= \\tfrac{1}{2}(4I)\\dfrac{\\omega^2}{16} = \\tfrac{1}{4}\\left(\\tfrac{1}{2}I\\omega^2\\right)$. Loss $= \\tfrac{3}{4}$ of initial KE, i.e. 75%."
+  },
+  {
+    "type": "integer",
+    "chapter": "Current Electricity",
+    "text": "A battery delivers a current of 2 A when connected across a 4 $\\Omega$ resistor and a current of 1 A when connected across a 10 $\\Omega$ resistor. The maximum power (in W) that this battery can deliver to an external resistor is ______.",
+    "answer": 18,
+    "solution": "$E = 2(4 + r) = 1(10 + r)$ gives $r = 2\\ \\Omega$ and $E = 12$ V. Maximum power is delivered when $R = r$: $P_{max} = \\dfrac{E^2}{4r} = \\dfrac{144}{8} = 18$ W."
+  },
+  {
+    "type": "integer",
+    "chapter": "Alternating Current",
+    "text": "A series LCR circuit with resistance $30\\ \\Omega$, inductive reactance $80\\ \\Omega$ and capacitive reactance $40\\ \\Omega$ is connected to an ac source of rms voltage 200 V. The average power (in W) dissipated in the circuit is ______.",
+    "answer": 480,
+    "solution": "$Z = \\sqrt{30^2 + (80 - 40)^2} = 50\\ \\Omega$, so $I_{rms} = \\dfrac{200}{50} = 4$ A. Power is dissipated only in the resistor: $P = I_{rms}^2 R = 16 \\times 30 = 480$ W."
+  },
+  {
+    "type": "integer",
+    "chapter": "Wave Optics",
+    "text": "In a Young's double slit experiment, the slit separation is 0.3 mm, the screen is 1.2 m from the slits and the wavelength of light used is 500 nm. The distance (in mm) between the third bright fringe on one side of the central maximum and the second dark fringe on the other side is ______.",
+    "answer": 9,
+    "solution": "Fringe width $\\beta = \\dfrac{\\lambda D}{d} = \\dfrac{500 \\times 10^{-9} \\times 1.2}{0.3 \\times 10^{-3}} = 2$ mm. Third bright fringe is at $3\\beta$ and second dark fringe at $1.5\\beta$ on the opposite side, so the separation is $4.5\\beta = 9$ mm."
+  },
+  {
+    "type": "integer",
+    "chapter": "Nuclei",
+    "text": "The half-life of a radioactive substance is 20 minutes. The time interval (in minutes) between the instant when 20% of a sample has decayed and the instant when 80% of it has decayed is ______.",
+    "answer": 40,
+    "solution": "The undecayed amount falls from 80% to 20%, a factor of 4, which takes 2 half-lives $= 2 \\times 20 = 40$ minutes."
+  }
+]

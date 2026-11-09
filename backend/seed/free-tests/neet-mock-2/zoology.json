@@ -1,0 +1,587 @@
+[
+  {
+    "type": "single",
+    "chapter": "Animal Kingdom",
+    "text": "Given below are two statements:\nStatement I: Ctenophores show well-marked bioluminescence and bear eight external rows of ciliated comb plates that help in locomotion.\nStatement II: In ctenophores, fertilisation is internal and development is direct.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "C",
+    "solution": "Ctenophores (comb jellies) show well-marked bioluminescence and have eight rows of ciliated comb plates for locomotion, so Statement I is true. They reproduce only sexually, with external fertilisation and indirect development, so Statement II is false."
+  },
+  {
+    "type": "single",
+    "chapter": "Animal Kingdom",
+    "text": "Match List-I with List-II:\nList-I\n(A) Pila\n(B) Asterias\n(C) Balanoglossus\n(D) Nereis\nList-II\n(I) Water vascular system\n(II) Radula\n(III) Parapodia\n(IV) Body divisible into proboscis, collar and trunk\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-I, B-II, C-IV, D-III",
+      "A-II, B-I, C-IV, D-III",
+      "A-II, B-I, C-III, D-IV",
+      "A-IV, B-I, C-II, D-III"
+    ],
+    "answer": "B",
+    "solution": "Pila is a mollusc whose mouth has a file-like rasping organ, the radula. Asterias is an echinoderm with a water vascular system. Balanoglossus is a hemichordate whose body has a proboscis, a collar and a trunk. Nereis is an aquatic annelid with lateral appendages called parapodia, used for swimming. So A-II, B-I, C-IV, D-III."
+  },
+  {
+    "type": "single",
+    "chapter": "Animal Kingdom",
+    "text": "How many of the following animals are cold-blooded (poikilothermous)?\nPterophyllum, Carcharodon, Salamandra, Corvus, Calotes, Delphinus, Chelone, Macropus",
+    "options": [
+      "Two",
+      "Three",
+      "Four",
+      "Five"
+    ],
+    "answer": "D",
+    "solution": "Pterophyllum (bony fish), Carcharodon (cartilaginous fish), Salamandra (amphibian), Calotes and Chelone (reptiles) are cold-blooded. Corvus (bird), Delphinus and Macropus (mammals) are warm-blooded. That makes five cold-blooded animals."
+  },
+  {
+    "type": "single",
+    "chapter": "Animal Kingdom",
+    "text": "Given below are two statements: one is labelled as Assertion A and the other is labelled as Reason R.\nAssertion A: The long bones of birds are hollow, with air cavities (pneumatic).\nReason R: The digestive tract of birds has additional chambers, the crop and the gizzard.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both A and R are true and R is the correct explanation of A",
+      "Both A and R are true but R is NOT the correct explanation of A",
+      "A is true but R is false",
+      "A is false but R is true"
+    ],
+    "answer": "B",
+    "solution": "NCERT lists both as features of Aves: the long bones are hollow with air cavities, and the digestive tract has a crop and a gizzard. Both are true, but the crop and gizzard have nothing to do with pneumatic bones, so R does not explain A."
+  },
+  {
+    "type": "single",
+    "chapter": "Structural Organisation in Animals",
+    "text": "Choose the correct statements:\nA. Cartilage, bones and blood are specialised connective tissues.\nB. Adipose tissue is a type of dense connective tissue.\nC. Gap junctions stop substances from leaking across a tissue.\nD. Compound epithelium has a limited role in secretion and absorption; it mainly protects against chemical and mechanical stresses.\nE. Tendons attach skeletal muscles to bones, while ligaments attach one bone to another.\nChoose the correct answer from the options given below:",
+    "options": [
+      "A, B and D only",
+      "B, C and E only",
+      "A, D and E only",
+      "A, C, D and E only"
+    ],
+    "answer": "C",
+    "solution": "A, D and E are correct. Adipose tissue is a loose connective tissue, so B is wrong. Tight junctions stop substances from leaking across a tissue, while gap junctions let neighbouring cells communicate, so C is wrong."
+  },
+  {
+    "type": "single",
+    "chapter": "Structural Organisation in Animals",
+    "text": "Match List-I with List-II:\nList-I\n(A) Squamous epithelium\n(B) Cuboidal epithelium\n(C) Ciliated epithelium\n(D) Columnar epithelium\nList-II\n(I) Lining of stomach and intestine\n(II) Walls of blood vessels and air sacs of lungs\n(III) Inner surface of bronchioles and fallopian tubes\n(IV) Tubular parts of nephrons\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-II, B-III, C-IV, D-I",
+      "A-II, B-IV, C-III, D-I",
+      "A-IV, B-II, C-I, D-III",
+      "A-I, B-IV, C-III, D-II"
+    ],
+    "answer": "B",
+    "solution": "Squamous epithelium lines the walls of blood vessels and the air sacs of the lungs. Cuboidal epithelium is found in the ducts of glands and the tubular parts of nephrons. Ciliated epithelium lines bronchioles and fallopian tubes. Columnar epithelium lines the stomach and intestine. So A-II, B-IV, C-III, D-I."
+  },
+  {
+    "type": "single",
+    "chapter": "Biomolecules",
+    "text": "Given below are two statements:\nStatement I: In a polysaccharide chain such as glycogen, the right end is called the reducing end and the left end is called the non-reducing end.\nStatement II: Starch can hold $I_2$ molecules in its helical secondary structure, but cellulose does not form such complex helices and so cannot hold $I_2$.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "A",
+    "solution": "NCERT states that in a polysaccharide chain like glycogen, the right end is the reducing end and the left end is the non-reducing end. Starch forms helices that hold $I_2$ and turn blue, while cellulose does not. Both statements are true."
+  },
+  {
+    "type": "single",
+    "chapter": "Biomolecules",
+    "text": "Match List-I with List-II:\nList-I\n(A) Lecithin\n(B) Adenylic acid\n(C) Chitin\n(D) Palmitic acid\nList-II\n(I) Fatty acid with 16 carbon atoms including the carboxyl carbon\n(II) Complex polysaccharide in the exoskeleton of arthropods\n(III) Nucleotide\n(IV) Phospholipid found in the cell membrane\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-IV, B-III, C-II, D-I",
+      "A-III, B-IV, C-I, D-II",
+      "A-IV, B-II, C-III, D-I",
+      "A-I, B-III, C-II, D-IV"
+    ],
+    "answer": "A",
+    "solution": "Lecithin is a phospholipid found in cell membranes. Adenylic acid is a nucleotide (adenine + sugar + phosphate). Chitin is the complex polysaccharide of arthropod exoskeletons. Palmitic acid has 16 carbons including the carboxyl carbon. So A-IV, B-III, C-II, D-I."
+  },
+  {
+    "type": "single",
+    "chapter": "Biomolecules",
+    "text": "How many of the following statements are correct?\n(a) The first amino acid of a polypeptide is called the C-terminal amino acid.\n(b) Collagen is the most abundant protein in the animal world.\n(c) RuBisCO is the most abundant protein in the whole biosphere.\n(d) Only right-handed helices are observed in proteins.\n(e) Lysine is an acidic amino acid.\n(f) Adult human haemoglobin has four subunits: two of the α type and two of the β type.",
+    "options": [
+      "Three",
+      "Four",
+      "Five",
+      "Six"
+    ],
+    "answer": "B",
+    "solution": "(b), (c), (d) and (f) are correct. The first amino acid is the N-terminal amino acid, so (a) is wrong. Lysine is a basic amino acid (glutamic acid is acidic), so (e) is wrong. Four statements are correct."
+  },
+  {
+    "type": "single",
+    "chapter": "Breathing and Exchange of Gases",
+    "text": "A healthy person has a tidal volume of 500 mL, an inspiratory reserve volume of 2500 mL, an expiratory reserve volume of 1000 mL and a residual volume of 1200 mL. What are this person's vital capacity and functional residual capacity, respectively?",
+    "options": [
+      "3000 mL and 2200 mL",
+      "4000 mL and 2200 mL",
+      "5200 mL and 2200 mL",
+      "4000 mL and 1700 mL"
+    ],
+    "answer": "B",
+    "solution": "Vital capacity = ERV + TV + IRV = 1000 + 500 + 2500 = 4000 mL. Functional residual capacity = ERV + RV = 1000 + 1200 = 2200 mL."
+  },
+  {
+    "type": "single",
+    "chapter": "Breathing and Exchange of Gases",
+    "text": "Given below are two statements: one is labelled as Assertion A and the other is labelled as Reason R.\nAssertion A: The partial pressure of $CO_2$ in deoxygenated blood (45 mm Hg) is higher than that in the alveoli (40 mm Hg).\nReason R: $CO_2$ is 20 to 25 times more soluble than $O_2$, so much more $CO_2$ can diffuse through the diffusion membrane per unit difference in partial pressure.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both A and R are true and R is the correct explanation of A",
+      "Both A and R are true but R is NOT the correct explanation of A",
+      "A is true but R is false",
+      "A is false but R is true"
+    ],
+    "answer": "B",
+    "solution": "Both values in A match NCERT, and R is also a correct statement. However, the higher $pCO_2$ in deoxygenated blood comes from $CO_2$ produced by the tissues, not from its solubility. Solubility only explains why $CO_2$ diffuses efficiently. So R does not explain A."
+  },
+  {
+    "type": "single",
+    "chapter": "Breathing and Exchange of Gases",
+    "text": "Choose the correct statements about the transport of gases:\nA. High $pCO_2$, high $H^+$ concentration and high temperature in the tissues favour the formation of oxyhaemoglobin.\nB. About 97 per cent of $O_2$ is transported by RBCs and the remaining 3 per cent in dissolved form through plasma.\nC. Nearly 20 to 25 per cent of $CO_2$ is transported by RBCs as carbamino-haemoglobin.\nD. Carbonic anhydrase is present in a very low concentration in RBCs.\nE. Under normal physiological conditions, every 100 mL of oxygenated blood delivers about 5 mL of $O_2$ to the tissues.\nChoose the correct answer from the options given below:",
+    "options": [
+      "A, B and C only",
+      "B, C and D only",
+      "B, C and E only",
+      "A, D and E only"
+    ],
+    "answer": "C",
+    "solution": "B, C and E are correct. High $pCO_2$, high $H^+$ and high temperature in the tissues favour dissociation of oxygen from oxyhaemoglobin, not its formation, so A is wrong. Carbonic anhydrase is present in very high concentration in RBCs and only in minute amounts in plasma, so D is wrong."
+  },
+  {
+    "type": "single",
+    "chapter": "Body Fluids and Circulation",
+    "text": "Given below are two statements:\nStatement I: During ventricular systole, the rise in ventricular pressure closes the tricuspid and bicuspid valves, and this closure is associated with the first heart sound, 'lub'.\nStatement II: Atrial systole accounts for about 70 per cent of ventricular filling.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "C",
+    "solution": "When the ventricles contract, the rising pressure closes the AV (tricuspid and bicuspid) valves, and this closure produces the first heart sound 'lub', so Statement I is true. Atrial systole increases ventricular filling by only about 30 per cent, so Statement II is false."
+  },
+  {
+    "type": "single",
+    "chapter": "Body Fluids and Circulation",
+    "text": "Match List-I with List-II:\nList-I\n(A) Neutrophils\n(B) Basophils\n(C) Eosinophils\n(D) Lymphocytes\nList-II\n(I) 20-25 per cent of total WBCs; responsible for immune responses\n(II) Secrete histamine, serotonin and heparin\n(III) 60-65 per cent of total WBCs; phagocytic\n(IV) 2-3 per cent of total WBCs; associated with allergic reactions\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-III, B-IV, C-II, D-I",
+      "A-I, B-II, C-IV, D-III",
+      "A-IV, B-II, C-III, D-I",
+      "A-III, B-II, C-IV, D-I"
+    ],
+    "answer": "D",
+    "solution": "Neutrophils make up 60-65 per cent of WBCs and are phagocytic. Basophils secrete histamine, serotonin and heparin. Eosinophils make up 2-3 per cent, resist infections and are associated with allergic reactions. Lymphocytes make up 20-25 per cent and are responsible for immune responses. So A-III, B-II, C-IV, D-I."
+  },
+  {
+    "type": "single",
+    "chapter": "Body Fluids and Circulation",
+    "text": "Given below are two statements: one is labelled as Assertion A and the other is labelled as Reason R.\nAssertion A: Coronary artery disease reduces the blood supply to the heart muscle.\nReason R: In coronary artery disease, deposits of calcium, fat, cholesterol and fibrous tissue make the lumen of the coronary arteries narrower.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both A and R are true and R is the correct explanation of A",
+      "Both A and R are true but R is NOT the correct explanation of A",
+      "A is true but R is false",
+      "A is false but R is true"
+    ],
+    "answer": "A",
+    "solution": "CAD (atherosclerosis) affects the vessels that supply blood to the heart muscle. It is caused by deposits of calcium, fat, cholesterol and fibrous tissue that narrow the arterial lumen. This narrowing is what reduces the blood supply, so R correctly explains A."
+  },
+  {
+    "type": "single",
+    "chapter": "Excretory Products and their Elimination",
+    "text": "Choose the correct statements:\nA. Nearly 99 per cent of the glomerular filtrate is reabsorbed by the renal tubules.\nB. The descending limb of the loop of Henle is impermeable to water.\nC. The proximal convoluted tubule is lined by simple cuboidal brush border epithelium.\nD. Conditional reabsorption of $Na^+$ and water takes place in the distal convoluted tubule.\nE. The vasa recta is absent or highly reduced in juxtamedullary nephrons.\nChoose the correct answer from the options given below:",
+    "options": [
+      "A, B and C only",
+      "A, C and D only",
+      "C, D and E only",
+      "A, B, D and E only"
+    ],
+    "answer": "B",
+    "solution": "A, C and D are correct. The descending limb of the loop of Henle is permeable to water and almost impermeable to electrolytes, so B is wrong. The vasa recta is absent or highly reduced in cortical nephrons, not in juxtamedullary nephrons, so E is wrong."
+  },
+  {
+    "type": "single",
+    "chapter": "Excretory Products and their Elimination",
+    "text": "Given below are two statements:\nStatement I: An increase in blood flow to the atria of the heart can cause the release of atrial natriuretic factor (ANF), which causes vasodilation and so lowers blood pressure.\nStatement II: ADH helps water reabsorption from the later parts of the renal tubule, and it can also affect kidney function by constricting blood vessels.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "A",
+    "solution": "NCERT states that increased blood flow to the atria releases ANF, which causes vasodilation and lowers blood pressure. It also states that ADH promotes water reabsorption from the later parts of the tubule and affects kidney function through its constrictory effect on blood vessels. Both statements are true."
+  },
+  {
+    "type": "single",
+    "chapter": "Excretory Products and their Elimination",
+    "text": "Match List-I with List-II:\nList-I\n(A) Uremia\n(B) Renal calculi\n(C) Glomerulonephritis\n(D) Glycosuria\nList-II\n(I) Inflammation of the glomeruli of the kidney\n(II) Presence of glucose in urine\n(III) Accumulation of urea in blood\n(IV) Insoluble mass of crystallised salts formed within the kidney\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-IV, B-III, C-I, D-II",
+      "A-III, B-IV, C-II, D-I",
+      "A-III, B-IV, C-I, D-II",
+      "A-I, B-IV, C-III, D-II"
+    ],
+    "answer": "C",
+    "solution": "Uremia is the accumulation of urea in blood. Renal calculi are stones or insoluble masses of crystallised salts, such as oxalates, formed in the kidney. Glomerulonephritis is inflammation of the glomeruli. Glycosuria is the presence of glucose in urine and points to diabetes mellitus. So A-III, B-IV, C-I, D-II."
+  },
+  {
+    "type": "single",
+    "chapter": "Locomotion and Movement",
+    "text": "Given below are two statements:\nStatement I: Each thick (myosin) filament is a polymerised protein made of many monomeric proteins called meromyosins.\nStatement II: In each meromyosin, the light meromyosin (LMM) forms the globular head, which is an active ATPase enzyme with binding sites for ATP and active sites for actin.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "C",
+    "solution": "Statement I is true: many meromyosin monomers make up one thick filament. In each meromyosin, the globular head with its short arm is the heavy meromyosin (HMM), and the tail is the light meromyosin (LMM). The head carries the ATPase activity, so Statement II is false."
+  },
+  {
+    "type": "single",
+    "chapter": "Locomotion and Movement",
+    "text": "How many of the following statements about the human skeleton are correct?\n(a) The vertebral column is formed by 26 serially arranged units called vertebrae.\n(b) The 11th and 12th pairs of ribs are called vertebrochondral ribs.\n(c) Each forelimb is made of 30 bones.\n(d) The cranium is made of 14 bones.\n(e) The sternum is a flat bone on the ventral midline of the thorax.\n(f) The acetabulum is a cavity in the pectoral girdle that articulates with the head of the humerus.",
+    "options": [
+      "Two",
+      "Three",
+      "Four",
+      "Five"
+    ],
+    "answer": "B",
+    "solution": "(a), (c) and (e) are correct. The 11th and 12th pairs are floating ribs (the 8th to 10th pairs are vertebrochondral), so (b) is wrong. The cranium has 8 bones (the face has 14), so (d) is wrong. The acetabulum is in the pelvic girdle and receives the femur, while the humerus fits into the glenoid cavity of the scapula, so (f) is wrong. Three statements are correct."
+  },
+  {
+    "type": "single",
+    "chapter": "Locomotion and Movement",
+    "text": "Given below are two statements: one is labelled as Assertion A and the other is labelled as Reason R.\nAssertion A: Calcium ions released from the sarcoplasmic reticulum are essential for muscle contraction.\nReason R: $Ca^{2+}$ binds to a subunit of troponin on the actin filaments and removes the masking of the active sites for myosin.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both A and R are true and R is the correct explanation of A",
+      "Both A and R are true but R is NOT the correct explanation of A",
+      "A is true but R is false",
+      "A is false but R is true"
+    ],
+    "answer": "A",
+    "solution": "A signal from the motor neuron releases $Ca^{2+}$ from the sarcoplasmic reticulum. Calcium binds to troponin and unmasks the active sites on actin, so myosin heads can bind and form cross bridges. This is why calcium is essential, so R correctly explains A."
+  },
+  {
+    "type": "single",
+    "chapter": "Neural Control and Coordination",
+    "text": "Given below are two statements:\nStatement I: In the resting state, the axonal membrane is more permeable to sodium ions and nearly impermeable to potassium ions.\nStatement II: The sodium-potassium pump transports 3 $Na^+$ ions outwards for every 2 $K^+$ ions moved into the cell.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "D",
+    "solution": "At rest, the axonal membrane is more permeable to $K^+$ and nearly impermeable to $Na^+$, so Statement I has it reversed and is false. The $Na^+/K^+$ pump moves 3 $Na^+$ out for every 2 $K^+$ in, so Statement II is true."
+  },
+  {
+    "type": "single",
+    "chapter": "Neural Control and Coordination",
+    "text": "Match List-I with List-II:\nList-I\n(A) Hypothalamus\n(B) Corpus callosum\n(C) Medulla oblongata\n(D) Corpora quadrigemina\nList-II\n(I) Centres that control respiration, cardiovascular reflexes and gastric secretions\n(II) Neurosecretory cells that secrete hypothalamic hormones\n(III) Four round swellings in the dorsal part of the midbrain\n(IV) Tract of nerve fibres connecting the two cerebral hemispheres\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-II, B-I, C-IV, D-III",
+      "A-IV, B-II, C-I, D-III",
+      "A-II, B-IV, C-III, D-I",
+      "A-II, B-IV, C-I, D-III"
+    ],
+    "answer": "D",
+    "solution": "The hypothalamus has neurosecretory cells that secrete hypothalamic hormones. The corpus callosum is a tract of nerve fibres connecting the two cerebral hemispheres. The medulla has centres for respiration, cardiovascular reflexes and gastric secretions. The corpora quadrigemina are four round swellings on the dorsal midbrain. So A-II, B-IV, C-I, D-III."
+  },
+  {
+    "type": "single",
+    "chapter": "Neural Control and Coordination",
+    "text": "Choose the correct statements:\nA. Electrical synapses are rare in our system.\nB. At a chemical synapse, the membranes of the pre-synaptic and post-synaptic neurons are separated by a fluid-filled space called the synaptic cleft.\nC. Impulse transmission across an electrical synapse is slower than across a chemical synapse.\nD. Neurotransmitters binding to receptors on the post-synaptic membrane can produce a new potential that may be either excitatory or inhibitory.\nE. Unmyelinated nerve fibres are commonly found in the autonomous and somatic neural systems.\nChoose the correct answer from the options given below:",
+    "options": [
+      "A, B, D and E only",
+      "A, B and C only",
+      "B, C, D and E only",
+      "A, C and E only"
+    ],
+    "answer": "A",
+    "solution": "A, B, D and E are correct, as NCERT states. Transmission across an electrical synapse is always faster than across a chemical synapse, because ions flow directly from one neuron to the next. So C is wrong."
+  },
+  {
+    "type": "single",
+    "chapter": "Chemical Coordination and Integration",
+    "text": "Match List-I (hormone) with List-II (function):\nList-I\n(A) Melatonin\n(B) Thymosins\n(C) Glucagon\n(D) Aldosterone\nList-II\n(I) Stimulates glycogenolysis and raises blood glucose\n(II) Reabsorption of $Na^+$ and water and excretion of $K^+$\n(III) Regulation of the 24-hour (diurnal) rhythm\n(IV) Differentiation of T-lymphocytes\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-IV, B-III, C-I, D-II",
+      "A-III, B-IV, C-I, D-II",
+      "A-III, B-IV, C-II, D-I",
+      "A-I, B-IV, C-III, D-II"
+    ],
+    "answer": "B",
+    "solution": "Melatonin from the pineal gland regulates the diurnal rhythm. Thymosins from the thymus drive the differentiation of T-lymphocytes. Glucagon stimulates glycogenolysis and is hyperglycemic. Aldosterone causes reabsorption of $Na^+$ and water and excretion of $K^+$. So A-III, B-IV, C-I, D-II."
+  },
+  {
+    "type": "single",
+    "chapter": "Chemical Coordination and Integration",
+    "text": "Given below are two statements:\nStatement I: Secretin acts on the gastric glands and stimulates the secretion of hydrochloric acid and pepsinogen.\nStatement II: Cholecystokinin (CCK) acts on both the pancreas and the gall bladder, stimulating the secretion of pancreatic enzymes and bile juice, respectively.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "D",
+    "solution": "Gastrin, not secretin, stimulates the gastric glands to secrete HCl and pepsinogen. Secretin acts on the exocrine pancreas to release water and bicarbonate ions, so Statement I is false. Statement II correctly describes CCK."
+  },
+  {
+    "type": "single",
+    "chapter": "Chemical Coordination and Integration",
+    "text": "Given below are two statements: one is labelled as Assertion A and the other is labelled as Reason R.\nAssertion A: Graves' disease is a form of hypothyroidism.\nReason R: Exophthalmic goitre is marked by an enlarged thyroid gland, protruding eyeballs, increased basal metabolic rate and weight loss.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both A and R are true and R is the correct explanation of A",
+      "Both A and R are true but R is NOT the correct explanation of A",
+      "A is true but R is false",
+      "A is false but R is true"
+    ],
+    "answer": "D",
+    "solution": "Graves' disease is another name for exophthalmic goitre, which is a form of hyperthyroidism, not hypothyroidism, so A is false. R correctly lists its features: an enlarged thyroid, protruding eyeballs, raised BMR and weight loss."
+  },
+  {
+    "type": "single",
+    "chapter": "Human Reproduction",
+    "text": "Choose the correct statements:\nA. LH acts on the Leydig cells and stimulates the synthesis and secretion of androgens.\nB. FSH acts on the Sertoli cells and stimulates the secretion of factors that help in spermiogenesis.\nC. Spermatids are diploid cells.\nD. For normal fertility, at least 60 per cent of ejaculated sperms must have normal shape and size, and at least 40 per cent must show vigorous motility.\nE. The release of sperms from the seminiferous tubules is called spermiogenesis.\nChoose the correct answer from the options given below:",
+    "options": [
+      "A, C and E only",
+      "B, D and E only",
+      "A, B and D only",
+      "A, B, C and D only"
+    ],
+    "answer": "C",
+    "solution": "A, B and D are correct, as NCERT states. Spermatids are haploid, since they form after meiosis II, so C is wrong. Sperm release from the seminiferous tubules is called spermiation (spermiogenesis is the change of spermatids into sperms), so E is wrong."
+  },
+  {
+    "type": "single",
+    "chapter": "Human Reproduction",
+    "text": "Match List-I with List-II:\nList-I\n(A) Fimbriae\n(B) Ampulla\n(C) Isthmus\n(D) Myometrium\nList-II\n(I) Last part of the oviduct, which has a narrow lumen and joins the uterus\n(II) Help to collect the ovum after ovulation\n(III) Thick middle layer of smooth muscle that contracts strongly during delivery of the baby\n(IV) Wider part of the oviduct\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-IV, B-II, C-I, D-III",
+      "A-II, B-IV, C-III, D-I",
+      "A-II, B-I, C-IV, D-III",
+      "A-II, B-IV, C-I, D-III"
+    ],
+    "answer": "D",
+    "solution": "Fimbriae are finger-like projections of the infundibulum that collect the ovum after ovulation. The ampulla is the wider part of the oviduct. The isthmus is the last part, with a narrow lumen, and joins the uterus. The myometrium is the thick smooth-muscle layer of the uterus that contracts strongly during delivery. So A-II, B-IV, C-I, D-III."
+  },
+  {
+    "type": "single",
+    "chapter": "Human Reproduction",
+    "text": "Given below are two statements: one is labelled as Assertion A and the other is labelled as Reason R.\nAssertion A: If fertilisation does not occur, degeneration of the corpus luteum leads to disintegration of the endometrium and menstruation.\nReason R: Progesterone secreted by the corpus luteum is essential for maintaining the endometrium.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both A and R are true and R is the correct explanation of A",
+      "Both A and R are true but R is NOT the correct explanation of A",
+      "A is true but R is false",
+      "A is false but R is true"
+    ],
+    "answer": "A",
+    "solution": "During the luteal phase, the corpus luteum secretes large amounts of progesterone, which maintains the endometrium. Without fertilisation, the corpus luteum degenerates and progesterone falls, so the endometrium breaks down and menstruation follows. R correctly explains A."
+  },
+  {
+    "type": "single",
+    "chapter": "Human Reproduction",
+    "text": "Choose the correct statements about human embryonic development:\nA. The embryo's heart forms after one month of pregnancy.\nB. By the end of the first month, the foetus develops limbs and digits.\nC. Most of the major organ systems are formed by the end of 12 weeks.\nD. The first movements of the foetus and the appearance of hair on the head are usually seen during the fourth month.\nE. By the end of about 24 weeks, the body is covered with fine hair, the eyelids separate and eyelashes form.\nChoose the correct answer from the options given below:",
+    "options": [
+      "A, B and C only",
+      "A, C and E only",
+      "B, D and E only",
+      "A, C, D and E only"
+    ],
+    "answer": "B",
+    "solution": "A, C and E are correct. Limbs and digits develop by the end of the second month, so B is wrong. The first foetal movements and hair on the head usually appear in the fifth month, so D is wrong."
+  },
+  {
+    "type": "single",
+    "chapter": "Reproductive Health",
+    "text": "Match List-I with List-II:\nList-I\n(A) Lippes loop\n(B) Multiload 375\n(C) LNG-20\n(D) Cervical cap\nList-II\n(I) Hormone-releasing IUD\n(II) Rubber barrier that covers the cervix during coitus\n(III) Non-medicated IUD\n(IV) Copper-releasing IUD\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-III, B-IV, C-I, D-II",
+      "A-IV, B-III, C-I, D-II",
+      "A-III, B-I, C-IV, D-II",
+      "A-I, B-IV, C-III, D-II"
+    ],
+    "answer": "A",
+    "solution": "Lippes loop is a non-medicated IUD. Multiload 375 is a copper-releasing IUD. LNG-20 is a hormone-releasing IUD. Cervical caps are rubber barriers placed in the female tract to cover the cervix. So A-III, B-IV, C-I, D-II."
+  },
+  {
+    "type": "single",
+    "chapter": "Reproductive Health",
+    "text": "Given below are two statements:\nStatement I: In intra uterine transfer (IUT), embryos with up to 8 blastomeres are transferred into the uterus.\nStatement II: In GIFT, an ovum collected from a donor is transferred into the fallopian tube of another female who cannot produce ova but can provide a suitable environment for fertilisation and further development.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "D",
+    "solution": "A zygote or early embryo with up to 8 blastomeres is transferred into the fallopian tube (ZIFT). Embryos with more than 8 blastomeres are transferred into the uterus (IUT), so Statement I is false. Statement II is the NCERT description of GIFT and is true."
+  },
+  {
+    "type": "single",
+    "chapter": "Evolution",
+    "text": "Match List-I (scientist) with List-II (contribution):\nList-I\n(A) S.L. Miller\n(B) Oparin and Haldane\n(C) Hugo de Vries\n(D) Louis Pasteur\nList-II\n(I) Proposed the idea of mutations based on work on evening primrose\n(II) Showed that life comes only from pre-existing life, using killed yeast in pre-sterilised flasks\n(III) Obtained amino acids from an electric discharge in a closed flask containing $, $, $ and water vapour\n(IV) Proposed that the first form of life came from pre-existing non-living organic molecules, preceded by chemical evolution\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-IV, B-III, C-I, D-II",
+      "A-III, B-IV, C-I, D-II",
+      "A-III, B-IV, C-II, D-I",
+      "A-II, B-IV, C-I, D-III"
+    ],
+    "answer": "B",
+    "solution": "Miller (1953) created an electric discharge in a closed flask with $, $, $ and water vapour at 800°C and observed amino acids forming. Oparin and Haldane proposed that life arose from non-living organic molecules after a period of chemical evolution. Hugo de Vries proposed mutations from his work on evening primrose. Pasteur showed that life comes only from pre-existing life: no life arose from killed yeast in pre-sterilised flasks. So A-III, B-IV, C-I, D-II."
+  },
+  {
+    "type": "single",
+    "chapter": "Evolution",
+    "text": "How many of the following factors affect Hardy-Weinberg equilibrium?\nGene migration, genetic drift, mutation, genetic recombination, natural selection, random mating",
+    "options": [
+      "Three",
+      "Four",
+      "Five",
+      "Six"
+    ],
+    "answer": "C",
+    "solution": "NCERT names five factors that affect Hardy-Weinberg equilibrium: gene migration (gene flow), genetic drift, mutation, genetic recombination and natural selection. Random mating is one of the conditions that keeps the equilibrium, not a factor that disturbs it. The answer is five."
+  },
+  {
+    "type": "single",
+    "chapter": "Evolution",
+    "text": "Given below are two statements: one is labelled as Assertion A and the other is labelled as Reason R.\nAssertion A: In England, after industrialisation, dark-winged moths outnumbered white-winged moths in industrial areas.\nReason R: Lichens grew abundantly on tree trunks in industrial areas and made the trunks dark.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both A and R are true and R is the correct explanation of A",
+      "Both A and R are true but R is NOT the correct explanation of A",
+      "A is true but R is false",
+      "A is false but R is true"
+    ],
+    "answer": "C",
+    "solution": "After industrialisation, dark moths became more common because they were camouflaged on tree trunks darkened by smoke and soot. Lichens indicate pollution because they do not grow in polluted areas, so R is false."
+  },
+  {
+    "type": "single",
+    "chapter": "Human Health and Disease",
+    "text": "Match List-I (barrier of innate immunity) with List-II (example):\nList-I\n(A) Physical barrier\n(B) Physiological barrier\n(C) Cellular barrier\n(D) Cytokine barrier\nList-II\n(I) Interferons secreted by virus-infected cells\n(II) Saliva in the mouth and tears from the eyes\n(III) Mucus coating of the epithelium lining the respiratory tract\n(IV) Natural killer cells\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-II, B-III, C-IV, D-I",
+      "A-III, B-II, C-I, D-IV",
+      "A-IV, B-II, C-III, D-I",
+      "A-III, B-II, C-IV, D-I"
+    ],
+    "answer": "D",
+    "solution": "Physical barriers include the skin and the mucus coating of epithelia. Physiological barriers include stomach acid, saliva and tears. Cellular barriers include neutrophils, monocytes, macrophages and NK cells. The cytokine barrier is formed by interferons from virus-infected cells. So A-III, B-II, C-IV, D-I."
+  },
+  {
+    "type": "single",
+    "chapter": "Human Health and Disease",
+    "text": "Choose the correct statements about the life cycle of Plasmodium:\nA. Plasmodium enters the human body as sporozoites through the bite of an infected female Anopheles mosquito.\nB. The parasites first multiply inside RBCs and then attack the liver cells.\nC. Rupture of RBCs releases haemozoin, which causes chills and high fever that recur every three to four days.\nD. Fertilisation and development take place in the mosquito's intestine.\nE. Sporozoites are stored in the salivary glands of the mosquito.\nChoose the correct answer from the options given below:",
+    "options": [
+      "A, B and C only",
+      "A, C, D and E only",
+      "B, C and E only",
+      "A, B, D and E only"
+    ],
+    "answer": "B",
+    "solution": "The parasites first multiply asexually in the liver cells and only then attack RBCs, so B is wrong. All the other statements match NCERT. The answer is A, C, D and E."
+  },
+  {
+    "type": "single",
+    "chapter": "Human Health and Disease",
+    "text": "Given below are two statements:\nStatement I: Heroin (smack) is diacetylmorphine, obtained by acetylation of morphine, and it is a depressant that slows down body functions.\nStatement II: Cannabinoids are known for their effects on the cardiovascular system of the body.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "A",
+    "solution": "Heroin is diacetylmorphine, a white, odourless, bitter crystalline compound made by acetylating morphine. It is a depressant. NCERT also states that cannabinoids are known for their effects on the cardiovascular system. Both statements are true."
+  },
+  {
+    "type": "single",
+    "chapter": "Biotechnology: Principles and Processes",
+    "text": "Restriction endonucleases recognise palindromic sequences in DNA. Which of the following sequences, written 5' to 3' for one strand of a double-stranded DNA, is a palindrome?",
+    "options": [
+      "5'-GGATGG-3'",
+      "5'-AGCTCT-3'",
+      "5'-GTACGT-3'",
+      "5'-CTGCAG-3'"
+    ],
+    "answer": "D",
+    "solution": "A palindrome reads the same on both strands when each is read 5' to 3'. The complementary strand of CTGCAG, read 5' to 3', is again CTGCAG. The other three give different sequences: CCATCC, AGAGCT and ACGTAC."
+  },
+  {
+    "type": "single",
+    "chapter": "Biotechnology: Principles and Processes",
+    "text": "Choose the correct statements:\nA. Recombinant colonies, where the insert disrupts the β-galactosidase gene, give blue colonies in the presence of a chromogenic substrate.\nB. In pBR322, the ori sequence also controls the copy number of the linked DNA.\nC. Inserting foreign DNA at the BamHI site of pBR322 causes loss of tetracycline resistance.\nD. In agarose gel electrophoresis, DNA fragments move towards the cathode.\nE. The Ti plasmid of Agrobacterium tumefaciens has been modified into a cloning vector that is no longer pathogenic to plants.\nChoose the correct answer from the options given below:",
+    "options": [
+      "A, B and D only",
+      "A, C and E only",
+      "B, C and E only",
+      "B, C, D and E only"
+    ],
+    "answer": "C",
+    "solution": "B, C and E are correct. Inserting DNA into the β-galactosidase gene inactivates it (insertional inactivation), so recombinant colonies stay colourless, while non-recombinants are blue. So A is wrong. DNA is negatively charged and moves towards the anode, so D is wrong. The BamHI site lies in the tetracycline resistance gene, which is why C is correct."
+  },
+  {
+    "type": "single",
+    "chapter": "Biotechnology: Principles and Processes",
+    "text": "Given below are two statements: one is labelled as Assertion A and the other is labelled as Reason R.\nAssertion A: Bacterial cells must first be made 'competent' before they can take up plasmid DNA.\nReason R: DNA is a hydrophilic molecule and cannot pass through cell membranes.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both A and R are true and R is the correct explanation of A",
+      "Both A and R are true but R is NOT the correct explanation of A",
+      "A is true but R is false",
+      "A is false but R is true"
+    ],
+    "answer": "A",
+    "solution": "Because DNA is hydrophilic, it cannot cross cell membranes on its own. So bacteria are made competent, for example by treating them with divalent cations such as calcium and then a heat shock, before they can take up the plasmid. R correctly explains A."
+  },
+  {
+    "type": "single",
+    "chapter": "Biotechnology and its Applications",
+    "text": "Given below are two statements:\nStatement I: Bt toxin exists as an inactive protoxin and becomes active in the insect gut, where the alkaline pH solubilises the crystals.\nStatement II: The proteins encoded by cryIAb control cotton bollworms, while those encoded by cryIAc and cryIIAb control the corn borer.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true",
+      "Both Statement I and Statement II are false",
+      "Statement I is true but Statement II is false",
+      "Statement I is false but Statement II is true"
+    ],
+    "answer": "C",
+    "solution": "Statement I matches NCERT. The genes are swapped in Statement II: cryIAc and cryIIAb control cotton bollworms, and cryIAb controls the corn borer. So Statement II is false."
+  },
+  {
+    "type": "single",
+    "chapter": "Biotechnology and its Applications",
+    "text": "Match List-I with List-II:\nList-I\n(A) RNA interference\n(B) Gene therapy for ADA deficiency\n(C) ELISA\n(D) PCR\nList-II\n(I) Detects pathogens present in very low concentration by amplifying their nucleic acid\n(II) Based on the principle of antigen-antibody interaction\n(III) Protects tobacco plants from the nematode Meloidegyne incognitia\n(IV) Functional cDNA introduced into lymphocytes grown in culture and returned to the patient\nChoose the correct answer from the options given below:",
+    "options": [
+      "A-III, B-IV, C-II, D-I",
+      "A-IV, B-III, C-II, D-I",
+      "A-III, B-IV, C-I, D-II",
+      "A-II, B-IV, C-III, D-I"
+    ],
+    "answer": "A",
+    "solution": "RNAi silences a specific mRNA of the nematode and protects tobacco from Meloidegyne incognitia. In ADA gene therapy, a functional ADA cDNA is introduced into the patient's cultured lymphocytes, which are then returned to the patient. ELISA works on antigen-antibody interaction. PCR amplifies nucleic acid to detect pathogens at very low concentration. So A-III, B-IV, C-II, D-I."
+  },
+  {
+    "type": "single",
+    "chapter": "Biotechnology and its Applications",
+    "text": "How many of the following statements about insulin are correct?\n(a) Insulin has two short polypeptide chains, A and B, linked together by disulphide bridges.\n(b) In mammals, insulin is made as a pro-hormone that contains an extra stretch called the C peptide.\n(c) The C peptide is retained in mature insulin.\n(d) Insulin for diabetics was earlier extracted from the pancreas of slaughtered cattle and pigs.\n(e) Insulin from animal sources caused some patients to develop allergy or other reactions to the foreign protein.",
+    "options": [
+      "One",
+      "Two",
+      "Three",
+      "Four"
+    ],
+    "answer": "D",
+    "solution": "(a), (b), (d) and (e) are correct. The C peptide is removed when pro-insulin matures into functional insulin, so (c) is wrong. Four statements are correct."
+  }
+]

@@ -32,6 +32,8 @@ model User {
   subscription    Subscription?
   testsCreated    Test[]
   attempts        Attempt[]
+  groups          GroupMember[]
+  testsAssigned   TestStudent[]
 }
 
 // A plan a student buys: one exam + class, e.g. "11th JEE". Tests are later
@@ -48,6 +50,7 @@ model Batch {
   updatedAt DateTime @updatedAt
 
   subscriptions Subscription[]
+  tests         TestBatch[]
 
   @@unique([exam, grade])
 }
@@ -102,6 +105,12 @@ model Test {
   questionCount Int       @default(0)
   totalMarks    Float     @default(0)
   status        String    @default("draft") // "draft" | "published"
+  // Who may take it: "all" = every student, "custom" = only the batches,
+  // groups and students listed in TestBatch / TestGroup / TestStudent.
+  audience      String    @default("all")
+  // A free test: every student of its exam (any exam if `exam` is null) may
+  // take it, with or without a batch. `audience` doesn't apply to it.
+  isFree        Boolean   @default(false)
   opensAt       DateTime? // students may start from…
   closesAt      DateTime? // …until (both optional)
   createdById   String?
@@ -110,8 +119,12 @@ model Test {
   updatedAt     DateTime  @updatedAt
 
   attempts      Attempt[]
+  batches       TestBatch[]
+  groups        TestGroup[]
+  students      TestStudent[]
 
   @@index([status])
+  @@index([isFree])
 }
 
 // One student's attempt at one test (one attempt per test for now).
@@ -137,5 +150,60 @@ model Attempt {
   updatedAt     DateTime  @updatedAt
 
   @@unique([testId, userId])
+  @@index([userId])
+}
+
+// A named set of students an admin makes by hand (e.g. "Revision group"),
+// used to give tests to many students at once.
+model Group {
+  id          String        @id @default(cuid())
+  name        String        @unique
+  description String        @default("")
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  members     GroupMember[]
+  tests       TestGroup[]
+}
+
+model GroupMember {
+  groupId String
+  group   Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  userId  String
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  addedAt DateTime @default(now())
+
+  @@id([groupId, userId])
+  @@index([userId])
+}
+
+// Who a "custom" test is given to: batches, groups and individual students.
+model TestBatch {
+  testId  String
+  test    Test   @relation(fields: [testId], references: [id], onDelete: Cascade)
+  batchId String
+  batch   Batch  @relation(fields: [batchId], references: [id], onDelete: Cascade)
+
+  @@id([testId, batchId])
+  @@index([batchId])
+}
+
+model TestGroup {
+  testId  String
+  test    Test   @relation(fields: [testId], references: [id], onDelete: Cascade)
+  groupId String
+  group   Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@id([testId, groupId])
+  @@index([groupId])
+}
+
+model TestStudent {
+  testId String
+  test   Test   @relation(fields: [testId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([testId, userId])
   @@index([userId])
 }

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { fmt } from '../../../lib/format.js'
 
-/* Right rail: where solutions live, and the student's batch. */
+/* Right rail: where solutions live, and the student's batch (or how to get one). */
 export default function SideCards({ me, latestDone }) {
   return (
     <>
@@ -35,7 +35,16 @@ export default function SideCards({ me, latestDone }) {
             ) : null}
           </p>
         </section>
-      ) : null}
+      ) : (
+        <section className="card rail-card teacher-card" id="batch" aria-labelledby="batch-title">
+          <p className="eyebrow">Free access</p>
+          <h2 id="batch-title">Unlock every test in your batch</h2>
+          <p className="rail-text">You can take the free mock tests now. Buy your batch to get every test your teachers publish for it, with full solutions.</p>
+          <Link className="btn btn-gold btn-block" to="/subscribe" viewTransition>
+            See your batch
+          </Link>
+        </section>
+      )}
     </>
   )
 }

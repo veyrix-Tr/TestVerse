@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useToast } from '../../lib/useToast.jsx'
 import TestEditor from './TestEditor.jsx'
+import { audienceText } from './studentsApi.js'
 import { EXAM_LABEL, deleteTest, listTests, setPublished, when } from './testsApi.js'
 
 /*
@@ -141,6 +142,7 @@ function TestsList({ onCount, toast, onCreate, onEdit }) {
                 <th>Paper</th>
                 <th>Window</th>
                 <th>Status</th>
+                <th>Given to</th>
                 <th>Attempts</th>
                 <th>
                   <span className="sr">Actions</span>
@@ -181,6 +183,16 @@ function TestsList({ onCount, toast, onCreate, onEdit }) {
                     </td>
                     <td>
                       <span className={'pill ' + (published ? 'p-published' : 'p-draft')}>{published ? 'Published' : 'Draft'}</span>
+                      {t.isFree ? <span className="pill p-scheduled ts-free-pill">Free</span> : null}
+                    </td>
+                    <td className="ts-aud" data-label="Given to">
+                      {!t.audience || t.audience.mode !== 'custom' ? (
+                        <span className="ts-dim">Everyone</span>
+                      ) : audienceText(t.audience) === 'Nobody yet' ? (
+                        <span className="pill p-warn">Nobody yet</span>
+                      ) : (
+                        <span title={audienceText(t.audience)}>{audienceText(t.audience, true)}</span>
+                      )}
                     </td>
                     <td>
                       {t.attempts || 0} started
