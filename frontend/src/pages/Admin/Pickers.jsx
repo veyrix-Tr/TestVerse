@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { useDebounced, useStudentSearch } from './pickerHooks.js'
-import { examClass } from './studentsApi.js'
+import Dropdown from './Dropdown.jsx'
+import { EXAM_OPTIONS, GRADE_OPTIONS, allStudents, examClass, studentsKey } from './studentsApi.js'
 
 /* Removable chip: "Revision group  Remove" */
 export function Chip({ children, sub, onRemove, busy, removeLabel }) {
@@ -155,15 +156,61 @@ export function OptionPicker({ label, title, options, search, onPick, placeholde
   Search-and-tick list of students for building a group.
   `selected`: array of student rows; `exclude`: Set of ids already in.
 */
-export function StudentMultiPicker({ selected, onChange, exclude, autoFocus }) {
+/*
+  Tick-list of students for forming a group. Paid students only by default
+  (only they can take group tests). Filter by search, class and exam;
+  "Select all" ticks every student matching the filters, not only those shown.
+*/
+const CHIPS_SHOWN = 12
+
+export function StudentMultiPicker({ selected, onChange, exclude, autoFocus, paidOnly = true }) {
   const [q, setQ] = useState('')
-  const { list, total, error, pending } = useStudentSearch(q, 30)
+  const [grade, setGrade] = useState('')
+  const [exam, setExam] = useState('')
+  const [allKey, setAllKey] = useState(null) // filters "Select all" was used with
+  const [selecting, setSelecting] = useState(false)
+  const [selErr, setSelErr] = useState(null)
+  const filters = { q, plan: paidOnly ? 'paid' : '', grade, exam }
+  const { list, total, error, pending } = useStudentSearch(filters, 30)
   const chosen = new Set(selected.map((s) => s.id))
   const shown = (list || []).filter((s) => !exclude || !exclude.has(s.id))
+  const key = studentsKey(filters)
+  const allTicked = allKey === key && shown.length > 0 && shown.every((s) => chosen.has(s.id))
+  const filtered = !!(q.trim() || grade || exam)
 
   function toggle(s) {
     onChange(chosen.has(s.id) ? selected.filter((x) => x.id !== s.id) : [...selected, s])
   }
+
+  async function toggleAll() {
+    setSelErr(null)
+    if (allTicked) {
+      // untick everyone matching these filters
+      setSelecting(true)
+      try {
+        const ids = new Set((await allStudents(filters)).map((s) => s.id))
+        onChange(selected.filter((s) => !ids.has(s.id)))
+        setAllKey(null)
+      } catch (e) {
+        setSelErr(e.message)
+      } finally {
+        setSelecting(false)
+      }
+      return
+    }
+    setSelecting(true)
+    try {
+      const all = (await allStudents(filters)).filter((s) => (!exclude || !exclude.has(s.id)) && !chosen.has(s.id))
+      onChange([...selected, ...all])
+      setAllKey(key)
+    } catch (e) {
+      setSelErr(e.message)
+    } finally {
+      setSelecting(false)
+    }
+  }
+
+  const available = Math.max(0, total - (exclude ? (list || []).filter((s) => exclude.has(s.id)).length : 0))
 
   return (
     <div className="sg-multi">
@@ -180,15 +227,44 @@ export function StudentMultiPicker({ selected, onChange, exclude, autoFocus }) {
           placeholder="Search name, email, mobile or city"
           onChange={(e) => setQ(e.target.value)}
         />
-        <span className="hint">{selected.length ? plural(selected.length) + ' chosen' : 'Tick students to add them.'}</span>
+        <Dropdown id="sg-multi-grade" label="Class" value={grade} onChange={setGrade} options={GRADE_OPTIONS} />
+        <Dropdown id="sg-multi-exam" label="Exam" value={exam} onChange={setExam} options={EXAM_OPTIONS} />
       </div>
+      <div className="sg-multi-bar">
+        <label className={'check sg-all' + (selecting ? ' is-busy' : '')}>
+          <input type="checkbox" checked={allTicked} disabled={selecting || !shown.length} onChange={toggleAll} />
+          <span>{selecting ? 'Selecting…' : allTicked ? `All ${available} selected` : `Select all ${list ? available : ''}${filtered ? ' matching' : ''}`.trim()}</span>
+        </label>
+        <span className="hint">
+          {paidOnly ? 'Paid students only. ' : ''}
+          {selected.length ? plural(selected.length) + ' chosen' : 'Tick students to add them.'}
+        </span>
+        {selected.length > 0 && (
+          <button
+            type="button"
+            className="linkbtn sg-clear-all"
+            onClick={() => {
+              onChange([])
+              setAllKey(null)
+            }}
+          >
+            Clear
+          </button>
+        )}
+      </div>
+      {selErr && (
+        <p className="err" role="alert">
+          {selErr}
+        </p>
+      )}
       {selected.length > 0 && (
         <div className="sg-chips">
-          {selected.map((s) => (
+          {selected.slice(0, CHIPS_SHOWN).map((s) => (
             <Chip key={s.id} onRemove={() => toggle(s)} removeLabel={'Remove ' + s.name}>
               {s.name}
             </Chip>
           ))}
+          {selected.length > CHIPS_SHOWN && <span className="hint sg-chips-more">and {selected.length - CHIPS_SHOWN} more</span>}
         </div>
       )}
       <ul className={'sg-multi-list' + (pending ? ' pending' : '')} aria-label="Students">
@@ -197,7 +273,15 @@ export function StudentMultiPicker({ selected, onChange, exclude, autoFocus }) {
         ) : list == null ? (
           <li className="sg-pop-none">Loading students…</li>
         ) : !shown.length ? (
-          <li className="sg-pop-none">{q.trim() ? 'No student matches “' + q.trim() + '”.' : exclude && exclude.size ? 'Every student is already in this group.' : 'No students have signed up yet.'}</li>
+          <li className="sg-pop-none">
+            {filtered
+              ? 'No paid student matches these filters.'
+              : exclude && exclude.size
+                ? 'Every paid student is already in this group.'
+                : paidOnly
+                  ? 'No paid students yet. Students appear here once they have an active batch.'
+                  : 'No students have signed up yet.'}
+          </li>
         ) : (
           shown.map((s) => (
             <li key={s.id}>
@@ -212,7 +296,7 @@ export function StudentMultiPicker({ selected, onChange, exclude, autoFocus }) {
           ))
         )}
       </ul>
-      {list && total > list.length && <p className="hint">Showing the newest {list.length} of {total}. Search to find others.</p>}
+      {list && total > list.length && <p className="hint">Showing the newest {list.length} of {total}. Search or filter to find others; Select all includes every match.</p>}
     </div>
   )
 }

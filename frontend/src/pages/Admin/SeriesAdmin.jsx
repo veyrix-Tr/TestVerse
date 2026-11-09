@@ -92,6 +92,7 @@ function SeriesList({ toast, onCount, onOpen }) {
         return list
       }),
     'series',
+    'series:list',
   )
   const [creating, setCreating] = useState(false)
   const now = useNow(30000)
@@ -281,7 +282,7 @@ function SeriesFields({ prefix, value, err, autoFocus, onChange }) {
 
 /* ---------- One series ---------- */
 function SeriesPage({ id, toast, onBack, onDeleted, onTest }) {
-  const live = useLive(() => getSeries(id), id)
+  const live = useLive(() => getSeries(id), id, 'series:' + id)
   const [form, setForm] = useState(null) // { title, exam, description } while editing
   const [formErr, setFormErr] = useState(null)
   const [busy, setBusy] = useState(null)

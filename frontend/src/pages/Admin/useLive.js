@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { cached, remember } from './cache.js'
 
 export const LIVE_MS = 20000
 
@@ -16,12 +17,15 @@ function typing() {
   Loads data and keeps it fresh: every 20 s and when the tab regains focus or
   becomes visible. Old data stays on screen while a refresh runs (no flashing,
   scroll and selection kept). `key` reloads straight away when it changes.
+  `cacheKey` remembers the last data across screens (cache.js), so coming back
+  to a section shows it at once and refreshes quietly.
   Returns { data, error, at, loading, refresh, setData }.
 */
-export function useLive(fetcher, key) {
-  const [data, setData] = useState(null)
+export function useLive(fetcher, key, cacheKey) {
+  const [data, setData] = useState(() => (cached(cacheKey) ? cached(cacheKey).data : null))
   const [error, setError] = useState(null)
-  const [at, setAt] = useState(null)
+  const [at, setAt] = useState(() => (cached(cacheKey) ? cached(cacheKey).at : null))
+  const cacheRef = useRef(cacheKey)
   const [loading, setLoading] = useState(false)
   const fetchRef = useRef(fetcher)
   const seq = useRef(0)
@@ -29,6 +33,7 @@ export function useLive(fetcher, key) {
 
   useEffect(() => {
     fetchRef.current = fetcher
+    cacheRef.current = cacheKey
   })
 
   const refresh = useCallback(() => {
@@ -43,6 +48,7 @@ export function useLive(fetcher, key) {
           setData(d)
           setError(null)
           setAt(Date.now())
+          remember(cacheRef.current, d)
         },
         (e) => {
           if (n !== seq.current) return

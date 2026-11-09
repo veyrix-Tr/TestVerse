@@ -16,12 +16,15 @@ import {
   examText,
   gradeText,
   lastActive,
-  listBatches,
   listGroups,
   listStudents,
   pctText,
   plural,
+  studentsKey,
+  EXAM_OPTIONS,
+  GRADE_OPTIONS,
 } from './studentsApi.js'
+import Dropdown from './Dropdown.jsx'
 import LiveStamp from './LiveStamp.jsx'
 import { useLive, useNow } from './useLive.js'
 
@@ -31,9 +34,17 @@ import { useLive, useNow } from './useLive.js'
   Screens: the list (Students | Groups tabs), a student, a group. Every screen
   refreshes itself every 20 s and when the tab regains focus.
 */
+// plan: paid (active batch) | free (no active batch); the rest narrow either list
+const NO_FILTERS = { q: '', plan: 'paid', status: '', grade: '', exam: '', group: '' }
+const PAYMENT_OPTIONS = [
+  { value: '', label: 'All free students' },
+  { value: 'none', label: 'No batch yet' },
+  { value: 'pending', label: 'Payment pending' },
+]
+
 export default function StudentsAdmin() {
   const [screen, setScreen] = useState({ name: 'list', tab: 'students' })
-  const [filters, setFilters] = useState({ q: '', batch: '', status: '', group: '' })
+  const [filters, setFilters] = useState(NO_FILTERS)
   const { toast, node: toastNode } = useToast()
   const scrolls = useRef({})
 
@@ -111,19 +122,8 @@ function ListScreen({ tab, setTab, filters, setFilters, toast, onOpenStudent, on
     want.current = PAGE
   }, [queryKey])
 
-  const students = useLive(() => listStudents(JSON.parse(queryKey), 0, Math.min(want.current, 500)), queryKey)
-  const groups = useLive(listGroups, 'groups')
-  const [batches, setBatches] = useState(null)
-
-  useEffect(() => {
-    let live = true
-    listBatches()
-      .then((b) => live && setBatches(b))
-      .catch(() => live && setBatches([]))
-    return () => {
-      live = false
-    }
-  }, [])
+  const students = useLive(() => listStudents(JSON.parse(queryKey), 0, Math.min(want.current, 500)), queryKey, studentsKey(query))
+  const groups = useLive(listGroups, 'groups', 'groups')
 
   async function loadMore() {
     const d = students.data
@@ -180,10 +180,10 @@ function ListScreen({ tab, setTab, filters, setFilters, toast, onOpenStudent, on
       {tab === 'students' ? (
         <StudentsTab
           live={students}
+          summary={s}
           filters={filters}
           setFilters={setFilters}
           settled={dq === filters.q}
-          batches={batches}
           groups={groups.data}
           onOpen={onOpenStudent}
           onMore={loadMore}
@@ -216,12 +216,16 @@ function Stat({ label, value, note }) {
 
 /* ---------------------------------------------------------------------- */
 
-function StudentsTab({ live, filters, setFilters, settled, batches, groups, onOpen, onMore, more, toast }) {
+function StudentsTab({ live, summary, filters, setFilters, settled, groups, onOpen, onMore, more, toast }) {
   const [exporting, setExporting] = useState(false)
   const now = useNow(30000)
   const d = live.data
-  const set = (k) => (e) => setFilters((f) => ({ ...f, [k]: e.target.value, ...(k === 'batch' && e.target.value === 'none' ? { status: '' } : {}) }))
-  const filtered = !!(filters.q.trim() || filters.batch || filters.status || filters.group)
+  const set = (k) => (v) => setFilters((f) => ({ ...f, [k]: v }))
+  // Switching paid <-> free keeps the search, class, exam and group
+  const setPlan = (plan) => setFilters((f) => ({ ...f, plan, status: '' }))
+  const filtered = !!(filters.q.trim() || filters.status || filters.grade || filters.exam || filters.group)
+  const paid = filters.plan === 'paid'
+  const count = (n) => (n == null ? '' : n.toLocaleString('en-IN'))
 
   async function exportCsv() {
     setExporting(true)
@@ -259,6 +263,17 @@ function StudentsTab({ live, filters, setFilters, settled, batches, groups, onOp
 
   return (
     <section className="sect" aria-labelledby="sg-tab-students">
+      <div className="seg sg-plan" role="group" aria-label="Paid or free students">
+        <button type="button" aria-pressed={paid ? 'true' : 'false'} onClick={() => setPlan('paid')}>
+          Paid students <span className="sg-plan-n">{count(summary && summary.paid)}</span>
+        </button>
+        <button type="button" aria-pressed={!paid ? 'true' : 'false'} onClick={() => setPlan('free')}>
+          Free students <span className="sg-plan-n">{count(summary && summary.free)}</span>
+        </button>
+      </div>
+      <p className="hint sg-plan-hint">
+        {paid ? 'Students with an active batch: they see the live tests given to them.' : 'Students without an active batch: they can take free tests only.'}
+      </p>
       <div className="filters sg-filters">
         <label className="sr" htmlFor="sg-q">
           Search students
@@ -270,34 +285,22 @@ function StudentsTab({ live, filters, setFilters, settled, batches, groups, onOp
           data-live-ok
           value={filters.q}
           placeholder="Search name, email, mobile or city"
-          onChange={set('q')}
+          onChange={(e) => set('q')(e.target.value)}
         />
-        <Select id="sg-batch" label="Batch" value={filters.batch} onChange={set('batch')}>
-          <option value="">All batches</option>
-          {(batches || []).map((b) => (
-            <option key={b.id} value={b.id}>
-              {b.name}
-            </option>
-          ))}
-          <option value="none">No batch</option>
-        </Select>
-        <Select id="sg-status" label="Status" value={filters.batch === 'none' ? 'none' : filters.status} onChange={set('status')} disabled={filters.batch === 'none'}>
-          <option value="">Any status</option>
-          <option value="active">Active</option>
-          <option value="pending">Pending</option>
-          <option value="none">No batch</option>
-        </Select>
-        <Select id="sg-group" label="Group" value={filters.group} onChange={set('group')}>
-          <option value="">All groups</option>
-          {(groups || []).map((g) => (
-            <option key={g.id} value={g.id}>
-              {g.name}
-            </option>
-          ))}
-        </Select>
+        {/* A batch is exam + class, so paid students are narrowed with those two */}
+        {!paid && <Dropdown id="sg-status" label="Payment" value={filters.status} onChange={set('status')} options={PAYMENT_OPTIONS} />}
+        <Dropdown id="sg-grade" label="Class" value={filters.grade} onChange={set('grade')} options={GRADE_OPTIONS} />
+        <Dropdown id="sg-exam" label="Exam" value={filters.exam} onChange={set('exam')} options={EXAM_OPTIONS} />
+        <Dropdown
+          id="sg-group"
+          label="Group"
+          value={filters.group}
+          onChange={set('group')}
+          options={[{ value: '', label: 'All groups' }, ...(groups || []).map((g) => ({ value: g.id, label: g.name }))]}
+        />
         <div className="sg-filters-end">
           {filtered && (
-            <button className="btn btn-outline btn-sm sg-clear" type="button" onClick={() => setFilters({ q: '', batch: '', status: '', group: '' })}>
+            <button className="btn btn-outline btn-sm sg-clear" type="button" onClick={() => setFilters({ ...NO_FILTERS, plan: filters.plan })}>
               Clear filters
             </button>
           )}
@@ -328,7 +331,7 @@ function StudentsTab({ live, filters, setFilters, settled, batches, groups, onOp
           </p>
           {filtered && (
             <div>
-              <button className="btn btn-outline" type="button" onClick={() => setFilters({ q: '', batch: '', status: '', group: '' })}>
+              <button className="btn btn-outline" type="button" onClick={() => setFilters({ ...NO_FILTERS, plan: filters.plan })}>
                 Clear filters
               </button>
             </div>
@@ -402,19 +405,6 @@ function StudentsTab({ live, filters, setFilters, settled, batches, groups, onOp
         </>
       )}
     </section>
-  )
-}
-
-function Select({ id, label, children, ...rest }) {
-  return (
-    <div className="sg-select">
-      <label className="sr" htmlFor={id}>
-        {label}
-      </label>
-      <select className="input" id={id} data-live-ok {...rest}>
-        {children}
-      </select>
-    </div>
   )
 }
 

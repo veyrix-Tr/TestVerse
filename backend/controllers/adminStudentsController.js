@@ -56,20 +56,29 @@ const STUDENT_INCLUDE = {
 };
 
 // Prisma filter for the students list from the query string.
+const GRADES = ['Class 11', 'Class 12', 'Dropper / repeater'];
+const EXAM_KEYS = { jee: ['jee-main', 'jee-advanced'], neet: ['neet'] };
+
+// Prisma filter for the students list from the query string.
+//   status: paid (active batch) | free (no active batch) | active | pending | none
+//   grade:  "Class 11" | "Class 12" | "Dropper / repeater"
+//   exam:   jee (JEE Main + Advanced) | neet
 const studentsWhere = (q) => {
-  const where = { role: 'student' };
+  const and = [{ role: 'student' }];
   const text = clean(q.q, 80);
-  if (text) {
-    where.OR = ['name', 'email', 'phone', 'city', 'state'].map((f) => ({ [f]: { contains: text, mode: 'insensitive' } }));
-  }
-  if (q.batch) where.subscription = { batchId: String(q.batch) };
-  if (q.status === 'active' || q.status === 'pending') where.subscription = { ...(where.subscription || {}), status: q.status };
-  if (q.status === 'none') where.subscription = { is: null };
-  if (q.group) where.groups = { some: { groupId: String(q.group) } };
-  return where;
+  if (text) and.push({ OR: ['name', 'email', 'phone', 'city', 'state'].map((f) => ({ [f]: { contains: text, mode: 'insensitive' } })) });
+  if (q.batch) and.push({ subscription: { is: { batchId: String(q.batch) } } });
+  const status = q.status === 'paid' ? 'active' : q.status;
+  if (status === 'active' || status === 'pending') and.push({ subscription: { is: { status } } });
+  if (status === 'none') and.push({ subscription: { is: null } });
+  if (status === 'free') and.push({ NOT: { subscription: { is: { status: 'active' } } } });
+  if (GRADES.includes(q.grade)) and.push({ grade: q.grade });
+  if (EXAM_KEYS[q.exam]) and.push({ exam: { in: EXAM_KEYS[q.exam] } });
+  if (q.group) and.push({ groups: { some: { groupId: String(q.group) } } });
+  return { AND: and };
 };
 
-// GET /api/admin/students?q=&batch=&status=active|pending|none&group=&offset=&limit=
+// GET /api/admin/students?q=&batch=&status=paid|free|active|pending|none&grade=&exam=jee|neet&group=&offset=&limit=
 const listStudents = async (req, res) => {
   try {
     const where  = studentsWhere(req.query);
@@ -91,7 +100,7 @@ const listStudents = async (req, res) => {
       total,
       offset,
       limit,
-      summary: { students, activeBatches, joinedThisWeek, submittedThisWeek },
+      summary: { students, activeBatches, paid: activeBatches, free: students - activeBatches, joinedThisWeek, submittedThisWeek },
       serverNow: new Date(),
     });
   } catch (error) {

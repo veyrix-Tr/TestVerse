@@ -25,7 +25,7 @@ import BackButton from '../../components/BackButton.jsx'
 /* One student: profile, batch, groups, results, tests in progress and the
    tests given to them directly. */
 export default function StudentPage({ id, toast, backText, onBack, onOpenGroup }) {
-  const live = useLive(() => Promise.all([getStudent(id), listGroups(), listTests('live')]), id)
+  const live = useLive(() => Promise.all([getStudent(id), listGroups(), listTests('live')]), id, 'student:' + id)
   const [busy, setBusy] = useState(null)
   const [notice, setNotice] = useState(null)
   const now = useNow(30000)
@@ -104,6 +104,11 @@ export default function StudentPage({ id, toast, backText, onBack, onOpenGroup }
     }
   })
 
+  // How many attempts each test has, to label the first one when there are retakes
+  const attemptsOf = (results || []).reduce((m, r) => ({ ...m, [r.testId]: (m[r.testId] || 0) + 1 }), {})
+  const testsDone = Object.keys(attemptsOf).length
+  const retakes = results.length - testsDone
+
   return (
     <div className="sg-page">
       {head(
@@ -118,13 +123,16 @@ export default function StudentPage({ id, toast, backText, onBack, onOpenGroup }
       <div className="stats sg-stats">
         <div className="card stat">
           <span>Tests submitted</span>
-          <b>{results.length}</b>
-          <small>{inProgress.length ? inProgress.length + ' in progress' : 'None in progress'}</small>
+          <b>{testsDone}</b>
+          <small>
+            {retakes ? plural(retakes, 'retake') + ' · ' : ''}
+            {inProgress.length ? inProgress.length + ' in progress' : 'None in progress'}
+          </small>
         </div>
         <div className="card stat">
           <span>Average score</span>
           <b>{pctText(s.stats.avgPct)}</b>
-          <small>{results.length ? 'Across ' + plural(results.length, 'test') : 'No results yet'}</small>
+          <small>{results.length ? 'Across ' + plural(results.length, 'attempt') : 'No results yet'}</small>
         </div>
         <div className="card stat">
           <span>Best score</span>
@@ -210,7 +218,11 @@ export default function StudentPage({ id, toast, backText, onBack, onOpenGroup }
         <div className="sect-head">
           <div>
             <h2>Results</h2>
-            <p>{results.length ? `${plural(results.length, 'test')} submitted, average ${pctText(s.stats.avgPct)}.` : `${first} hasn't submitted a test yet.`}</p>
+            <p>
+              {results.length
+                ? `${plural(testsDone, 'test')} submitted${retakes ? ` (${plural(results.length, 'attempt')} including retakes)` : ''}, average ${pctText(s.stats.avgPct)}.`
+                : `${first} hasn't submitted a test yet.`}
+            </p>
           </div>
         </div>
         {results.length > 0 && (
@@ -228,11 +240,12 @@ export default function StudentPage({ id, toast, backText, onBack, onOpenGroup }
               </thead>
               <tbody>
                 {results.map((r) => (
-                  <tr key={r.testId}>
+                  <tr key={r.testId + ':' + r.attemptNo}>
                     <td>
                       <b>{r.title}</b>
                       <span className="sub">
                         {r.subject}
+                        {r.attemptNo > 1 ? ` · Retake · attempt ${r.attemptNo}` : attemptsOf[r.testId] > 1 ? ' · Attempt 1' : ''}
                         {r.autoSubmitted ? ' · Submitted automatically when time ran out' : ''}
                       </span>
                     </td>

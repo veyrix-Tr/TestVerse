@@ -21,7 +21,7 @@ import BackButton from '../../components/BackButton.jsx'
 
 /* One group: name and description, members, tests given, delete. */
 export default function GroupPage({ id, toast, backText, onBack, onDeleted, onOpenStudent }) {
-  const live = useLive(() => Promise.all([getGroup(id), listTests('live')]), id)
+  const live = useLive(() => Promise.all([getGroup(id), listTests('live')]), id, 'group:' + id)
   const [busy, setBusy] = useState(null)
   const [notice, setNotice] = useState(null)
   const [form, setForm] = useState(null) // { name, description } while editing

@@ -11,20 +11,46 @@ const id = (v) => encodeURIComponent(v)
 
 export const PAGE = 50
 
-/* filters: { q, batch, status, group } -> query string (empty values left out) */
-export function studentsQuery(f, offset = 0, limit = PAGE) {
+/*
+  filters -> query string (empty values left out):
+    plan   'paid' (active batch) | 'free' (no active batch) | '' (everyone)
+    status for free students: 'none' (no batch) | 'pending' (payment pending)
+    batch, group (ids), grade ("Class 11" …), exam ('jee' | 'neet'), q (search)
+*/
+export function filterParams(f = {}) {
   const p = new URLSearchParams()
   if (f.q && f.q.trim()) p.set('q', f.q.trim())
-  if (f.batch === 'none') p.set('status', 'none')
-  else {
-    if (f.batch) p.set('batch', f.batch)
-    if (f.status) p.set('status', f.status)
-  }
+  if (f.plan === 'free') p.set('status', f.status === 'none' || f.status === 'pending' ? f.status : 'free')
+  else if (f.plan === 'paid') p.set('status', 'paid')
+  if (f.plan !== 'free' && f.batch) p.set('batch', f.batch)
+  if (f.grade) p.set('grade', f.grade)
+  if (f.exam) p.set('exam', f.exam)
   if (f.group) p.set('group', f.group)
+  return p
+}
+
+export function studentsQuery(f, offset = 0, limit = PAGE) {
+  const p = filterParams(f)
   p.set('offset', String(offset))
   p.set('limit', String(limit))
   return p.toString()
 }
+
+/* Cache key for a students list (cache.js): the same filters give the same key
+   on the Students tab and in the pickers, so a loaded list is reused. */
+export const studentsKey = (f) => 'students:' + filterParams(f).toString()
+
+export const GRADE_OPTIONS = [
+  { value: '', label: 'All classes' },
+  { value: 'Class 11', label: '11th' },
+  { value: 'Class 12', label: '12th' },
+  { value: 'Dropper / repeater', label: 'Dropper' },
+]
+export const EXAM_OPTIONS = [
+  { value: '', label: 'All exams' },
+  { value: 'jee', label: 'JEE' },
+  { value: 'neet', label: 'NEET' },
+]
 
 export const listStudents = (f, offset, limit) => call('/students?' + studentsQuery(f, offset, limit))
 export const getStudent = (sid) => call('/students/' + id(sid))

@@ -3,6 +3,7 @@ import { useToast } from '../../lib/useToast.jsx'
 import TestEditor from './TestEditor.jsx'
 import { audienceText } from './studentsApi.js'
 import { EXAM_LABEL, deleteTest, listTests, setPublished, when } from './testsApi.js'
+import { cached, remember } from './cache.js'
 
 /*
   Admin › Free tests and Admin › Live tests (real, API-backed). Shown by
@@ -82,7 +83,8 @@ function freeWindow(t) {
 function TestsList({ kind, onCount, toast, onCreate, onEdit }) {
   const copy = COPY[kind]
   const isLive = kind === 'live'
-  const [tests, setTests] = useState(null)
+  // Last list for this section shows at once; load() then refreshes it
+  const [tests, setTests] = useState(() => (cached('tests:' + kind) ? cached('tests:' + kind).data : null))
   const [error, setError] = useState(null)
   const [busy, setBusy] = useState(null) // { id, kind } of the row being changed
   const [retrying, setRetrying] = useState(false)
@@ -94,6 +96,7 @@ function TestsList({ kind, onCount, toast, onCreate, onEdit }) {
         .then((list) => {
           setError(null)
           setTests(list)
+          remember('tests:' + kind, list)
           if (onCount) onCount(list.length)
         })
         .catch((e) => setError(e.message)),

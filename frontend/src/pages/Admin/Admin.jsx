@@ -10,6 +10,7 @@ import SeriesAdmin from './SeriesAdmin.jsx'
 import StudentsAdmin from './StudentsAdmin.jsx'
 import TestsAdmin from './TestsAdmin.jsx'
 import { loadCounts } from './testsApi.js'
+import { forgetAll } from './cache.js'
 
 /*
   design/admin.html -> route "/admin"
@@ -47,6 +48,7 @@ export default function Admin() {
     .toUpperCase()
 
   function logOut() {
+    forgetAll()
     clearSession()
     navigate('/login', { replace: true })
   }
