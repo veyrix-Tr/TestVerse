@@ -187,7 +187,7 @@ Public, SEO-indexable.
 - exams (labels, patterns, part-test size, price, on sale)
 - live tests (next 3 per exam)
 - referral amounts
-- website settings (announcement, FAQ, YouTube links)
+- website settings (announcement, YouTube links)
 
 In the prototype these live in one `EXAMS` block in the script.
 
@@ -282,7 +282,7 @@ One page, three views.
 | **Coupons & referrals** | Coupon list + create/edit/on-off; referral settings; manual credits |
 | **Video requests** | Queue with filters; merged requests; Start recording; Add YouTube link & send; Decline with reason; rules (limits, reply time) |
 | **Students & groups** | Groups (create/edit/delete from LMS students); students list with LMS/Direct, bought, tests, credits; search; CSV export |
-| **Website info** | Announcement strip, YouTube channel + per-exam playlists, FAQ editor; shows the automatic values (price, next live test, referral offer) |
+| **Website info** | Announcement strip, YouTube channel + per-exam playlists; shows the automatic values (price, next live test, referral offer) |
 
 ---
 
@@ -419,7 +419,7 @@ videoRequests/{id}                  source: "test" | "photo", testId?, questionI
 reports/{id}                        uid, testId, questionId, reason, note,
                                     status: "open" | "fixed" | "dismissed"
 notifications/{id}                  uid, type, text, link, read, at
-settings/website                    announcement, showAnnouncement, faqs[{ q, a }],
+settings/website                    announcement, showAnnouncement,
                                     youtube { channel, playlists { neet, jee-main, jee-advanced } }
 settings/video                      limitDirect, limitLms, hours
 settings/referral                   enabled, friendDiscount, referrerCredit, maxPerStudent

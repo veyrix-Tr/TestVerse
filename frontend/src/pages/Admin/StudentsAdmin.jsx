@@ -8,7 +8,6 @@ import {
   PAGE,
   ago,
   allStudents,
-  batchState,
   createGroup,
   day,
   downloadCsv,
@@ -34,13 +33,8 @@ import { useLive, useNow } from './useLive.js'
   Screens: the list (Students | Groups tabs), a student, a group. Every screen
   refreshes itself every 20 s and when the tab regains focus.
 */
-// plan: paid (active batch) | free (no active batch); the rest narrow either list
-const NO_FILTERS = { q: '', plan: 'paid', status: '', grade: '', exam: '', group: '' }
-const PAYMENT_OPTIONS = [
-  { value: '', label: 'All free students' },
-  { value: 'none', label: 'No batch yet' },
-  { value: 'pending', label: 'Payment pending' },
-]
+// plan: paid (active batch) | free (everyone else); search, class, exam (and group, paid only) narrow it
+const NO_FILTERS = { q: '', plan: 'paid', grade: '', exam: '', group: '' }
 
 export default function StudentsAdmin() {
   const [screen, setScreen] = useState({ name: 'list', tab: 'students' })
@@ -111,6 +105,11 @@ const key = (s) => s.name + ':' + (s.id || s.tab || '')
 /* ---------------------------------------------------------------------- */
 
 function ListScreen({ tab, setTab, filters, setFilters, toast, onOpenStudent, onOpenGroup }) {
+  // Tiles open the Paid or Free students list
+  const showPlan = (plan) => {
+    setTab('students')
+    setFilters((f) => ({ ...f, plan, group: plan === 'free' ? '' : f.group }))
+  }
   const dq = useDebounced(filters.q, 300)
   const query = { ...filters, q: dq }
   const want = useRef(PAGE) // rows to keep loaded across refreshes ("Load more")
@@ -162,10 +161,44 @@ function ListScreen({ tab, setTab, filters, setFilters, toast, onOpenStudent, on
       </div>
 
       <div className="stats sg-stats">
-        <Stat label="Students" value={s && s.students} note="Signed up in total" />
-        <Stat label="Active batches" value={s && s.activeBatches} note={s ? (s.students ? Math.round((s.activeBatches / s.students) * 100) + '% of students' : 'No students yet') : ''} />
-        <Stat label="Joined this week" value={s && s.joinedThisWeek} note="In the last 7 days" />
-        <Stat label="Tests submitted" value={s && s.submittedThisWeek} note="In the last 7 days" />
+        <Stat
+          label="Students"
+          value={s && s.students}
+          extra={s && s.students > 0 && <SplitBar paid={s.paid} free={s.free} />}
+          note={
+            s &&
+            (s.students ? (
+              <>
+                <button type="button" className="sg-stat-link" onClick={() => showPlan('paid')}>
+                  {s.paid.toLocaleString('en-IN')} paid
+                </button>
+                {' · '}
+                <button type="button" className="sg-stat-link" onClick={() => showPlan('free')}>
+                  {s.free.toLocaleString('en-IN')} free
+                </button>
+              </>
+            ) : (
+              'No sign-ups yet'
+            ))
+          }
+        />
+        <Stat
+          label="Paid students"
+          value={s && s.paid}
+          onClick={() => showPlan('paid')}
+          note={s && (s.students ? `${Math.round((s.paid / s.students) * 100)}% of students have a batch` : 'No students yet')}
+        />
+        <Stat label="New this week" value={s && s.joinedThisWeek} note={s && <Growth now={s.joinedThisWeek} before={s.joinedLastWeek} />} />
+        <Stat
+          label="Tests this week"
+          value={s && s.submittedThisWeek}
+          note={
+            s &&
+            (s.submittedThisWeek
+              ? `Average ${pctText(s.weekAvgPct)} · ${plural(s.weekTakers, 'student')} took a test`
+              : 'No tests taken in the last 7 days')
+          }
+        />
       </div>
 
       <div className="sg-tabs" role="tablist" aria-label="Students and groups">
@@ -197,9 +230,28 @@ function ListScreen({ tab, setTab, filters, setFilters, toast, onOpenStudent, on
   )
 }
 
-function Stat({ label, value, note }) {
+/* Paid / free split of all students, as one thin two-colour bar */
+function SplitBar({ paid, free }) {
+  const total = paid + free
   return (
-    <div className="card stat">
+    <span className="sg-split" role="img" aria-label={`${paid} paid and ${free} free students`}>
+      <i className="sg-split-paid" style={{ width: (total ? (paid / total) * 100 : 0) + '%' }}></i>
+    </span>
+  )
+}
+
+/* "+2 since last week", "1 fewer than last week", … */
+function Growth({ now, before }) {
+  if (!before) return now ? <>None joined the week before</> : <>No sign-ups in the last 2 weeks</>
+  const d = now - before
+  if (!d) return <>Same as last week</>
+  return <span className={d > 0 ? 'sg-up' : 'sg-down'}>{d > 0 ? `+${d} since last week` : `${-d} fewer than last week`}</span>
+}
+
+function Stat({ label, value, note, extra, onClick }) {
+  const Tag = onClick ? 'button' : 'div'
+  return (
+    <Tag className={'card stat' + (onClick ? ' stat-link' : '')} {...(onClick ? { type: 'button', onClick } : {})}>
       <span>{label}</span>
       {value == null ? (
         <b aria-busy="true">
@@ -209,8 +261,9 @@ function Stat({ label, value, note }) {
       ) : (
         <b>{value.toLocaleString('en-IN')}</b>
       )}
+      {extra || null}
       <small>{note || (value == null ? <span className="skel skel-note"></span> : null)}</small>
-    </div>
+    </Tag>
   )
 }
 
@@ -222,8 +275,9 @@ function StudentsTab({ live, summary, filters, setFilters, settled, groups, onOp
   const d = live.data
   const set = (k) => (v) => setFilters((f) => ({ ...f, [k]: v }))
   // Switching paid <-> free keeps the search, class, exam and group
-  const setPlan = (plan) => setFilters((f) => ({ ...f, plan, status: '' }))
-  const filtered = !!(filters.q.trim() || filters.status || filters.grade || filters.exam || filters.group)
+  // Groups are for paid students only, so the free list has no group filter
+  const setPlan = (plan) => setFilters((f) => ({ ...f, plan, group: plan === 'free' ? '' : f.group }))
+  const filtered = !!(filters.q.trim() || filters.grade || filters.exam || filters.group)
   const paid = filters.plan === 'paid'
   const count = (n) => (n == null ? '' : n.toLocaleString('en-IN'))
 
@@ -287,17 +341,17 @@ function StudentsTab({ live, summary, filters, setFilters, settled, groups, onOp
           placeholder="Search name, email, mobile or city"
           onChange={(e) => set('q')(e.target.value)}
         />
-        {/* A batch is exam + class, so paid students are narrowed with those two */}
-        {!paid && <Dropdown id="sg-status" label="Payment" value={filters.status} onChange={set('status')} options={PAYMENT_OPTIONS} />}
         <Dropdown id="sg-grade" label="Class" value={filters.grade} onChange={set('grade')} options={GRADE_OPTIONS} />
         <Dropdown id="sg-exam" label="Exam" value={filters.exam} onChange={set('exam')} options={EXAM_OPTIONS} />
-        <Dropdown
-          id="sg-group"
-          label="Group"
-          value={filters.group}
-          onChange={set('group')}
-          options={[{ value: '', label: 'All groups' }, ...(groups || []).map((g) => ({ value: g.id, label: g.name }))]}
-        />
+        {paid && (
+          <Dropdown
+            id="sg-group"
+            label="Group"
+            value={filters.group}
+            onChange={set('group')}
+            options={[{ value: '', label: 'All groups' }, ...(groups || []).map((g) => ({ value: g.id, label: g.name }))]}
+          />
+        )}
         <div className="sg-filters-end">
           {filtered && (
             <button className="btn btn-outline btn-sm sg-clear" type="button" onClick={() => setFilters({ ...NO_FILTERS, plan: filters.plan })}>
@@ -350,7 +404,7 @@ function StudentsTab({ live, summary, filters, setFilters, settled, groups, onOp
                 <tr>
                   <th>Student</th>
                   <th>Mobile</th>
-                  <th>Batch</th>
+                  {paid && <th>Batch</th>}
                   <th>Exam · class</th>
                   <th>City</th>
                   <th className="num">Tests</th>
@@ -361,7 +415,6 @@ function StudentsTab({ live, summary, filters, setFilters, settled, groups, onOp
               </thead>
               <tbody>
                 {d.students.map((s) => {
-                  const st = batchState(s)
                   const la = lastActive(s)
                   return (
                     <tr key={s.id} className="sg-row" onClick={() => onOpen(s.id)}>
@@ -372,10 +425,11 @@ function StudentsTab({ live, summary, filters, setFilters, settled, groups, onOp
                         <span className="sub">{s.email}</span>
                       </td>
                       <td data-label="Mobile">{s.phone || '–'}</td>
-                      <td data-label="Batch">
-                        {s.batch && <span className="sg-batch-name">{s.batch.name}</span>}
-                        <span className={'pill ' + st.cls}>{st.text}</span>
-                      </td>
+                      {paid && (
+                        <td data-label="Batch">
+                          <span className="sg-batch-name">{s.batch ? s.batch.name : '–'}</span>
+                        </td>
+                      )}
                       <td data-label="Exam · class">{examClass(s) || '–'}</td>
                       <td data-label="City">{s.city || '–'}</td>
                       <td className="num" data-label="Tests done">

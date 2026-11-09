@@ -56,11 +56,7 @@ function seed() {
     ],
     website: {
       announcement: 'Next NEET live test on Sunday, 1 November at 2:00 PM. Register free.',
-      showAnnouncement: true,
-      faqs: [
-        { q: 'How much does it cost?', a: '₹999 per exam for all 11 tests.' },
-        { q: 'What if I miss a live test?', a: 'You can take it later for a practice score. It won’t count towards the all-India rank.' }
-      ]
+      showAnnouncement: true
     }
   };
   function t(exam, kind, slot, chapters, status) {
@@ -81,7 +77,6 @@ load();
 var $ = function (s, el) { return (el || document).querySelector(s); };
 var $$ = function (s, el) { return Array.prototype.slice.call((el || document).querySelectorAll(s)); };
 function esc(v) { return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
-function rupee(n) { return '₹' + Number(n || 0).toLocaleString('en-IN'); }
 function when(iso) {
   if (!iso) return '—';
   var d = new Date(iso);
@@ -126,36 +121,10 @@ function render() {
 
 var bind = {};
 
-/* ---------- Dashboard ---------- */
-VIEWS.dashboard = function () {
-  var now = Date.now();
-  var upcoming = db.tests.filter(function (x) { return x.kind === 'live' && new Date(x.start).getTime() > now; }).sort(function (a, b) { return new Date(a.start) - new Date(b.start); });
-  var published = db.tests.filter(function (x) { return x.status !== 'draft'; }).length;
-  var alerts = [];
-  Object.keys(db.exams).forEach(function (k) {
-    var filled = db.tests.filter(function (x) { return x.exam === k && x.kind !== 'live' && x.status === 'published'; }).length;
-    if (filled < 11) alerts.push(['a-warn', db.exams[k].label + ' test series: ' + filled + ' of 11 tests published.', 'series']);
-  });
-  db.tests.forEach(function (x) {
-    if (x.missing) alerts.push(['a-warn', examLabel(x.exam) + ' ' + x.title + ': ' + x.missing + ' questions have no answer key.', 'tests']);
-    if (x.kind === 'live' && !x.file) alerts.push(['a-err', examLabel(x.exam) + ' live test on ' + when(x.start) + ' has no test file yet.', 'live']);
-  });
-  return '<div class="head"><div><h1>Dashboard</h1><p>What needs attention before your next test.</p></div>' +
-    '<div class="actions"><button class="btn btn-primary" type="button" data-upload>Upload a test</button></div></div>' +
-    '<div class="stats">' +
-    stat(published, 'Tests live or scheduled', db.tests.length + ' tests in total') + stat(upcoming.length, 'Upcoming live tests', upcoming[0] ? 'Next: ' + when(upcoming[0].start) : 'None scheduled') + '</div>' +
-    '<div class="dash">' +
-    '<section class="sect"><div class="sect-head"><div><h2>Needs attention</h2><p>' + (alerts.length ? alerts.length + ' item' + (alerts.length === 1 ? '' : 's') + ' to sort out before your next test.' : 'Nothing is blocking your next test.') + '</p></div></div><div class="card attn">' + (alerts.length ? alerts.map(function (a) { return '<div class="alert ' + a[0] + '"><span>' + esc(a[1]) + '</span><button class="btn btn-outline btn-sm" type="button" data-goto="' + a[2] + '">Fix</button></div>'; }).join('') : '<div class="alert a-ok"><span>Everything is ready.</span></div>') + '</div></section>' +
-    '<section class="sect"><div class="sect-head"><div><h2>Upcoming live tests</h2><p>The next one shows on the website countdown.</p></div></div><div class="card list-card">' + (upcoming.length ? upcoming.slice(0, 4).map(function (x) {
-      return '<div class="list-row"><div><b>' + esc(x.title) + '</b><span class="meta">' + esc(examLabel(x.exam)) + ' · ' + when(x.start) + '</span></div><button class="btn btn-outline btn-sm" type="button" data-edit-live="' + esc(x.id) + '">Change date</button></div>';
-    }).join('') : '<p class="hint">No live tests scheduled.</p>') + '</div></section></div>';
-  function stat(n, l, h) { return '<div class="card stat"><span>' + l + '</span><b>' + n + '</b><small>' + esc(h) + '</small></div>'; }
-};
-bind.dashboard = function () {
-  $$('[data-goto]').forEach(function (b) { b.addEventListener('click', function () { go(b.dataset.goto); }); });
-  $$('[data-edit-live]').forEach(function (b) { b.addEventListener('click', function () { editLive(b.dataset.editLive); }); });
-  bindUpload();
-};
+/* ---------- Dashboard ----------
+   Real, API-backed screen: Admin.jsx renders <AdminDashboard/> beside #view
+   while this view is active, so #view stays empty here. */
+VIEWS.dashboard = function () { return ''; };
 
 /* ---------- Free tests, Live tests, Test series ----------
    Real, API-backed screens: Admin.jsx renders <TestsAdmin/> (free / live) or
@@ -166,24 +135,6 @@ VIEWS.free = function () { return ''; };
 VIEWS.live = function () { return ''; };
 VIEWS.series = function () { return ''; };
 function find(id) { return db.tests.filter(function (x) { return x.id === id; })[0]; }
-
-/* ---------- Dashboard: change a demo live test's date ---------- */
-function editLive(id) {
-  var x = find(id);
-  formDialog('Change date: ' + x.title,
-    '<div class="form">' +
-    field('Start date and time', '<input class="input" type="datetime-local" id="lv-start" value="' + esc(x.start) + '">') +
-    field('Entry window (minutes)', '<input class="input" type="number" min="0" max="180" id="lv-window" value="' + x.window + '">', 'Students must start within this time to count for the rank.') +
-    field('Rank published at', '<input class="input" type="datetime-local" id="lv-result" value="' + esc(x.resultAt) + '">') +
-    '<div class="full"><label class="check"><input type="checkbox" id="lv-notify" checked> Notify registered students about the change</label></div></div>',
-    function () {
-      var s = $('#lv-start').value, r = $('#lv-result').value;
-      if (!s) return 'Choose a start date and time.';
-      if (r && new Date(r) <= new Date(s)) return 'The rank must be published after the test starts.';
-      x.start = s; x.window = Number($('#lv-window').value) || 0; x.resultAt = r;
-      save(); render(); toast('Live test moved to ' + when(s) + ($('#lv-notify').checked ? '. Students notified.' : ''));
-    });
-}
 
 /* ---------- Video requests and Analysis ----------
    Coming soon: Admin.jsx renders a "coming soon" screen beside #view while
@@ -196,53 +147,10 @@ VIEWS.analysis = function () { return ''; };
    while this view is active, so #view stays empty here. */
 VIEWS.students = function () { return ''; };
 
-/* ---------- Website info ---------- */
-VIEWS.website = function () {
-  var w = db.website;
-  var nextLive = db.tests.filter(function (x) { return x.kind === 'live' && x.status === 'scheduled' && new Date(x.start) > new Date(); }).sort(function (a, b) { return new Date(a.start) - new Date(b.start); })[0];
-  return '<div class="head"><div><h1>Website info</h1><p>Text on the homepage. Prices, test plans and live test dates update automatically from the other sections.</p></div></div>' +
-    '<div class="grid g2">' +
-    '<section class="card"><h2>Announcement strip</h2><div class="stack">' +
-    '<label class="check"><input type="checkbox" id="ws-on"' + (w.showAnnouncement ? ' checked' : '') + '> Show at the top of the homepage</label>' +
-    field('Text', '<textarea class="input" id="ws-text" maxlength="160">' + esc(w.announcement) + '</textarea>', 'Keep it under 160 characters.') +
-    '<button class="btn btn-primary" type="button" id="ws-save">Save</button></div></section>' +
-    '<section class="card"><h2>YouTube video library</h2><div class="stack">' +
-    '<p class="hint">Students see a "Video library" button in the app and on the website that opens your channel. Add playlists to send each exam\u2019s students to the right videos.</p>' +
-    field('Channel link', '<input class="input" type="url" id="yt-ch" value="' + esc(db.video.channel) + '">') +
-    Object.keys(db.exams).map(function (k) { return field(db.exams[k].label + ' playlist (optional)', '<input class="input" type="url" id="yt-' + k + '" placeholder="https://www.youtube.com/playlist?list=..." value="' + esc(db.video.playlists[k] || '') + '">'); }).join('') +
-    '<button class="btn btn-primary" type="button" id="yt-save">Save video library links</button></div></section>' +
-    '<section class="card"><h2>Shown automatically</h2><div class="summary-list">' +
-    Object.keys(db.exams).map(function (k) { var e = db.exams[k]; return '<div><span>' + esc(e.label) + ' price</span><span>' + (e.onSale ? rupee(e.price) : 'Not on sale') + '</span></div>'; }).join('') +
-    '<div><span>Next live test (countdown)</span><span>' + (nextLive ? esc(examLabel(nextLive.exam)) + ', ' + when(nextLive.start) : 'None scheduled') + '</span></div>' +
-    '</div></section></div>' +
-    '<section class="card faq-card"><div class="card-head"><h2>Frequently asked questions</h2><button class="btn btn-outline btn-sm" type="button" id="faq-add">Add question</button></div>' +
-    '<div class="stack">' + w.faqs.map(function (f, i) {
-      return '<div class="faq">' +
-        '<label class="l" for="fq-' + i + '">Question ' + (i + 1) + '</label><input class="input" id="fq-' + i + '" data-fq="' + i + '" value="' + esc(f.q) + '">' +
-        '<label class="l" for="fa-' + i + '">Answer</label><textarea class="input" id="fa-' + i + '" data-fa="' + i + '">' + esc(f.a) + '</textarea>' +
-        '<div><button class="btn btn-danger btn-sm" type="button" data-faq-del="' + i + '">Remove</button></div></div>';
-    }).join('') + '</div><div class="card-foot"><button class="btn btn-primary" type="button" id="faq-save">Save FAQs</button></div></section>';
-};
-bind.website = function () {
-  $('#yt-save').addEventListener('click', function () {
-    var ok = function (u) { return !u || /^https:\/\/(www\.|m\.)?(youtube\.com|youtu\.be)\//i.test(u); };
-    var ch = $('#yt-ch').value.trim();
-    if (!ch || !ok(ch)) { toast('Enter your YouTube channel link'); return; }
-    var pl = {}, bad = false;
-    Object.keys(db.exams).forEach(function (k) { var u = $('#yt-' + k).value.trim(); if (!ok(u)) bad = true; pl[k] = u; });
-    if (bad) { toast('Playlist links must be YouTube links'); return; }
-    db.video.channel = ch; db.video.playlists = pl; save(); toast('Video library links saved');
-  });
-  $('#ws-save').addEventListener('click', function () { db.website.showAnnouncement = $('#ws-on').checked; db.website.announcement = $('#ws-text').value.trim(); save(); toast('Announcement saved'); });
-  function collect() { db.website.faqs = db.website.faqs.map(function (f, i) { return { q: $('[data-fq="' + i + '"]').value.trim(), a: $('[data-fa="' + i + '"]').value.trim() }; }); }
-  $('#faq-add').addEventListener('click', function () { collect(); db.website.faqs.push({ q: '', a: '' }); render(); });
-  $$('[data-faq-del]').forEach(function (b) { b.addEventListener('click', function () { collect(); db.website.faqs.splice(Number(b.dataset.faqDel), 1); save(); render(); }); });
-  $('#faq-save').addEventListener('click', function () {
-    collect();
-    if (db.website.faqs.some(function (f) { return !f.q || !f.a; })) { toast('Fill in every question and answer, or remove empty ones'); return; }
-    save(); toast('FAQs saved');
-  });
-};
+/* ---------- Website info ----------
+   React screen: Admin.jsx renders <WebsiteAdmin/> beside #view while this view
+   is active, so #view stays empty here. */
+VIEWS.website = function () { return ''; };
 
 /* ---------- Shared form bits ---------- */
 function field(label, control, hint) {

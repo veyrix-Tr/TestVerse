@@ -59,7 +59,7 @@ const getOverview = async (req, res) => {
       prisma.user.findMany({ where: { ...student, createdAt: { gte: chartFrom } }, select: { createdAt: true } }),
       prisma.attempt.findMany({ where: { submittedAt: { gte: chartFrom } }, select: { submittedAt: true } }),
       prisma.test.findMany({
-        select: { id: true, title: true, kind: true, exam: true, isFree: true, status: true, opensAt: true, closesAt: true, questionCount: true, durationMin: true, paper: false, createdAt: true, _count: { select: { attempts: true } } },
+        select: { id: true, title: true, kind: true, exam: true, isFree: true, status: true, opensAt: true, closesAt: true, questionCount: true, durationMin: true, createdAt: true, _count: { select: { attempts: true } } },
       }),
       prisma.attempt.groupBy({ by: ['testId'], where: { submittedAt: { gte: monthAgo } }, _count: { _all: true }, orderBy: { _count: { testId: 'desc' } }, take: 5 }),
       prisma.batch.findMany({
@@ -103,7 +103,7 @@ const getOverview = async (req, res) => {
     // Needs attention, most urgent first
     const attention = [];
     const closingSoon = openNow.filter((t) => t.closesAt && t.closesAt <= dayAhead);
-    closingSoon.forEach((t) => attention.push({ level: 'warn', text: `${t.title} closes ${t.closesAt.toISOString()}`, at: t.closesAt, kind: 'closing', testId: t.id, view: t.kind === 'live' ? 'live' : 'free' }));
+    closingSoon.forEach((t) => attention.push({ level: 'warn', kind: 'closing', title: t.title, at: t.closesAt, attempts: t._count.attempts, view: t.kind === 'live' ? 'live' : 'free' }));
     if (pending) attention.push({ level: 'info', kind: 'pending', count: pending, view: 'students' });
     const drafts = tests.filter((t) => t.status === 'draft');
     const emptyDrafts = drafts.filter((t) => !t.questionCount);

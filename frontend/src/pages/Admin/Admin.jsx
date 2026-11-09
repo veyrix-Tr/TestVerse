@@ -6,9 +6,11 @@ import { usePageMeta } from '../../lib/hooks.js'
 import { clearSession, loadSession } from '../../lib/session.js'
 import mountAdmin from './adminApp.js'
 import AdminComingSoon from './AdminComingSoon.jsx'
+import AdminDashboard from './AdminDashboard.jsx'
 import SeriesAdmin from './SeriesAdmin.jsx'
 import StudentsAdmin from './StudentsAdmin.jsx'
 import TestsAdmin from './TestsAdmin.jsx'
+import WebsiteAdmin from './WebsiteAdmin.jsx'
 import { loadCounts } from './testsApi.js'
 import { forgetAll } from './cache.js'
 
@@ -20,13 +22,13 @@ import { forgetAll } from './cache.js'
   (#dashboard, #tests, …) and every interaction are the design's own script,
   mounted by mountAdmin() below — see adminApp.js.
 
-  Exceptions: "Free tests", "Live tests", "Test series" and "Students &
-  groups" are real and API-backed. adminApp reports the current view through
-  onView; while it is "free", "live", "series" or "students", #view is hidden
-  and the React <TestsAdmin/>, <SeriesAdmin/> or <StudentsAdmin/> screen
-  renders in its place. "Analysis" and "Video requests" show
-  <AdminComingSoon/> the same way. Clicking a sidebar item again goes back to
-  that section's first screen (its `navKey` remounts it).
+  Exceptions: "Free tests", "Live tests", "Test series", "Students &
+  groups" and "Website info" are React screens. adminApp reports the current
+  view through onView; while it is "free", "live", "series", "students" or
+  "website", #view is hidden and the matching screen renders in its place.
+  "Analysis" and "Video requests" show <AdminComingSoon/> the same way.
+  Clicking a sidebar item again goes back to that section's first screen (its
+  `navKey` remounts it).
 */
 export default function Admin() {
   usePageMeta({ title: 'Admin — Testverse by Studyverse' })
@@ -68,7 +70,11 @@ export default function Admin() {
   const showTests = view === 'free' || view === 'live'
   const showSeries = view === 'series'
   const showStudents = view === 'students'
+  const showWebsite = view === 'website'
   const showSoon = view === 'analysis' || view === 'requests'
+  const showDash = view === 'dashboard'
+  // Open another section the way its sidebar button does (adminApp owns the routing)
+  const goTo = (v) => rootRef.current?.querySelector('.side [data-view="' + v + '"]')?.click()
 
   return (
     <div className="tv-admin" ref={rootRef}>
@@ -153,7 +159,12 @@ export default function Admin() {
             </button>
           </div>
         </nav>
-        <main className="main" id="view" tabIndex={-1} hidden={showTests || showSeries || showStudents || showSoon}></main>
+        <main className="main" id="view" tabIndex={-1} hidden={showDash || showTests || showSeries || showStudents || showSoon || showWebsite}></main>
+        {showDash && (
+          <main className="main" id="dash-view">
+            <AdminDashboard onGo={goTo} />
+          </main>
+        )}
         {showTests && (
           <main className="main" id="tests-view">
             <TestsAdmin key={view + navKey} kind={view} onCount={view === 'free' ? setFree : setLive} />
@@ -172,6 +183,11 @@ export default function Admin() {
         {showSoon && (
           <main className="main" id="soon-view">
             <AdminComingSoon view={view} />
+          </main>
+        )}
+        {showWebsite && (
+          <main className="main" id="website-view">
+            <WebsiteAdmin key={navKey} />
           </main>
         )}
       </div>

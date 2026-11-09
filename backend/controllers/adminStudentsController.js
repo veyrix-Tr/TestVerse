@@ -85,22 +85,38 @@ const listStudents = async (req, res) => {
     const limit  = Math.min(Math.max(parseInt(req.query.limit, 10) || PAGE, 1), MAX_PAGE);
     const offset = Math.max(parseInt(req.query.offset, 10) || 0, 0);
     const weekAgo = new Date(Date.now() - WEEK_MS);
+    const twoWeeksAgo = new Date(Date.now() - 2 * WEEK_MS);
 
-    const [users, total, students, activeBatches, joinedThisWeek, submittedThisWeek] = await Promise.all([
+    const [users, total, students, activeBatches, joinedThisWeek, joinedLastWeek, weekAttempts] = await Promise.all([
       prisma.user.findMany({ where, include: STUDENT_INCLUDE, orderBy: { createdAt: 'desc' }, skip: offset, take: limit }),
       prisma.user.count({ where }),
       prisma.user.count({ where: { role: 'student' } }),
       prisma.subscription.count({ where: { status: 'active', user: { role: 'student' } } }),
       prisma.user.count({ where: { role: 'student', createdAt: { gte: weekAgo } } }),
-      prisma.attempt.count({ where: { submittedAt: { gte: weekAgo } } }),
+      prisma.user.count({ where: { role: 'student', createdAt: { gte: twoWeeksAgo, lt: weekAgo } } }),
+      // this week's submitted attempts, for the count, average and number of students
+      prisma.attempt.findMany({ where: { submittedAt: { gte: weekAgo } }, select: { userId: true, score: true, maxScore: true } }),
     ]);
+    const weekPcts = weekAttempts.map((a) => pct(a.score, a.maxScore)).filter((x) => x != null);
+    const weekAvgPct = weekPcts.length ? Math.round((weekPcts.reduce((x, y) => x + y, 0) / weekPcts.length) * 10) / 10 : null;
+    const weekTakers = new Set(weekAttempts.map((a) => a.userId)).size;
     const stats = await statsFor(users.map((u) => u.id));
     res.json({
       students: users.map((u) => studentRow(u, stats[u.id])),
       total,
       offset,
       limit,
-      summary: { students, activeBatches, paid: activeBatches, free: students - activeBatches, joinedThisWeek, submittedThisWeek },
+      summary: {
+        students,
+        activeBatches,
+        paid:              activeBatches,
+        free:              students - activeBatches,
+        joinedThisWeek,
+        joinedLastWeek,
+        submittedThisWeek: weekAttempts.length,
+        weekAvgPct,
+        weekTakers,
+      },
       serverNow: new Date(),
     });
   } catch (error) {
@@ -191,10 +207,14 @@ const readGroup = (b, partial) => {
   return { data: { ...(b.name !== undefined || !partial ? { name } : {}), ...(b.description !== undefined || !partial ? { description } : {}) } };
 };
 
+// Groups are for paid students only: anyone without an active batch is skipped.
 const validStudentIds = async (list) => {
   const wanted = ids(list);
   if (!wanted.length) return [];
-  const found = await prisma.user.findMany({ where: { id: { in: wanted }, role: 'student' }, select: { id: true } });
+  const found = await prisma.user.findMany({
+    where:  { id: { in: wanted }, role: 'student', subscription: { is: { status: 'active' } } },
+    select: { id: true },
+  });
   return found.map((u) => u.id);
 };
 
@@ -278,7 +298,7 @@ const addMembers = async (req, res) => {
     const exists = await prisma.group.findUnique({ where: { id: req.params.id }, select: { id: true } });
     if (!exists) return res.status(404).json({ error: 'Group not found' });
     const studentIds = await validStudentIds(req.body.studentIds);
-    if (!studentIds.length) return res.status(400).json({ field: 'studentIds', error: 'Choose at least one student.' });
+    if (!studentIds.length) return res.status(400).json({ field: 'studentIds', error: 'Choose at least one paid student. Students need an active batch to join a group.' });
     const r = await prisma.groupMember.createMany({ data: studentIds.map((userId) => ({ groupId: exists.id, userId })), skipDuplicates: true });
     res.json({ message: `${r.count} student${r.count === 1 ? '' : 's'} added`, added: r.count });
   } catch (error) {

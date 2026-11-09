@@ -48,9 +48,7 @@ export default function StudentPage({ id, toast, backText, onBack, onOpenGroup }
   const head = (title, sub, right) => (
     <div className="head ts-head sg-head">
       <div>
-        <BackButton onClick={onBack}>
-          {backText}
-        </BackButton>
+        <BackButton onClick={onBack}>{backText}</BackButton>
         <h1>{title}</h1>
         {sub}
       </div>
@@ -79,6 +77,7 @@ export default function StudentPage({ id, toast, backText, onBack, onOpenGroup }
   const [{ student: s, results, inProgress, assignedTests }, groups, tests] = live.data
   const st = batchState(s)
   const first = s.name.split(/\s+/)[0]
+  const isPaid = !!(s.batch && s.batch.status === 'active') // only paid students join groups
   const inGroups = new Set(s.groups.map((g) => g.id))
   const assigned = new Set(assignedTests.map((t) => t.id))
   const best = results.reduce((m, r) => (r.pct != null && (m == null || r.pct > m) ? r.pct : m), null)
@@ -141,7 +140,9 @@ export default function StudentPage({ id, toast, backText, onBack, onOpenGroup }
         </div>
         <div className="card stat">
           <span>Last active</span>
-          <b className="sg-stat-text">{s.stats.lastAt || s.lastLoginAt ? ago(s.stats.lastAt && (!s.lastLoginAt || s.stats.lastAt > s.lastLoginAt) ? s.stats.lastAt : s.lastLoginAt, now) : 'Never'}</b>
+          <b className="sg-stat-text">
+            {s.stats.lastAt || s.lastLoginAt ? ago(s.stats.lastAt && (!s.lastLoginAt || s.stats.lastAt > s.lastLoginAt) ? s.stats.lastAt : s.lastLoginAt, now) : 'Never'}
+          </b>
           <small>{s.stats.lastAt ? 'Last test ' + day(s.stats.lastAt) : 'No test yet'}</small>
         </div>
       </div>
@@ -186,21 +187,28 @@ export default function StudentPage({ id, toast, backText, onBack, onOpenGroup }
           <section className="card sg-card">
             <div className="card-head">
               <h2>Groups</h2>
-              <OptionPicker
-                label="Add to group"
-                title={'Add ' + first + ' to a group'}
-                placeholder="Search groups"
-                empty={groups.length ? 'No group matches.' : 'No groups yet. Create one in the Groups tab.'}
-                options={groupOptions}
-                busy={busy === 'group'}
-                align="right"
-                onPick={(g) => act('group', () => addMembers(g.id, [s.id]), `${first} added to "${g.label}"`)}
-              />
+              {isPaid && (
+                <OptionPicker
+                  label="Add to group"
+                  title={'Add ' + first + ' to a group'}
+                  placeholder="Search groups"
+                  empty={groups.length ? 'No group matches.' : 'No groups yet. Create one in the Groups tab.'}
+                  options={groupOptions}
+                  busy={busy === 'group'}
+                  align="right"
+                  onPick={(g) => act('group', () => addMembers(g.id, [s.id]), `${first} added to "${g.label}"`)}
+                />
+              )}
             </div>
             {s.groups.length ? (
               <div className="sg-chips">
                 {s.groups.map((g) => (
-                  <Chip key={g.id} busy={busy === 'g:' + g.id} removeLabel={'Remove from ' + g.name} onRemove={() => act('g:' + g.id, () => removeMember(g.id, s.id), `${first} removed from "${g.name}"`)}>
+                  <Chip
+                    key={g.id}
+                    busy={busy === 'g:' + g.id}
+                    removeLabel={'Remove from ' + g.name}
+                    onRemove={() => act('g:' + g.id, () => removeMember(g.id, s.id), `${first} removed from "${g.name}"`)}
+                  >
                     <button type="button" className="sg-chip-link" onClick={() => onOpenGroup(g.id)}>
                       {g.name}
                     </button>
@@ -208,7 +216,11 @@ export default function StudentPage({ id, toast, backText, onBack, onOpenGroup }
                 ))}
               </div>
             ) : (
-              <p className="hint">Not in any group. Tests given to a group show up for everyone in it.</p>
+              <p className="hint">
+                {isPaid
+                  ? 'Not in any group. Tests given to a group show up for everyone in it.'
+                  : `Groups are for paid students. ${first} can join one once their batch is active.`}
+              </p>
             )}
           </section>
         </div>
