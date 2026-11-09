@@ -111,6 +111,12 @@ model Test {
   // A free test: every student of its exam (any exam if `exam` is null) may
   // take it, with or without a batch. `audience` doesn't apply to it.
   isFree        Boolean   @default(false)
+  // Which admin section it belongs to: "free" (Free tests, isFree = true),
+  // "live" (Live tests: has a start time, given to chosen people or all paid
+  // students) or "series" (stored inside a TestSeries, shown to nobody yet).
+  kind          String    @default("live")
+  seriesId      String?
+  series        TestSeries? @relation(fields: [seriesId], references: [id], onDelete: Cascade)
   opensAt       DateTime? // students may start from…
   closesAt      DateTime? // …until (both optional)
   createdById   String?
@@ -125,6 +131,21 @@ model Test {
 
   @@index([status])
   @@index([isFree])
+  @@index([kind])
+  @@index([seriesId])
+}
+
+// A test series an admin builds: a named set of tests. For now its tests are
+// stored only (no student can see them); selling series comes later.
+model TestSeries {
+  id          String   @id @default(cuid())
+  title       String
+  exam        String?  // "jee" | "neet" | null
+  description String   @default("")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tests       Test[]
 }
 
 // One student's attempt at one test. A student may retake a test once they've

@@ -26,6 +26,13 @@ Run it again after editing a paper; `-- --check` only checks the papers:
 npm run seed:free-tests
 ```
 
+Create a ready-to-use paid student (active batch for their exam + class, as if they had paid):
+
+```bash
+STUDENT_EMAIL=test@example.com STUDENT_PASSWORD='…' npm run create-student
+# optional: STUDENT_NAME, STUDENT_EXAM (jee-main), STUDENT_GRADE ("Class 12"), STUDENT_CITY, STUDENT_PAID=false
+```
+
 Admins log in on the normal `/login` page and land on `/admin`. Protect admin
 API routes with `requireAuth, requireAdmin` from `middleware/auth.js`.
 

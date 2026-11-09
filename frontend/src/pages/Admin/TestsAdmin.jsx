@@ -5,11 +5,34 @@ import { audienceText } from './studentsApi.js'
 import { EXAM_LABEL, deleteTest, listTests, setPublished, when } from './testsApi.js'
 
 /*
-  Admin › Tests (real, API-backed). Shown by Admin.jsx in place of the demo
-  #view while the sidebar's "Tests" item is active. Two screens in one place:
-  the list, and the create / edit form (not a modal).
+  Admin › Free tests and Admin › Live tests (real, API-backed). Shown by
+  Admin.jsx in place of the demo #view while the sidebar's "Free tests" or
+  "Live tests" item is active (`kind` = 'free' | 'live'). Two screens in one
+  place: the list, and the create / edit form (not a modal).
 */
-export default function TestsAdmin({ onCount }) {
+const COPY = {
+  free: {
+    title: 'Free tests',
+    text: 'Open to every student, with or without a batch. Add the question paper as JSON and publish it when it is ready.',
+    create: 'Create free test',
+    back: 'Back to free tests',
+    empty: 'No free tests yet',
+    emptyText: 'Free tests are open to every student. Fill in the details, add the question paper as JSON, check the preview and publish.',
+  },
+  live: {
+    title: 'Live tests',
+    text: 'Tests for paid students that open at a set time. Choose who can take each one: all paid students, or chosen batches, groups and students.',
+    create: 'Create live test',
+    back: 'Back to live tests',
+    empty: 'No live tests yet',
+    emptyText: 'Set a start time, choose who can take it, add the question paper as JSON and publish.',
+  },
+}
+
+// "JEE " / "NEET " / "" for wording like "Every JEE student".
+const examWord = (exam) => (exam === 'jee' ? 'JEE ' : exam === 'neet' ? 'NEET ' : '')
+
+export default function TestsAdmin({ kind = 'free', onCount }) {
   const [screen, setScreen] = useState({ name: 'list' }) // or { name: 'edit', id: null | string }
   const { toast, node: toastNode } = useToast()
 
@@ -21,11 +44,13 @@ export default function TestsAdmin({ onCount }) {
   return (
     <>
       {screen.name === 'list' ? (
-        <TestsList onCount={onCount} toast={toast} onCreate={() => open({ name: 'edit', id: null })} onEdit={(id) => open({ name: 'edit', id })} />
+        <TestsList kind={kind} onCount={onCount} toast={toast} onCreate={() => open({ name: 'edit', id: null })} onEdit={(id) => open({ name: 'edit', id })} />
       ) : (
         <TestEditor
           key={screen.id || 'new'}
           id={screen.id}
+          kind={kind}
+          backText={COPY[kind].back}
           onBack={() => open({ name: 'list' })}
           onSaved={(msg) => {
             toast(msg)
@@ -38,28 +63,41 @@ export default function TestsAdmin({ onCount }) {
   )
 }
 
-function windowText(t) {
-  if (t.opensAt && t.closesAt) return [when(t.opensAt), 'to ' + when(t.closesAt)]
-  if (t.opensAt) return ['Opens ' + when(t.opensAt), 'No closing time']
-  if (t.closesAt) return ['Open now', 'Closes ' + when(t.closesAt)]
-  return ['Always open', null]
+/* Where a published test is in its window: Upcoming / Open now / Ended (null when always open). */
+function phase(t, now) {
+  if (t.closesAt && new Date(t.closesAt).getTime() <= now) return 'Ended'
+  if (t.opensAt && new Date(t.opensAt).getTime() > now) return 'Upcoming'
+  if (t.opensAt || t.closesAt) return 'Open now'
+  return null
 }
 
-function TestsList({ onCount, toast, onCreate, onEdit }) {
+/* Free tests: a short line about their optional window. */
+function freeWindow(t) {
+  if (t.opensAt && t.closesAt) return 'Open ' + when(t.opensAt) + ' to ' + when(t.closesAt)
+  if (t.opensAt) return 'Opens ' + when(t.opensAt)
+  if (t.closesAt) return 'Closes ' + when(t.closesAt)
+  return 'Always open'
+}
+
+function TestsList({ kind, onCount, toast, onCreate, onEdit }) {
+  const copy = COPY[kind]
+  const isLive = kind === 'live'
   const [tests, setTests] = useState(null)
   const [error, setError] = useState(null)
-  const [busy, setBusy] = useState(null) // id of the row being changed
+  const [busy, setBusy] = useState(null) // { id, kind } of the row being changed
+  const [retrying, setRetrying] = useState(false)
+  const [now] = useState(() => Date.now())
 
   const load = useCallback(
     () =>
-      listTests()
+      listTests(kind)
         .then((list) => {
           setError(null)
           setTests(list)
           if (onCount) onCount(list.length)
         })
         .catch((e) => setError(e.message)),
-    [onCount],
+    [kind, onCount],
   )
 
   useEffect(() => {
@@ -67,7 +105,7 @@ function TestsList({ onCount, toast, onCreate, onEdit }) {
   }, [load])
 
   async function togglePublish(t) {
-    setBusy(t.id)
+    setBusy({ id: t.id, kind: 'publish' })
     try {
       const on = t.status !== 'published'
       await setPublished(t.id, on)
@@ -86,7 +124,7 @@ function TestsList({ onCount, toast, onCreate, onEdit }) {
       ? `\n\n${n} student attempt${n === 1 ? '' : 's'} and ${n === 1 ? 'its' : 'their'} results will be deleted too. This can't be undone.`
       : "\n\nThis can't be undone."
     if (!window.confirm(`Delete "${t.title}"?${warn}`)) return
-    setBusy(t.id)
+    setBusy({ id: t.id, kind: 'delete' })
     try {
       await deleteTest(t.id)
       await load()
@@ -102,12 +140,12 @@ function TestsList({ onCount, toast, onCreate, onEdit }) {
     <>
       <div className="head">
         <div>
-          <h1>Tests</h1>
-          <p>Create a test from a JSON question paper, then publish it when it is ready for students.</p>
+          <h1>{copy.title}</h1>
+          <p>{copy.text}</p>
         </div>
         <div className="actions">
           <button className="btn btn-primary" type="button" onClick={onCreate}>
-            Create test
+            {copy.create}
           </button>
         </div>
       </div>
@@ -115,8 +153,16 @@ function TestsList({ onCount, toast, onCreate, onEdit }) {
       {error ? (
         <div className="alert a-err" role="alert">
           <span className="ts-grow">Couldn&apos;t load tests. {error}</span>
-          <button className="btn btn-outline btn-sm" type="button" onClick={load}>
-            Try again
+          <button
+            className="btn btn-outline btn-sm"
+            type="button"
+            disabled={retrying}
+            onClick={() => {
+              setRetrying(true)
+              load().finally(() => setRetrying(false))
+            }}
+          >
+            {retrying ? 'Trying…' : 'Try again'}
           </button>
         </div>
       ) : tests == null ? (
@@ -125,24 +171,24 @@ function TestsList({ onCount, toast, onCreate, onEdit }) {
         </div>
       ) : tests.length === 0 ? (
         <div className="card ts-empty">
-          <h2>No tests yet</h2>
-          <p className="hint">Fill in the details, paste or upload the question paper as JSON, check the preview and publish.</p>
+          <h2>{copy.empty}</h2>
+          <p className="hint">{copy.emptyText}</p>
           <div>
             <button className="btn btn-primary" type="button" onClick={onCreate}>
-              Create your first test
+              {copy.create}
             </button>
           </div>
         </div>
       ) : (
-        <div className="table-wrap ts-table">
+        <div className={'table-wrap ts-table ' + (isLive ? 'ts-live' : 'ts-freelist')}>
           <table>
             <thead>
               <tr>
                 <th>Test</th>
                 <th>Paper</th>
-                <th>Window</th>
+                {isLive && <th>Starts / window</th>}
                 <th>Status</th>
-                <th>Given to</th>
+                {isLive && <th>Given to</th>}
                 <th>Attempts</th>
                 <th>
                   <span className="sr">Actions</span>
@@ -151,8 +197,8 @@ function TestsList({ onCount, toast, onCreate, onEdit }) {
             </thead>
             <tbody>
               {tests.map((t) => {
-                const [w1, w2] = windowText(t)
                 const published = t.status === 'published'
+                const ph = published ? phase(t, now) : null
                 return (
                   <tr key={t.id}>
                     <td>
@@ -177,24 +223,40 @@ function TestsList({ onCount, toast, onCreate, onEdit }) {
                         </>
                       )}
                     </td>
-                    <td>
-                      {w1}
-                      {w2 && <span className="sub">{w2}</span>}
-                    </td>
-                    <td>
+                    {isLive && (
+                      <td className="ts-when" data-label="Starts">
+                        {t.opensAt ? (
+                          <>
+                            {when(t.opensAt)}
+                            <span className="sub">{t.closesAt ? 'Closes ' + when(t.closesAt) : 'No closing time'}</span>
+                          </>
+                        ) : (
+                          <>
+                            <span className="pill p-warn">No start time</span>
+                            <span className="sub">Edit to add one</span>
+                          </>
+                        )}
+                      </td>
+                    )}
+                    <td className="ts-state">
                       <span className={'pill ' + (published ? 'p-published' : 'p-draft')}>{published ? 'Published' : 'Draft'}</span>
-                      {t.isFree ? <span className="pill p-scheduled ts-free-pill">Free</span> : null}
+                      {isLive ? ph && <span className="sub">{ph}</span> : <span className="sub">{freeWindow(t)}</span>}
                     </td>
-                    <td className="ts-aud" data-label="Given to">
-                      {!t.audience || t.audience.mode !== 'custom' ? (
-                        <span className="ts-dim">Everyone</span>
-                      ) : audienceText(t.audience) === 'Nobody yet' ? (
-                        <span className="pill p-warn">Nobody yet</span>
-                      ) : (
-                        <span title={audienceText(t.audience)}>{audienceText(t.audience, true)}</span>
-                      )}
-                    </td>
-                    <td>
+                    {isLive && (
+                      <td className="ts-aud" data-label="Given to">
+                        {!t.audience || t.audience.mode !== 'custom' ? (
+                          <>
+                            <span>All paid students</span>
+                            <span className="sub">{t.exam ? examWord(t.exam) + 'batches' : 'Every active batch'}</span>
+                          </>
+                        ) : audienceText(t.audience) === 'Nobody yet' ? (
+                          <span className="pill p-warn">Nobody yet</span>
+                        ) : (
+                          <span title={audienceText(t.audience)}>{audienceText(t.audience, true)}</span>
+                        )}
+                      </td>
+                    )}
+                    <td className="ts-att">
                       {t.attempts || 0} started
                       <span className="sub">{t.submitted || 0} submitted</span>
                     </td>
@@ -204,22 +266,22 @@ function TestsList({ onCount, toast, onCreate, onEdit }) {
                           Edit
                         </button>
                         {published ? (
-                          <button className="btn btn-outline btn-sm" type="button" disabled={busy === t.id} onClick={() => togglePublish(t)}>
-                            Unpublish
+                          <button className="btn btn-outline btn-sm" type="button" disabled={busy?.id === t.id} onClick={() => togglePublish(t)}>
+                            {busy?.id === t.id && busy.kind === 'publish' ? 'Unpublishing…' : 'Unpublish'}
                           </button>
                         ) : (
                           <button
                             className="btn btn-dark btn-sm"
                             type="button"
-                            disabled={busy === t.id || !t.hasPaper}
-                            title={t.hasPaper ? undefined : 'Add the question paper first'}
+                            disabled={busy?.id === t.id || !t.hasPaper || (isLive && !t.opensAt)}
+                            title={!t.hasPaper ? 'Add the question paper first' : isLive && !t.opensAt ? 'Add a start time first' : undefined}
                             onClick={() => togglePublish(t)}
                           >
-                            Publish
+                            {busy?.id === t.id && busy.kind === 'publish' ? 'Publishing…' : 'Publish'}
                           </button>
                         )}
-                        <button className="btn btn-danger btn-sm" type="button" disabled={busy === t.id} onClick={() => remove(t)} aria-label={'Delete ' + t.title}>
-                          Delete
+                        <button className="btn btn-danger btn-sm" type="button" disabled={busy?.id === t.id} onClick={() => remove(t)} aria-label={'Delete ' + t.title}>
+                          {busy?.id === t.id && busy.kind === 'delete' ? 'Deleting…' : 'Delete'}
                         </button>
                       </div>
                     </td>

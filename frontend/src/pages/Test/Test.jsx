@@ -10,7 +10,6 @@ import { loadJSON, removeKey, saveJSON } from '../../lib/storage.js'
 import { useToast } from '../../lib/useToast.jsx'
 import ExamView from './sections/ExamView.jsx'
 import InstructionsView from './sections/InstructionsView.jsx'
-import ResultView from './sections/ResultView.jsx'
 import { countsOf } from './status.js'
 import { attemptOf, flatten, paperOf } from './testData.js'
 import BackButton from '../../components/BackButton.jsx'
@@ -31,8 +30,10 @@ function baseResp() {
 }
 
 /*
-  design/test.html -> route "/test?test=<id>" (and &view=result[&attempt=n],
-  or &retake=1 to take a submitted test again).
+  design/test.html -> route "/test?test=<id>" (or &retake=1 to take a
+  submitted test again). Results live in the dashboard
+  (/student/result, ResultPage.jsx): after submitting, and for old
+  &view=result[&attempt=n] links, this page sends the student there.
   The paper, clock and attempt live on the server (backend/controllers/
   testsController.js). The browser keeps a backup of the attempt in
   localStorage and pushes answers to PUT /attempt; the server's deadline
@@ -50,11 +51,10 @@ export default function Test() {
   const PATH = '/tests/' + encodeURIComponent(testId)
   const RESULT_PATH = PATH + '/result' + (qs.get('attempt') ? '?attempt=' + encodeURIComponent(qs.get('attempt')) : '')
 
-  const [view, setView] = useState('loading') // loading | error | instr | exam | result
+  const [view, setView] = useState('loading') // loading | error | instr | exam
   const [problem, setProblem] = useState(null) // { title, text, retry? } in the error view
   const [paper, setPaper] = useState(null)
   const [attempt, setAttempt] = useState(null)
-  const [resultMeta, setResultMeta] = useState(null) // { history, canRetake, inProgress } with a result
   const [retakeNo, setRetakeNo] = useState(0) // the attempt number a retake will start, 0 if not retaking
   const [blocked, setBlocked] = useState(null) // { opensAt } while the test hasn't opened
   const [starting, setStarting] = useState(false)
@@ -63,7 +63,6 @@ export default function Test() {
   const [save, setSave] = useState(SAVE.saved)
   const [sideOpen, setSideOpen] = useState(false)
   const [online, setOnline] = useState(() => navigator.onLine)
-  const [reviewFilter, setReviewFilter] = useState('all')
   const [submitOpen, setSubmitOpen] = useState(false)
   const [submitState, setSubmitState] = useState(null) // { status: 'sending' | 'failed', auto, msg }
   const [bootKey, setBootKey] = useState(0)
@@ -111,24 +110,17 @@ export default function Test() {
     saveJSON(KEY, { startedAt: a.startedAt, responses: a.responses, current: a.current, lang: a.lang, tabSwitches: a.tabSwitches, warned5: a.warned5, pending })
   }
 
-  /* ---------- result ---------- */
+  /* ---------- result: shown in the dashboard ---------- */
   function showResult(d, message) {
-    const p = paperOf(d.test)
-    const fl = flatten(p)
-    const local = loadJSON(KEY)
-    const a = attemptOf(d.attempt, local ? { ...local, pending: false } : null, fl.length)
     clearTimeout(debounceRef.current)
-    attemptRef.current = a
-    setPaper(p)
-    setAttempt(a)
-    setResultMeta({ history: d.history || [], canRetake: !!d.canRetake, inProgress: !!d.inProgress, attemptNo: d.attempt.attemptNo || 1 })
-    setLang(a.lang)
-    setSubmitOpen(false)
-    setSubmitState(null)
+    // The attempt is submitted: nothing left to autosave or flush on the way out
+    attemptRef.current = attemptOf(d.attempt, null, flatten(paperOf(d.test)).length)
     failedRef.current = null
-    setView('result')
     removeKey(KEY)
-    if (message) toast(message, 4000)
+    routerNavigate('/student/result?test=' + encodeURIComponent(testId) + '&attempt=' + (d.attempt.attemptNo || 1), {
+      replace: true,
+      state: message ? { notice: message } : null,
+    })
   }
 
   function fail(title, text, retry) {
@@ -700,10 +692,6 @@ export default function Test() {
           onFontDn={() => font(-1)}
           api={examApi}
         />
-      ) : null}
-
-      {view === 'result' && attempt && paper ? (
-        <ResultView paper={paper} flat={flat} attempt={attempt} meta={resultMeta} reviewFilter={reviewFilter} setReviewFilter={setReviewFilter} />
       ) : null}
 
       {/* Submit confirm / progress / retry */}

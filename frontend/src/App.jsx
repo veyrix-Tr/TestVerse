@@ -72,10 +72,15 @@ const router = createBrowserRouter([
   { path: '/signup', ...page(() => import('./pages/Signup/Signup.jsx')) },
   { path: '/subscribe', loader: requireNoSubscription, ...page(() => import('./pages/Subscribe/Subscribe.jsx')) },
   { path: '/checkout', element: <Navigate to="/subscribe" replace /> },
-  { path: '/student', loader: requireStudent, ...page(() => import('./pages/StudentHome/StudentHome.jsx')) },
-  // Coming-soon pages inside the dashboard shell
-  { path: '/student/analysis', loader: requireStudent, ...page(() => import('./pages/StudentHome/StudentHome.jsx')) },
-  { path: '/student/video-requests', loader: requireStudent, ...page(() => import('./pages/StudentHome/StudentHome.jsx')) },
+  // One route for the dashboard and its coming-soon pages (/student/analysis …),
+  // so moving between them keeps the page mounted instead of rebuilding it.
+  {
+    path: '/student/:page?',
+    loader: requireStudent,
+    // The session was checked on the way in; the server checks it on every API call too
+    shouldRevalidate: ({ currentUrl, nextUrl }) => !currentUrl.pathname.startsWith('/student') || !nextUrl.pathname.startsWith('/student'),
+    ...page(() => import('./pages/StudentHome/StudentHome.jsx')),
+  },
   { path: '/test', loader: requireSession, ...testPage },
   { path: '/admin', loader: requireAdmin, ...page(() => import('./pages/Admin/Admin.jsx')) },
   { path: '*', element: <Navigate to="/" replace /> },

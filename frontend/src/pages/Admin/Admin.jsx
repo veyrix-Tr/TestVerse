@@ -1,13 +1,15 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import './Admin.css'
 import LogoSprite from '../../components/LogoSprite.jsx'
 import { useNavigate } from 'react-router-dom'
 import { usePageMeta } from '../../lib/hooks.js'
 import { clearSession, loadSession } from '../../lib/session.js'
 import mountAdmin from './adminApp.js'
+import AdminComingSoon from './AdminComingSoon.jsx'
+import SeriesAdmin from './SeriesAdmin.jsx'
 import StudentsAdmin from './StudentsAdmin.jsx'
 import TestsAdmin from './TestsAdmin.jsx'
-import { loadTestCount } from './testsApi.js'
+import { loadCounts } from './testsApi.js'
 
 /*
   design/admin.html -> route "/admin"
@@ -17,10 +19,13 @@ import { loadTestCount } from './testsApi.js'
   (#dashboard, #tests, …) and every interaction are the design's own script,
   mounted by mountAdmin() below — see adminApp.js.
 
-  Exceptions: the "Tests" and "Students & groups" views are real and
-  API-backed. adminApp reports the current view through onView; while it is
-  "tests" or "students", #view is hidden and the React <TestsAdmin/> or
-  <StudentsAdmin/> screen renders in its place.
+  Exceptions: "Free tests", "Live tests", "Test series" and "Students &
+  groups" are real and API-backed. adminApp reports the current view through
+  onView; while it is "free", "live", "series" or "students", #view is hidden
+  and the React <TestsAdmin/>, <SeriesAdmin/> or <StudentsAdmin/> screen
+  renders in its place. "Analysis" and "Video requests" show
+  <AdminComingSoon/> the same way. Clicking a sidebar item again goes back to
+  that section's first screen (its `navKey` remounts it).
 */
 export default function Admin() {
   usePageMeta({ title: 'Admin — Testverse by Studyverse' })
@@ -28,8 +33,11 @@ export default function Admin() {
   const [menuOpen, setMenuOpen] = useState(false)
   const navigate = useNavigate()
   const [view, setView] = useState(null)
-  const [testCount, setTestCount] = useState(null)
-  const [studentsKey, setStudentsKey] = useState(0) // bumped to go back to the list when "Students & groups" is clicked again
+  const [counts, setCounts] = useState({ free: null, live: null, series: null })
+  const [navKey, setNavKey] = useState(0) // bumped on every sidebar click, so clicking a section again goes back to its list
+  const setFree = useCallback((n) => setCounts((c) => ({ ...c, free: n })), [])
+  const setLive = useCallback((n) => setCounts((c) => ({ ...c, live: n })), [])
+  const setSeries = useCallback((n) => setCounts((c) => ({ ...c, series: n })), [])
   const me = loadSession() // the route loader only lets admins in
   const initials = (me?.name || 'Admin')
     .split(/\s+/)
@@ -49,14 +57,16 @@ export default function Admin() {
 
   useEffect(() => {
     let live = true
-    loadTestCount().then((n) => live && n != null && setTestCount(n))
+    loadCounts().then((c) => live && setCounts(c))
     return () => {
       live = false
     }
   }, [])
 
-  const showTests = view === 'tests'
+  const showTests = view === 'free' || view === 'live'
+  const showSeries = view === 'series'
   const showStudents = view === 'students'
+  const showSoon = view === 'analysis' || view === 'requests'
 
   return (
     <div className="tv-admin" ref={rootRef}>
@@ -80,7 +90,7 @@ export default function Admin() {
           onClick={(e) => {
             const item = e.target.closest('[data-view]')
             if (item) {
-              if (item.dataset.view === 'students') setStudentsKey((k) => k + 1)
+              setNavKey((k) => k + 1)
               setMenuOpen(false)
               window.scrollTo(0, 0)
             }
@@ -97,25 +107,29 @@ export default function Admin() {
               Dashboard
             </button>
             <span className="nav-label">Content</span>
-            <button type="button" data-view="tests">
-              Tests <span className="count" data-count="tests">{testCount ?? ''}</span>
+            <button type="button" data-view="free">
+              Free tests <span className="count">{counts.free ?? ''}</span>
             </button>
             <button type="button" data-view="live">
-              Live tests
+              Live tests <span className="count">{counts.live ?? ''}</span>
             </button>
             <button type="button" data-view="series">
-              Test series
+              Test series <span className="count">{counts.series ?? ''}</span>
             </button>
             <span className="nav-label">Students</span>
             <button type="button" data-view="students">
               Students &amp; groups
             </button>
-            <button type="button" data-view="requests">
-              Video requests <span className="count" data-count="requests"></span>
-            </button>
             <span className="nav-label">Growth</span>
             <button type="button" data-view="website">
               Website info
+            </button>
+            <span className="nav-label">Coming soon</span>
+            <button type="button" data-view="analysis">
+              Analysis <span className="nav-soon">Soon</span>
+            </button>
+            <button type="button" data-view="requests">
+              Video requests <span className="nav-soon">Soon</span>
             </button>
           </div>
           <div className="side-foot">
@@ -137,15 +151,25 @@ export default function Admin() {
             </button>
           </div>
         </nav>
-        <main className="main" id="view" tabIndex={-1} hidden={showTests || showStudents}></main>
+        <main className="main" id="view" tabIndex={-1} hidden={showTests || showSeries || showStudents || showSoon}></main>
         {showTests && (
           <main className="main" id="tests-view">
-            <TestsAdmin onCount={setTestCount} />
+            <TestsAdmin key={view + navKey} kind={view} onCount={view === 'free' ? setFree : setLive} />
+          </main>
+        )}
+        {showSeries && (
+          <main className="main" id="series-view">
+            <SeriesAdmin key={navKey} onCount={setSeries} />
           </main>
         )}
         {showStudents && (
           <main className="main" id="students-view">
-            <StudentsAdmin key={studentsKey} />
+            <StudentsAdmin key={navKey} />
+          </main>
+        )}
+        {showSoon && (
+          <main className="main" id="soon-view">
+            <AdminComingSoon view={view} />
           </main>
         )}
       </div>

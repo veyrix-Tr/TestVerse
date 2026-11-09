@@ -109,3 +109,26 @@ export function accuracyOf(a) {
 export function heroTest(groups) {
   return groups['in-progress'][0] || groups.open[0] || groups.upcoming[0] || null
 }
+
+/* Where a test is taken, and where one attempt's result (optionally at its solutions) opens. */
+export const testHref = (t) => '/test?test=' + encodeURIComponent(t.id)
+export const resultHref = (t, a, hash) => '/student/result?test=' + encodeURIComponent(t.id) + (a ? '&attempt=' + a.attemptNo : '') + (hash ? '#' + hash : '')
+
+/* Headline numbers over every submitted attempt (rows from resultsOf, newest first). */
+export function summaryOf(tests, rows) {
+  const pcts = rows.map((r) => pctOf(r.a)).filter((p) => p != null)
+  const first = rows.length ? pctOf(rows[rows.length - 1].a) : null
+  const last = rows.length ? pctOf(rows[0].a) : null
+  return {
+    taken: tests.filter((t) => (t.history || []).length).length,
+    total: tests.length,
+    attempts: rows.length,
+    best: pcts.length ? Math.max(...pcts) : null,
+    avg: pcts.length ? Math.round(pcts.reduce((a, b) => a + b, 0) / pcts.length) : null,
+    // Percentage points from the first attempt to the latest (needs two attempts)
+    change: rows.length > 1 && first != null && last != null ? last - first : null,
+  }
+}
+
+/* "+6 pts" / "−4 pts" / "No change" */
+export const signed = (n, unit = '') => (n > 0 ? '+' + n : n < 0 ? '−' + Math.abs(n) : '0') + unit

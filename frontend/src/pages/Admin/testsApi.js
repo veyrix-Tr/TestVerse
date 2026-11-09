@@ -8,7 +8,14 @@ import { getToken } from '../../lib/session.js'
 */
 const call = (path, opts = {}) => api('/admin' + path, { ...opts, token: getToken() })
 
-export const listTests = () => call('/tests').then((r) => r.tests)
+/* kind: 'free' | 'live' | 'series' (all tests when left out) */
+export function listTests(kind, seriesId) {
+  const q = new URLSearchParams()
+  if (kind) q.set('kind', kind)
+  if (seriesId) q.set('seriesId', seriesId)
+  const qs = q.toString()
+  return call('/tests' + (qs ? '?' + qs : '')).then((r) => r.tests)
+}
 export const getTest = (id) => call('/tests/' + encodeURIComponent(id)).then((r) => r.test)
 export const validatePaper = (body) => call('/tests/validate', { body })
 export const createTest = (body) => call('/tests', { body }).then((r) => r.test)
@@ -17,11 +24,17 @@ export const setPublished = (id, on) =>
   call('/tests/' + encodeURIComponent(id) + (on ? '/publish' : '/unpublish'), { body: {} }).then((r) => r.test)
 export const deleteTest = (id) => call('/tests/' + encodeURIComponent(id), { method: 'DELETE' })
 
-/* Number of tests for the sidebar count; null when it can't be loaded. */
-export function loadTestCount() {
-  return listTests()
-    .then((t) => t.length)
-    .catch(() => null)
+/* Test series (backend/controllers/adminSeriesController.js) */
+export const listSeries = () => call('/series').then((r) => r.series)
+export const getSeries = (id) => call('/series/' + encodeURIComponent(id)) // { series, tests }
+export const createSeries = (body) => call('/series', { body }).then((r) => r.series)
+export const updateSeries = (id, body) => call('/series/' + encodeURIComponent(id), { body, method: 'PUT' }).then((r) => r.series)
+export const deleteSeries = (id) => call('/series/' + encodeURIComponent(id), { method: 'DELETE' })
+
+/* Sidebar counts: { free, live, series }; a count is null when it can't be loaded. */
+export function loadCounts() {
+  const n = (p) => p.then((list) => list.length).catch(() => null)
+  return Promise.all([n(listTests('free')), n(listTests('live')), n(listSeries())]).then(([free, live, series]) => ({ free, live, series }))
 }
 
 export const DEFAULT_MARKING = {

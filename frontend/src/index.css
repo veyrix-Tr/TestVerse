@@ -47,11 +47,13 @@ html.smooth-scroll {
     auth-panel  – the clicked "Log in"/"Sign up" control grows into the form
 */
 @media (prefers-reduced-motion: no-preference) {
+  /* The old page stays fully visible while the new one fades in over it:
+     no zoom or blur, and no white gap between the two. */
   ::view-transition-old(root) {
-    animation: tv-vt-out 280ms cubic-bezier(0.4, 0, 1, 1) both;
+    animation: none;
   }
   ::view-transition-new(root) {
-    animation: tv-vt-in 520ms cubic-bezier(0.16, 1, 0.3, 1) 60ms both;
+    animation: tv-vt-fade-in 180ms ease-out both;
   }
   ::view-transition-group(brand-logo),
   ::view-transition-group(auth-brand),
@@ -80,12 +82,6 @@ html.smooth-scroll {
   ::view-transition-new(*) {
     animation: none !important;
   }
-}
-@keyframes tv-vt-out {
-  to { opacity: 0; transform: scale(0.985); filter: blur(6px); }
-}
-@keyframes tv-vt-in {
-  from { opacity: 0; transform: scale(1.015); filter: blur(6px); }
 }
 @keyframes tv-vt-fade-out {
   to { opacity: 0; }

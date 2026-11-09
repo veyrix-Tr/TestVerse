@@ -1,20 +1,10 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import PendingLink from '../../../components/PendingLink.jsx'
 import { fmt, hms, pad } from '../../../lib/format.js'
-import SectionHead from '../SectionHead.jsx'
-import { GROUPS, pctOf } from '../useTests.js'
+import { subjectsOf, until, when } from '../fmt.js'
+import { pctOf } from '../useTests.js'
 
-const when = (iso) => fmt(iso, { weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' })
 const clock = (iso) => fmt(iso, { hour: 'numeric', minute: '2-digit' })
 const facts = (t) => `${t.questionCount} questions · ${t.durationMin} min · ${t.totalMarks} marks`
-
-/* "2d 4h", "3h 12m", "12m" until a moment */
-function until(ms) {
-  const m = Math.max(0, Math.ceil(ms / 60000))
-  if (m >= 1440) return Math.floor(m / 1440) + 'd ' + Math.floor((m % 1440) / 60) + 'h'
-  if (m >= 60) return Math.floor(m / 60) + 'h ' + (m % 60) + 'm'
-  return m + 'm'
-}
 
 function Segs({ ms }) {
   const s = Math.max(0, Math.floor(ms / 1000))
@@ -26,7 +16,7 @@ function Segs({ ms }) {
         [pad(Math.floor((s % 3600) / 60)), 'min'],
         [pad(s % 60), 'sec'],
       ].map(([v, l]) => (
-        <span className="seg" key={l}>
+        <span className="clock-seg" key={l}>
           <b>{v}</b>
           <small>{l}</small>
         </span>
@@ -36,7 +26,20 @@ function Segs({ ms }) {
 }
 
 /* The one loud element on the dashboard: the test in progress, else one to start now, else the next one. */
-export function TestHero({ test, now }) {
+export function TestHero({ test, now, loading }) {
+  if (loading) {
+    return (
+      <section className="hero is-skeleton" aria-busy="true" aria-label="Loading your next test">
+        <div className="hero-main">
+          <span className="skel skel-on-navy" style={{ width: '22%', height: 12 }}></span>
+          <span className="skel skel-on-navy" style={{ width: '64%', height: 30 }}></span>
+          <span className="skel skel-on-navy" style={{ width: '40%' }}></span>
+          <span className="skel skel-on-navy" style={{ width: 168, height: 52, borderRadius: 12 }}></span>
+        </div>
+        <span className="skel skel-on-navy hero-clock-skel"></span>
+      </section>
+    )
+  }
   if (!test) return null
   const href = '/test?test=' + encodeURIComponent(test.id)
   const s = test.status
@@ -47,9 +50,9 @@ export function TestHero({ test, now }) {
     const left = Date.parse(test.attempt.deadline) - now
     eyebrow = 'In progress'
     action = (
-      <Link className="btn btn-gold btn-lg" to={href}>
+      <PendingLink className="btn btn-gold btn-lg" to={href}>
         Resume test
-      </Link>
+      </PendingLink>
     )
     note = 'Your answers are saved. The clock keeps running while you’re away.'
     clockNode = (
@@ -62,9 +65,9 @@ export function TestHero({ test, now }) {
   } else if (s === 'open') {
     eyebrow = 'Available now'
     action = (
-      <Link className="btn btn-gold btn-lg" to={href}>
+      <PendingLink className="btn btn-gold btn-lg" to={href}>
         Start test
-      </Link>
+      </PendingLink>
     )
     note = `You get the full ${test.durationMin} minute${test.durationMin === 1 ? '' : 's'} from the moment you press Start.`
     clockNode = test.closesAt ? (
@@ -85,9 +88,9 @@ export function TestHero({ test, now }) {
   } else {
     eyebrow = 'Next test'
     action = (
-      <Link className="btn btn-on-navy btn-lg" to={href}>
+      <PendingLink className="btn btn-on-navy btn-lg" to={href}>
         Read the instructions
-      </Link>
+      </PendingLink>
     )
     note = `Opens ${when(test.opensAt)}.`
     clockNode = (
@@ -121,17 +124,9 @@ export function TestHero({ test, now }) {
 
 const EXAM_LABEL = { neet: 'NEET', jee: 'JEE Main' }
 
-/* "Physics, Chemistry, Biology" -> ["Physics", "Chemistry", "Biology"] */
-const subjectsOf = (t) => (t.subject || '').split(',').map((x) => x.trim()).filter(Boolean)
-
-const FILTERS = [
-  { key: 'all', label: 'All', has: () => true },
-  { key: 'todo', label: 'To do', has: (s) => s === 'in-progress' || s === 'open' || s === 'upcoming' },
-  { key: 'done', label: 'Completed', has: (s) => s === 'done' },
-]
 
 /* One test as a card: what it is, how big it is, and what the student can do with it now. */
-function TestCard({ t, now }) {
+export function TestCard({ t, now }) {
   const href = '/test?test=' + encodeURIComponent(t.id)
   const s = t.status
   const best = t.best
@@ -142,35 +137,35 @@ function TestCard({ t, now }) {
   if (s === 'in-progress') {
     state = <span className="status status-amber">{hms(Date.parse(t.attempt.deadline) - now)} left</span>
     actions = (
-      <Link className="btn btn-gold btn-sm" to={href}>
+      <PendingLink className="btn btn-gold btn-sm" to={href}>
         {tries ? 'Resume retake' : 'Resume test'}
-      </Link>
+      </PendingLink>
     )
   } else if (s === 'open') {
     state = <span className="tc-when">{t.closesAt ? 'Closes ' + when(t.closesAt) : 'Open now · no deadline'}</span>
     actions = (
-      <Link className="btn btn-primary btn-sm" to={href}>
+      <PendingLink className="btn btn-primary btn-sm" to={href}>
         Start test
-      </Link>
+      </PendingLink>
     )
   } else if (s === 'upcoming') {
     state = <span className="status status-blue">Opens in {until(Date.parse(t.opensAt) - now)}</span>
     actions = (
-      <Link className="btn btn-outline btn-sm" to={href}>
+      <PendingLink className="btn btn-outline btn-sm" to={href}>
         Instructions
-      </Link>
+      </PendingLink>
     )
   } else if (s === 'done') {
     state = null
     actions = (
       <>
-        <Link className="btn btn-outline btn-sm" to={href + '&view=result'}>
+        <PendingLink className="btn btn-outline btn-sm" to={'/student/result?test=' + encodeURIComponent(t.id)}>
           View result
-        </Link>
+        </PendingLink>
         {t.canRetake ? (
-          <Link className="btn btn-primary btn-sm" to={href + '&retake=1'}>
+          <PendingLink className="btn btn-primary btn-sm" to={href + '&retake=1'}>
             Retake
-          </Link>
+          </PendingLink>
         ) : null}
       </>
     )
@@ -229,77 +224,5 @@ function TestCard({ t, now }) {
         </div>
       </article>
     </li>
-  )
-}
-
-/* Every published test for this student, filtered by what they can do with it. */
-export default function TestsSection({ status, error, groups, total, now, onRetry, free }) {
-  const [filter, setFilter] = useState('all')
-  const ordered = GROUPS.flatMap((g) => groups[g.key])
-  const count = (f) => ordered.filter((t) => f.has(t.status)).length
-  const active = FILTERS.find((f) => f.key === filter) || FILTERS[0]
-  const shown = ordered.filter((t) => active.has(t.status))
-
-  return (
-    <section className="section" id="tests" aria-labelledby="tests-title" aria-busy={status === 'loading' ? 'true' : 'false'}>
-      <SectionHead
-        id="tests-title"
-        title="Your tests"
-        desc={free ? 'Your free full-length mocks, on the real exam pattern. Take them as often as you like.' : 'Tests your teachers have published, with your score once you finish.'}
-      >
-        {status === 'ready' && total ? (
-          <div className="filter-tabs" role="group" aria-label="Show tests">
-            {FILTERS.map((f) => (
-              <button key={f.key} type="button" aria-pressed={filter === f.key ? 'true' : 'false'} onClick={() => setFilter(f.key)}>
-                {f.label}
-                <span>{count(f)}</span>
-              </button>
-            ))}
-          </div>
-        ) : null}
-      </SectionHead>
-
-      {status === 'loading' ? (
-        <ul className="tcards" aria-hidden="true">
-          {[0, 1, 2].map((i) => (
-            <li key={i} className="tcard is-skeleton">
-              <span></span>
-              <span></span>
-              <span></span>
-            </li>
-          ))}
-        </ul>
-      ) : status === 'error' ? (
-        <div className="card state-card" role="alert">
-          <div>
-            <h3>Couldn’t load your tests</h3>
-            <p className="meta">{error}</p>
-          </div>
-          <button className="btn btn-outline" type="button" onClick={onRetry}>
-            Try again
-          </button>
-        </div>
-      ) : !total ? (
-        <div className="card state-card is-empty">
-          <div>
-            <h3>No tests yet</h3>
-            <p className="meta">Your teachers will publish them here.</p>
-          </div>
-        </div>
-      ) : !shown.length ? (
-        <div className="card state-card is-empty">
-          <div>
-            <h3>{filter === 'done' ? 'Nothing completed yet' : 'You’re all caught up'}</h3>
-            <p className="meta">{filter === 'done' ? 'Finish a test and it shows up here with your score.' : 'Every test is done. You can retake any of them from Completed.'}</p>
-          </div>
-        </div>
-      ) : (
-        <ul className="tcards">
-          {shown.map((t) => (
-            <TestCard key={t.id} t={t} now={now} />
-          ))}
-        </ul>
-      )}
-    </section>
   )
 }

@@ -34,7 +34,7 @@ function answerText(q, a, lang) {
   design/test.html renderResult() + renderReview() — KPIs, section bars,
   "What to work on", chapter table, review list with filters.
 */
-export default function ResultView({ paper, flat, attempt, meta, reviewFilter, setReviewFilter }) {
+export default function ResultView({ paper, flat, attempt, meta, reviewFilter, setReviewFilter, embedded }) {
   const R = computeResult(flat, attempt)
   // The server's stored score is the headline; computeResult (same rules) drives the breakdown.
   const total = Number.isFinite(attempt.score) ? attempt.score : R.total
@@ -54,6 +54,8 @@ export default function ResultView({ paper, flat, attempt, meta, reviewFilter, s
   const history = (meta && meta.history) || []
   const shownNo = (meta && meta.attemptNo) || 1
   const testHref = '/test?test=' + encodeURIComponent(paper.id)
+  // Inside the dashboard, switching attempts stays on the dashboard's result page
+  const attemptHref = (n) => (embedded ? '/student/result?test=' + encodeURIComponent(paper.id) : testHref + '&view=result') + '&attempt=' + n
 
   const list = R.items.filter((it) => {
     if (reviewFilter === 'all') return true
@@ -87,16 +89,18 @@ export default function ResultView({ paper, flat, attempt, meta, reviewFilter, s
   }
 
   return (
-    <section id="v-result" className="result">
-      <header className="bar">
-        <div className="in">
-          <Link className="brand" to="/student">
-            <svg className="tv-logo" style={{ height: '32px' }} viewBox="0 0 1784 409" role="img" aria-label="Testverse by Studyverse">
-              <use href="#tv-logo" />
-            </svg>
-          </Link>
-        </div>
-      </header>
+    <section id="v-result" className={'result' + (embedded ? ' is-embedded' : '')}>
+      {embedded ? null : (
+        <header className="bar">
+          <div className="in">
+            <Link className="brand" to="/student">
+              <svg className="tv-logo" style={{ height: '32px' }} viewBox="0 0 1784 409" role="img" aria-label="Testverse by Studyverse">
+                <use href="#tv-logo" />
+              </svg>
+            </Link>
+          </div>
+        </header>
+      )}
 
       <div className="res-hero">
         <div className="res-shell res-hero-in">
@@ -111,9 +115,11 @@ export default function ResultView({ paper, flat, attempt, meta, reviewFilter, s
             </div>
           </div>
           <div className="res-title">
-            <BackButton to="/student" tone="dark">
-              Back to dashboard
-            </BackButton>
+            {embedded ? null : (
+              <BackButton to="/student" tone="dark">
+                Back to dashboard
+              </BackButton>
+            )}
             <span className="eyebrow on-navy">Result and analysis · {paper.exam}</span>
             <h1>{paper.title}</h1>
             <p>
@@ -139,7 +145,7 @@ export default function ResultView({ paper, flat, attempt, meta, reviewFilter, s
                       .slice()
                       .reverse()
                       .map((h) => (
-                        <Link key={h.attemptNo} to={testHref + '&view=result&attempt=' + h.attemptNo} aria-current={h.attemptNo === shownNo ? 'page' : undefined}>
+                        <Link key={h.attemptNo} to={attemptHref(h.attemptNo)} aria-current={h.attemptNo === shownNo ? 'page' : undefined}>
                           Attempt {h.attemptNo}
                           <b>{h.score}</b>
                         </Link>

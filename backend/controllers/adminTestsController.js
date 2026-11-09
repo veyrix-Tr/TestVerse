@@ -37,8 +37,14 @@ const readPaperInput = (v) => {
   }
 };
 
-// Checks the test's own fields. Returns { data } or { field, error }.
-const readDetails = (b) => {
+// The admin section a test belongs to (see `kind` in prisma/schema.prisma).
+const KINDS = ['free', 'live', 'series'];
+
+// Checks the test's own fields for its kind. Returns { data } or { field, error }.
+//   free   - shown to every student of its exam; no audience
+//   live   - needs a start time (opensAt); given to chosen people or all paid students
+//   series - stored inside a test series; no timing, never published, shown to nobody
+const readDetails = (b, kind) => {
   const title = clean(b.title);
   if (!title) return { field: 'title', error: 'Give the test a title.' };
   const subject = clean(b.subject);
@@ -56,9 +62,27 @@ const readDetails = (b) => {
   if (opensAt === undefined) return { field: 'opensAt', error: 'The opening time is not a valid date.' };
   if (closesAt === undefined) return { field: 'closesAt', error: 'The closing time is not a valid date.' };
   if (opensAt && closesAt && closesAt <= opensAt) return { field: 'closesAt', error: 'The test must close after it opens.' };
-  const isFree = b.isFree === true;
-  return { data: { title, subject, exam, isFree, durationMin, instructions, opensAt, closesAt } };
+  if (kind === 'live' && !opensAt) return { field: 'opensAt', error: 'A live test needs a start time.' };
+  const timing = kind === 'series' ? { opensAt: null, closesAt: null } : { opensAt, closesAt };
+  return { data: { title, subject, exam, kind, isFree: kind === 'free', durationMin, instructions, ...timing } };
 };
+
+// Kind for a new test: a series id makes it a series test; otherwise the body's
+// `kind`, falling back to the older `isFree` flag. Returns { kind, seriesId } or { field, error }.
+const readKind = async (b) => {
+  if (b.seriesId) {
+    const series = await prisma.testSeries.findUnique({ where: { id: String(b.seriesId) }, select: { id: true } });
+    if (!series) return { field: 'seriesId', error: 'That test series no longer exists.' };
+    return { kind: 'series', seriesId: series.id };
+  }
+  const kind = KINDS.includes(b.kind) ? b.kind : b.isFree === true ? 'free' : 'live';
+  if (kind === 'series') return { field: 'seriesId', error: 'Choose the test series this test belongs to.' };
+  return { kind, seriesId: null };
+};
+
+// Only live tests have an audience; free tests are for everyone of the exam
+// and series tests for nobody yet, so theirs is reset to "all".
+const audienceFor = (kind, a) => (kind === 'live' ? a : { mode: 'all', batchIds: [], groupIds: [], studentIds: [] });
 
 const summaryOf = (t) => ({
   id:            t.id,
@@ -66,6 +90,8 @@ const summaryOf = (t) => ({
   subject:       t.subject,
   exam:          t.exam,
   isFree:        t.isFree,
+  kind:          t.kind,
+  seriesId:      t.seriesId,
   durationMin:   t.durationMin,
   questionCount: t.questionCount,
   totalMarks:    t.totalMarks,
@@ -104,10 +130,14 @@ const checkPaper = (rawPaper, subject, rawMarking) => {
   return { marking: mk.marking, paper: r.paper, summary: r.summary, source: parsed.value };
 };
 
-// GET /api/admin/tests — every test, newest first, with attempt counts
+// GET /api/admin/tests?kind=free|live|series&seriesId= — tests, newest first, with attempt counts
 const listTests = async (req, res) => {
   try {
+    const where = {};
+    if (KINDS.includes(req.query.kind)) where.kind = req.query.kind;
+    if (req.query.seriesId) where.seriesId = String(req.query.seriesId);
     const tests = await prisma.test.findMany({
+      where,
       orderBy: { createdAt: 'desc' },
       include: WITH,
     });
@@ -135,22 +165,26 @@ const validatePaper = async (req, res) => {
 };
 
 // POST /api/admin/tests
-// Body: { title, subject, exam, isFree?, durationMin, instructions, marking, opensAt, closesAt, paper, publish?,
-//         audience?: { mode: 'all'|'custom', batchIds, groupIds, studentIds } }
+// Body: { title, subject, exam, kind ('free'|'live'), seriesId?, durationMin, instructions, marking,
+//         opensAt, closesAt, paper, publish?, audience?: { mode: 'all'|'custom', batchIds, groupIds, studentIds } }
 const createTest = async (req, res) => {
   try {
-    const d = readDetails(req.body);
+    const k = await readKind(req.body);
+    if (k.error) return res.status(400).json(k);
+    const d = readDetails(req.body, k.kind);
     if (d.error) return res.status(400).json(d);
-    const a = await readAudience(req.body.audience);
+    const a = await readAudience(req.body.audience === undefined && k.kind !== 'live' ? { mode: 'all' } : req.body.audience);
     if (a.error) return res.status(400).json(a);
     const p = checkPaper(req.body.paper, d.data.subject, req.body.marking);
     if (p.status) return res.status(p.status).json(p.body);
     const publish = req.body.publish === true;
+    if (publish && k.kind === 'series') return res.status(400).json({ error: 'Tests in a test series are stored only, so they can’t be published yet.' });
     if (publish && !p.paper) return res.status(400).json({ field: 'paper', error: 'Add the question paper before publishing.' });
 
     const created = await prisma.test.create({
       data: {
         ...d.data,
+        seriesId:      k.seriesId,
         marking:       p.marking,
         paper:         p.paper || undefined,
         source:        p.source || undefined,
@@ -161,7 +195,7 @@ const createTest = async (req, res) => {
         createdById:   req.user.id,
       },
     });
-    if (a.audience) await prisma.$transaction(writeAudience(prisma, created.id, a.audience));
+    if (a.audience) await prisma.$transaction(writeAudience(prisma, created.id, audienceFor(k.kind, a.audience)));
     const test = await prisma.test.findUnique({ where: { id: created.id }, include: WITH });
     res.status(201).json({ message: publish ? 'Test published' : 'Draft saved', test: fullOf({ ...test, submitted: 0 }) });
   } catch (error) {
@@ -189,7 +223,8 @@ const updateTest = async (req, res) => {
     const existing = await prisma.test.findUnique({ where: { id: req.params.id }, include: { _count: { select: { attempts: true } } } });
     if (!existing) return res.status(404).json({ error: 'Test not found' });
 
-    const d = readDetails(req.body);
+    // A test stays in the section it was made in
+    const d = readDetails(req.body, existing.kind);
     if (d.error) return res.status(400).json(d);
     const a = await readAudience(req.body.audience);
     if (a.error) return res.status(400).json(a);
@@ -217,7 +252,7 @@ const updateTest = async (req, res) => {
     }
     await prisma.test.update({ where: { id: existing.id }, data });
     // The audience can always change (who may take it), even once attempted
-    if (a.audience) await prisma.$transaction(writeAudience(prisma, existing.id, a.audience));
+    if (a.audience) await prisma.$transaction(writeAudience(prisma, existing.id, audienceFor(existing.kind, a.audience)));
     const test = await prisma.test.findUnique({ where: { id: existing.id }, include: WITH });
     res.json({ message: 'Test saved', test: fullOf(test) });
   } catch (error) {
@@ -231,6 +266,7 @@ const setStatus = (status) => async (req, res) => {
   try {
     const test = await prisma.test.findUnique({ where: { id: req.params.id } });
     if (!test) return res.status(404).json({ error: 'Test not found' });
+    if (status === 'published' && test.kind === 'series') return res.status(400).json({ error: 'Tests in a test series are stored only, so they can’t be published yet.' });
     if (status === 'published' && !test.paper) return res.status(400).json({ field: 'paper', error: 'Add the question paper before publishing.' });
     const updated = await prisma.test.update({ where: { id: test.id }, data: { status }, include: WITH });
     res.json({ message: status === 'published' ? 'Test published' : 'Test moved back to drafts', test: summaryOf(updated) });

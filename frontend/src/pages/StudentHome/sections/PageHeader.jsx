@@ -1,36 +1,50 @@
-import { useState } from 'react'
-import { greet } from '../../../lib/format.js'
-
-/* Greeting, exam and a few headline numbers from the real test list, set inline (not boxed). */
-export default function PageHeader({ me, stats }) {
-  const [today] = useState(() => new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' }))
-
+/*
+  The header every student page opens with: an optional back link and eyebrow,
+  the page title, a one-line description, actions on the right, and anything
+  passed as children (the headline numbers) underneath.
+*/
+export default function PageHeader({ back, eyebrow, title, desc, actions, children }) {
   return (
-    <header className="page-head" id="top">
+    <header className="page-head">
       <div className="page-head-row">
-        <div>
-          <p className="eyebrow">{today}</p>
-          <h1>
-            {greet()}, {me.first}
-          </h1>
-          <p className="page-sub">
-            {me.examText ? 'Preparing for ' + me.examText : null}
-            {me.batch ? <span className="chip chip-gold">{me.batch}</span> : <span className="chip chip-grey">Free access</span>}
-          </p>
+        <div className="page-head-text">
+          {back}
+          {eyebrow ? <p className="eyebrow">{eyebrow}</p> : null}
+          <h1 id="page-title">{title}</h1>
+          {desc ? <div className="page-desc">{desc}</div> : null}
         </div>
+        {actions ? <div className="page-head-actions">{actions}</div> : null}
       </div>
+      {children}
+    </header>
+  )
+}
 
-      <dl className="stats">
-        {stats.map((s) => (
-          <div className="stat" key={s.label}>
-            <dt>{s.label}</dt>
-            <dd>
+/* Headline numbers set inline under a page title. Each item is
+   { label, v, unit?, note?, tone? }; `v: null` shimmers while `loading`,
+   otherwise shows `empty` (a short note). */
+export function Stats({ items, loading }) {
+  return (
+    <dl className="stats">
+      {items.map((s) => (
+        <div className="stat" key={s.label}>
+          <dt>{s.label}</dt>
+          {loading ? (
+            <dd aria-busy="true">
+              <span className="skel skel-stat"></span>
+              <span className="sr">Loading</span>
+            </dd>
+          ) : s.v != null ? (
+            <dd className={s.tone ? 'is-' + s.tone : undefined}>
               {s.v}
               {s.unit ? <span className="unit">{s.unit}</span> : null}
+              {s.note ? <span className="stat-note">{s.note}</span> : null}
             </dd>
-          </div>
-        ))}
-      </dl>
-    </header>
+          ) : (
+            <dd className="stat-empty">{s.empty || '—'}</dd>
+          )}
+        </div>
+      ))}
+    </dl>
   )
 }

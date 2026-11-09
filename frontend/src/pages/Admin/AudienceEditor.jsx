@@ -58,7 +58,7 @@ export default function AudienceEditor({ value, onChange, error }) {
       <div className="au-top">
         <div className="seg" role="group" aria-label="Who can take this test">
           <button type="button" aria-pressed={!custom ? 'true' : 'false'} onClick={() => onChange({ ...value, mode: 'all' })}>
-            Everyone
+            All paid students
           </button>
           <button type="button" aria-pressed={custom ? 'true' : 'false'} onClick={() => onChange({ ...value, mode: 'custom' })}>
             Chosen people
@@ -74,7 +74,7 @@ export default function AudienceEditor({ value, onChange, error }) {
               </>
             )
           ) : (
-            'Every student with an active batch for this exam can see it once it is published. Free tests also show to students without a batch.'
+            'Every student with an active batch for this exam can see it once it is published.'
           )}
         </p>
       </div>
@@ -138,7 +138,7 @@ export default function AudienceEditor({ value, onChange, error }) {
           </div>
           {nobody && (
             <div className="alert a-warn">
-              <span>Choose at least one batch, group or student, or switch to Everyone. Until then nobody can see this test.</span>
+              <span>Choose at least one batch, group or student, or switch to All paid students. Until then nobody can see this test.</span>
             </div>
           )}
           <p className="hint">Students who have already started the test keep access to it and their result, whatever you choose here.</p>

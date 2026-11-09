@@ -91,6 +91,7 @@ async function main() {
       subject:      t.subject,
       exam:         t.exam,
       isFree:       true,
+      kind:         'free',
       audience:     'all',
       durationMin:  DURATION_MIN,
       instructions: t.instructions,

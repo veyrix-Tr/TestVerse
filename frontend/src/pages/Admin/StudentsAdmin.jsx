@@ -201,8 +201,15 @@ function Stat({ label, value, note }) {
   return (
     <div className="card stat">
       <span>{label}</span>
-      <b>{value == null ? '–' : value.toLocaleString('en-IN')}</b>
-      <small>{note}</small>
+      {value == null ? (
+        <b aria-busy="true">
+          <span className="skel skel-stat"></span>
+          <span className="sr">Loading</span>
+        </b>
+      ) : (
+        <b>{value.toLocaleString('en-IN')}</b>
+      )}
+      <small>{note || (value == null ? <span className="skel skel-note"></span> : null)}</small>
     </div>
   )
 }
@@ -303,8 +310,8 @@ function StudentsTab({ live, filters, setFilters, settled, batches, groups, onOp
       {live.error && !d ? (
         <div className="alert a-err" role="alert">
           <span className="ts-grow">Couldn&apos;t load students. {live.error}</span>
-          <button className="btn btn-outline btn-sm" type="button" onClick={live.refresh}>
-            Try again
+          <button className="btn btn-outline btn-sm" type="button" onClick={live.refresh} disabled={live.loading}>
+            {live.loading ? 'Trying…' : 'Try again'}
           </button>
         </div>
       ) : !d ? (
@@ -445,8 +452,8 @@ function GroupsTab({ live, toast, onOpen }) {
       {live.error && !list ? (
         <div className="alert a-err" role="alert">
           <span className="ts-grow">Couldn&apos;t load groups. {live.error}</span>
-          <button className="btn btn-outline btn-sm" type="button" onClick={live.refresh}>
-            Try again
+          <button className="btn btn-outline btn-sm" type="button" onClick={live.refresh} disabled={live.loading}>
+            {live.loading ? 'Trying…' : 'Try again'}
           </button>
         </div>
       ) : !list ? (

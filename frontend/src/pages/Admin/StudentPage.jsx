@@ -25,7 +25,7 @@ import BackButton from '../../components/BackButton.jsx'
 /* One student: profile, batch, groups, results, tests in progress and the
    tests given to them directly. */
 export default function StudentPage({ id, toast, backText, onBack, onOpenGroup }) {
-  const live = useLive(() => Promise.all([getStudent(id), listGroups(), listTests()]), id)
+  const live = useLive(() => Promise.all([getStudent(id), listGroups(), listTests('live')]), id)
   const [busy, setBusy] = useState(null)
   const [notice, setNotice] = useState(null)
   const now = useNow(30000)
@@ -65,8 +65,8 @@ export default function StudentPage({ id, toast, backText, onBack, onOpenGroup }
         {live.error ? (
           <div className="alert a-err" role="alert">
             <span className="ts-grow">Couldn&apos;t open this student. {live.error}</span>
-            <button className="btn btn-outline btn-sm" type="button" onClick={live.refresh}>
-              Try again
+            <button className="btn btn-outline btn-sm" type="button" onClick={live.refresh} disabled={live.loading}>
+              {live.loading ? 'Trying…' : 'Try again'}
             </button>
           </div>
         ) : (
@@ -296,7 +296,7 @@ export default function StudentPage({ id, toast, backText, onBack, onOpenGroup }
             label="Give a test"
             title={'Give a test to ' + first}
             placeholder="Search tests"
-            empty={tests.length ? 'No test matches.' : 'No tests yet. Create one under Tests.'}
+            empty={tests.length ? 'No test matches.' : 'No live tests yet. Create one under Live tests.'}
             options={testOptions}
             busy={busy === 'assign'}
             align="right"
@@ -327,7 +327,7 @@ export default function StudentPage({ id, toast, backText, onBack, onOpenGroup }
                     disabled={busy === 't:' + t.id}
                     onClick={() => act('t:' + t.id, () => takeTestFromStudent(s.id, t.id), `"${t.title}" taken back`)}
                   >
-                    Take back
+                    {busy === 't:' + t.id ? 'Taking back…' : 'Take back'}
                   </button>
                 </div>
               </div>

@@ -1,5 +1,6 @@
 // lib/access.js
-// Who may see and take a published test. A student can when ANY of these hold:
+// Who may see and take a published test that isn't part of a test series.
+// A student can when ANY of these hold:
 //   - it's a free test for their exam (or for any exam): no batch needed
 //   - the test is for everyone (audience "all"), it's for their exam (or any
 //     exam), and they have an ACTIVE batch
@@ -26,6 +27,8 @@ const visibleTo = async (userId) => {
 
   return {
     status: 'published',
+    // Tests inside a test series are stored only; no student sees them yet
+    seriesId: null,
     OR: [
       { isFree: true, ...forExam(family) },
       ...(subscribed ? [{ audience: 'all', ...forExam(family) }] : []),

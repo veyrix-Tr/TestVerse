@@ -1,21 +1,35 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 import './StudentHome.css'
 import LogoSprite from '../../components/LogoSprite.jsx'
 import { usePageMeta } from '../../lib/hooks.js'
 import { clearSession, loadSession } from '../../lib/session.js'
-import PageHeader from './sections/PageHeader.jsx'
+import ResultPage from '../Test/ResultPage.jsx'
+import AccountPage from './pages/AccountPage.jsx'
+import Overview, { OverviewRail } from './pages/Overview.jsx'
+import ResultsPage from './pages/ResultsPage.jsx'
+import SolutionsPage, { SolutionsRail } from './pages/SolutionsPage.jsx'
+import TestsPage from './pages/TestsPage.jsx'
+import ComingSoon from './sections/ComingSoon.jsx'
+import { SOON } from './soon.js'
 import Sidebar from './sections/Sidebar.jsx'
-import ComingSoon, { SOON } from './sections/ComingSoon.jsx'
-import ResultsSection from './sections/ResultsSection.jsx'
-import SideCards from './sections/SideCards.jsx'
-import TestsSection, { TestHero } from './sections/TestsSection.jsx'
-import { groupTests, heroTest, pctOf, resultsOf, statusNow, useTests } from './useTests.js'
+import { groupTests, resultsOf, statusNow, useTests } from './useTests.js'
 
-const SPY = ['top', 'tests', 'results', 'videos']
 const EXAMS = { neet: 'NEET', 'jee-main': 'JEE Main', 'jee-advanced': 'JEE Advanced' }
 
-/* The signed-in student as the dashboard shows them. */
+/* Each page under /student/<key>: its screen, an optional right rail, and its <title>. */
+const PAGES = {
+  '': { Main: Overview, Rail: OverviewRail, title: 'Overview' },
+  tests: { Main: TestsPage, title: 'Your tests' },
+  results: { Main: ResultsPage, title: 'Results' },
+  solutions: { Main: SolutionsPage, Rail: SolutionsRail, title: 'Solutions' },
+  account: { Main: AccountPage, title: 'Account' },
+}
+
+// The dashboard used to be one long page with these sections: old links land on their pages
+const OLD_HASHES = { '#tests': '/student/tests', '#results': '/student/results', '#solutions': '/student/solutions', '#top': '/student' }
+
+/* The signed-in student as the pages show them. */
 function meOf(user) {
   const name = (user && user.name) || 'Student'
   const exam = user && EXAMS[user.exam]
@@ -24,54 +38,46 @@ function meOf(user) {
     name,
     first: name.split(' ')[0],
     email: (user && user.email) || '',
+    examName: exam || '',
     examText: exam ? exam + (user.targetYear ? ' ' + user.targetYear : '') : '',
     batch: sub ? sub.batch.name : '',
     subscription: sub,
   }
 }
 
-/* Headline numbers, all from the real test list and every submitted attempt. */
-function statsOf(status, tests, rows) {
-  if (status !== 'ready') {
-    return [
-      { v: '—', label: 'Tests done' },
-      { v: '—', label: 'Attempts' },
-      { v: '—', label: 'Best score' },
-      { v: '—', label: 'Average score' },
-    ]
-  }
-  const pcts = rows.map((r) => pctOf(r.a)).filter((p) => p != null)
-  return [
-    { v: tests.filter((t) => (t.history || []).length).length, unit: '/ ' + tests.length, label: 'Tests done' },
-    { v: rows.length, label: 'Attempts' },
-    pcts.length ? { v: Math.max(...pcts), unit: '%', label: 'Best score' } : { v: '—', label: 'Best score' },
-    pcts.length ? { v: Math.round(pcts.reduce((a, b) => a + b, 0) / pcts.length), unit: '%', label: 'Average score' } : { v: '—', label: 'Average score' },
-  ]
-}
-
-/* design/student-home.html -> route "/student". /student/analysis and
-   /student/video-requests use the same shell with a "coming soon" panel. */
+/*
+  design/student-home.html -> "/student/:page?". One shell (sidebar + content)
+  for every student page, so moving between them keeps the shell and the test
+  list mounted: Overview (/student), Your tests, Results, Solutions, Account,
+  a test's result (/student/result?test=…&attempt=…, Test/ResultPage.jsx) and
+  the coming-soon pages (sections/ComingSoon.jsx). The test list is loaded once
+  here and handed to each page.
+*/
 export default function StudentHome() {
   const location = useLocation()
-  const pageKey = location.pathname.split('/')[2] || ''
+  const pageKey = useParams().page || ''
   const soon = SOON[pageKey] || null
-  usePageMeta({ title: soon ? soon.eyebrow + ' — Testverse' : 'My Testverse — Dashboard' })
+  const isResult = pageKey === 'result'
+  const page = PAGES[pageKey] || null
+  const params = new URLSearchParams(location.search)
+  usePageMeta({ title: (soon ? soon.eyebrow : isResult ? 'Result' : page ? page.title : 'Overview') + ' — Testverse' })
 
   const [tick, setTick] = useState(() => Date.now())
   const [sheetOpen, setSheetOpen] = useState(false)
-  const [active, setActive] = useState('top')
-  const routerNavigate = useNavigate()
+  const [loggingOut, setLoggingOut] = useState(false)
+  const navigate = useNavigate()
   const { status, tests, offset, error, reload, refresh } = useTests()
 
-  const me = meOf(loadSession())
+  const user = loadSession()
+  const me = meOf(user)
   const now = tick + offset
   const groups = useMemo(() => groupTests(tests, now), [tests, now])
   const rows = useMemo(() => resultsOf(tests), [tests])
-  const hero = heroTest(groups)
   const freeTests = tests.filter((t) => t.isFree)
   const free = { total: freeTests.length, done: freeTests.filter((t) => (t.history || []).length).length }
   const counts = { todo: groups.open.length + groups['in-progress'].length, results: rows.length }
   const stale = tests.some((t) => statusNow(t, now).stale)
+  const data = { status, error, tests, groups, rows, now, reload, free }
 
   // 1s ticker for countdowns
   useEffect(() => {
@@ -84,35 +90,23 @@ export default function StudentHome() {
     if (stale) refresh()
   }, [stale, refresh, tick])
 
-  // Highlight the nav item for the section in view
+  // A new page (or another result) starts at the top; filters on the same page don't move it
+  const scrollKey = location.pathname + (isResult ? location.search : '')
   useEffect(() => {
-    if (!('IntersectionObserver' in window)) return undefined
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) setActive(e.target.id)
-        })
-      },
-      { rootMargin: '-30% 0px -60% 0px' },
-    )
-    SPY.forEach((id) => {
-      const el = document.getElementById(id)
-      if (el) io.observe(el)
-    })
-    return () => io.disconnect()
-  }, [])
+    window.scrollTo(0, 0)
+  }, [scrollKey])
 
-  // Arriving at /student#tests (e.g. from a coming-soon page): scroll there once the list is in
-  useEffect(() => {
-    if (soon || status !== 'ready' || !location.hash) return
-    const el = document.getElementById(location.hash.slice(1))
-    if (el) el.scrollIntoView({ block: 'start' })
-  }, [soon, status, location.hash])
-
-  function navigate(id) {
-    if (id) setActive(id)
-    setSheetOpen(false)
+  function logout() {
+    if (loggingOut) return
+    setLoggingOut(true)
+    clearSession()
+    navigate('/login', { replace: true, viewTransition: true })
   }
+
+  if (!pageKey && OLD_HASHES[location.hash]) return <Navigate to={OLD_HASHES[location.hash]} replace />
+  if (!page && !soon && !isResult) return <Navigate to="/student" replace />
+
+  const Rail = page && page.Rail
 
   return (
     <div className="tv-studenthome">
@@ -120,41 +114,33 @@ export default function StudentHome() {
 
       <Sidebar
         me={me}
-        active={active}
-        onNavigate={navigate}
+        active={isResult ? 'results' : pageKey}
         sheetOpen={sheetOpen}
         setSheetOpen={setSheetOpen}
-        page={soon ? pageKey : null}
         counts={counts}
         free={free}
-        onLogout={() => {
-          clearSession()
-          routerNavigate('/login', { replace: true, viewTransition: true })
-        }}
+        loggingOut={loggingOut}
+        onLogout={logout}
       />
 
       <div className="shell">
         <div className="content">
-          <main className="layout" id="main">
+          <main className={'layout' + (Rail ? '' : ' is-wide')} id="main" aria-labelledby={isResult ? 'result-page-title' : soon ? 'soon-title' : 'page-title'}>
             <div className="main-col">
               {soon ? (
                 <ComingSoon page={soon} />
+              ) : isResult ? (
+                <ResultPage testId={params.get('test') || ''} attemptNo={params.get('attempt') || ''} />
               ) : (
-                <>
-                  <PageHeader me={me} stats={statsOf(status, tests, rows)} />
-
-                  <TestHero test={hero} now={now} />
-
-                  <TestsSection status={status} error={error} groups={groups} total={tests.length} now={now} onRetry={() => reload()} free={!me.subscription} />
-
-                  <ResultsSection status={status} rows={rows} />
-                </>
+                <page.Main me={me} user={user} data={data} onLogout={logout} loggingOut={loggingOut} />
               )}
             </div>
 
-            <aside className="rail" aria-label="Your plan, score trend and solutions">
-              <SideCards me={me} rows={rows} freeLeft={free.total - free.done} />
-            </aside>
+            {Rail ? (
+              <aside className="rail" aria-label="More for this page">
+                <Rail me={me} data={data} />
+              </aside>
+            ) : null}
           </main>
 
           <footer className="foot">

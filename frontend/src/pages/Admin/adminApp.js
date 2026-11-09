@@ -91,11 +91,6 @@ function when(iso) {
 function examLabel(id) { return id === 'all' ? 'All exams' : (db.exams[id] ? db.exams[id].label : id); }
 var KIND = { part: 'Part test', half: 'Half syllabus', full: 'Full syllabus', live: 'Live test' };
 var SLOTS = { part: 6, half: 3, full: 2 };
-function statusPill(s) {
-  var map = { published: ['p-published', 'Published'], scheduled: ['p-scheduled', 'Scheduled'], draft: ['p-draft', 'Draft'] };
-  var m = map[s] || ['p-draft', s];
-  return '<span class="pill ' + m[0] + '">' + m[1] + '</span>';
-}
 function toast(msg) {
   var t = document.createElement('div'); t.className = 'toast'; t.setAttribute('role', 'status'); t.textContent = msg;
   (root || document.body).appendChild(t); setTimeout(function () { t.remove(); }, 2600);
@@ -114,9 +109,10 @@ function nextFreeSlot(exam, kind) {
 }
 
 /* ---------- router ---------- */
-var ui = { view: 'dashboard', testExam: 'all', testKind: 'all', seriesExam: 'neet' };
+var ui = { view: 'dashboard' };
 var VIEWS = {};
 function go(view) {
+  if (view === 'tests') view = 'free';
   ui.view = VIEWS[view] ? view : 'dashboard';
   $$('.side [data-view]').forEach(function (b) { b.setAttribute('aria-current', b.dataset.view === ui.view ? 'page' : 'false'); });
   if (location.hash.slice(1) !== ui.view) { try { history.replaceState(null, '', '#' + ui.view); } catch { /* not allowed in some previews */ } }
@@ -124,9 +120,6 @@ function go(view) {
   render();
 }
 function render() {
-  /* The Tests count comes from the real API (TestsAdmin.jsx sets it). */
-  var openReq = db.requests.filter(function (r) { return r.status === 'new' || r.status === 'progress'; }).length;
-  var rc = $('[data-count="requests"]'); rc.textContent = openReq; rc.hidden = !openReq;
   $('#view').innerHTML = VIEWS[ui.view]();
   if (bind[ui.view]) bind[ui.view]();
 }
@@ -139,10 +132,6 @@ VIEWS.dashboard = function () {
   var upcoming = db.tests.filter(function (x) { return x.kind === 'live' && new Date(x.start).getTime() > now; }).sort(function (a, b) { return new Date(a.start) - new Date(b.start); });
   var published = db.tests.filter(function (x) { return x.status !== 'draft'; }).length;
   var alerts = [];
-  var overdue = db.requests.filter(function (r) { return (r.status === 'new' || r.status === 'progress') && hoursSince(r.askers[0].at) > db.video.hours; }).length;
-  var newReq = db.requests.filter(function (r) { return r.status === 'new'; }).length;
-  if (overdue) alerts.push(['a-err', overdue + ' video request' + (overdue === 1 ? ' is' : 's are') + ' past the ' + db.video.hours + '-hour promise.', 'requests']);
-  else if (newReq) alerts.push(['a-info', newReq + ' new video request' + (newReq === 1 ? '' : 's') + ' waiting.', 'requests']);
   Object.keys(db.exams).forEach(function (k) {
     var filled = db.tests.filter(function (x) { return x.exam === k && x.kind !== 'live' && x.status === 'published'; }).length;
     if (filled < 11) alerts.push(['a-warn', db.exams[k].label + ' test series: ' + filled + ' of 11 tests published.', 'series']);
@@ -168,32 +157,17 @@ bind.dashboard = function () {
   bindUpload();
 };
 
-/* ---------- Tests ----------
-   Real, API-backed screen: Admin.jsx renders <TestsAdmin/> beside #view while
-   this view is active (see onView in mountAdmin), so #view stays empty here. */
-VIEWS.tests = function () { return ''; };
+/* ---------- Free tests, Live tests, Test series ----------
+   Real, API-backed screens: Admin.jsx renders <TestsAdmin/> (free / live) or
+   <SeriesAdmin/> beside #view while one of these views is active (see onView
+   in mountAdmin), so #view stays empty here. "#tests" (the old single Tests
+   section) opens Free tests. */
+VIEWS.free = function () { return ''; };
+VIEWS.live = function () { return ''; };
+VIEWS.series = function () { return ''; };
 function find(id) { return db.tests.filter(function (x) { return x.id === id; })[0]; }
 
-/* ---------- Live tests ---------- */
-VIEWS.live = function () {
-  var list = db.tests.filter(function (x) { return x.kind === 'live'; }).sort(function (a, b) { return new Date(a.start) - new Date(b.start); });
-  return '<div class="head"><div><h1>Live tests</h1><p>All-India tests at a fixed time. The next one shows on the website countdown automatically.</p></div>' +
-    '<div class="actions"><button class="btn btn-primary" type="button" data-upload="live">Add a live test</button></div></div>' +
-    '<div class="table-wrap"><table><thead><tr><th>Date and time</th><th>Test</th><th>Entry window</th><th>Rank published</th><th>Status</th><th></th></tr></thead><tbody>' +
-    (list.length ? list.map(function (x) {
-      var past = new Date(x.start).getTime() < Date.now();
-      return '<tr><td><b>' + when(x.start) + '</b>' + (past ? '<span class="sub">Finished</span>' : '') + '</td>' +
-        '<td>' + esc(x.title) + '<span class="sub">' + esc(examLabel(x.exam)) + ' · ' + x.questions + ' questions, ' + x.minutes + ' min</span>' + (!x.file ? '<span class="pill p-off">No test file</span>' : '') + '</td>' +
-        '<td>' + x.window + ' min</td><td>' + when(x.resultAt) + '</td><td>' + statusPill(x.status) + '</td>' +
-        '<td><div class="row-actions"><button class="btn btn-outline btn-sm" type="button" data-edit-live="' + esc(x.id) + '">Change date</button><button class="btn btn-outline btn-sm" type="button" data-edit="' + esc(x.id) + '">Edit test</button></div></td></tr>';
-    }).join('') : '<tr><td colspan="6" class="hint">No live tests yet.</td></tr>') + '</tbody></table></div>' +
-    '<p class="hint foot-note">Moving a live test? Registered students get an SMS and app notification with the new time once you save.</p>';
-};
-bind.live = function () {
-  bindUpload();
-  $$('[data-edit-live]').forEach(function (b) { b.addEventListener('click', function () { editLive(b.dataset.editLive); }); });
-  $$('[data-edit]').forEach(function (b) { b.addEventListener('click', function () { openTestDialog(b.dataset.edit); }); });
-};
+/* ---------- Dashboard: change a demo live test's date ---------- */
 function editLive(id) {
   var x = find(id);
   formDialog('Change date: ' + x.title,
@@ -211,127 +185,11 @@ function editLive(id) {
     });
 }
 
-/* ---------- Test series ---------- */
-VIEWS.series = function () {
-  var ex = db.exams[ui.seriesExam];
-  var tests = db.tests.filter(function (x) { return x.exam === ui.seriesExam && x.kind !== 'live'; });
-  var filled = tests.filter(function (x) { return x.status === 'published'; }).length;
-  function stage(kind, title) {
-    var n = SLOTS[kind], out = '';
-    for (var i = 1; i <= n; i++) {
-      var x = tests.filter(function (y) { return y.kind === kind && y.slot === i; })[0];
-      out += x
-        ? '<div class="slot"><div class="slot-top"><b>' + esc(x.title) + '</b>' + statusPill(x.status) + '</div><span class="hint">' + esc(x.chapters) + '</span><div><button class="btn btn-outline btn-sm" type="button" data-edit="' + esc(x.id) + '">Edit</button></div></div>'
-        : '<div class="slot empty"><b>' + KIND[kind] + ' ' + i + '</b><span class="hint">Empty slot</span><div><button class="btn btn-primary btn-sm" type="button" data-upload-slot="' + kind + ':' + i + '">Upload</button></div></div>';
-    }
-    return '<div class="stage"><h3>' + title + ' (' + n + ')</h3><div class="slots s' + n + '">' + out + '</div></div>';
-  }
-  return '<div class="head"><div><h1>Test series</h1><p>The 11-test plan for each exam: 6 part, 3 half-syllabus, 2 full-syllabus.</p></div></div>' +
-    '<div class="filters"><div class="seg" role="group" aria-label="Exam">' + Object.keys(db.exams).map(function (k) { return '<button type="button" data-sx="' + k + '" aria-pressed="' + (k === ui.seriesExam) + '">' + esc(db.exams[k].label) + '</button>'; }).join('') + '</div></div>' +
-    '<div class="split">' +
-    '<section class="card">' + stage('part', 'Part tests') + stage('half', 'Half-syllabus tests') + stage('full', 'Full-syllabus tests') + '</section>' +
-    '<section class="card"><h2>Sale settings</h2>' +
-    '<div class="alert ' + (filled === 11 ? 'a-ok' : 'a-warn') + '">' + filled + ' of 11 tests published.</div>' +
-    '<div class="stack">' +
-    field('Price (₹)', '<input class="input" type="number" min="0" id="sr-price" value="' + ex.price + '">') +
-    '<label class="check"><input type="checkbox" id="sr-sale"' + (ex.onSale ? ' checked' : '') + '> On sale on the website</label>' +
-    '<p class="hint">Students who buy get every test in the series as soon as it\u2019s published, including ones you add later.</p>' +
-    '<button class="btn btn-primary" type="button" id="sr-save">Save</button></div></section></div>';
-};
-bind.series = function () {
-  $$('[data-sx]').forEach(function (b) { b.addEventListener('click', function () { ui.seriesExam = b.dataset.sx; render(); }); });
-  $$('[data-edit]').forEach(function (b) { b.addEventListener('click', function () { openTestDialog(b.dataset.edit); }); });
-  $$('[data-upload-slot]').forEach(function (b) {
-    b.addEventListener('click', function () { var p = b.dataset.uploadSlot.split(':'); openTestDialog(null, { exam: ui.seriesExam, kind: p[0], slot: Number(p[1]) }); });
-  });
-  $('#sr-save').addEventListener('click', function () {
-    var ex = db.exams[ui.seriesExam], price = Number($('#sr-price').value);
-    if (!(price >= 0)) { toast('Enter a valid price'); return; }
-    ex.price = price; ex.onSale = $('#sr-sale').checked; save(); render(); toast(ex.label + ' series saved');
-  });
-};
-
-/* ---------- Video requests ---------- */
-function hoursSince(iso) { return (Date.now() - new Date(iso).getTime()) / 36e5; }
-var REQ_STATUS = { 'new': ['p-warn', 'New'], progress: ['p-scheduled', 'Recording'], done: ['p-published', 'Sent'], declined: ['p-draft', 'Declined'] };
-ui.reqStatus = 'open';
-VIEWS.requests = function () {
-  var list = db.requests.filter(function (r) {
-    if (ui.reqStatus === 'open') return r.status === 'new' || r.status === 'progress';
-    return ui.reqStatus === 'all' || r.status === ui.reqStatus;
-  }).sort(function (a, b) { return b.askers.length - a.askers.length || new Date(a.askers[0].at) - new Date(b.askers[0].at); });
-  var v = db.video;
-  return '<div class="head"><div><h1>Video requests</h1><p>Students ask for a video solution on a test question or a photo. Most-asked first.</p></div>' +
-    '<div class="actions"><button class="btn btn-outline" type="button" id="vr-settings">Request rules</button></div></div>' +
-    '<div class="filters"><div class="seg" role="group" aria-label="Status">' +
-    [['open', 'Open'], ['new', 'New'], ['progress', 'Recording'], ['done', 'Sent'], ['declined', 'Declined'], ['all', 'All']].map(function (o) {
-      return '<button type="button" data-rs="' + o[0] + '" aria-pressed="' + (ui.reqStatus === o[0]) + '">' + o[1] + '</button>';
-    }).join('') + '</div><span class="hint">Promise to students: within ' + v.hours + ' hours · ' + v.limitDirect + ' requests a week (direct), ' + v.limitLms + ' (course students)</span></div>' +
-    (list.length ? '<div class="req-grid">' + list.map(function (r) {
-      var age = hoursSince(r.askers[0].at), late = (r.status === 'new' || r.status === 'progress') && age > v.hours;
-      var st = REQ_STATUS[r.status];
-      return '<article class="card req' + (late ? ' late' : '') + '">' +
-        '<div class="req-thumb" aria-hidden="true">' + (r.source === 'photo' ? 'Student\u2019s photo' : 'From a test') + '</div>' +
-        '<div class="req-body">' +
-        '<div class="req-tags"><span class="pill ' + st[0] + '">' + st[1] + '</span>' +
-        (r.askers.length > 1 ? '<span class="pill p-scheduled">' + r.askers.length + ' students asked</span>' : '') +
-        (late ? '<span class="pill p-off">Past ' + v.hours + ' h</span>' : '') +
-        '</div><span class="meta">' + esc(examLabel(r.exam)) + ' · ' + esc(r.subject) + ' · ' + esc(r.chapter) + ' · ' + esc(r.ref) + '</span>' +
-        '<div class="req-text">' + esc(r.text) + '</div>' +
-        (r.source === 'photo' ? '<div class="hint">Text and chapter read from the photo by Claude. Check before recording.</div>' : '') +
-        (r.note ? '<div class="req-note">Student\u2019s note: ' + esc(r.note) + '</div>' : '') +
-        '<div class="meta">Asked by ' + esc(r.askers.map(function (a) { return a.name; }).join(', ')) + ' · first ' + when(r.askers[0].at) + '</div>' +
-        (r.status === 'done' ? '<div class="req-extra">Sent: <a href="' + esc(r.link) + '" target="_blank" rel="noopener">' + esc(r.link) + '</a></div>' : '') +
-        (r.status === 'declined' ? '<div class="req-extra">Reason sent: ' + esc(r.reason) + '</div>' : '') +
-        '<div class="actions req-actions">' +
-        (r.status === 'new' ? '<button class="btn btn-outline btn-sm" type="button" data-r-start="' + r.id + '">Start recording</button>' : '') +
-        (r.status === 'new' || r.status === 'progress' ? '<button class="btn btn-primary btn-sm" type="button" data-r-send="' + r.id + '">Add YouTube link &amp; send</button><button class="btn btn-danger btn-sm" type="button" data-r-decline="' + r.id + '">Decline</button>' : '') +
-        (r.status === 'done' ? '<button class="btn btn-outline btn-sm" type="button" data-r-send="' + r.id + '">Change link</button>' : '') +
-        '</div></div></article>';
-    }).join('') + '</div>' : '<div class="card empty"><p class="hint">No requests here.</p></div>');
-};
-bind.requests = function () {
-  $$('[data-rs]').forEach(function (b) { b.addEventListener('click', function () { ui.reqStatus = b.dataset.rs; render(); }); });
-  var req = function (id) { return db.requests.filter(function (r) { return r.id === id; })[0]; };
-  $$('[data-r-start]').forEach(function (b) { b.addEventListener('click', function () { req(b.dataset.rStart).status = 'progress'; save(); render(); toast('Marked as recording'); }); });
-  $$('[data-r-send]').forEach(function (b) {
-    b.addEventListener('click', function () {
-      var r = req(b.dataset.rSend);
-      formDialog('Send video solution',
-        '<p style="font-size: 15px">' + esc(r.text) + '</p>' +
-        field('YouTube link', '<input class="input" id="r-link" type="url" placeholder="https://youtu.be/..." value="' + esc(r.link) + '">', 'Paste the link of the video you uploaded.') +
-        '<label class="check"><input type="checkbox" id="r-notify" checked> Notify ' + (r.askers.length === 1 ? esc(r.askers[0].name) : 'all ' + r.askers.length + ' students') + ' in the app and on WhatsApp</label>',
-        function () {
-          var link = $('#r-link').value.trim();
-          if (!/^https:\/\/(www\.|m\.)?(youtube\.com|youtu\.be)\//i.test(link)) return 'Paste a YouTube link starting with https://youtube.com or https://youtu.be';
-          var notify = $('#r-notify').checked;
-          r.link = link; r.status = 'done'; save(); render();
-          toast('Video link saved' + (notify ? ' and sent to ' + r.askers.length + ' student' + (r.askers.length === 1 ? '' : 's') : ''));
-        });
-    });
-  });
-  $$('[data-r-decline]').forEach(function (b) {
-    b.addEventListener('click', function () {
-      var r = req(b.dataset.rDecline);
-      formDialog('Decline request',
-        field('Reason (sent to the student)', '<select class="input" id="r-why"><option>The photo is too blurry. Please send a clearer picture.</option><option>This question is outside the NEET/JEE syllabus.</option><option>A video for this is already on our YouTube channel. Search the chapter playlist.</option><option>Part of the question is missing in the photo.</option></select>'),
-        function () { r.reason = $('#r-why').value; r.status = 'declined'; save(); render(); toast('Request declined. The student was told why, and it doesn\u2019t count towards their weekly limit.'); });
-    });
-  });
-  $('#vr-settings').addEventListener('click', function () {
-    var v = db.video;
-    formDialog('Video request rules',
-      '<div class="form">' +
-      field('Requests per week, direct students', '<input class="input" type="number" min="0" id="v-ld" value="' + v.limitDirect + '">') +
-      field('Requests per week, course (LMS) students', '<input class="input" type="number" min="0" id="v-ll" value="' + v.limitLms + '">') +
-      field('Promised reply time (hours)', '<input class="input" type="number" min="1" id="v-h" value="' + v.hours + '">', 'Shown to students when they send a request.') +
-      '</div>',
-      function () {
-        v.limitDirect = Number($('#v-ld').value) || 0; v.limitLms = Number($('#v-ll').value) || 0; v.hours = Number($('#v-h').value) || 48;
-        save(); render(); toast('Request rules saved');
-      });
-  });
-};
+/* ---------- Video requests and Analysis ----------
+   Coming soon: Admin.jsx renders a "coming soon" screen beside #view while
+   either view is active, so #view stays empty here. */
+VIEWS.requests = function () { return ''; };
+VIEWS.analysis = function () { return ''; };
 
 /* ---------- Students & groups ----------
    Real, API-backed screen: Admin.jsx renders <StudentsAdmin/> beside #view

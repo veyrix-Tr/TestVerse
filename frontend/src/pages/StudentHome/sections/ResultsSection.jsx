@@ -1,90 +1,139 @@
 import { Link } from 'react-router-dom'
+import PendingLink from '../../../components/PendingLink.jsx'
 import { fmt } from '../../../lib/format.js'
-import SectionHead from '../SectionHead.jsx'
-import { accuracyOf, pctOf } from '../useTests.js'
+import { day } from '../fmt.js'
+import { accuracyOf, pctOf, resultHref, signed, testHref } from '../useTests.js'
 
-const day = (iso) => fmt(iso, { day: 'numeric', month: 'short', year: 'numeric' })
+const dayShort = (iso) => fmt(iso, { day: 'numeric', month: 'short' })
 
-/* +48 / −12 next to a retake's score */
-function Delta({ v }) {
-  if (v == null) return null
-  if (v === 0) return <span className="delta">same as before</span>
-  return <span className={'delta ' + (v > 0 ? 'up' : 'down')}>{(v > 0 ? '+' : '−') + Math.abs(v)} vs last try</span>
+/* Change in marks from the previous attempt at the same test. */
+export function Delta({ v, quiet }) {
+  if (v == null) return quiet ? null : <span className="delta">—</span>
+  if (v === 0) return <span className="delta">No change</span>
+  return <span className={'delta ' + (v > 0 ? 'up' : 'down')}>{signed(v) + ' marks'}</span>
 }
 
-/* Every submitted attempt, newest first: score, accuracy, the answer split,
-   and links to the full analysis or a retake. */
-export default function ResultsSection({ status, rows }) {
+/* Overview: the latest few attempts as compact rows. */
+export function RecentResults({ rows }) {
   return (
-    <section className="section" id="results" aria-labelledby="results-title">
-      <SectionHead id="results-title" title="Your results" desc="Every attempt you’ve submitted. Open one to go through the solutions." />
-
-      {status !== 'ready' ? null : !rows.length ? (
-        <div className="card state-card is-empty">
-          <div>
-            <h3>No results yet</h3>
-            <p className="meta">Submit your first test and your score, accuracy and solutions will show up here.</p>
+    <ul className="card rows">
+      {rows.map(({ test: t, a, delta }) => (
+        <li className="row" key={t.id + '-' + a.attemptNo}>
+          <div className="row-main">
+            <Link className="row-title" to={resultHref(t, a)}>
+              {t.title}
+            </Link>
+            <span className="meta">
+              {dayShort(a.submittedAt)}
+              {a.attemptNo > 1 ? ' · attempt ' + a.attemptNo : ''}
+            </span>
           </div>
-          <a className="btn btn-outline" href="#tests">
-            See your tests
-          </a>
-        </div>
-      ) : (
-        <ul className="card res-list">
+          <div className="row-score">
+            <b>
+              {pctOf(a)}
+              <small>%</small>
+            </b>
+            <span className="meta">
+              {a.score} / {a.maxScore}
+            </span>
+          </div>
+          <div className="row-side">
+            <Delta v={delta} quiet />
+          </div>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+/* Results page: every attempt as a table (stacked cards on phones). */
+export function AttemptsTable({ rows }) {
+  return (
+    <div className="card table-wrap">
+      <table className="atable">
+        <thead>
+          <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Test</th>
+            <th scope="col" className="num">
+              Score
+            </th>
+            <th scope="col" className="num">
+              Percent
+            </th>
+            <th scope="col">Change</th>
+            <th scope="col" className="num">
+              Accuracy
+            </th>
+            <th scope="col">Answers</th>
+            <th scope="col">
+              <span className="sr">Actions</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
           {rows.map(({ test: t, a, latest, delta }) => {
-            const href = '/test?test=' + encodeURIComponent(t.id)
             const acc = accuracyOf(a)
+            const tries = (t.history || []).length
             return (
-              <li className="res-row" key={t.id + '-' + a.attemptNo}>
-                <div className="rr-test">
-                  <b>{t.title}</b>
+              <tr key={t.id + '-' + a.attemptNo}>
+                <td className="a-date" data-label="Date">
+                  {day(a.submittedAt)}
+                </td>
+                <td className="a-test">
+                  <Link to={resultHref(t, a)}>{t.title}</Link>
                   <span className="meta">
-                    {day(a.submittedAt)}
-                    {a.attemptNo > 1 ? <span className="chip chip-blue">Retake {a.attemptNo - 1}</span> : null}
+                    Attempt {a.attemptNo}
+                    {tries > 1 ? ' of ' + tries : ''}
+                    {latest && tries > 1 ? <span className="chip chip-blue">Latest</span> : null}
                   </span>
-                </div>
-                <dl className="rr-stats">
+                </td>
+                <td className="num a-score" data-label="Score">
+                  <b>{a.score}</b>
+                  <span className="muted"> / {a.maxScore}</span>
+                </td>
+                <td className="num" data-label="Percent">
+                  <b>{pctOf(a)}%</b>
+                </td>
+                <td data-label="Change">
+                  <Delta v={delta} />
+                </td>
+                <td className="num" data-label="Accuracy">
+                  {acc == null ? <span className="muted">—</span> : acc + '%'}
+                </td>
+                <td data-label="Answers">
+                  <span className="ans-split">
+                    <span className="s-c" title="Correct">
+                      {a.correct || 0}
+                      <span className="sr"> correct</span>
+                    </span>
+                    <span className="s-w" title="Wrong">
+                      {(a.wrong || 0) + (a.partial || 0)}
+                      <span className="sr"> wrong</span>
+                    </span>
+                    <span className="s-s" title="Skipped">
+                      {a.skipped || 0}
+                      <span className="sr"> skipped</span>
+                    </span>
+                  </span>
+                </td>
+                <td className="a-actions">
                   <div>
-                    <dt>Score</dt>
-                    <dd>
-                      <b>{a.score}</b>
-                      <span className="muted"> / {a.maxScore}</span>
-                      <span className="rr-sub">
-                        {pctOf(a)}%
-                        <Delta v={delta} />
-                      </span>
-                    </dd>
+                    <PendingLink className="btn btn-outline btn-sm" to={resultHref(t, a)}>
+                      View result
+                    </PendingLink>
+                    {latest && t.canRetake ? (
+                      <PendingLink className="btn btn-primary btn-sm" to={testHref(t) + '&retake=1'}>
+                        Retake
+                      </PendingLink>
+                    ) : null}
                   </div>
-                  <div>
-                    <dt>Accuracy</dt>
-                    <dd>
-                      <b>{acc == null ? '—' : acc + '%'}</b>
-                    </dd>
-                  </div>
-                  <div>
-                    <dt>Answers</dt>
-                    <dd className="split">
-                      <span className="s-c">{a.correct || 0} correct</span>
-                      <span className="s-w">{(a.wrong || 0) + (a.partial || 0)} wrong</span>
-                      <span className="s-s">{a.skipped || 0} skipped</span>
-                    </dd>
-                  </div>
-                </dl>
-                <div className="rr-actions">
-                  <Link className="btn btn-outline btn-sm" to={href + '&view=result&attempt=' + a.attemptNo}>
-                    View result
-                  </Link>
-                  {latest && t.canRetake ? (
-                    <Link className="btn btn-primary btn-sm" to={href + '&retake=1'}>
-                      Retake
-                    </Link>
-                  ) : null}
-                </div>
-              </li>
+                </td>
+              </tr>
             )
           })}
-        </ul>
-      )}
-    </section>
+        </tbody>
+      </table>
+    </div>
   )
 }

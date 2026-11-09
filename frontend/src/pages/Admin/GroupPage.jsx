@@ -21,7 +21,7 @@ import BackButton from '../../components/BackButton.jsx'
 
 /* One group: name and description, members, tests given, delete. */
 export default function GroupPage({ id, toast, backText, onBack, onDeleted, onOpenStudent }) {
-  const live = useLive(() => Promise.all([getGroup(id), listTests()]), id)
+  const live = useLive(() => Promise.all([getGroup(id), listTests('live')]), id)
   const [busy, setBusy] = useState(null)
   const [notice, setNotice] = useState(null)
   const [form, setForm] = useState(null) // { name, description } while editing
@@ -67,8 +67,8 @@ export default function GroupPage({ id, toast, backText, onBack, onDeleted, onOp
             <span className="ts-grow">
               {live.error === 'Group not found' ? 'This group no longer exists. It may have been deleted.' : "Couldn't open this group. " + live.error}
             </span>
-            <button className="btn btn-outline btn-sm" type="button" onClick={live.refresh}>
-              Try again
+            <button className="btn btn-outline btn-sm" type="button" onClick={live.refresh} disabled={live.loading}>
+              {live.loading ? 'Trying…' : 'Try again'}
             </button>
           </div>
         ) : (
@@ -313,7 +313,7 @@ export default function GroupPage({ id, toast, backText, onBack, onDeleted, onOp
                             aria-label={'Remove ' + m.name + ' from the group'}
                             onClick={() => act('m:' + m.id, () => removeMember(g.id, m.id), `${m.name} removed`)}
                           >
-                            Remove
+                            {busy === 'm:' + m.id ? 'Removing…' : 'Remove'}
                           </button>
                         </div>
                       </td>
@@ -336,7 +336,7 @@ export default function GroupPage({ id, toast, backText, onBack, onDeleted, onOp
             label="Give a test"
             title="Give a test to this group"
             placeholder="Search tests"
-            empty={tests.length ? 'No test matches.' : 'No tests yet. Create one under Tests.'}
+            empty={tests.length ? 'No test matches.' : 'No live tests yet. Create one under Live tests.'}
             options={testOptions}
             busy={busy === 'give'}
             align="right"
@@ -370,7 +370,7 @@ export default function GroupPage({ id, toast, backText, onBack, onDeleted, onOp
                     disabled={busy === 't:' + t.id}
                     onClick={() => act('t:' + t.id, () => takeTestFromGroup(g.id, t.id), `"${t.title}" taken back`)}
                   >
-                    Take back
+                    {busy === 't:' + t.id ? 'Taking back…' : 'Take back'}
                   </button>
                 </div>
               </div>

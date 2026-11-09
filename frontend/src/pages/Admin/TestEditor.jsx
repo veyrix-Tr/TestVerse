@@ -20,6 +20,12 @@ import {
   Create / edit a test: details, marking scheme, instructions, question paper
   (pasted or uploaded JSON, checked as you type) and a preview of the parsed
   questions. One scrolling page with a sticky action bar.
+
+  `kind` decides what the form asks for (an existing test keeps its own kind):
+    free   – open to every student; optional opening / closing time.
+    live   – needs a start time; "Who can take this test" picks the audience.
+    series – stored inside the test series `seriesId`: no timing, no audience
+             and no publishing yet (students don't see series tests).
 */
 
 const EXAMS = [
@@ -63,7 +69,9 @@ function defaultInstructions(minutes, f) {
   ].join('\n')
 }
 
-export default function TestEditor({ id, onBack, onSaved }) {
+const examWord = (exam) => (exam === 'jee' ? 'JEE ' : exam === 'neet' ? 'NEET ' : '')
+
+export default function TestEditor({ id, kind: newKind = 'live', seriesId, backText = 'Back to tests', onBack, onSaved }) {
   const editing = !!id
   const [loaded, setLoaded] = useState(!editing)
   const [loadError, setLoadError] = useState(null)
@@ -72,7 +80,6 @@ export default function TestEditor({ id, onBack, onSaved }) {
   const [title, setTitle] = useState('')
   const [subject, setSubject] = useState('')
   const [exam, setExam] = useState('')
-  const [isFree, setIsFree] = useState(false)
   const [duration, setDuration] = useState('180')
   const [opensAt, setOpensAt] = useState('')
   const [closesAt, setClosesAt] = useState('')
@@ -91,6 +98,9 @@ export default function TestEditor({ id, onBack, onSaved }) {
   const seq = useRef(0)
   const formRef = useRef(null)
 
+  const kind = editing ? (original && (original.kind || (original.isFree ? 'free' : 'live'))) || newKind : newKind
+  const isSeries = kind === 'series'
+  const isLive = kind === 'live'
   const locked = editing && original && original.attempts > 0
   const published = editing && original && original.status === 'published'
   const instrValue = instructions == null ? defaultInstructions(duration, marking) : instructions
@@ -106,7 +116,6 @@ export default function TestEditor({ id, onBack, onSaved }) {
         setTitle(t.title || '')
         setSubject(t.subject || '')
         setExam(t.exam || '')
-        setIsFree(!!t.isFree)
         setDuration(String(t.durationMin || ''))
         setOpensAt(toLocalInput(t.opensAt))
         setClosesAt(toLocalInput(t.closesAt))
@@ -178,35 +187,36 @@ export default function TestEditor({ id, onBack, onSaved }) {
       title: title.trim(),
       subject: subject.trim(),
       exam,
-      isFree,
+      kind: isSeries ? undefined : kind,
+      seriesId: isSeries && !editing ? seriesId : undefined,
       durationMin: Number(duration),
       instructions: instrValue,
       marking: markingFromForm(marking),
-      opensAt: fromLocalInput(opensAt),
-      closesAt: fromLocalInput(closesAt),
+      opensAt: isSeries ? null : fromLocalInput(opensAt),
+      closesAt: isSeries ? null : fromLocalInput(closesAt),
       paper: paperText.trim() ? paperText : null,
-      audience: audienceBody(audience),
+      ...(isLive ? { audience: audienceBody(audience) } : {}),
     }
   }
 
-  async function save(kind) {
-    setSaving(kind)
+  async function save(how) {
+    setSaving(how)
     setFieldErr(null)
     setFormErr(null)
     try {
       let msg
       if (!editing) {
-        const t = await createTest({ ...body(), publish: kind === 'publish' })
-        msg = kind === 'publish' ? `"${t.title}" is published` : `"${t.title}" saved as a draft`
+        const t = await createTest({ ...body(), ...(isSeries ? {} : { publish: how === 'publish' }) })
+        msg = isSeries ? `"${t.title}" added to the series` : how === 'publish' ? `"${t.title}" is published` : `"${t.title}" saved as a draft`
       } else {
         const t = await updateTest(id, body())
-        if (kind === 'publish' && t.status !== 'published') await setPublished(id, true)
-        msg = kind === 'publish' ? `"${t.title}" saved and published` : `"${t.title}" saved`
+        if (how === 'publish' && t.status !== 'published') await setPublished(id, true)
+        msg = how === 'publish' ? `"${t.title}" saved and published` : `"${t.title}" saved`
       }
       onSaved(msg)
     } catch (e) {
       setSaving(null)
-      if (e.field) {
+      if (e.field && e.field !== 'seriesId') {
         setFieldErr({ field: e.field, message: e.message })
         if (e.field === 'paper' && Array.isArray(e.data.errors) && e.data.errors.length) {
           setResult({ key: checkKey, state: 'bad', error: e.message, errors: e.data.errors })
@@ -234,7 +244,7 @@ export default function TestEditor({ id, onBack, onSaved }) {
   if (loadError) {
     return (
       <>
-        <BackLink onBack={onBack} />
+        <BackLink onBack={onBack} text={backText} />
         <div className="alert a-err" role="alert">
           <span>Couldn&apos;t open this test. {loadError}</span>
         </div>
@@ -244,7 +254,7 @@ export default function TestEditor({ id, onBack, onSaved }) {
   if (!loaded) {
     return (
       <>
-        <BackLink onBack={onBack} />
+        <BackLink onBack={onBack} text={backText} />
         <p className="hint">Loading test…</p>
       </>
     )
@@ -255,20 +265,28 @@ export default function TestEditor({ id, onBack, onSaved }) {
   const shownOk = paperOk ? check : check.state === 'checking' && check.prev && check.prev.state === 'ok' ? check.prev : null
   const markingErr = check.state === 'bad' && check.field === 'marking'
   const canPublish = paperOk && !saving
+  const noStart = isLive && editing && !original.opensAt // older tests were made before live tests needed a start time
+  // section numbers: the audience section only exists for live tests
+  const num = (name) => String(['details', isLive && 'audience', 'marking', 'instructions', 'paper', 'preview'].filter(Boolean).indexOf(name) + 1)
+  const noun = { free: 'free test', live: 'live test', series: 'test' }[kind]
 
   return (
     <div className="ts-editor" ref={formRef}>
       <div className="head ts-head">
         <div>
-          <BackLink onBack={onBack} />
-          <h1>{editing ? 'Edit test' : 'Create test'}</h1>
+          <BackLink onBack={onBack} text={backText} />
+          <h1>{editing ? 'Edit ' + noun : isSeries ? 'Add a test to the series' : 'Create ' + noun}</h1>
           <p>
-            {editing
-              ? 'Change the details, marking or question paper. Students see changes as soon as you save.'
-              : 'Fill in the details, add the question paper as JSON and check the preview before publishing.'}
+            {isSeries
+              ? 'Fill in the details and add the question paper as JSON. Tests in a series are stored only: no student sees them yet.'
+              : editing
+                ? 'Change the details, marking or question paper. Students see changes as soon as you save.'
+                : isLive
+                  ? 'Set when it starts and who can take it, add the question paper as JSON and check the preview before publishing.'
+                  : 'Free tests are open to every student, with or without a batch. Add the question paper as JSON and check the preview before publishing.'}
           </p>
         </div>
-        {editing && (
+        {editing && !isSeries && (
           <div className="ts-head-meta">
             <span className={'pill ' + (published ? 'p-published' : 'p-draft')}>{published ? 'Published' : 'Draft'}</span>
             <span className="hint">
@@ -282,14 +300,24 @@ export default function TestEditor({ id, onBack, onSaved }) {
         <div className="alert a-info">
           <span>
             {original.attempts} student{original.attempts === 1 ? ' has' : 's have'} already started this test, so its question paper and marking are locked.
-            You can still change the title, instructions, timings and who can take it.
+            {isLive
+              ? ' You can still change the title, instructions, timings and who can take it.'
+              : isSeries
+                ? ' You can still change the title and instructions.'
+                : ' You can still change the title, instructions and timings.'}
           </span>
         </div>
       )}
 
-      {/* 1. Details */}
+      {noStart && (
+        <div className="alert a-warn">
+          <span>This live test has no start time yet. Add one under Details before you save.</span>
+        </div>
+      )}
+
+      {/* Details */}
       <section className="ts-sect">
-        <SectHead n="1" title="Details" text="What students see in their test list." />
+        <SectHead n={num('details')} title="Details" text={isSeries ? 'The name, subject and length of this test.' : 'What students see in their test list.'} />
         <div className="card">
           <div className="form ts-form">
             <div className="full" data-field="title">
@@ -339,16 +367,12 @@ export default function TestEditor({ id, onBack, onSaved }) {
                   </button>
                 ))}
               </div>
-              {err('exam')}
-              <label className="check ts-free">
-                <input type="checkbox" checked={isFree} onChange={(e) => setIsFree(e.target.checked)} />
-                Free test
-              </label>
-              <p className="hint">
-                {isFree
-                  ? `Every ${exam ? (exam === 'jee' ? 'JEE' : 'NEET') + ' ' : ''}student can take it, with or without a batch.`
-                  : 'Only students with an active batch see it.'}
-              </p>
+              {err('exam') ||
+                (kind === 'free' ? (
+                  <p className="hint ts-exam-hint">Every {examWord(exam)}student can take it, with or without a batch.</p>
+                ) : isLive ? (
+                  <p className="hint ts-exam-hint">{exam ? `Only ${examWord(exam)}students see it.` : 'Students of every exam can see it.'}</p>
+                ) : null)}
             </div>
             <div data-field="durationMin">
               <label className="l" htmlFor="ts-duration">
@@ -371,54 +395,56 @@ export default function TestEditor({ id, onBack, onSaved }) {
               />
               {err('durationMin')}
             </div>
-            <div className="ts-spacer" aria-hidden="true"></div>
-            <div data-field="opensAt">
-              <label className="l" htmlFor="ts-opens">
-                Opens at <span className="ts-opt">optional</span>
-              </label>
-              <input
-                className="input"
-                id="ts-opens"
-                type="datetime-local"
-                value={opensAt}
-                aria-invalid={invalid('opensAt')}
-                onChange={(e) => {
-                  setOpensAt(e.target.value)
-                  clearErr('opensAt')
-                }}
-              />
-              {err('opensAt') || <p className="hint">Leave empty to open it as soon as it is published.</p>}
-            </div>
-            <div data-field="closesAt">
-              <label className="l" htmlFor="ts-closes">
-                Closes at <span className="ts-opt">optional</span>
-              </label>
-              <input
-                className="input"
-                id="ts-closes"
-                type="datetime-local"
-                value={closesAt}
-                aria-invalid={invalid('closesAt')}
-                onChange={(e) => {
-                  setClosesAt(e.target.value)
-                  clearErr('closesAt')
-                }}
-              />
-              {err('closesAt') || <p className="hint">Leave empty to keep it open.</p>}
-            </div>
+            {!isSeries && (
+              <>
+                <div className="ts-spacer" aria-hidden="true"></div>
+                <div data-field="opensAt">
+                  <label className="l" htmlFor="ts-opens">
+                    {isLive ? 'Starts at' : 'Opens at'} {!isLive && <span className="ts-opt">optional</span>}
+                  </label>
+                  <input
+                    className="input"
+                    id="ts-opens"
+                    type="datetime-local"
+                    value={opensAt}
+                    required={isLive}
+                    aria-invalid={invalid('opensAt')}
+                    onChange={(e) => {
+                      setOpensAt(e.target.value)
+                      clearErr('opensAt')
+                    }}
+                  />
+                  {err('opensAt') || (
+                    <p className="hint">{isLive ? 'Students can start the test from this time.' : 'Leave empty to open it as soon as it is published.'}</p>
+                  )}
+                </div>
+                <div data-field="closesAt">
+                  <label className="l" htmlFor="ts-closes">
+                    Closes at <span className="ts-opt">optional</span>
+                  </label>
+                  <input
+                    className="input"
+                    id="ts-closes"
+                    type="datetime-local"
+                    value={closesAt}
+                    aria-invalid={invalid('closesAt')}
+                    onChange={(e) => {
+                      setClosesAt(e.target.value)
+                      clearErr('closesAt')
+                    }}
+                  />
+                  {err('closesAt') || <p className="hint">Leave empty to keep it open.</p>}
+                </div>
+              </>
+            )}
           </div>
         </div>
       </section>
 
-      {/* 2. Who can take it */}
-      <section className="ts-sect" data-field="audience">
-        <SectHead n="2" title="Who can take this test" text="Everyone, or only the batches, groups and students you choose. You can change this at any time." />
-        {isFree ? (
-          <p className="hint">
-            This is a free test, so every {exam ? (exam === 'jee' ? 'JEE' : 'NEET') + ' ' : ''}student can take it and the audience doesn’t apply.
-            Untick “Free test” to choose who gets it.
-          </p>
-        ) : (
+      {/* Who can take it (live tests only) */}
+      {isLive && (
+        <section className="ts-sect" data-field="audience">
+          <SectHead n={num('audience')} title="Who can take this test" text="All paid students, or only the batches, groups and students you choose. You can change this at any time." />
           <AudienceEditor
             value={audience}
             error={fieldErr && fieldErr.field === 'audience' ? fieldErr.message : null}
@@ -427,12 +453,12 @@ export default function TestEditor({ id, onBack, onSaved }) {
               clearErr('audience')
             }}
           />
-        )}
-      </section>
+        </section>
+      )}
 
-      {/* 3. Marking */}
+      {/* Marking */}
       <section className="ts-sect" data-field="marking">
-        <SectHead n="3" title="Marking scheme" text="Applies to every question of that type, unless a question sets its own marks." />
+        <SectHead n={num('marking')} title="Marking scheme" text="Applies to every question of that type, unless a question sets its own marks." />
         <div className="card ts-mk-card">
           <table className="ts-mk">
             <thead>
@@ -503,7 +529,7 @@ export default function TestEditor({ id, onBack, onSaved }) {
       {/* 4. Instructions */}
       <section className="ts-sect" data-field="instructions">
         <SectHead
-          n="4"
+          n={num('instructions')}
           title="Instructions"
           text="Shown to students before they start. One rule per line."
           action={
@@ -540,7 +566,7 @@ export default function TestEditor({ id, onBack, onSaved }) {
       {/* 5. Question paper */}
       <section className="ts-sect" data-field="paper">
         <SectHead
-          n="5"
+          n={num('paper')}
           title="Question paper"
           text="Paste the paper as JSON or upload a .json file. It is checked as you type."
           action={
@@ -677,7 +703,7 @@ export default function TestEditor({ id, onBack, onSaved }) {
       {/* 6. Preview */}
       {shownOk && (
         <section className={'ts-sect' + (paperOk ? '' : ' ts-stale')}>
-          <SectHead n="6" title="Preview" text="The questions as the server read them, with the correct answers highlighted." />
+          <SectHead n={num('preview')} title="Preview" text="The questions as the server read them, with the correct answers highlighted." />
           <PaperPreview paper={shownOk.paper} />
         </section>
       )}
@@ -698,8 +724,12 @@ export default function TestEditor({ id, onBack, onSaved }) {
                 : check.state === 'checking'
                   ? 'Checking the paper…'
                   : check.state === 'empty'
-                    ? 'You can save a draft without a paper. Publishing needs one.'
-                    : 'Fix the paper before publishing. You can still save a draft.'}
+                    ? isSeries
+                      ? 'You can save the test now and add the paper later.'
+                      : 'You can save a draft without a paper. Publishing needs one.'
+                    : isSeries
+                      ? 'The paper has problems. You can still save and fix it later.'
+                      : 'Fix the paper before publishing. You can still save a draft.'}
             </span>
           )}
         </div>
@@ -707,7 +737,11 @@ export default function TestEditor({ id, onBack, onSaved }) {
           <button className="btn btn-outline" type="button" onClick={onBack} disabled={!!saving}>
             Cancel
           </button>
-          {published ? (
+          {isSeries ? (
+            <button className="btn btn-primary" type="button" disabled={!!saving} onClick={() => save('save')}>
+              {saving ? 'Saving…' : editing ? 'Save changes' : 'Save test'}
+            </button>
+          ) : published ? (
             <button className="btn btn-primary" type="button" disabled={!!saving || check.state === 'checking'} onClick={() => save('save')}>
               {saving ? 'Saving…' : 'Save changes'}
             </button>
@@ -733,12 +767,8 @@ export default function TestEditor({ id, onBack, onSaved }) {
   )
 }
 
-function BackLink({ onBack }) {
-  return (
-    <BackButton onClick={onBack}>
-      Back to tests
-    </BackButton>
-  )
+function BackLink({ onBack, text }) {
+  return <BackButton onClick={onBack}>{text}</BackButton>
 }
 
 function SectHead({ n, title, text, action }) {
@@ -761,7 +791,7 @@ const FIELD_NAME = {
   subject: 'subject',
   exam: 'exam',
   durationMin: 'duration',
-  opensAt: 'opening time',
+  opensAt: 'start time',
   closesAt: 'closing time',
   instructions: 'instructions',
   marking: 'marking scheme',

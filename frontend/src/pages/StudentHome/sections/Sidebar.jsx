@@ -1,15 +1,16 @@
 import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { usePopover } from '../usePopover.js'
+import PendingLink from '../../../components/PendingLink.jsx'
 
-// Sections of the dashboard (scrolled to by id) and pages that are coming soon.
+// The student pages (keyed by the URL segment after /student/) and pages that are coming soon.
 const NAV = [
-  { id: 'top', label: 'Dashboard' },
-  { id: 'tests', label: 'Your tests', count: 'todo' },
-  { id: 'results', label: 'Results', count: 'results' },
-  { id: 'videos', label: 'Solutions' },
+  { page: '', label: 'Overview' },
+  { page: 'tests', label: 'Your tests', count: 'todo', countLabel: 'to do' },
+  { page: 'results', label: 'Results', count: 'results', countLabel: 'attempts' },
+  { page: 'solutions', label: 'Solutions' },
 ]
 const SOON_NAV = [
+  { page: 'test-series', label: 'Test series' },
   { page: 'analysis', label: 'Analysis' },
   { page: 'video-requests', label: 'Video requests' },
 ]
@@ -31,32 +32,27 @@ function Logo({ height }) {
 function PlanPanel({ me, free }) {
   if (me.subscription) {
     return (
-      <div className="plan">
-        <span className="plan-label">Your batch</span>
-        <b>{me.subscription.batch.name}</b>
-        <span className="plan-sub">Active · {me.examText || me.subscription.batch.grade}</span>
+      <div className="plan-line">
+        <span className="plan-text">
+          <span className="plan-dot" aria-hidden="true"></span>
+          <b>{me.subscription.batch.name}</b> · Active batch
+        </span>
       </div>
     )
   }
-  const pct = free.total ? Math.round((free.done / free.total) * 100) : 0
   return (
-    <div className="plan is-free">
-      <span className="plan-label">Free access</span>
-      <b>
-        {free.done} of {free.total} free mocks done
-      </b>
-      <span className="plan-bar" aria-hidden="true">
-        <i style={{ width: pct + '%' }}></i>
+    <div className="plan-line">
+      <span className="plan-text">
+        Free plan · {free.done} of {free.total} mocks
       </span>
-      <Link className="btn btn-gold btn-sm btn-block" to="/subscribe" viewTransition>
-        Unlock your batch
-      </Link>
+      <PendingLink className="plan-link" to="/subscribe" viewTransition>
+        Unlock your batch →
+      </PendingLink>
     </div>
   )
 }
 
-export default function Sidebar({ me, active, page, onNavigate, sheetOpen, setSheetOpen, onLogout, counts, free }) {
-  const { open: accountOpen, setOpen: setAccountOpen, ref: accountRef } = usePopover()
+export default function Sidebar({ me, active, sheetOpen, setSheetOpen, onLogout, loggingOut, counts, free }) {
   const closeRef = useRef(null)
   const menuBtnRef = useRef(null)
   const wasOpen = useRef(false)
@@ -81,7 +77,7 @@ export default function Sidebar({ me, active, page, onNavigate, sheetOpen, setSh
   return (
     <>
       <div className="topbar">
-        <Link className="brand" to="/student" aria-label="Testverse dashboard">
+        <Link className="brand" to="/student" aria-label="Testverse overview">
           <Logo height="26px" />
         </Link>
         <button ref={menuBtnRef} className="topbar-menu" type="button" aria-expanded={sheetOpen ? 'true' : 'false'} aria-controls="sidebar" onClick={() => setSheetOpen(true)}>
@@ -93,7 +89,7 @@ export default function Sidebar({ me, active, page, onNavigate, sheetOpen, setSh
 
       <aside className={'sidebar' + (sheetOpen ? ' is-open' : '')} id="sidebar" aria-label="Sidebar">
         <div className="sidebar-top">
-          <Link className="brand" to="/student" aria-label="Testverse dashboard">
+          <Link className="brand" to="/student" aria-label="Testverse overview">
             <Logo height="32px" />
           </Link>
           <button ref={closeRef} className="sheet-close" type="button" onClick={() => setSheetOpen(false)}>
@@ -104,30 +100,18 @@ export default function Sidebar({ me, active, page, onNavigate, sheetOpen, setSh
         <nav className="sidenav" aria-label="Main">
           <ul>
             {NAV.map((n) => {
-              const isActive = !page && active === n.id
-              const inner = (
-                <>
-                  {n.label}
-                  {n.count && counts[n.count] ? <span className="nav-count">{counts[n.count]}</span> : null}
-                </>
-              )
+              const on = active === n.page
               return (
-                <li key={n.id}>
-                  {page ? (
-                    // On a coming-soon page: go back to the dashboard at that section
-                    <Link to={'/student#' + n.id} onClick={() => onNavigate(n.id)}>
-                      {inner}
-                    </Link>
-                  ) : (
-                    <a
-                      href={'#' + n.id}
-                      className={isActive ? 'is-active' : undefined}
-                      aria-current={n.id === 'top' ? 'page' : isActive ? 'location' : undefined}
-                      onClick={() => onNavigate(n.id)}
-                    >
-                      {inner}
-                    </a>
-                  )}
+                <li key={n.page || 'overview'}>
+                  <Link to={'/student' + (n.page ? '/' + n.page : '')} className={on ? 'is-active' : undefined} aria-current={on ? 'page' : undefined} onClick={() => setSheetOpen(false)}>
+                    {n.label}
+                    {n.count && counts[n.count] ? (
+                      <span className="nav-count">
+                        {counts[n.count]}
+                        <span className="sr"> {n.countLabel}</span>
+                      </span>
+                    ) : null}
+                  </Link>
                 </li>
               )
             })}
@@ -138,9 +122,9 @@ export default function Sidebar({ me, active, page, onNavigate, sheetOpen, setSh
               <li key={n.page}>
                 <Link
                   to={'/student/' + n.page}
-                  className={page === n.page ? 'is-active' : undefined}
-                  aria-current={page === n.page ? 'page' : undefined}
-                  onClick={() => onNavigate(null)}
+                  className={active === n.page ? 'is-active' : undefined}
+                  aria-current={active === n.page ? 'page' : undefined}
+                  onClick={() => setSheetOpen(false)}
                 >
                   {n.label}
                   <span className="nav-soon">Soon</span>
@@ -152,35 +136,34 @@ export default function Sidebar({ me, active, page, onNavigate, sheetOpen, setSh
 
         <div className="sidebar-foot">
           <PlanPanel me={me} free={free} />
-          <div className="account" ref={accountRef}>
-            <div className="account-menu" id="account-menu" hidden={!accountOpen}>
-              <button
-                type="button"
-                onClick={() => {
-                  setAccountOpen(false)
-                  onLogout()
-                }}
-              >
-                Log out
-              </button>
-            </div>
-            <button
-              className="account-btn"
-              type="button"
-              aria-expanded={accountOpen ? 'true' : 'false'}
-              aria-controls="account-menu"
-              aria-label={'Account: ' + me.name}
-              onClick={() => setAccountOpen(!accountOpen)}
-            >
-              <span className="avatar" aria-hidden="true">
-                {me.first.charAt(0)}
-              </span>
-              <span className="account-text">
-                <b>{me.name}</b>
-                <span>{[me.examText, me.batch].filter(Boolean).join(' · ') || me.email}</span>
-              </span>
-            </button>
+          <div className="me-id">
+            <span className="avatar" aria-hidden="true">
+              {me.first.charAt(0)}
+            </span>
+            <span className="me-text">
+              <b>{me.name}</b>
+              <span>{me.examText || me.email}</span>
+            </span>
           </div>
+          <nav className="sidenav foot-nav" aria-label="Your account">
+            <ul>
+              <li>
+                <Link
+                  to="/student/account"
+                  className={active === 'account' ? 'is-active' : undefined}
+                  aria-current={active === 'account' ? 'page' : undefined}
+                  onClick={() => setSheetOpen(false)}
+                >
+                  Account
+                </Link>
+              </li>
+              <li>
+                <button type="button" className="nav-btn" disabled={loggingOut} onClick={onLogout}>
+                  {loggingOut ? 'Logging out…' : 'Log out'}
+                </button>
+              </li>
+            </ul>
+          </nav>
         </div>
       </aside>
     </>
