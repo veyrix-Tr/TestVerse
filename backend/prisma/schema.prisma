@@ -127,14 +127,17 @@ model Test {
   @@index([isFree])
 }
 
-// One student's attempt at one test (one attempt per test for now).
-// The clock is the server's: deadline = startedAt + test duration.
+// One student's attempt at one test. A student may retake a test once they've
+// submitted it: each retake is a new row with the next attemptNo (1, 2, …).
+// Only the latest attempt can be in progress. The clock is the server's:
+// deadline = startedAt + test duration.
 model Attempt {
   id            String    @id @default(cuid())
   testId        String
   test          Test      @relation(fields: [testId], references: [id], onDelete: Cascade)
   userId        String
   user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  attemptNo     Int       @default(1)
   startedAt     DateTime  @default(now())
   deadline      DateTime
   responses     Json      @default("{}") // { [questionId]: { answer, marked, visited, timeMs } }
@@ -149,7 +152,7 @@ model Attempt {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  @@unique([testId, userId])
+  @@unique([testId, userId, attemptNo])
   @@index([userId])
 }
 

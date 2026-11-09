@@ -73,6 +73,9 @@ const router = createBrowserRouter([
   { path: '/subscribe', loader: requireNoSubscription, ...page(() => import('./pages/Subscribe/Subscribe.jsx')) },
   { path: '/checkout', element: <Navigate to="/subscribe" replace /> },
   { path: '/student', loader: requireStudent, ...page(() => import('./pages/StudentHome/StudentHome.jsx')) },
+  // Coming-soon pages inside the dashboard shell
+  { path: '/student/analysis', loader: requireStudent, ...page(() => import('./pages/StudentHome/StudentHome.jsx')) },
+  { path: '/student/video-requests', loader: requireStudent, ...page(() => import('./pages/StudentHome/StudentHome.jsx')) },
   { path: '/test', loader: requireSession, ...testPage },
   { path: '/admin', loader: requireAdmin, ...page(() => import('./pages/Admin/Admin.jsx')) },
   { path: '*', element: <Navigate to="/" replace /> },

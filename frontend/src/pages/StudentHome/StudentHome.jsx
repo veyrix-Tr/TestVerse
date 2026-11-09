@@ -1,16 +1,18 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import './StudentHome.css'
 import LogoSprite from '../../components/LogoSprite.jsx'
 import { usePageMeta } from '../../lib/hooks.js'
 import { clearSession, loadSession } from '../../lib/session.js'
 import PageHeader from './sections/PageHeader.jsx'
 import Sidebar from './sections/Sidebar.jsx'
+import ComingSoon, { SOON } from './sections/ComingSoon.jsx'
+import ResultsSection from './sections/ResultsSection.jsx'
 import SideCards from './sections/SideCards.jsx'
 import TestsSection, { TestHero } from './sections/TestsSection.jsx'
-import { groupTests, heroTest, statusNow, useTests } from './useTests.js'
+import { groupTests, heroTest, pctOf, resultsOf, statusNow, useTests } from './useTests.js'
 
-const SPY = ['top', 'tests']
+const SPY = ['top', 'tests', 'results', 'videos']
 const EXAMS = { neet: 'NEET', 'jee-main': 'JEE Main', 'jee-advanced': 'JEE Advanced' }
 
 /* The signed-in student as the dashboard shows them. */
@@ -28,30 +30,32 @@ function meOf(user) {
   }
 }
 
-/* Headline numbers, all from the real test list. */
-function statsOf(status, tests, groups) {
+/* Headline numbers, all from the real test list and every submitted attempt. */
+function statsOf(status, tests, rows) {
   if (status !== 'ready') {
     return [
       { v: '—', label: 'Tests done' },
-      { v: '—', label: 'Available now' },
+      { v: '—', label: 'Attempts' },
+      { v: '—', label: 'Best score' },
       { v: '—', label: 'Average score' },
-      { v: '—', label: 'Last score' },
     ]
   }
-  const done = groups.done
-  const pcts = done.filter((t) => t.attempt.maxScore > 0).map((t) => (t.attempt.score / t.attempt.maxScore) * 100)
-  const last = done[0]
+  const pcts = rows.map((r) => pctOf(r.a)).filter((p) => p != null)
   return [
-    { v: done.length, unit: '/ ' + tests.length, label: 'Tests done' },
-    { v: groups.open.length + groups['in-progress'].length, label: 'Available now' },
+    { v: tests.filter((t) => (t.history || []).length).length, unit: '/ ' + tests.length, label: 'Tests done' },
+    { v: rows.length, label: 'Attempts' },
+    pcts.length ? { v: Math.max(...pcts), unit: '%', label: 'Best score' } : { v: '—', label: 'Best score' },
     pcts.length ? { v: Math.round(pcts.reduce((a, b) => a + b, 0) / pcts.length), unit: '%', label: 'Average score' } : { v: '—', label: 'Average score' },
-    last ? { v: last.attempt.score, unit: '/ ' + last.attempt.maxScore, label: 'Last score' } : { v: '—', label: 'Last score' },
   ]
 }
 
-/* design/student-home.html -> route "/student" */
+/* design/student-home.html -> route "/student". /student/analysis and
+   /student/video-requests use the same shell with a "coming soon" panel. */
 export default function StudentHome() {
-  usePageMeta({ title: 'My Testverse — Dashboard' })
+  const location = useLocation()
+  const pageKey = location.pathname.split('/')[2] || ''
+  const soon = SOON[pageKey] || null
+  usePageMeta({ title: soon ? soon.eyebrow + ' — Testverse' : 'My Testverse — Dashboard' })
 
   const [tick, setTick] = useState(() => Date.now())
   const [sheetOpen, setSheetOpen] = useState(false)
@@ -62,7 +66,11 @@ export default function StudentHome() {
   const me = meOf(loadSession())
   const now = tick + offset
   const groups = useMemo(() => groupTests(tests, now), [tests, now])
+  const rows = useMemo(() => resultsOf(tests), [tests])
   const hero = heroTest(groups)
+  const freeTests = tests.filter((t) => t.isFree)
+  const free = { total: freeTests.length, done: freeTests.filter((t) => (t.history || []).length).length }
+  const counts = { todo: groups.open.length + groups['in-progress'].length, results: rows.length }
   const stale = tests.some((t) => statusNow(t, now).stale)
 
   // 1s ticker for countdowns
@@ -94,8 +102,15 @@ export default function StudentHome() {
     return () => io.disconnect()
   }, [])
 
+  // Arriving at /student#tests (e.g. from a coming-soon page): scroll there once the list is in
+  useEffect(() => {
+    if (soon || status !== 'ready' || !location.hash) return
+    const el = document.getElementById(location.hash.slice(1))
+    if (el) el.scrollIntoView({ block: 'start' })
+  }, [soon, status, location.hash])
+
   function navigate(id) {
-    setActive(id)
+    if (id) setActive(id)
     setSheetOpen(false)
   }
 
@@ -109,6 +124,9 @@ export default function StudentHome() {
         onNavigate={navigate}
         sheetOpen={sheetOpen}
         setSheetOpen={setSheetOpen}
+        page={soon ? pageKey : null}
+        counts={counts}
+        free={free}
         onLogout={() => {
           clearSession()
           routerNavigate('/login', { replace: true, viewTransition: true })
@@ -119,15 +137,23 @@ export default function StudentHome() {
         <div className="content">
           <main className="layout" id="main">
             <div className="main-col">
-              <PageHeader me={me} stats={statsOf(status, tests, groups)} />
+              {soon ? (
+                <ComingSoon page={soon} />
+              ) : (
+                <>
+                  <PageHeader me={me} stats={statsOf(status, tests, rows)} />
 
-              <TestHero test={hero} now={now} />
+                  <TestHero test={hero} now={now} />
 
-              <TestsSection status={status} error={error} groups={groups} total={tests.length} now={now} onRetry={() => reload()} />
+                  <TestsSection status={status} error={error} groups={groups} total={tests.length} now={now} onRetry={() => reload()} free={!me.subscription} />
+
+                  <ResultsSection status={status} rows={rows} />
+                </>
+              )}
             </div>
 
-            <aside className="rail" aria-label="Solutions and your batch">
-              <SideCards me={me} latestDone={groups.done[0] || null} />
+            <aside className="rail" aria-label="Your plan, score trend and solutions">
+              <SideCards me={me} rows={rows} freeLeft={free.total - free.done} />
             </aside>
           </main>
 

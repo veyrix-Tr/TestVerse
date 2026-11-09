@@ -13,6 +13,7 @@ import InstructionsView from './sections/InstructionsView.jsx'
 import ResultView from './sections/ResultView.jsx'
 import { countsOf } from './status.js'
 import { attemptOf, flatten, paperOf } from './testData.js'
+import BackButton from '../../components/BackButton.jsx'
 
 const BASE = import.meta.env.VITE_API_URL || ''
 const SAVE_DEBOUNCE_MS = 4000
@@ -30,7 +31,8 @@ function baseResp() {
 }
 
 /*
-  design/test.html -> route "/test?test=<id>" (and &view=result).
+  design/test.html -> route "/test?test=<id>" (and &view=result[&attempt=n],
+  or &retake=1 to take a submitted test again).
   The paper, clock and attempt live on the server (backend/controllers/
   testsController.js). The browser keeps a backup of the attempt in
   localStorage and pushes answers to PUT /attempt; the server's deadline
@@ -43,13 +45,17 @@ export default function Test() {
   const qs = useMemo(() => new URLSearchParams(window.location.search), [])
   const testId = qs.get('test') || ''
   const wantResult = qs.get('view') === 'result'
+  const wantRetake = qs.get('retake') === '1'
   const KEY = 'tv-attempt-' + testId
   const PATH = '/tests/' + encodeURIComponent(testId)
+  const RESULT_PATH = PATH + '/result' + (qs.get('attempt') ? '?attempt=' + encodeURIComponent(qs.get('attempt')) : '')
 
   const [view, setView] = useState('loading') // loading | error | instr | exam | result
   const [problem, setProblem] = useState(null) // { title, text, retry? } in the error view
   const [paper, setPaper] = useState(null)
   const [attempt, setAttempt] = useState(null)
+  const [resultMeta, setResultMeta] = useState(null) // { history, canRetake, inProgress } with a result
+  const [retakeNo, setRetakeNo] = useState(0) // the attempt number a retake will start, 0 if not retaking
   const [blocked, setBlocked] = useState(null) // { opensAt } while the test hasn't opened
   const [starting, setStarting] = useState(false)
   const [lang, setLang] = useState('en')
@@ -115,6 +121,7 @@ export default function Test() {
     attemptRef.current = a
     setPaper(p)
     setAttempt(a)
+    setResultMeta({ history: d.history || [], canRetake: !!d.canRetake, inProgress: !!d.inProgress, attemptNo: d.attempt.attemptNo || 1 })
     setLang(a.lang)
     setSubmitOpen(false)
     setSubmitState(null)
@@ -148,7 +155,7 @@ export default function Test() {
       try {
         if (wantResult) {
           try {
-            const r = await api(PATH + '/result', { token })
+            const r = await api(RESULT_PATH, { token })
             if (alive) showResult(r)
             return
           } catch (e) {
@@ -158,12 +165,19 @@ export default function Test() {
         const d = await api(PATH, { token })
         if (!alive) return
         syncClock(d.serverNow)
+        const p = paperOf(d.test)
+        if (d.status === 'done' && wantRetake && d.canRetake) {
+          // A fresh attempt: the instructions again, with no clock until Start
+          setPaper(p)
+          setRetakeNo((d.attempt.attemptNo || 1) + 1)
+          setView('instr')
+          return
+        }
         if (d.status === 'done') {
-          const r = await api(PATH + '/result', { token })
+          const r = await api(RESULT_PATH, { token })
           if (alive) showResult(r)
           return
         }
-        const p = paperOf(d.test)
         setPaper(p)
         if (d.status === 'closed') {
           return fail('This test has closed', d.test.closesAt ? `It closed on ${fmt(d.test.closesAt)}. Look out for the next one on your dashboard.` : 'Look out for the next one on your dashboard.')
@@ -383,15 +397,20 @@ export default function Test() {
     }
     setStarting(true)
     try {
-      const d = await api(PATH + '/start', { method: 'POST', token: getToken() })
+      const d = await api(PATH + '/start', { method: 'POST', body: retakeNo ? { retake: true } : {}, token: getToken() })
       syncClock(d.serverNow)
       const a = attemptOf(d.attempt, loadJSON(KEY), flat.length)
       setBlocked(null)
+      if (retakeNo) {
+        // Reloading now should resume this attempt, not offer yet another retake
+        window.history.replaceState(window.history.state, '', '/test?test=' + encodeURIComponent(testId))
+        setRetakeNo(0)
+      }
       enterExam({ ...a, lang })
     } catch (e) {
       if (e.status === 409) {
         try {
-          showResult(await api(PATH + '/result', { token: getToken() }), e.message)
+          showResult(await api(RESULT_PATH, { token: getToken() }), e.message)
         } catch (err) {
           failFrom(err)
         }
@@ -656,6 +675,7 @@ export default function Test() {
           online={online}
           blocked={blocked}
           offset={offsetRef.current}
+          retakeNo={retakeNo}
         />
       ) : null}
 
@@ -682,7 +702,9 @@ export default function Test() {
         />
       ) : null}
 
-      {view === 'result' && attempt && paper ? <ResultView paper={paper} flat={flat} attempt={attempt} reviewFilter={reviewFilter} setReviewFilter={setReviewFilter} /> : null}
+      {view === 'result' && attempt && paper ? (
+        <ResultView paper={paper} flat={flat} attempt={attempt} meta={resultMeta} reviewFilter={reviewFilter} setReviewFilter={setReviewFilter} />
+      ) : null}
 
       {/* Submit confirm / progress / retry */}
       <dialog
@@ -775,14 +797,12 @@ function StateView({ problem, onRetry }) {
               <use href="#tv-logo" />
             </svg>
           </Link>
-          <Link className="back-link" to="/student">
-            Back to home
-          </Link>
         </div>
       </header>
       <div className="state-body">
         {problem ? (
           <div className="state-card" role="alert">
+            <BackButton to="/student">Back to dashboard</BackButton>
             <h1>{problem.title}</h1>
             <p>{problem.text}</p>
             <div className="state-actions">

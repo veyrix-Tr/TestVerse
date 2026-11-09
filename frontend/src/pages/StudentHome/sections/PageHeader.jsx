@@ -13,12 +13,10 @@ export default function PageHeader({ me, stats }) {
           <h1>
             {greet()}, {me.first}
           </h1>
-          {me.examText || me.batch ? (
-            <p className="page-sub">
-              {me.examText ? 'Preparing for ' + me.examText : null}
-              {me.batch ? <span className="chip chip-gold">{me.batch}</span> : null}
-            </p>
-          ) : null}
+          <p className="page-sub">
+            {me.examText ? 'Preparing for ' + me.examText : null}
+            {me.batch ? <span className="chip chip-gold">{me.batch}</span> : <span className="chip chip-grey">Free access</span>}
+          </p>
         </div>
       </div>
 

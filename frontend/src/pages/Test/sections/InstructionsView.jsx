@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { fmt, hms, pad } from '../../../lib/format.js'
 import { useCountdown } from '../../../lib/hooks.js'
 import { Q_TYPE_LABELS } from '../data/papers.js'
+import BackButton from '../../../components/BackButton.jsx'
 
 const mins = (n) => n + (n === 1 ? ' minute' : ' minutes')
 
@@ -32,7 +33,7 @@ const LEGEND = [
   Layout: navy hero with the paper facts, then the reading column on the left
   and a sticky "ready to start" panel on the right.
 */
-export default function InstructionsView({ paper, flat, attempt, left, lang, setLang, onStart, starting, online, blocked, offset }) {
+export default function InstructionsView({ paper, flat, attempt, left, lang, setLang, onStart, starting, online, blocked, offset, retakeNo }) {
   const resuming = !!(attempt && !attempt.submittedAt)
   const [agree, setAgree] = useState(resuming)
   // Opening time on this device's clock (the server's clock is `offset` ahead)
@@ -68,15 +69,15 @@ export default function InstructionsView({ paper, flat, attempt, left, lang, set
               <use href="#tv-logo" />
             </svg>
           </Link>
-          <Link className="back-link" to="/student">
-            Back to home
-          </Link>
         </div>
       </header>
 
       <div className="instr-hero">
         <div className="shell instr-cols">
           <div className="hero-copy">
+            <BackButton to="/student" tone="dark">
+              Back to dashboard
+            </BackButton>
             <span className="eyebrow on-navy">{paper.exam} · Instructions</span>
             <h1>{paper.title}</h1>
             <p>
@@ -220,13 +221,15 @@ export default function InstructionsView({ paper, flat, attempt, left, lang, set
         <aside className="ready" aria-label="Start the test">
           <div className="ready-card">
             <div className="ready-head">
-              <h2>{resuming ? 'Pick up where you left off' : waiting ? 'Not open yet' : 'Ready when you are'}</h2>
+              <h2>{resuming ? 'Pick up where you left off' : waiting ? 'Not open yet' : retakeNo ? `Retake: attempt ${retakeNo}` : 'Ready when you are'}</h2>
               <p>
                 {resuming
                   ? `${hms(left)} left on the clock.`
                   : waiting
                     ? `This test opens on ${fmt(blocked.opensAt)}.`
-                    : `${mins(paper.durationMin)}, ${totalQ} questions. The clock starts on Start.`}
+                    : retakeNo
+                      ? `${mins(paper.durationMin)}, ${totalQ} questions, starting fresh. Your earlier results stay saved.`
+                      : `${mins(paper.durationMin)}, ${totalQ} questions. The clock starts on Start.`}
               </p>
             </div>
 
@@ -293,7 +296,7 @@ export default function InstructionsView({ paper, flat, attempt, left, lang, set
             </label>
 
             <button className="btn btn-primary btn-lg btn-block" type="button" id="start" disabled={!agree || waiting || starting} onClick={onStart}>
-              {starting ? (resuming ? 'Resuming…' : 'Starting…') : waiting ? 'Opens ' + fmt(blocked.opensAt, { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }) : resuming ? 'Resume test' : 'Start test'}
+              {starting ? (resuming ? 'Resuming…' : 'Starting…') : waiting ? 'Opens ' + fmt(blocked.opensAt, { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }) : resuming ? 'Resume test' : retakeNo ? 'Start retake' : 'Start test'}
             </button>
           </div>
 

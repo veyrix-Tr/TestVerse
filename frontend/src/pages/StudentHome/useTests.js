@@ -81,6 +81,30 @@ export function groupTests(tests, now) {
   return by
 }
 
+/* Every submitted attempt across all tests, newest first, each with its test
+   and the change in score from the student's previous attempt at that test.
+   `latest` marks the newest attempt of its test (the one that can be retaken). */
+export function resultsOf(tests) {
+  const rows = []
+  for (const t of tests) {
+    const h = t.history || []
+    h.forEach((a, i) => {
+      const prev = h[i + 1]
+      rows.push({ test: t, a, latest: i === 0, delta: prev ? a.score - prev.score : null })
+    })
+  }
+  return rows.sort((x, y) => ts(y.a.submittedAt) - ts(x.a.submittedAt))
+}
+
+/* Score as a percentage of the maximum (0–100), or null. */
+export const pctOf = (a) => (a && a.maxScore > 0 ? Math.max(0, Math.round((a.score / a.maxScore) * 100)) : null)
+
+/* Share of attempted questions answered correctly (partial counts half), or null. */
+export function accuracyOf(a) {
+  const tried = (a.correct || 0) + (a.wrong || 0) + (a.partial || 0)
+  return tried ? Math.round((((a.correct || 0) + (a.partial || 0) * 0.5) / tried) * 100) : null
+}
+
 /* The one test the hero should show: in progress, else available, else the next upcoming. */
 export function heroTest(groups) {
   return groups['in-progress'][0] || groups.open[0] || groups.upcoming[0] || null

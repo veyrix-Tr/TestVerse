@@ -20,6 +20,7 @@ import {
 import { listTests } from './testsApi.js'
 import LiveStamp from './LiveStamp.jsx'
 import { useLive, useNow } from './useLive.js'
+import BackButton from '../../components/BackButton.jsx'
 
 /* One student: profile, batch, groups, results, tests in progress and the
    tests given to them directly. */
@@ -47,9 +48,9 @@ export default function StudentPage({ id, toast, backText, onBack, onOpenGroup }
   const head = (title, sub, right) => (
     <div className="head ts-head sg-head">
       <div>
-        <button type="button" className="ts-back" onClick={onBack}>
+        <BackButton onClick={onBack}>
           {backText}
-        </button>
+        </BackButton>
         <h1>{title}</h1>
         {sub}
       </div>

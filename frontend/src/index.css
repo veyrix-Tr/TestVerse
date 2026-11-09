@@ -93,3 +93,58 @@ html.smooth-scroll {
 @keyframes tv-vt-fade-in {
   from { opacity: 0; }
 }
+
+/*
+  BackButton (components/BackButton.jsx): the same arrow + label everywhere,
+  top-left above the page title. Global on purpose; the doubled class beats
+  each page's scoped `a` / `button` rules. Colours come from the page's tokens.
+*/
+.tv-back.tv-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  margin: 0 0 14px -10px;
+  padding: 0 12px 0 10px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--muted, #5b6577);
+  font: 600 14px/1 "Inter", "Segoe UI", system-ui, sans-serif;
+  letter-spacing: 0;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 150ms ease, background-color 150ms ease;
+}
+.tv-back.tv-back svg {
+  flex: 0 0 18px;
+  transition: transform 150ms ease;
+}
+.tv-back.tv-back:hover {
+  color: var(--ink, #0e1a2b);
+  background: var(--soft, #f1f3f7);
+  text-decoration: none;
+}
+.tv-back.tv-back:hover svg {
+  transform: translateX(-3px);
+}
+.tv-back.tv-back:focus-visible {
+  outline: 2px solid var(--blue, #2450d6);
+  outline-offset: 2px;
+}
+.tv-back.tv-back-dark {
+  color: var(--on-navy-muted, #b9c3d6);
+}
+.tv-back.tv-back-dark:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+.tv-back.tv-back-dark:focus-visible {
+  outline-color: var(--gold, #e9b949);
+}
+@media (prefers-reduced-motion: reduce) {
+  .tv-back.tv-back,
+  .tv-back.tv-back svg {
+    transition: none;
+  }
+}

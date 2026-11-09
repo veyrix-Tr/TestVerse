@@ -1,7 +1,8 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { fmt, hms, pad } from '../../../lib/format.js'
 import SectionHead from '../SectionHead.jsx'
-import { GROUPS } from '../useTests.js'
+import { GROUPS, pctOf } from '../useTests.js'
 
 const when = (iso) => fmt(iso, { weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' })
 const clock = (iso) => fmt(iso, { hour: 'numeric', minute: '2-digit' })
@@ -118,103 +119,150 @@ export function TestHero({ test, now }) {
   )
 }
 
-function Tile({ t, now }) {
-  const href = '/test?test=' + encodeURIComponent(t.id)
-  const head = (
-    <>
-      <span className="tt-top">
-        <span className="tt-subject">{t.subject}</span>
-        {t.isFree ? <span className="chip chip-gold">Free</span> : null}
-      </span>
-      <span className="tile-name">{t.title}</span>
-      <span className="tt-facts">{facts(t)}</span>
-    </>
-  )
+const EXAM_LABEL = { neet: 'NEET', jee: 'JEE Main' }
 
-  if (t.status === 'in-progress') {
-    return (
-      <li>
-        <Link className="tile test-tile is-progress" to={href} aria-label={`${t.title}, in progress, resume`}>
-          {head}
-          <span className="tt-foot">
-            <span className="status status-amber">{hms(Date.parse(t.attempt.deadline) - now)} left</span>
-            <span className="tt-cta">Resume</span>
-          </span>
-        </Link>
-      </li>
+/* "Physics, Chemistry, Biology" -> ["Physics", "Chemistry", "Biology"] */
+const subjectsOf = (t) => (t.subject || '').split(',').map((x) => x.trim()).filter(Boolean)
+
+const FILTERS = [
+  { key: 'all', label: 'All', has: () => true },
+  { key: 'todo', label: 'To do', has: (s) => s === 'in-progress' || s === 'open' || s === 'upcoming' },
+  { key: 'done', label: 'Completed', has: (s) => s === 'done' },
+]
+
+/* One test as a card: what it is, how big it is, and what the student can do with it now. */
+function TestCard({ t, now }) {
+  const href = '/test?test=' + encodeURIComponent(t.id)
+  const s = t.status
+  const best = t.best
+  const bestPct = pctOf(best)
+  const tries = (t.history || []).length
+
+  let state, actions
+  if (s === 'in-progress') {
+    state = <span className="status status-amber">{hms(Date.parse(t.attempt.deadline) - now)} left</span>
+    actions = (
+      <Link className="btn btn-gold btn-sm" to={href}>
+        {tries ? 'Resume retake' : 'Resume test'}
+      </Link>
     )
-  }
-  if (t.status === 'open') {
-    return (
-      <li>
-        <Link className="tile test-tile is-next" to={href} aria-label={`${t.title}, available now, start`}>
-          {head}
-          <span className="tt-foot">
-            <span className="tt-when">{t.closesAt ? 'Closes ' + when(t.closesAt) : 'Open now'}</span>
-            <span className="tt-cta">Start</span>
-          </span>
-        </Link>
-      </li>
+  } else if (s === 'open') {
+    state = <span className="tc-when">{t.closesAt ? 'Closes ' + when(t.closesAt) : 'Open now · no deadline'}</span>
+    actions = (
+      <Link className="btn btn-primary btn-sm" to={href}>
+        Start test
+      </Link>
     )
-  }
-  if (t.status === 'upcoming') {
-    return (
-      <li>
-        <Link className="tile test-tile is-upcoming" to={href} aria-label={`${t.title}, opens ${when(t.opensAt)}`}>
-          {head}
-          <span className="tt-foot">
-            <span className="tt-when">Opens {when(t.opensAt)}</span>
-            <span className="status status-blue">in {until(Date.parse(t.opensAt) - now)}</span>
-          </span>
-        </Link>
-      </li>
+  } else if (s === 'upcoming') {
+    state = <span className="status status-blue">Opens in {until(Date.parse(t.opensAt) - now)}</span>
+    actions = (
+      <Link className="btn btn-outline btn-sm" to={href}>
+        Instructions
+      </Link>
     )
-  }
-  if (t.status === 'done') {
-    const a = t.attempt
-    const p = a.maxScore ? Math.max(0, Math.round((a.score / a.maxScore) * 100)) : 0
-    return (
-      <li>
-        <Link className="tile test-tile is-done" to={href + '&view=result'} aria-label={`${t.title}, score ${a.score} of ${a.maxScore}, view result`}>
-          {head}
-          <span className="tt-foot tt-foot-score">
-            <span className="tile-score">
-              <b>
-                {a.score}
-                <small> / {a.maxScore}</small>
-              </b>
-              <span className="tile-bar" aria-hidden="true">
-                <i style={{ width: p + '%' }}></i>
-              </span>
-            </span>
-            <span className="tt-cta">View result</span>
-          </span>
+  } else if (s === 'done') {
+    state = null
+    actions = (
+      <>
+        <Link className="btn btn-outline btn-sm" to={href + '&view=result'}>
+          View result
         </Link>
-      </li>
+        {t.canRetake ? (
+          <Link className="btn btn-primary btn-sm" to={href + '&retake=1'}>
+            Retake
+          </Link>
+        ) : null}
+      </>
     )
+  } else {
+    state = <span className="tc-when">{t.closesAt ? 'Closed ' + when(t.closesAt) : 'Closed'}</span>
+    actions = null
   }
+
   return (
     <li>
-      <div className="tile test-tile is-locked">
-        {head}
-        <span className="tt-foot">
-          <span className="tt-when">{t.closesAt ? 'Closed ' + when(t.closesAt) : 'Closed'}</span>
-        </span>
-      </div>
+      <article className={'tcard is-' + s} aria-labelledby={'tc-' + t.id}>
+        <div className="tc-badges">
+          {t.isFree ? <span className="chip chip-gold">Free mock</span> : null}
+          {EXAM_LABEL[t.exam] ? <span className="chip chip-grey">{EXAM_LABEL[t.exam]}</span> : null}
+          {s === 'done' ? <span className="status status-green">Completed{tries > 1 ? ' · ' + tries + ' attempts' : ''}</span> : null}
+        </div>
+
+        <h3 className="tc-title" id={'tc-' + t.id}>
+          {t.title}
+        </h3>
+        <p className="tc-subjects">{subjectsOf(t).join(' · ')}</p>
+
+        <dl className="tc-facts">
+          <div>
+            <dt>Questions</dt>
+            <dd>{t.questionCount}</dd>
+          </div>
+          <div>
+            <dt>Minutes</dt>
+            <dd>{t.durationMin}</dd>
+          </div>
+          <div>
+            <dt>Marks</dt>
+            <dd>{t.totalMarks}</dd>
+          </div>
+        </dl>
+
+        {s === 'done' && best ? (
+          <div className="tc-score">
+            <div className="tc-score-top">
+              <span>{tries > 1 ? 'Best score' : 'Your score'}</span>
+              <b>
+                {best.score}
+                <small> / {best.maxScore}</small>
+              </b>
+            </div>
+            <span className="tile-bar" aria-hidden="true">
+              <i style={{ width: (bestPct || 0) + '%' }}></i>
+            </span>
+          </div>
+        ) : null}
+
+        <div className="tc-foot">
+          {state}
+          {actions ? <div className="tc-actions">{actions}</div> : null}
+        </div>
+      </article>
     </li>
   )
 }
 
-/* Every published test for this student, grouped by what they can do with it. */
-export default function TestsSection({ status, error, groups, total, now, onRetry }) {
+/* Every published test for this student, filtered by what they can do with it. */
+export default function TestsSection({ status, error, groups, total, now, onRetry, free }) {
+  const [filter, setFilter] = useState('all')
+  const ordered = GROUPS.flatMap((g) => groups[g.key])
+  const count = (f) => ordered.filter((t) => f.has(t.status)).length
+  const active = FILTERS.find((f) => f.key === filter) || FILTERS[0]
+  const shown = ordered.filter((t) => active.has(t.status))
+
   return (
     <section className="section" id="tests" aria-labelledby="tests-title" aria-busy={status === 'loading' ? 'true' : 'false'}>
-      <SectionHead id="tests-title" title="Your tests" desc="Tests your teachers have published, with your score once you finish." />
+      <SectionHead
+        id="tests-title"
+        title="Your tests"
+        desc={free ? 'Your free full-length mocks, on the real exam pattern. Take them as often as you like.' : 'Tests your teachers have published, with your score once you finish.'}
+      >
+        {status === 'ready' && total ? (
+          <div className="filter-tabs" role="group" aria-label="Show tests">
+            {FILTERS.map((f) => (
+              <button key={f.key} type="button" aria-pressed={filter === f.key ? 'true' : 'false'} onClick={() => setFilter(f.key)}>
+                {f.label}
+                <span>{count(f)}</span>
+              </button>
+            ))}
+          </div>
+        ) : null}
+      </SectionHead>
 
       {status === 'loading' ? (
-        <ul className="test-tiles" aria-hidden="true">
+        <ul className="tcards" aria-hidden="true">
           {[0, 1, 2].map((i) => (
-            <li key={i} className="tile test-tile is-skeleton">
+            <li key={i} className="tcard is-skeleton">
               <span></span>
               <span></span>
               <span></span>
@@ -238,25 +286,19 @@ export default function TestsSection({ status, error, groups, total, now, onRetr
             <p className="meta">Your teachers will publish them here.</p>
           </div>
         </div>
-      ) : (
-        <div className="test-groups">
-          {GROUPS.map((g) =>
-            groups[g.key].length ? (
-              <div className={'test-group group-' + g.key} key={g.key}>
-                <div className="stage-head">
-                  <h3>{g.title}</h3>
-                  <span>{groups[g.key].length}</span>
-                  <span className="stage-desc">{g.desc}</span>
-                </div>
-                <ul className="test-tiles">
-                  {groups[g.key].map((t) => (
-                    <Tile key={t.id} t={t} now={now} />
-                  ))}
-                </ul>
-              </div>
-            ) : null,
-          )}
+      ) : !shown.length ? (
+        <div className="card state-card is-empty">
+          <div>
+            <h3>{filter === 'done' ? 'Nothing completed yet' : 'You’re all caught up'}</h3>
+            <p className="meta">{filter === 'done' ? 'Finish a test and it shows up here with your score.' : 'Every test is done. You can retake any of them from Completed.'}</p>
+          </div>
         </div>
+      ) : (
+        <ul className="tcards">
+          {shown.map((t) => (
+            <TestCard key={t.id} t={t} now={now} />
+          ))}
+        </ul>
       )}
     </section>
   )

@@ -7,6 +7,7 @@ import { usePageMeta } from '../../lib/hooks.js'
 import { nextPath, saveSession } from '../../lib/session.js'
 import { BrandAside, OtpInput, PasswordInput, Resend } from './AuthParts.jsx'
 import { isEmail, useResendTimer } from './otp.js'
+import BackButton from '../../components/BackButton.jsx'
 
 /* route "/login" — email + password, with "Forgot password?" resetting the
    password through a 6-digit code the backend emails via Brevo.
@@ -213,6 +214,7 @@ export default function Login() {
 
             {step === 'forgot' && (
               <>
+                <BackButton onClick={() => goTo('login')}>Back to log in</BackButton>
                 <header className="form-head">
                   <p className="step-kicker">Reset password</p>
                   <h1>Forgot your password?</h1>
@@ -224,25 +226,18 @@ export default function Login() {
                   <button className="btn btn-primary btn-lg btn-block" type="submit" disabled={busy}>
                     {busy ? 'Sending code…' : 'Send code'}
                   </button>
-                  <p className="resend">
-                    <button type="button" className="linkbtn" onClick={() => goTo('login')}>
-                      Back to log in
-                    </button>
-                  </p>
                 </form>
               </>
             )}
 
             {step === 'code' && (
               <>
+                <BackButton onClick={() => goTo('forgot')}>Change email</BackButton>
                 <header className="form-head">
                   <p className="step-kicker">Step 2 of 3</p>
                   <h1>Check your email</h1>
                   <p className="sub" role="status">
-                    We sent a 6-digit code to <b>{email.trim()}</b>.{' '}
-                    <button type="button" className="linkbtn" onClick={() => goTo('forgot')}>
-                      Change email
-                    </button>
+                    We sent a 6-digit code to <b>{email.trim()}</b>.
                   </p>
                 </header>
 
@@ -275,6 +270,7 @@ export default function Login() {
 
             {step === 'reset' && (
               <>
+                <BackButton onClick={() => goTo('login')}>Back to log in</BackButton>
                 <header className="form-head">
                   <p className="step-kicker">Step 3 of 3</p>
                   <h1>Set a new password</h1>

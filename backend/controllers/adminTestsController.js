@@ -3,8 +3,9 @@ const prisma = require('../lib/prisma');
 const { normalizePaper, normalizeMarking } = require('../lib/paperFormat');
 const { AUDIENCE_INCLUDE, publicAudience, readAudience, writeAudience } = require('../lib/audience');
 
-// What every admin test reply loads: attempt count + who it's given to.
-const WITH = { _count: { select: { attempts: true } }, ...AUDIENCE_INCLUDE };
+// What every admin test reply loads: how many students started it (first
+// attempts only, so retakes don't count twice) + who it's given to.
+const WITH = { _count: { select: { attempts: { where: { attemptNo: 1 } } } }, ...AUDIENCE_INCLUDE };
 
 const EXAMS        = ['jee', 'neet'];
 const MAX_DURATION = 600; // minutes
@@ -110,7 +111,7 @@ const listTests = async (req, res) => {
       orderBy: { createdAt: 'desc' },
       include: WITH,
     });
-    const done = await prisma.attempt.groupBy({ by: ['testId'], where: { submittedAt: { not: null } }, _count: { _all: true } });
+    const done = await prisma.attempt.groupBy({ by: ['testId'], where: { submittedAt: { not: null }, attemptNo: 1 }, _count: { _all: true } });
     const submitted = Object.fromEntries(done.map((d) => [d.testId, d._count._all]));
     res.json({ tests: tests.map((t) => summaryOf({ ...t, submitted: submitted[t.id] || 0 })) });
   } catch (error) {

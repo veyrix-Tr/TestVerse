@@ -117,6 +117,7 @@ const getStudent = async (req, res) => {
       testId:        a.testId,
       title:         a.test.title,
       subject:       a.test.subject,
+      attemptNo:     a.attemptNo, // 2, 3, … are retakes
       startedAt:     a.startedAt,
       submittedAt:   a.submittedAt,
       autoSubmitted: a.autoSubmitted,

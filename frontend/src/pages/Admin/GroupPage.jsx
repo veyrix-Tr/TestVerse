@@ -17,6 +17,7 @@ import {
 import { listTests } from './testsApi.js'
 import LiveStamp from './LiveStamp.jsx'
 import { useLive, useNow } from './useLive.js'
+import BackButton from '../../components/BackButton.jsx'
 
 /* One group: name and description, members, tests given, delete. */
 export default function GroupPage({ id, toast, backText, onBack, onDeleted, onOpenStudent }) {
@@ -47,9 +48,9 @@ export default function GroupPage({ id, toast, backText, onBack, onDeleted, onOp
   }
 
   const back = (
-    <button type="button" className="ts-back" onClick={onBack}>
+    <BackButton onClick={onBack}>
       {backText}
-    </button>
+    </BackButton>
   )
 
   if (!live.data) {

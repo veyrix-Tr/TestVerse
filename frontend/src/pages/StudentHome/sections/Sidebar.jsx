@@ -2,10 +2,16 @@ import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { usePopover } from '../usePopover.js'
 
+// Sections of the dashboard (scrolled to by id) and pages that are coming soon.
 const NAV = [
   { id: 'top', label: 'Dashboard' },
-  { id: 'tests', label: 'Your tests' },
-  { id: 'videos', label: 'Video solutions' },
+  { id: 'tests', label: 'Your tests', count: 'todo' },
+  { id: 'results', label: 'Results', count: 'results' },
+  { id: 'videos', label: 'Solutions' },
+]
+const SOON_NAV = [
+  { page: 'analysis', label: 'Analysis' },
+  { page: 'video-requests', label: 'Video requests' },
 ]
 
 function Logo({ height }) {
@@ -21,7 +27,35 @@ function Logo({ height }) {
   that, a compact top bar shows the logo and a "Menu" button, and the same
   <aside> slides in as a sheet.
 */
-export default function Sidebar({ me, active, onNavigate, sheetOpen, setSheetOpen, onLogout }) {
+/* Below the nav: the batch the student holds, or their free mocks and a way to buy one. */
+function PlanPanel({ me, free }) {
+  if (me.subscription) {
+    return (
+      <div className="plan">
+        <span className="plan-label">Your batch</span>
+        <b>{me.subscription.batch.name}</b>
+        <span className="plan-sub">Active · {me.examText || me.subscription.batch.grade}</span>
+      </div>
+    )
+  }
+  const pct = free.total ? Math.round((free.done / free.total) * 100) : 0
+  return (
+    <div className="plan is-free">
+      <span className="plan-label">Free access</span>
+      <b>
+        {free.done} of {free.total} free mocks done
+      </b>
+      <span className="plan-bar" aria-hidden="true">
+        <i style={{ width: pct + '%' }}></i>
+      </span>
+      <Link className="btn btn-gold btn-sm btn-block" to="/subscribe" viewTransition>
+        Unlock your batch
+      </Link>
+    </div>
+  )
+}
+
+export default function Sidebar({ me, active, page, onNavigate, sheetOpen, setSheetOpen, onLogout, counts, free }) {
   const { open: accountOpen, setOpen: setAccountOpen, ref: accountRef } = usePopover()
   const closeRef = useRef(null)
   const menuBtnRef = useRef(null)
@@ -70,24 +104,54 @@ export default function Sidebar({ me, active, onNavigate, sheetOpen, setSheetOpe
         <nav className="sidenav" aria-label="Main">
           <ul>
             {NAV.map((n) => {
-              const isActive = active === n.id
+              const isActive = !page && active === n.id
+              const inner = (
+                <>
+                  {n.label}
+                  {n.count && counts[n.count] ? <span className="nav-count">{counts[n.count]}</span> : null}
+                </>
+              )
               return (
                 <li key={n.id}>
-                  <a
-                    href={'#' + n.id}
-                    className={isActive ? 'is-active' : undefined}
-                    aria-current={n.id === 'top' ? 'page' : isActive ? 'location' : undefined}
-                    onClick={() => onNavigate(n.id)}
-                  >
-                    {n.label}
-                  </a>
+                  {page ? (
+                    // On a coming-soon page: go back to the dashboard at that section
+                    <Link to={'/student#' + n.id} onClick={() => onNavigate(n.id)}>
+                      {inner}
+                    </Link>
+                  ) : (
+                    <a
+                      href={'#' + n.id}
+                      className={isActive ? 'is-active' : undefined}
+                      aria-current={n.id === 'top' ? 'page' : isActive ? 'location' : undefined}
+                      onClick={() => onNavigate(n.id)}
+                    >
+                      {inner}
+                    </a>
+                  )}
                 </li>
               )
             })}
           </ul>
+          <p className="sidenav-label">Coming soon</p>
+          <ul>
+            {SOON_NAV.map((n) => (
+              <li key={n.page}>
+                <Link
+                  to={'/student/' + n.page}
+                  className={page === n.page ? 'is-active' : undefined}
+                  aria-current={page === n.page ? 'page' : undefined}
+                  onClick={() => onNavigate(null)}
+                >
+                  {n.label}
+                  <span className="nav-soon">Soon</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
         </nav>
 
         <div className="sidebar-foot">
+          <PlanPanel me={me} free={free} />
           <div className="account" ref={accountRef}>
             <div className="account-menu" id="account-menu" hidden={!accountOpen}>
               <button

@@ -15,6 +15,11 @@ const findTest = async (req) =>
     where: { id: req.params.id, ...(req.user.role === 'admin' ? {} : await visibleTo(req.user.id)) },
   });
 
+// A student can retake a test after submitting it, so they may have several
+// attempts (attemptNo 1, 2, …). Only the latest one can be in progress.
+const latestAttempt = (testId, userId) =>
+  prisma.attempt.findFirst({ where: { testId, userId }, orderBy: { attemptNo: 'desc' } });
+
 const meta = (t) => ({
   id:            t.id,
   title:         t.title,
@@ -32,6 +37,7 @@ const meta = (t) => ({
 const publicAttempt = (a) =>
   a
     ? {
+        attemptNo:     a.attemptNo,
         startedAt:     a.startedAt,
         deadline:      a.deadline,
         submittedAt:   a.submittedAt,
@@ -46,6 +52,18 @@ const publicAttempt = (a) =>
       }
     : null;
 
+// One line per submitted attempt, newest first, for score history.
+const summaryOf = (a) => ({
+  attemptNo:   a.attemptNo,
+  submittedAt: a.submittedAt,
+  score:       a.score,
+  maxScore:    a.maxScore,
+  correct:     a.correct,
+  wrong:       a.wrong,
+  partial:     a.partial,
+  skipped:     a.skipped,
+});
+
 // Scores and closes an attempt.
 const finalize = (attempt, test, responses, auto) =>
   prisma.attempt.update({
@@ -59,7 +77,7 @@ const settle = async (attempt, test) => {
   return finalize(attempt, test, attempt.responses, true);
 };
 
-// upcoming | open | in-progress | done | closed
+// upcoming | open | in-progress | done | closed (for the latest attempt)
 const statusOf = (test, attempt, now = Date.now()) => {
   if (attempt && attempt.submittedAt) return 'done';
   if (attempt) return 'in-progress';
@@ -68,23 +86,51 @@ const statusOf = (test, attempt, now = Date.now()) => {
   return 'open';
 };
 
-const resultPayload = (test, attempt) => ({
-  test:    { ...meta(test), instructions: test.instructions, marking: test.marking, paper: test.paper },
-  attempt: publicAttempt(attempt),
-});
+// A submitted test can be taken again while it's still open.
+const canRetake = (test, attempt, now = Date.now()) =>
+  !!(attempt && attempt.submittedAt) &&
+  !(test.opensAt && now < test.opensAt.getTime()) &&
+  !(test.closesAt && now >= test.closesAt.getTime());
 
-// GET /api/tests — the published tests meant for this student, with their status and score
+// The full paper with answers, one submitted attempt, and the student's other
+// submitted attempts. `latest` is their newest attempt (maybe a retake in progress).
+const resultPayload = async (test, attempt, latest) => {
+  const done = await prisma.attempt.findMany({
+    where:   { testId: test.id, userId: attempt.userId, submittedAt: { not: null } },
+    orderBy: { attemptNo: 'desc' },
+  });
+  return {
+    test:       { ...meta(test), instructions: test.instructions, marking: test.marking, paper: test.paper },
+    attempt:    publicAttempt(attempt),
+    history:    done.map(summaryOf),
+    inProgress: !!(latest && !latest.submittedAt),
+    canRetake:  canRetake(test, latest || attempt),
+  };
+};
+
+// GET /api/tests — the published tests meant for this student, with their
+// status, latest attempt (without answers), best score and score history
 const listTests = async (req, res) => {
   try {
     const tests = await prisma.test.findMany({
       where:   await visibleTo(req.user.id),
       orderBy: [{ opensAt: 'asc' }, { createdAt: 'desc' }],
-      include: { attempts: { where: { userId: req.user.id } } },
+      include: { attempts: { where: { userId: req.user.id }, orderBy: { attemptNo: 'desc' } } },
     });
     const out = [];
     for (const t of tests) {
-      const attempt = await settle(t.attempts[0], t);
-      out.push({ ...meta(t), status: statusOf(t, attempt), attempt: publicAttempt(attempt) && { ...publicAttempt(attempt), responses: undefined } });
+      const [first, ...older] = t.attempts;
+      const attempt = await settle(first, t);
+      const done = [attempt, ...older].filter((a) => a && a.submittedAt);
+      const best = done.reduce((b, a) => (!b || a.score > b.score ? a : b), null);
+      out.push({
+        ...meta(t),
+        status:    statusOf(t, attempt),
+        canRetake: canRetake(t, attempt),
+        attempt:   attempt ? { ...publicAttempt(attempt), responses: undefined } : null,
+        best:      best ? { attemptNo: best.attemptNo, score: best.score, maxScore: best.maxScore } : null,
+        history:   done.map(summaryOf),
+      });
     }
     res.json({ tests: out, serverNow: new Date() });
   } catch (error) {
@@ -94,15 +140,16 @@ const listTests = async (req, res) => {
 };
 
 // GET /api/tests/:id — details, instructions and the paper WITHOUT answers,
-// plus this student's attempt (if any) and the server's clock
+// plus this student's latest attempt (if any) and the server's clock
 const getTest = async (req, res) => {
   try {
     const test = await findTest(req);
     if (!test || !test.paper) return res.status(404).json({ error: 'Test not found' });
-    const attempt = await settle(await prisma.attempt.findUnique({ where: { testId_userId: { testId: test.id, userId: req.user.id } } }), test);
+    const attempt = await settle(await latestAttempt(test.id, req.user.id), test);
     res.json({
       test:      { ...meta(test), instructions: test.instructions, marking: test.marking, paper: stripAnswers(test.paper) },
       status:    statusOf(test, attempt),
+      canRetake: canRetake(test, attempt),
       attempt:   publicAttempt(attempt),
       serverNow: new Date(),
     });
@@ -112,28 +159,37 @@ const getTest = async (req, res) => {
   }
 };
 
-// POST /api/tests/:id/start — starts the attempt, or returns the one in progress
+// POST /api/tests/:id/start — Body: { retake?: true }
+// Starts the first attempt, returns the one in progress, or (with retake)
+// starts a fresh attempt after a submitted one
 const startTest = async (req, res) => {
   try {
     const test = await findTest(req);
     if (!test || !test.paper) return res.status(404).json({ error: 'Test not found' });
-    const key = { testId_userId: { testId: test.id, userId: req.user.id } };
-    let attempt = await settle(await prisma.attempt.findUnique({ where: key }), test);
+    let attempt = await settle(await latestAttempt(test.id, req.user.id), test);
+    const retake = !!(req.body && req.body.retake === true);
 
-    if (attempt && attempt.submittedAt) return res.status(409).json({ error: "You've already submitted this test.", attempt: publicAttempt(attempt) });
-    if (!attempt) {
+    if (attempt && attempt.submittedAt && !retake) return res.status(409).json({ error: "You've already submitted this test.", attempt: publicAttempt(attempt) });
+    if (!attempt || attempt.submittedAt) {
       const status = statusOf(test, null);
       if (status === 'upcoming') return res.status(403).json({ error: 'This test has not opened yet.', opensAt: test.opensAt });
-      if (status === 'closed') return res.status(403).json({ error: 'This test has closed.', closesAt: test.closesAt });
+      if (status === 'closed') return res.status(403).json({ error: attempt ? 'This test has closed, so it can no longer be retaken.' : 'This test has closed.', closesAt: test.closesAt });
       const now = new Date();
       try {
         attempt = await prisma.attempt.create({
-          data: { testId: test.id, userId: req.user.id, startedAt: now, deadline: new Date(now.getTime() + test.durationMin * 60000), responses: {} },
+          data: {
+            testId:    test.id,
+            userId:    req.user.id,
+            attemptNo: attempt ? attempt.attemptNo + 1 : 1,
+            startedAt: now,
+            deadline:  new Date(now.getTime() + test.durationMin * 60000),
+            responses: {},
+          },
         });
       } catch (e) {
         // Two tabs pressed Start together: use the attempt the other one made
         if (e.code !== 'P2002') throw e;
-        attempt = await prisma.attempt.findUnique({ where: key });
+        attempt = await latestAttempt(test.id, req.user.id);
       }
     }
     res.json({ attempt: publicAttempt(attempt), serverNow: new Date() });
@@ -150,13 +206,17 @@ const openAttempt = async (req, res) => {
     res.status(404).json({ error: 'Test not found' });
     return null;
   }
-  const attempt = await settle(await prisma.attempt.findUnique({ where: { testId_userId: { testId: test.id, userId: req.user.id } } }), test);
+  const attempt = await settle(await latestAttempt(test.id, req.user.id), test);
   if (!attempt) {
     res.status(409).json({ error: "You haven't started this test." });
     return null;
   }
   if (attempt.submittedAt) {
-    res.status(409).json({ error: attempt.autoSubmitted ? 'Time was up, so your test was submitted with your saved answers.' : "You've already submitted this test.", submitted: true, ...resultPayload(test, attempt) });
+    res.status(409).json({
+      error: attempt.autoSubmitted ? 'Time was up, so your test was submitted with your saved answers.' : "You've already submitted this test.",
+      submitted: true,
+      ...(await resultPayload(test, attempt, attempt)),
+    });
     return null;
   }
   return { test, attempt };
@@ -184,21 +244,27 @@ const submitTest = async (req, res) => {
     const responses = req.body && req.body.responses ? cleanResponses(open.test.paper, req.body.responses) : open.attempt.responses;
     const auto = req.body && req.body.auto === true;
     const done = await finalize(open.attempt, open.test, responses, auto);
-    res.json({ message: 'Test submitted', ...resultPayload(open.test, done) });
+    res.json({ message: 'Test submitted', ...(await resultPayload(open.test, done, done)) });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Could not submit the test' });
   }
 };
 
-// GET /api/tests/:id/result — the full paper with answers and solutions, once submitted
+// GET /api/tests/:id/result[?attempt=n] — the full paper with answers and
+// solutions for a submitted attempt (default: the latest submitted one)
 const getResult = async (req, res) => {
   try {
     const test = await findTest(req);
     if (!test || !test.paper) return res.status(404).json({ error: 'Test not found' });
-    const attempt = await settle(await prisma.attempt.findUnique({ where: { testId_userId: { testId: test.id, userId: req.user.id } } }), test);
-    if (!attempt || !attempt.submittedAt) return res.status(409).json({ error: "You haven't submitted this test yet." });
-    res.json(resultPayload(test, attempt));
+    const latest = await settle(await latestAttempt(test.id, req.user.id), test);
+    const n = Number(req.query.attempt);
+    const attempt = await prisma.attempt.findFirst({
+      where:   { testId: test.id, userId: req.user.id, submittedAt: { not: null }, ...(Number.isInteger(n) && n > 0 ? { attemptNo: n } : {}) },
+      orderBy: { attemptNo: 'desc' },
+    });
+    if (!attempt) return res.status(409).json({ error: "You haven't submitted this test yet." });
+    res.json(await resultPayload(test, attempt, latest));
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Something went wrong' });

@@ -5,6 +5,7 @@ import { AR_OPTIONS } from '../data/papers.js'
 import { computeResult } from '../scoring.js'
 import { hasAnswer } from '../answers.js'
 import { Link } from 'react-router-dom'
+import BackButton from '../../../components/BackButton.jsx'
 
 function letter(i) {
   return String.fromCharCode(65 + i)
@@ -33,7 +34,7 @@ function answerText(q, a, lang) {
   design/test.html renderResult() + renderReview() — KPIs, section bars,
   "What to work on", chapter table, review list with filters.
 */
-export default function ResultView({ paper, flat, attempt, reviewFilter, setReviewFilter }) {
+export default function ResultView({ paper, flat, attempt, meta, reviewFilter, setReviewFilter }) {
   const R = computeResult(flat, attempt)
   // The server's stored score is the headline; computeResult (same rules) drives the breakdown.
   const total = Number.isFinite(attempt.score) ? attempt.score : R.total
@@ -50,6 +51,9 @@ export default function ResultView({ paper, flat, attempt, reviewFilter, setRevi
     .sort((a, b) => b.lost - a.lost)
   const colour = (p) => (p >= 75 ? 'var(--green)' : p >= 50 ? 'var(--blue)' : 'var(--amber)')
   const lang = attempt.lang || 'en'
+  const history = (meta && meta.history) || []
+  const shownNo = (meta && meta.attemptNo) || 1
+  const testHref = '/test?test=' + encodeURIComponent(paper.id)
 
   const list = R.items.filter((it) => {
     if (reviewFilter === 'all') return true
@@ -91,9 +95,6 @@ export default function ResultView({ paper, flat, attempt, reviewFilter, setRevi
               <use href="#tv-logo" />
             </svg>
           </Link>
-          <Link className="back-link" to="/student">
-            Back to home
-          </Link>
         </div>
       </header>
 
@@ -110,13 +111,43 @@ export default function ResultView({ paper, flat, attempt, reviewFilter, setRevi
             </div>
           </div>
           <div className="res-title">
+            <BackButton to="/student" tone="dark">
+              Back to dashboard
+            </BackButton>
             <span className="eyebrow on-navy">Result and analysis · {paper.exam}</span>
             <h1>{paper.title}</h1>
             <p>
               Submitted{' '}
               {new Date(attempt.submittedAt).toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' })}
               {attempt.autoSubmitted ? ' (time ran out)' : ''}
+              {history.length > 1 ? ` · Attempt ${shownNo} of ${history.length}` : ''}
             </p>
+            {meta && (meta.inProgress || meta.canRetake || history.length > 1) ? (
+              <div className="res-actions">
+                {meta.inProgress ? (
+                  <Link className="btn btn-gold" to={testHref}>
+                    Resume your retake
+                  </Link>
+                ) : meta.canRetake ? (
+                  <Link className="btn btn-gold" to={testHref + '&retake=1'}>
+                    Retake test
+                  </Link>
+                ) : null}
+                {history.length > 1 ? (
+                  <nav className="attempts" aria-label="Your attempts">
+                    {history
+                      .slice()
+                      .reverse()
+                      .map((h) => (
+                        <Link key={h.attemptNo} to={testHref + '&view=result&attempt=' + h.attemptNo} aria-current={h.attemptNo === shownNo ? 'page' : undefined}>
+                          Attempt {h.attemptNo}
+                          <b>{h.score}</b>
+                        </Link>
+                      ))}
+                  </nav>
+                ) : null}
+              </div>
+            ) : null}
           </div>
           <div className="res-score">
             <span>{verdict}</span>

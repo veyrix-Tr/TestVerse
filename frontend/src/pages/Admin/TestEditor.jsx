@@ -1,3 +1,4 @@
+import BackButton from '../../components/BackButton.jsx'
 import { useEffect, useRef, useState } from 'react'
 import AudienceEditor from './AudienceEditor.jsx'
 import PaperPreview from './PaperPreview.jsx'
@@ -734,9 +735,9 @@ export default function TestEditor({ id, onBack, onSaved }) {
 
 function BackLink({ onBack }) {
   return (
-    <button type="button" className="ts-back" onClick={onBack}>
+    <BackButton onClick={onBack}>
       Back to tests
-    </button>
+    </BackButton>
   )
 }
 
