@@ -24,7 +24,7 @@ export default function FinalCta({ signupHref }) {
             <h3>Want a teacher too?</h3>
             <p>Studyverse courses add live classes and faculty who teach from your own test results.</p>
           </div>
-          <a className="btn btn-ghost" href="/courses">
+          <a className="btn btn-ghost" href="https://studyverse.in" target="_blank" rel="noreferrer">
             Explore Studyverse courses
           </a>
         </div>

@@ -42,6 +42,15 @@ app.use('/api/admin', adminStudentRoutes);
 const adminOverviewRoutes = require('./routes/adminOverviewRoutes');
 app.use('/api/admin', adminOverviewRoutes);
 
+const adminContentRoutes = require('./routes/adminContentRoutes');
+app.use('/api/admin', adminContentRoutes);
+
+const siteRoutes = require('./routes/siteRoutes');
+app.use('/api', siteRoutes);
+
+const adminWebsiteRoutes = require('./routes/adminWebsiteRoutes');
+app.use('/api/admin/website', adminWebsiteRoutes);
+
 const testRoutes = require('./routes/testRoutes');
 app.use('/api/tests', testRoutes);
 

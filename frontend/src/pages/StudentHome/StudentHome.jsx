@@ -10,6 +10,7 @@ import Overview, { OverviewRail } from './pages/Overview.jsx'
 import ResultsPage from './pages/ResultsPage.jsx'
 import SolutionsPage, { SolutionsRail } from './pages/SolutionsPage.jsx'
 import TestsPage from './pages/TestsPage.jsx'
+import AnnouncementBanner from './sections/AnnouncementBanner.jsx'
 import ComingSoon from './sections/ComingSoon.jsx'
 import { SOON } from './soon.js'
 import Sidebar from './sections/Sidebar.jsx'
@@ -125,6 +126,7 @@ export default function StudentHome() {
 
       <div className="shell">
         <div className="content">
+          <AnnouncementBanner />
           <main className={'layout' + (Rail ? '' : ' is-wide')} id="main" aria-labelledby={isResult ? 'result-page-title' : soon ? 'soon-title' : 'page-title'}>
             <div className="main-col">
               {soon ? (

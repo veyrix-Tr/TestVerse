@@ -4,6 +4,7 @@ const jwt    = require('jsonwebtoken');
 const prisma = require('../lib/prisma');
 const { sendOtpEmail } = require('../services/emailService');
 const { WITH_SUBSCRIPTION, publicUser } = require('../lib/publicUser');
+const { notify, EXAM_LABEL } = require('../lib/notify');
 
 const EXAMS              = ['neet', 'jee-main', 'jee-advanced'];
 const GRADES             = ['Class 11', 'Class 12', 'Dropper / repeater'];
@@ -180,6 +181,9 @@ const signup = async (req, res) => {
       },
       include: WITH_SUBSCRIPTION,
     });
+
+    // The admin's bell: someone just joined.
+    notify({ type: 'signup', text: 'New signup: ' + user.name + (EXAM_LABEL[user.exam] ? ' · ' + EXAM_LABEL[user.exam] : ''), view: 'students' });
 
     res.status(201).json({ message: 'Account created successfully', token: signToken(user), user: publicUser(user) });
   } catch (error) {

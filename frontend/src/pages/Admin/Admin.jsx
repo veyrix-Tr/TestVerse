@@ -6,6 +6,7 @@ import { usePageMeta } from '../../lib/hooks.js'
 import { clearSession, loadSession } from '../../lib/session.js'
 import mountAdmin from './adminApp.js'
 import AdminComingSoon from './AdminComingSoon.jsx'
+import AdminBell from './AdminBell.jsx'
 import AdminDashboard from './AdminDashboard.jsx'
 import SeriesAdmin from './SeriesAdmin.jsx'
 import StudentsAdmin from './StudentsAdmin.jsx'
@@ -86,9 +87,12 @@ export default function Admin() {
             <use href="#tv-logo" />
           </svg>
           <small className="admin-tag">Admin</small>
-          <button className="menu-toggle" type="button" aria-controls="admin-nav" aria-expanded={menuOpen ? 'true' : 'false'} onClick={() => setMenuOpen((v) => !v)}>
-            {menuOpen ? 'Close' : 'Menu'}
-          </button>
+          <div className="topbar-actions">
+            <AdminBell onOpen={goTo} />
+            <button className="menu-toggle" type="button" aria-controls="admin-nav" aria-expanded={menuOpen ? 'true' : 'false'} onClick={() => setMenuOpen((v) => !v)}>
+              {menuOpen ? 'Close' : 'Menu'}
+            </button>
+          </div>
         </header>
         <div className="scrim" aria-hidden="true" onClick={() => setMenuOpen(false)}></div>
         <nav
@@ -105,10 +109,13 @@ export default function Admin() {
           }}
         >
           <div className="brand">
-            <svg className="tv-logo" style={{ height: '30px' }} viewBox="0 0 1784 409" role="img" aria-label="Testverse by Studyverse">
-              <use href="#tv-logo" />
-            </svg>
-            <small className="admin-tag">Admin</small>
+            <span className="brand-lockup">
+              <svg className="tv-logo" style={{ height: '30px' }} viewBox="0 0 1784 409" role="img" aria-label="Testverse by Studyverse">
+                <use href="#tv-logo" />
+              </svg>
+              <small className="admin-tag">Admin</small>
+            </span>
+            <AdminBell onOpen={goTo} />
           </div>
           <div className="nav">
             <button type="button" data-view="dashboard">
@@ -152,10 +159,6 @@ export default function Admin() {
             </div>
             <button type="button" className="logout" onClick={logOut}>
               Log out
-            </button>
-            <p>Demo: changes are saved in this browser only.</p>
-            <button type="button" id="reset">
-              Reset demo data
             </button>
           </div>
         </nav>

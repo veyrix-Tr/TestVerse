@@ -1,6 +1,7 @@
 const prisma = require('../lib/prisma');
 const { publicBatch, publicSubscription } = require('../lib/publicUser');
 const { examFamily } = require('../lib/access');
+const { notify } = require('../lib/notify');
 
 // Until Cashfree is wired in, MOCK_PAYMENTS=true activates a purchase straight
 // away so the rest of the flow can be built and tested. Never in production.
@@ -10,10 +11,11 @@ const mockPayments = () => process.env.MOCK_PAYMENTS === 'true' && process.env.N
 // JEE Main / JEE Advanced + "Class 11" -> "11th JEE", and so on.
 
 const batchFor = async (userId) => {
-  const user = await prisma.user.findUnique({ where: { id: userId }, select: { exam: true, grade: true } });
+  const user = await prisma.user.findUnique({ where: { id: userId }, select: { name: true, exam: true, grade: true } });
   const exam = examFamily(user && user.exam);
   if (!exam || !user.grade) return null;
-  return prisma.batch.findFirst({ where: { exam, grade: user.grade, isActive: true } });
+  const batch = await prisma.batch.findFirst({ where: { exam, grade: user.grade, isActive: true } });
+  return batch ? { batch, student: user } : null;
 };
 
 // GET /api/batches — batches on sale (public)
@@ -32,7 +34,8 @@ const listBatches = async (req, res) => {
 const getSubscription = async (req, res) => {
   try {
     const sub   = await prisma.subscription.findUnique({ where: { userId: req.user.id }, include: { batch: true } });
-    const batch = await batchFor(req.user.id);
+    const found = await batchFor(req.user.id);
+    const batch = found && found.batch;
     res.json({ subscription: publicSubscription(sub), batch: batch ? publicBatch(batch) : null });
   } catch (error) {
     console.error(error);
@@ -45,8 +48,9 @@ const getSubscription = async (req, res) => {
 // A student holds one batch only: an active purchase can't be changed.
 const subscribe = async (req, res) => {
   try {
-    const batch = await batchFor(req.user.id);
-    if (!batch) return res.status(400).json({ error: "There's no batch on sale for your exam and class yet. Please contact us." });
+    const found = await batchFor(req.user.id);
+    if (!found) return res.status(400).json({ error: "There's no batch on sale for your exam and class yet. Please contact us." });
+    const { batch, student } = found;
 
     const existing = await prisma.subscription.findUnique({ where: { userId: req.user.id }, include: { batch: true } });
     if (existing && existing.status === 'active') {
@@ -76,6 +80,12 @@ const subscribe = async (req, res) => {
         subscription: publicSubscription(sub),
       });
     }
+    // The admin's bell: a student just bought a batch.
+    notify({
+      type: 'purchase',
+      text: 'New purchase: ' + (student && student.name ? student.name : 'Student') + ' · ' + batch.name + (batch.price ? ' · ₹' + batch.price : ''),
+      view: 'students',
+    });
     res.status(201).json({ message: 'Batch activated', subscription: publicSubscription(sub) });
   } catch (error) {
     console.error(error);

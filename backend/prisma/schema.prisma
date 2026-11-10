@@ -34,6 +34,8 @@ model User {
   attempts        Attempt[]
   groups          GroupMember[]
   testsAssigned   TestStudent[]
+  resources       Resource[]
+  announcements   Announcement[]
 }
 
 // A plan a student buys: one exam + class, e.g. "11th JEE". Tests are later
@@ -230,4 +232,79 @@ model TestStudent {
 
   @@id([testId, userId])
   @@index([userId])
+}
+
+// A YouTube video shown in the homepage's "Resources" section. Admins add them
+// from Admin > Website info; visitors see only the published ones.
+model Resource {
+  id          String   @id @default(cuid())
+  title       String
+  videoId     String   // YouTube video id from watch?v=... / youtu.be/...
+  exam        String?  // "neet" | "jee-main" | "jee-advanced" | null = for everyone
+  topic       String?  // short free-text tag, e.g. "Physics" or "Strategy"
+  sortOrder   Int      @default(0)
+  isPublished Boolean  @default(true)
+  createdById String?
+  createdBy   User?    @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([isPublished])
+}
+
+// A message shown on the homepage strip (visitors) and as a banner in the
+// student dashboard. `audience` decides who sees it:
+//   "all" | "students" | "paid" | "exam:neet" | "exam:jee-main" | ...
+model Announcement {
+  id          String    @id @default(cuid())
+  body        String
+  audience    String    @default("all")
+  link        String?   // optional "Learn more" URL
+  startsAt    DateTime  @default(now())
+  endsAt      DateTime? // null = runs until it is switched off
+  isActive    Boolean   @default(true)
+  createdById String?
+  createdBy   User?     @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  reads       AnnouncementRead[]
+
+  @@index([isActive])
+}
+
+// One row per (announcement, student) who has seen it - the read receipt the
+// admin sees as "N of M read".
+model AnnouncementRead {
+  announcementId String
+  announcement   Announcement @relation(fields: [announcementId], references: [id], onDelete: Cascade)
+  userId         String
+  readAt         DateTime     @default(now())
+
+  @@id([announcementId, userId])
+  @@index([userId])
+}
+
+// The admin's inbox: one row per event (new signup, new purchase, ...). Clicking
+// an item opens the sidebar `view` it names.
+model Notification {
+  id        String    @id @default(cuid())
+  type      String // "signup" | "purchase" | ...
+  text      String
+  view      String?   // sidebar view to open: "students" | "dashboard" | ...
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([readAt])
+}
+
+// Website-wide settings managed from Admin > Website info. Single row.
+model WebsiteSettings {
+  id                String  @id @default(cuid())
+  announcement      String  @default("")
+  showAnnouncement  Boolean @default(false)
+  youtubeChannel    String  @default("")
+  youtubePlaylists  Json    @default("{}") // { "neet": "url", "jee-main": "url", "jee-advanced": "url" }
+  updatedAt         DateTime @updatedAt
+  createdAt         DateTime @default(now())
 }

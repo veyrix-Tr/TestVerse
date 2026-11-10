@@ -4,10 +4,12 @@ import LogoSprite from '../../components/LogoSprite.jsx'
 import { EXAMS, EXAM_KEY } from '../../data/exams.js'
 import { usePageMeta } from '../../lib/hooks.js'
 import Analysis from './sections/Analysis.jsx'
+import AnnouncementBar from './sections/AnnouncementBar.jsx'
 import CbtScreen from './sections/CbtScreen.jsx'
 import Faq from './sections/Faq.jsx'
 import FinalCta from './sections/FinalCta.jsx'
 import Hero from './sections/Hero.jsx'
+import Resources from './sections/Resources.jsx'
 import HowItWorks from './sections/HowItWorks.jsx'
 import SiteFooter from './sections/SiteFooter.jsx'
 import SiteHeader from './sections/SiteHeader.jsx'
@@ -86,6 +88,7 @@ export default function Home() {
   return (
     <div className="tv-home">
       <LogoSprite />
+      <AnnouncementBar />
       <SiteHeader />
 
       <main>
@@ -102,6 +105,8 @@ export default function Home() {
         <HowItWorks />
 
         <Together />
+
+        <Resources />
 
         <Faq />
 

@@ -347,6 +347,8 @@ Matches the existing Studyverse backend (Express + Prisma) and a small team. Equ
 All documents also have `createdAt`, `updatedAt`, `createdBy`.
 
 > **Built so far (Nov 2026):** accounts live in PostgreSQL as the Prisma models `User` (id, name, email, password hash, role, exam, phone, grade, targetYear, state, city, emailVerifiedAt, isActive, lastLoginAt) and `Otp` (email + purpose, hashed code, attempts, expiry). Field names differ from the sketch below: `class` → `grade`, `examYear` → `targetYear`. The rest of this model is still the plan; add it as Prisma tables.
+>
+> **Content models (Nov 2026):** `Resource` (homepage video: title, `videoId`, exam?, topic?, sortOrder, isPublished, createdById), `Announcement` (body ≤ 300, audience `all | students | paid | exam:<key>`, startsAt/endsAt, isActive, link?, createdById) with `AnnouncementRead` (per-student receipt), `Notification` (admin bell: type, text, view, readAt) and `WebsiteSettings` (youtube channel + per-exam playlists, announcement strip). Migration `20261109163420_add_resources_announcements_notifications`.
 
 ```text
 users/{uid}
@@ -474,6 +476,10 @@ All require auth unless noted. Admin endpoints check roles.
 | GET | `/me/credits`, `/me/referrals`, `/me/orders` | Wallet, referrals, orders and invoices |
 | POST | `/me/parent-link` / `DELETE` | Create / turn off parent link |
 | GET | `/p/:token` | Parent progress data (no auth; token only) |
+| GET | `/resources` | Published homepage videos, admin order (no auth) |
+| GET | `/announcements` | Newest public announcement strip (no auth) |
+| GET | `/announcements/mine` | This student's visible announcements, newest first, with read flags |
+| POST | `/announcements/:id/read` | Mark one read (moves the admin's "N read" count); idempotent |
 
 **Admin**
 
@@ -490,6 +496,11 @@ All require auth unless noted. Admin endpoints check roles.
 | GET / PUT | `/admin/reports/:id` | Fix / dismiss |
 | GET | `/admin/students`, `/admin/orders`, `/admin/results/:testId` | Lists and exports |
 | POST | `/admin/orders/:id/refund` | Refund via gateway |
+| CRUD | `/admin/resources` | Homepage videos: YouTube link parsed to `videoId`, reorder (`sortOrder`), publish/unpublish; duplicate link → 409 |
+| CRUD | `/admin/announcements` | Body ≤ 300, audience, schedule, on/off; list carries per-row `reads` + `audienceSize` |
+| GET | `/admin/notifications` | The admin bell: newest 30 + `unread` count |
+| POST | `/admin/notifications/read`, `/admin/notifications/:id/read` | Clear all / one inbox item |
+| GET / PUT | `/admin/website` (built) | `WebsiteSettings`: channel, per-exam playlists, announcement strip. PUT writes only the fields you send |
 
 ---
 
@@ -611,6 +622,8 @@ Admin edits an answer:
 ## 11. Notifications
 
 Send in-app always. WhatsApp/SMS where marked (✓). WhatsApp needs approved templates.
+
+> **Built (Nov 2026):** the admin's own in-app inbox — `backend/lib/notify.js` writes a `Notification` on **signup** and **purchase** (fire-and-forget, never fails the request); the bell in the admin top bar reads `/admin/notifications`, marks items read and jumps to the sidebar section in `view`. **Announcements** (separate system, §7): admins publish to `all | students | paid | exam:<key>` from Admin › Website info; the homepage strip reads `/api/announcements`, the student dashboard banner reads `/api/announcements/mine`.
 
 | Trigger | To | WhatsApp/SMS |
 |---|---|---|

@@ -1,22 +1,39 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import AuthLink from '../../../components/AuthLink.jsx'
+import { siteResources } from '../../../lib/content.js'
 
 const LINKS = [
   ['#plan', 'Test plan'],
   ['#cbt', 'CBT screen'],
   ['#analysis', 'Analysis'],
   ['#parents', 'For parents'],
+  ['#resources', 'Resources'],
   ['#faq', 'FAQ'],
 ]
 
 /* Sticky navy header with a text "Menu" sheet on small screens. Nav links
    scroll in place instead of changing the hash, so a chosen exam (#neet …)
-   stays in the URL; the section in view is marked as current. */
+   stays in the URL; the section in view is marked as current. The
+   "Resources" link only shows once there are published videos, since that
+   section isn't rendered otherwise. */
 export default function SiteHeader() {
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState(null)
   const [scrolled, setScrolled] = useState(false)
+  const [hasRes, setHasRes] = useState(false)
+
+  useEffect(() => {
+    let live = true
+    siteResources()
+      .then((rows) => live && setHasRes(rows.length > 0))
+      .catch(() => {})
+    return () => {
+      live = false
+    }
+  }, [])
+
+  const links = hasRes ? LINKS : LINKS.filter(([href]) => href !== '#resources')
 
   useEffect(() => {
     const first = document.querySelector(LINKS[0][0])
@@ -31,25 +48,30 @@ export default function SiteHeader() {
       (entries) => entries.forEach((e) => e.isIntersecting && setActive('#' + e.target.id)),
       { rootMargin: '-45% 0px -50% 0px' },
     )
-    LINKS.forEach(([href]) => {
-      const el = document.querySelector(href)
-      if (el) io.observe(el)
-    })
+    // Sections that load late (Resources) may not be in the DOM yet on this
+    // commit; wait a frame so they're observed once they appear.
+    const raf = requestAnimationFrame(() =>
+      LINKS.forEach(([href]) => {
+        const el = document.querySelector(href)
+        if (el) io.observe(el)
+      }),
+    )
     return () => {
+      cancelAnimationFrame(raf)
       window.removeEventListener('scroll', onScroll)
       io.disconnect()
     }
-  }, [])
+  }, [hasRes])
 
+  // Always handled here: letting the browser follow the link would replace
+  // the exam kept in the hash (#neet …), even when the section is missing.
   function go(e, href) {
-    const el = document.querySelector(href)
-    if (!el) return
     e.preventDefault()
     setOpen(false)
-    el.scrollIntoView()
+    document.querySelector(href)?.scrollIntoView()
   }
 
-  const navLinks = LINKS.map(([href, label]) => (
+  const navLinks = links.map(([href, label]) => (
     <a key={href} href={href} onClick={(e) => go(e, href)} aria-current={active === href ? 'true' : undefined}>
       {label}
     </a>

@@ -324,10 +324,6 @@ export default function mountAdmin(el, opts) {
   $$('.side [data-view]').forEach(function (b) {
     once(b, function () { go(b.dataset.view); $('#view').focus(); });
   });
-  once($('#reset'), function () {
-    if (!confirm('Reset all demo data? Your changes in this browser will be lost.')) return;
-    db = seed(); save(); render(); toast('Demo data reset');
-  });
   once($('#df-save'), function () {
     var err = onSave && onSave();
     if (err) { $('#df-err').textContent = err; $('#df-err').hidden = false; return; }
