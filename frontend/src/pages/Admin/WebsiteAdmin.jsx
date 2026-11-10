@@ -286,9 +286,6 @@ export default function WebsiteAdmin() {
         </div>
         <div className="ws-head-actions">
           <LiveStamp at={annLive.at} loading={annLive.loading || resLive.loading} error={annLive.error || resLive.error} onRefresh={() => { annLive.refresh(); resLive.refresh() }} />
-          <a className="btn btn-outline" href="/" target="_blank" rel="noreferrer">
-            Open the website
-          </a>
         </div>
       </div>
 
@@ -417,7 +414,7 @@ export default function WebsiteAdmin() {
             <div className="card-head">
               <div>
                 <h2 id="ws-res-t">Video resources</h2>
-                <p className="meta">The videos in the homepage’s Resources section. Paste a YouTube link, name it, and it appears in the order shown here.</p>
+                <p className="meta">Videos for the homepage and the students’ Resources page. “Everyone” shows on both; an exam shows only to logged-in students preparing for it.</p>
               </div>
               <span className={'pill ' + (pubCount ? 'p-published' : 'p-draft')}>
                 {pubCount} of {resources.length} published
@@ -443,13 +440,13 @@ export default function WebsiteAdmin() {
                 </div>
                 <div>
                   <label className="l" htmlFor="ws-rexam">
-                    Exam
+                    Who sees it
                   </label>
                   <select id="ws-rexam" className="input" value={vDraft.exam} onChange={(e) => setVDraft((d) => ({ ...d, exam: e.target.value }))}>
-                    <option value="">Everyone</option>
-                    <option value="neet">NEET</option>
-                    <option value="jee-main">JEE Main</option>
-                    <option value="jee-advanced">JEE Advanced</option>
+                    <option value="">Everyone (homepage + all students)</option>
+                    <option value="neet">NEET students only</option>
+                    <option value="jee-main">JEE Main students only</option>
+                    <option value="jee-advanced">JEE Advanced students only</option>
                   </select>
                 </div>
                 <div>
@@ -460,7 +457,7 @@ export default function WebsiteAdmin() {
                 </div>
               </div>
               <div className="ws-foot">
-                <span className="hint">Published videos show on the homepage straight away.</span>
+                <span className="hint">Published videos show straight away.</span>
                 <button className="btn btn-primary" type="submit" disabled={busy || !vDraft.url.trim() || !vDraft.title.trim()}>
                   Add video
                 </button>
@@ -477,7 +474,7 @@ export default function WebsiteAdmin() {
                     <div className="ws-res-main">
                       <b>{r.title}</b>
                       <span className="meta">
-                        {[r.topic, r.exam ? ({ neet: 'NEET', 'jee-main': 'JEE Main', 'jee-advanced': 'JEE Advanced' }[r.exam] || r.exam) : null, r.isPublished ? 'Published' : 'Hidden']
+                        {[r.topic, r.exam ? ({ neet: 'NEET', 'jee-main': 'JEE Main', 'jee-advanced': 'JEE Advanced' }[r.exam] || r.exam) + ' students' : 'Everyone', r.isPublished ? 'Published' : 'Hidden']
                           .filter(Boolean)
                           .join(' · ')}
                       </span>
@@ -500,7 +497,7 @@ export default function WebsiteAdmin() {
                 ))}
               </ul>
             ) : !resLive.error ? (
-              <p className="hint ws-empty">No videos yet. Add the first one above — it will appear in the Resources section of the homepage.</p>
+              <p className="hint ws-empty">No videos yet. Add the first one above — it appears on the homepage and in students’ Resources page.</p>
             ) : null}
           </section>
         </div>

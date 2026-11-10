@@ -7,6 +7,7 @@ import { clearSession, loadSession } from '../../lib/session.js'
 import ResultPage from '../Test/ResultPage.jsx'
 import AccountPage from './pages/AccountPage.jsx'
 import Overview, { OverviewRail } from './pages/Overview.jsx'
+import ResourcesPage from './pages/ResourcesPage.jsx'
 import ResultsPage from './pages/ResultsPage.jsx'
 import SolutionsPage, { SolutionsRail } from './pages/SolutionsPage.jsx'
 import TestsPage from './pages/TestsPage.jsx'
@@ -24,6 +25,7 @@ const PAGES = {
   tests: { Main: TestsPage, title: 'Your tests' },
   results: { Main: ResultsPage, title: 'Results' },
   solutions: { Main: SolutionsPage, Rail: SolutionsRail, title: 'Solutions' },
+  resources: { Main: ResourcesPage, title: 'Resources' },
   account: { Main: AccountPage, title: 'Account' },
 }
 

@@ -28,6 +28,7 @@ export default function SiteFooter() {
           <a href="/contact">Contact</a>
           <a href="/privacy">Privacy</a>
           <a href="/terms">Terms</a>
+          <a href="/refunds">Refund policy</a>
         </div>
       </div>
       <div className="wrap copyright">© 2026 Studyverse. All rights reserved.</div>

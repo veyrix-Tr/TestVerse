@@ -1,0 +1,50 @@
+/* The Terms / Privacy / Refunds / Contact card (LegalHost.jsx). Self-contained:
+   it opens over any page, so it doesn't rely on that page's tokens. */
+.legal-dialog {
+  --l-card: #FFFFFF; --l-ink: #0E1A2B; --l-ink-2: #26324A; --l-muted: #5B6577; --l-line: #E4E8EE; --l-soft: #F1F3F7;
+  --l-blue: #2450D6; --l-navy: #0B1B33;
+  /* One fixed size for every tab, so switching never resizes the card */
+  width: min(600px, calc(100vw - 32px)); height: min(560px, calc(100dvh - 48px));
+  padding: 0; border: 0; border-radius: 20px; background: var(--l-card); color: var(--l-ink);
+  box-shadow: 0 30px 60px -20px rgba(5, 12, 28, 0.45); overflow: hidden;
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  .legal-dialog { --l-card: #0F1828; --l-ink: #E9EDF5; --l-ink-2: #C9D1E0; --l-muted: #98A3B8; --l-line: #1F2B40; --l-soft: #111A2C; --l-blue: #7F9BFF; }
+}
+.legal-dialog[open] { display: flex; animation: legal-in 180ms ease-out; }
+.legal-dialog::backdrop { background: rgba(7, 17, 31, 0.6); backdrop-filter: blur(3px); }
+@keyframes legal-in { from { opacity: 0; transform: translateY(8px) scale(0.98); } }
+@media (prefers-reduced-motion: reduce) { .legal-dialog[open] { animation: none; } }
+
+.legal-card { display: flex; flex-direction: column; width: 100%; min-height: 0; }
+.legal-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 20px 16px 24px; border-bottom: 1px solid var(--l-line); }
+.legal-head h2 { margin: 0; font: 700 22px/1.2 "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif; letter-spacing: -0.01em; }
+.legal-close { flex: 0 0 auto; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--l-line); background: transparent; color: var(--l-muted); cursor: pointer; }
+.legal-close:hover { background: var(--l-soft); color: var(--l-ink); }
+
+.legal-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 20px 24px 24px; overscroll-behavior: contain; }
+/* No visible scrollbar: the text fits; on a very short screen it still scrolls by touch or wheel */
+.legal-body { scrollbar-width: none; }
+.legal-body::-webkit-scrollbar { display: none; }
+/* The page behind doesn't scroll (or show its scrollbar) while the card is open */
+html:has(.legal-dialog[open]) { overflow: hidden; }
+.legal-body .legal-intro { margin: 0 0 18px; font-size: 15.5px; line-height: 1.6; color: var(--l-ink-2); }
+.legal-body section + section { margin-top: 16px; }
+.legal-body h3 { margin: 0 0 4px; font: 600 15px/1.4 "Inter", system-ui, sans-serif; color: var(--l-ink); }
+.legal-body p { margin: 0; font-size: 14.5px; line-height: 1.65; color: var(--l-muted); }
+.legal-link { display: inline-block; margin-top: 20px; font-weight: 600; color: var(--l-blue); text-decoration: none; }
+.legal-link:hover { text-decoration: underline; }
+
+.legal-tabs { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 20px; border-top: 1px solid var(--l-line); background: var(--l-soft); }
+.legal-tabs button { min-height: 34px; padding: 0 12px; border: 0; border-radius: 8px; background: transparent; color: var(--l-muted); font: 600 13.5px/1 "Inter", system-ui, sans-serif; cursor: pointer; }
+.legal-tabs button:hover { color: var(--l-ink); }
+.legal-tabs button[aria-current] { background: var(--l-card); color: var(--l-ink); box-shadow: 0 1px 2px rgba(14, 26, 43, 0.08); }
+.legal-dialog :focus-visible { outline: 2px solid var(--l-blue); outline-offset: 2px; }
+
+@media (max-width: 560px) {
+  .legal-dialog { width: 100vw; max-width: 100vw; height: min(570px, 85dvh); margin: auto 0 0; border-radius: 20px 20px 0 0; }
+  .legal-head { padding: 16px 16px 14px; }
+  .legal-body { padding: 16px; }
+  .legal-tabs { padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); }
+}

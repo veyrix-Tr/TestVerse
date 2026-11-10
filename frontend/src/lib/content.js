@@ -27,6 +27,7 @@ export const siteResources = () => {
 export const siteAnnouncement = () => api('/announcements').then((r) => r.announcement)
 
 /* ---- the signed-in student ---- */
+export const myResources = () => api('/resources/mine', { token: getToken() }).then((r) => r.resources || [])
 export const myAnnouncements = () => api('/announcements/mine', { token: getToken() }).then((r) => r.announcements)
 export const markAnnouncementRead = (id) => api('/announcements/' + encodeURIComponent(id) + '/read', { method: 'POST', body: {}, token: getToken() })
 

@@ -21,12 +21,32 @@ const publicAnnouncement = (a, read) => ({
   read: !!read,
 });
 
-// GET /api/resources — published resources for the homepage "Resources"
-// section, in the order the admin put them (public).
+const RES_ORDER = [{ sortOrder: 'asc' }, { createdAt: 'asc' }];
+
+// GET /api/resources — the homepage "Resources" section: published videos
+// meant for everyone (no exam), in the admin's order (public). Exam videos
+// are only for signed-in students of that exam, via /resources/mine.
 const listResources = async (req, res) => {
   try {
     const rows = await prisma.resource.findMany({
-      where:   { isPublished: true },
+      where:   { isPublished: true, exam: null },
+      orderBy: RES_ORDER,
+    });
+    res.json({ resources: rows.map(publicResource) });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Could not load resources' });
+  }
+};
+
+// GET /api/resources/mine — the student's Resources page: published videos
+// for everyone plus those for the exam the student is preparing for.
+const myResources = async (req, res) => {
+  try {
+    const user = await prisma.user.findUnique({ where: { id: req.user.id }, select: { exam: true } });
+    const exams = [null, ...(user && user.exam ? [user.exam] : [])];
+    const rows = await prisma.resource.findMany({
+      where:   { isPublished: true, OR: exams.map((exam) => ({ exam })) },
       orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }],
     });
     res.json({ resources: rows.map(publicResource) });
@@ -87,4 +107,4 @@ const markRead = async (req, res) => {
   }
 };
 
-module.exports = { listResources, listAnnouncements, myAnnouncements, markRead };
+module.exports = { listResources, myResources, listAnnouncements, myAnnouncements, markRead };

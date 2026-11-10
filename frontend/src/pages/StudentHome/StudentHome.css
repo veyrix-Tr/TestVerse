@@ -137,7 +137,9 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 /* ---------- Shell & layout ---------- */
 .shell { margin-left: var(--sidebar); min-width: 0; }
-.content { max-width: 1680px; padding: var(--pad) var(--pad) 0; }
+/* Fill the viewport so the footer stays at the bottom on short pages */
+.content { max-width: 1680px; padding: var(--pad) var(--pad) 0; min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; }
+.content > main { flex: 1 0 auto; }
 .layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 56px; align-items: start; }
 .main-col { display: grid; grid-template-columns: minmax(0, 1fr); gap: 48px; min-width: 0; container: main / inline-size; }
 .rail { display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); align-items: start; min-width: 0; }
@@ -625,6 +627,7 @@ a.row-title:hover { color: var(--blue); }
 /* ---------- Under 1024: top bar + nav sheet ---------- */
 @media (max-width: 1023px) {
   .shell { margin-left: 0; }
+  .content { min-height: calc(100vh - 60px); min-height: calc(100dvh - 60px); }
   .topbar {
     position: sticky; top: 0; z-index: 35; display: flex; align-items: center; justify-content: space-between;
     height: 60px; padding: 0 var(--pad); background: var(--navy); border-bottom: 1px solid var(--navy-line);
@@ -697,3 +700,16 @@ a.row-title:hover { color: var(--blue); }
   .ann-banner { padding: 12px 14px; margin-bottom: 16px; }
   .ann-banner-text { font-size: 14px; }
 }
+
+/* ---------- Resources page (/student/resources) ---------- */
+.sres-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); gap: 18px; }
+.sres-card { display: grid; gap: 12px; padding: 12px; color: inherit; text-decoration: none; height: 100%; transition: transform 160ms ease, box-shadow 160ms ease; }
+a.sres-card:hover { text-decoration: none; transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.sres-thumb { position: relative; display: block; aspect-ratio: 16 / 9; border-radius: 10px; overflow: hidden; background: var(--navy-2); }
+.sres-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.sres-play { position: absolute; inset: 0; margin: auto; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; background: rgba(11, 27, 51, 0.74); color: #fff; border: 1px solid rgba(255, 255, 255, 0.35); transition: background-color 160ms ease; }
+a.sres-card:hover .sres-play { background: var(--blue); color: var(--on-blue); }
+.sres-tag { position: absolute; left: 8px; top: 8px; font: 600 11px/1 var(--body); text-transform: uppercase; letter-spacing: 0.06em; padding: 6px 8px; border-radius: 999px; background: rgba(7, 17, 31, 0.8); color: #fff; }
+.sres-body { display: grid; gap: 4px; }
+.sres-body b { font-size: 15.5px; line-height: 1.35; color: var(--ink); }
+.sres-cta { font: 600 13px/1 var(--body); color: var(--blue); margin-top: 4px; }

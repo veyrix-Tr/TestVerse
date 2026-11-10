@@ -1,4 +1,5 @@
 import { Navigate, RouterProvider, createBrowserRouter, redirect, useLocation } from 'react-router-dom'
+import LegalHost from './components/legal/LegalHost.jsx'
 import { checkSession } from './lib/session.js'
 
 /*
@@ -66,8 +67,16 @@ const testPage = {
   HydrateFallback: () => null,
 }
 
-const router = createBrowserRouter([
-  { path: '/', ...page(() => import('./pages/Home/Home.jsx')) },
+const home = page(() => import('./pages/Home/Home.jsx'))
+
+// LegalHost wraps every page: /terms, /privacy, /refunds and /contact open as a
+// card over the current page (or over the homepage when visited directly).
+const router = createBrowserRouter([{ element: <LegalHost />, children: [
+  { path: '/', ...home },
+  { path: '/terms', ...home },
+  { path: '/privacy', ...home },
+  { path: '/refunds', ...home },
+  { path: '/contact', ...home },
   { path: '/login', ...page(() => import('./pages/Login/Login.jsx')) },
   { path: '/signup', ...page(() => import('./pages/Signup/Signup.jsx')) },
   { path: '/subscribe', loader: requireNoSubscription, ...page(() => import('./pages/Subscribe/Subscribe.jsx')) },
@@ -84,7 +93,7 @@ const router = createBrowserRouter([
   { path: '/test', loader: requireSession, ...testPage },
   { path: '/admin', loader: requireAdmin, ...page(() => import('./pages/Admin/Admin.jsx')) },
   { path: '*', element: <Navigate to="/" replace /> },
-])
+] }])
 
 function App() {
   return <RouterProvider router={router} />
