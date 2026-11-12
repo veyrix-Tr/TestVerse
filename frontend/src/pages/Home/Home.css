@@ -563,14 +563,14 @@ a:hover { text-decoration: underline; text-underline-offset: 3px; }
 }
 
 /* ---------- Announcement strip (top of the page) ---------- */
-.ann-bar { position: relative; z-index: 51; background: var(--navy-2); border-bottom: 1px solid var(--navy-line); color: var(--on-navy); }
+.ann-bar { position: relative; z-index: 51; background: var(--gold); border-bottom: 1px solid color-mix(in srgb, var(--navy) 30%, var(--gold)); color: var(--navy); }
 .ann-row { display: flex; align-items: center; gap: 14px; min-height: 48px; padding-block: 9px; }
-.ann-text { flex: 1 1 auto; font-size: 14.5px; line-height: 1.5; }
-.ann-link { display: inline-block; margin-left: 10px; color: var(--gold); font-weight: 600; white-space: nowrap; }
-.ann-link:hover { text-decoration: underline; color: var(--gold); }
-.ann-x { flex: 0 0 auto; width: 30px; height: 30px; display: grid; place-items: center; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.22); background: transparent; color: var(--on-navy-muted); cursor: pointer; transition: background-color 150ms ease, color 150ms ease; }
-.ann-x:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
-.ann-x:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.ann-text { flex: 1 1 auto; font-size: 14.5px; line-height: 1.5; font-weight: 600; }
+.ann-link { display: inline-block; margin-left: 10px; color: var(--navy); font-weight: 700; white-space: nowrap; text-decoration: underline; }
+.ann-link:hover { text-decoration: underline; color: var(--navy); }
+.ann-x { flex: 0 0 auto; width: 30px; height: 30px; display: grid; place-items: center; border-radius: 8px; border: 1px solid rgba(11, 27, 51, 0.35); background: transparent; color: rgba(11, 27, 51, 0.8); cursor: pointer; transition: background-color 150ms ease, color 150ms ease; }
+.ann-x:hover { background: rgba(11, 27, 51, 0.12); color: var(--navy); }
+.ann-x:focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; }
 
 /* ---------- Resources (YouTube videos from the admin) ---------- */
 .res-grid { margin-top: clamp(40px, 4vw, 56px); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: clamp(18px, 2vw, 28px); }
@@ -578,6 +578,8 @@ a:hover { text-decoration: underline; text-underline-offset: 3px; }
 .res-card:hover { text-decoration: none; transform: translateY(-3px); border-color: color-mix(in srgb, var(--blue) 35%, var(--line)); box-shadow: 0 14px 30px -20px rgba(7, 17, 31, 0.55); }
 .res-thumb { position: relative; display: block; aspect-ratio: 16 / 9; border-radius: 14px; overflow: hidden; background: var(--navy-2); }
 .res-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.res-thumb.is-pl { background: linear-gradient(140deg, var(--navy-2), var(--navy)); }
+.res-thumb.is-pl::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(115deg, rgba(255, 255, 255, 0.05) 0 2px, transparent 2px 15px); }
 .res-play { position: absolute; inset: 0; margin: auto; width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; background: rgba(11, 27, 51, 0.74); color: #fff; border: 1px solid rgba(255, 255, 255, 0.35); transition: background-color 160ms ease, transform 160ms ease; }
 .res-card:hover .res-play { background: var(--blue); transform: scale(1.06); }
 .res-tag { position: absolute; left: 10px; top: 10px; font: 600 11px/1 var(--body); text-transform: uppercase; letter-spacing: 0.06em; padding: 6px 9px; border-radius: 999px; background: rgba(7, 17, 31, 0.8); color: #fff; }

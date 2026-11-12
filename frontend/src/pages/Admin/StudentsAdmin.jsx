@@ -111,7 +111,7 @@ function ListScreen({ tab, setTab, filters, setFilters, toast, onOpenStudent, on
     setFilters((f) => ({ ...f, plan, group: plan === 'free' ? '' : f.group }))
   }
   const dq = useDebounced(filters.q, 300)
-  const query = { ...filters, q: dq }
+  const query = { ...filters, q: dq, plan: '' } // Load all students, filter client-side
   const want = useRef(PAGE) // rows to keep loaded across refreshes ("Load more")
   const queryKey = JSON.stringify(query)
   const [more, setMore] = useState(false)
@@ -121,7 +121,7 @@ function ListScreen({ tab, setTab, filters, setFilters, toast, onOpenStudent, on
     want.current = PAGE
   }, [queryKey])
 
-  const students = useLive(() => listStudents(JSON.parse(queryKey), 0, Math.min(want.current, 500)), queryKey, studentsKey(query))
+  const students = useLive(() => listStudents(JSON.parse(queryKey), 0, Math.min(want.current, 500)), queryKey, null)
   const groups = useLive(listGroups, 'groups', 'groups')
 
   async function loadMore() {
@@ -129,12 +129,9 @@ function ListScreen({ tab, setTab, filters, setFilters, toast, onOpenStudent, on
     if (!d) return
     setMore(true)
     try {
-      const r = await listStudents(query, d.students.length, PAGE)
-      want.current = d.students.length + r.students.length
-      students.setData((cur) => {
-        const seen = new Set(cur.students.map((s) => s.id))
-        return { ...r, students: [...cur.students, ...r.students.filter((s) => !seen.has(s.id))] }
-      })
+      want.current += PAGE
+      const r = await listStudents(query, 0, want.current)
+      students.setData(r)
     } catch (e) {
       toast(e.message, 4000)
     } finally {
@@ -149,6 +146,21 @@ function ListScreen({ tab, setTab, filters, setFilters, toast, onOpenStudent, on
 
   const s = students.data && students.data.summary
   const at = students.at && groups.at ? Math.min(students.at, groups.at) : students.at || groups.at
+
+  // Filter students client-side based on plan
+  const allStudents = students.data?.students || []
+  const filteredStudents = allStudents.filter((student) => {
+    if (filters.plan === 'paid') return student.batch?.status === 'active'
+    if (filters.plan === 'free') return !student.batch || student.batch.status !== 'active'
+    return true
+  })
+
+  // Create a filtered data object for the StudentsTab
+  const filteredData = students.data ? {
+    ...students.data,
+    students: filteredStudents,
+    total: filteredStudents.length
+  } : null
 
   return (
     <>
@@ -212,11 +224,10 @@ function ListScreen({ tab, setTab, filters, setFilters, toast, onOpenStudent, on
 
       {tab === 'students' ? (
         <StudentsTab
-          live={students}
+          live={{ ...students, data: filteredData }}
           summary={s}
           filters={filters}
           setFilters={setFilters}
-          settled={dq === filters.q}
           groups={groups.data}
           onOpen={onOpenStudent}
           onMore={loadMore}
@@ -269,7 +280,7 @@ function Stat({ label, value, note, extra, onClick }) {
 
 /* ---------------------------------------------------------------------- */
 
-function StudentsTab({ live, summary, filters, setFilters, settled, groups, onOpen, onMore, more, toast }) {
+function StudentsTab({ live, summary, filters, setFilters, groups, onOpen, onMore, more, toast }) {
   const [exporting, setExporting] = useState(false)
   const now = useNow(30000)
   const d = live.data
@@ -280,6 +291,7 @@ function StudentsTab({ live, summary, filters, setFilters, settled, groups, onOp
   const filtered = !!(filters.q.trim() || filters.grade || filters.exam || filters.group)
   const paid = filters.plan === 'paid'
   const count = (n) => (n == null ? '' : n.toLocaleString('en-IN'))
+  const hasData = !!summary
 
   async function exportCsv() {
     setExporting(true)
@@ -319,10 +331,10 @@ function StudentsTab({ live, summary, filters, setFilters, settled, groups, onOp
     <section className="sect" aria-labelledby="sg-tab-students">
       <div className="seg sg-plan" role="group" aria-label="Paid or free students">
         <button type="button" aria-pressed={paid ? 'true' : 'false'} onClick={() => setPlan('paid')}>
-          Paid students <span className="sg-plan-n">{count(summary && summary.paid)}</span>
+          Paid students {hasData && <span className="sg-plan-n">{count(summary.paid)}</span>}
         </button>
         <button type="button" aria-pressed={!paid ? 'true' : 'false'} onClick={() => setPlan('free')}>
-          Free students <span className="sg-plan-n">{count(summary && summary.free)}</span>
+          Free students {hasData && <span className="sg-plan-n">{count(summary.free)}</span>}
         </button>
       </div>
       <p className="hint sg-plan-hint">
@@ -396,9 +408,9 @@ function StudentsTab({ live, summary, filters, setFilters, settled, groups, onOp
           <p className="hint sg-count" aria-live="polite">
             {d.students.length < d.total ? `Showing ${d.students.length} of ${plural(d.total, 'student')}` : plural(d.total, 'student')}
             {filtered ? ' matching' : ''}
-            {!settled || live.loading ? <span className="sg-dim"> · updating…</span> : null}
+            {live.loading ? <span className="sg-dim"> · updating…</span> : null}
           </p>
-          <div className={'table-wrap sg-table st-table' + (!settled ? ' sg-stale' : '')}>
+          <div className="table-wrap sg-table st-table">
             <table>
               <thead>
                 <tr>
@@ -411,6 +423,7 @@ function StudentsTab({ live, summary, filters, setFilters, settled, groups, onOp
                   <th className="num">Average</th>
                   <th>Last active</th>
                   <th>Joined</th>
+                  <th>Email</th>
                 </tr>
               </thead>
               <tbody>
@@ -443,6 +456,21 @@ function StudentsTab({ live, summary, filters, setFilters, settled, groups, onOp
                         {la && <span className="sub">{la.what === 'Logged in' ? 'Last login' : 'Last test'}</span>}
                       </td>
                       <td data-label="Joined">{day(s.joinedAt)}</td>
+                      <td data-label="Email">
+                        <a
+                          href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(s.email)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="sg-mail-btn"
+                          onClick={(e) => e.stopPropagation()}
+                          title={`Email ${s.email}`}
+                        >
+                          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                          </svg>
+                        </a>
+                      </td>
                     </tr>
                   )
                 })}

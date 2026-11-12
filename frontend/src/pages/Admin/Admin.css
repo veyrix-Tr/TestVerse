@@ -423,6 +423,7 @@ div > .input + .hint, div > select + .hint, div > textarea + .hint { margin-top:
 
 /* Resource rows: thumbnail | title + meta | actions */
 .ws-thumb { width: 72px; height: 40px; object-fit: cover; border-radius: 8px; background: var(--soft); flex: 0 0 auto; }
+.ws-thumb-pl { display: grid; place-items: center; color: var(--muted); border: 1px dashed var(--line); }
 .ws-url-row { display: flex; align-items: center; gap: 10px; }
 .ws-url-row .input { flex: 1 1 auto; }
 .ws-res { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
@@ -821,6 +822,14 @@ span.ts-l { display: block; font-size: 13px; font-weight: 600; letter-spacing: 0
   font: 600 15px/1.35 var(--body); color: var(--ink); border-radius: 4px;
 }
 .sg-name:hover, .sg-row:hover .sg-name { color: var(--blue); text-decoration: underline; text-underline-offset: 3px; }
+.sg-mail-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; padding: 0; border: 1px solid var(--line);
+  border-radius: 8px; background: var(--card); color: var(--muted);
+  cursor: pointer; transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+}
+.sg-mail-btn:hover { background: var(--soft); color: var(--blue); border-color: var(--blue); }
+.sg-mail-btn:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
 .st-table td:nth-child(3), .st-table td:nth-child(4) { min-width: 120px; max-width: 200px; }
 .st-table td:first-child { min-width: 220px; max-width: 300px; }
 .st-table td .pill { margin-top: 6px; display: flex; width: max-content; }
@@ -987,6 +996,7 @@ form.sg-card .sg-form-foot { margin-top: 20px; }
   .sg-table .row-actions { justify-content: flex-start; margin-left: -12px; }
   .st-table td:nth-child(2) { display: none; }
   .st-table td:last-child { display: none; }
+  .st-table td:nth-last-child(2) { display: none; }
   .ts-table td.ts-aud { grid-column: 1 / -1; max-width: none; }
   .ts-table td.ts-aud::before { content: attr(data-label); display: block; font: 600 11px/1.4 var(--body); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
 }

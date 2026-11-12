@@ -1,6 +1,5 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useToast } from '../../lib/useToast.jsx'
-import { getWebsiteSettings, updateWebsiteSettings } from './websiteApi.js'
 import {
   AUDIENCES,
   audienceLabel,
@@ -24,21 +23,20 @@ import { useLive, useNow } from './useLive.js'
   Left column (yours to edit):
     Announcements  -> homepage strip + the banner in the student dashboard
                       (backend: /api/admin/announcements, /api/announcements…)
-    Video resources-> the homepage "Resources" section
+    Video resources-> the homepage "Resources" section and the student's
+                      Resources page — a YouTube video or a whole playlist
                       (backend: /api/admin/resources, /api/resources)
-  Right column: the YouTube channel / playlist links — stored through the
-  settings API (/api/admin/website) — and the values the site fills in by
-  itself (prices, next live test), read from the demo store until they get
-  their own endpoint.
+  Right column: the values the site fills in by itself (prices, next live
+  test), read from the demo store until they get their own endpoint.
 */
 const STORE_KEY = 'sv-admin-demo-v4'
 const MAX_BODY = 300
-const YT_HOSTS = /^https:\/\/(www\.|m\.)?(youtube\.com|youtu\.be)\//i
+const PLAYLIST_RE = /[?&]list=[\w-]{12,}/
 
 const EMPTY_DRAFT = { body: '', audience: 'all', link: '', startsAt: '', endsAt: '' }
-const EMPTY_VIDEO = { url: '', title: '', exam: '', topic: '' }
+const EMPTY_VIDEO = { url: '', title: '', exam: '', topic: '', kind: 'video' }
 
-/* ---------------- demo store: channel, playlists, prices ---------------- */
+/* ---------------- demo store: prices, next live test ---------------- */
 function readStore() {
   try {
     return JSON.parse(localStorage.getItem(STORE_KEY)) || null
@@ -46,8 +44,7 @@ function readStore() {
     return null
   }
 }
-// Read-only info for the right-hand column: exam prices and the next live
-// test. (Channel + playlists come from the settings API, below.)
+// Read-only info for the right-hand column: exam prices and the next live test.
 function readLibrary() {
   const db = readStore() || {}
   return {
@@ -101,31 +98,8 @@ export default function WebsiteAdmin() {
   const [vDraft, setVDraft] = useState(EMPTY_VIDEO)
 
   const lib0 = useMemo(() => readLibrary(), [])
-  const [saved, setSaved] = useState({ channel: '', playlists: {} })
-  const [lib, setLib] = useState({ channel: '', playlists: {} })
-  const [linksReady, setLinksReady] = useState(false)
-
-  // Channel + playlists load from the settings API (not the browser)
-  useEffect(() => {
-    let live = true
-    getWebsiteSettings().then((s) => {
-      if (!live) return
-      const v = { channel: s.channel || '', playlists: Object.assign({}, s.playlists || {}) }
-      setSaved(v)
-      setLib(v)
-      setLinksReady(true)
-    })
-    return () => {
-      live = false
-    }
-  }, [])
 
   const set = (k, v) => setDraft((d) => ({ ...d, [k]: v }))
-  const setL = (k, v) => setLib((l) => ({ ...l, [k]: v }))
-  const vidDirty = lib.channel !== saved.channel || JSON.stringify(lib.playlists) !== JSON.stringify(saved.playlists)
-  const channel = lib.channel.trim()
-  const channelBad = channel !== '' && !YT_HOSTS.test(channel)
-  const playlistsSet = lib0.exams.filter((e) => (lib.playlists[e.id] || '').trim()).length
   const liveCount = anns.filter((a) => annState(a, now).label === 'Live').length
   const pubCount = resources.filter((r) => r.isPublished).length
   const previewId = videoIdOf(vDraft.url)
@@ -150,10 +124,14 @@ export default function WebsiteAdmin() {
           ...cur,
           announcements: cur.announcements.map((x) => (x.id === a.id ? { ...x, ...a, reads: x.reads } : x)),
         }))
+        // Refresh to ensure UI is in sync with server
+        await annLive.refresh()
         toast('Announcement saved')
       } else {
         const a = await createAnnouncement(payload)
         annLive.setData((cur) => ({ ...cur, announcements: [{ ...a, reads: 0 }, ...cur.announcements] }))
+        // Refresh to ensure UI is in sync with server
+        await annLive.refresh()
         toast('Announcement published')
       }
       setDraft(EMPTY_DRAFT)
@@ -197,6 +175,8 @@ export default function WebsiteAdmin() {
     }
     try {
       await deleteAnnouncement(a.id)
+      // Refresh to ensure UI is in sync with server and prevent race conditions with auto-refresh
+      await annLive.refresh()
       toast('Announcement deleted')
     } catch (err) {
       annLive.setData(() => snapshot)
@@ -207,15 +187,16 @@ export default function WebsiteAdmin() {
   /* ---------------- video resources ---------------- */
   async function addResource(e) {
     e.preventDefault()
-    const videoId = videoIdOf(vDraft.url)
-    if (!videoId) return toast('Paste a YouTube link (https://youtu.be/…)')
-    if (!vDraft.title.trim()) return toast('Give the video a title')
+    const kind = vDraft.kind === 'playlist' ? 'playlist' : 'video'
+    const ok = kind === 'playlist' ? PLAYLIST_RE.test(vDraft.url) : !!videoIdOf(vDraft.url)
+    if (!ok) return toast(kind === 'playlist' ? 'Paste a YouTube playlist link (https://www.youtube.com/playlist?list=…)' : 'Paste a YouTube link (https://youtu.be/…)')
+    if (!vDraft.title.trim()) return toast('Give it a title')
     setBusy(true)
     try {
-      const r = await createResource({ url: vDraft.url, title: vDraft.title, exam: vDraft.exam || null, topic: vDraft.topic })
+      const r = await createResource({ url: vDraft.url, title: vDraft.title, exam: vDraft.exam || null, topic: vDraft.topic, kind })
       resLive.setData((cur) => [...(cur || []), r])
       setVDraft(EMPTY_VIDEO)
-      toast('Video added')
+      toast(kind === 'playlist' ? 'Playlist added' : 'Video added')
     } catch (err) {
       toast(err.message)
     } finally {
@@ -258,27 +239,6 @@ export default function WebsiteAdmin() {
     } catch (err) {
       toast(err.message)
     }
-  }
-
-  /* ---------------- channel + playlists (settings API) ---------------- */
-  function saveLibrary() {
-    const ch = channel
-    if (!ch) return toast('Enter your YouTube channel link')
-    if (!YT_HOSTS.test(ch)) return toast("That doesn't look like a YouTube link")
-    const playlists = {}
-    for (const e of lib0.exams) {
-      const u = (lib.playlists[e.id] || '').trim()
-      if (u && !YT_HOSTS.test(u)) return toast(e.label + ' playlist must be a YouTube link')
-      if (u) playlists[e.id] = u
-    }
-    updateWebsiteSettings({ channel: ch, playlists })
-      .then(() => {
-        const next = { channel: ch, playlists }
-        setSaved(next)
-        setLib(next)
-        toast('Video library links saved')
-      })
-      .catch((err) => toast(err.message || 'Failed to save video links'))
   }
 
   return (
@@ -418,7 +378,7 @@ export default function WebsiteAdmin() {
             <div className="card-head">
               <div>
                 <h2 id="ws-res-t">Video resources</h2>
-                <p className="meta">Videos for the homepage and the students’ Resources page. “Everyone” shows on both; an exam shows only to logged-in students preparing for it.</p>
+                <p className="meta">Videos and playlists for the homepage and the students’ Resources page. “Everyone” shows on both; an exam shows only to logged-in students preparing for it.</p>
               </div>
               <span className={'pill ' + (pubCount ? 'p-published' : 'p-draft')}>
                 {pubCount} of {resources.length} published
@@ -426,21 +386,48 @@ export default function WebsiteAdmin() {
             </div>
 
             <form className="stack" onSubmit={addResource}>
+              <div className="ws-rows">
+                <span className="ws-sub">Add</span>
+                <div className="seg" role="group" aria-label="Resource type">
+                  <button type="button" aria-pressed={vDraft.kind !== 'playlist'} onClick={() => setVDraft((d) => ({ ...d, kind: 'video' }))}>
+                    Video
+                  </button>
+                  <button type="button" aria-pressed={vDraft.kind === 'playlist'} onClick={() => setVDraft((d) => ({ ...d, kind: 'playlist' }))}>
+                    Playlist
+                  </button>
+                </div>
+              </div>
+
               <div className="ws-form ws-form-video">
                 <div className="ws-url">
                   <label className="l" htmlFor="ws-url">
-                    YouTube link
+                    {vDraft.kind === 'playlist' ? 'Playlist link' : 'YouTube link'}
                   </label>
                   <div className="ws-url-row">
-                    {previewId ? <img className="ws-thumb ws-thumb-form" src={'https://i.ytimg.com/vi/' + previewId + '/mqdefault.jpg'} alt="" width="72" height="40" /> : null}
-                    <input id="ws-url" className="input" type="url" value={vDraft.url} onChange={(e) => setVDraft((d) => ({ ...d, url: e.target.value }))} placeholder="https://www.youtube.com/watch?v=…" />
+                    {vDraft.kind === 'playlist' ? (
+                      <span className="ws-thumb ws-thumb-form ws-thumb-pl" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                          <path d="M4 6h11v2H4zM4 11h11v2H4zM4 16h7v2H4zM17 10.5v7.2a1.6 1.6 0 1 0 1.4 1.6V11l4 1.1v5.8a1.6 1.6 0 1 0 1.4 1.6V9.2z" />
+                        </svg>
+                      </span>
+                    ) : previewId ? (
+                      <img className="ws-thumb ws-thumb-form" src={'https://i.ytimg.com/vi/' + previewId + '/mqdefault.jpg'} alt="" width="72" height="40" />
+                    ) : null}
+                    <input
+                      id="ws-url"
+                      className="input"
+                      type="url"
+                      value={vDraft.url}
+                      onChange={(e) => setVDraft((d) => ({ ...d, url: e.target.value }))}
+                      placeholder={vDraft.kind === 'playlist' ? 'https://www.youtube.com/playlist?list=…' : 'https://www.youtube.com/watch?v=…'}
+                    />
                   </div>
                 </div>
                 <div>
                   <label className="l" htmlFor="ws-title">
                     Title
                   </label>
-                  <input id="ws-title" className="input" value={vDraft.title} onChange={(e) => setVDraft((d) => ({ ...d, title: e.target.value }))} placeholder="Rotational Motion in 20 minutes" />
+                  <input id="ws-title" className="input" value={vDraft.title} onChange={(e) => setVDraft((d) => ({ ...d, title: e.target.value }))} placeholder={vDraft.kind === 'playlist' ? 'NEET 2026 full syllabus playlist' : 'Rotational Motion in 20 minutes'} />
                 </div>
                 <div>
                   <label className="l" htmlFor="ws-rexam">
@@ -461,9 +448,13 @@ export default function WebsiteAdmin() {
                 </div>
               </div>
               <div className="ws-foot">
-                <span className="hint">Published videos show straight away.</span>
-                <button className="btn btn-primary" type="submit" disabled={busy || !vDraft.url.trim() || !vDraft.title.trim()}>
-                  Add video
+                <span className="hint">Published items show straight away — playlists open as a card in Resources.</span>
+                <button
+                  className="btn btn-primary"
+                  type="submit"
+                  disabled={busy || !vDraft.url.trim() || !vDraft.title.trim()}
+                >
+                  {vDraft.kind === 'playlist' ? 'Add playlist' : 'Add video'}
                 </button>
               </div>
             </form>
@@ -474,11 +465,24 @@ export default function WebsiteAdmin() {
               <ul className="ws-list">
                 {resources.map((r, i) => (
                   <li className="ws-item ws-res" key={r.id}>
-                    <img className="ws-thumb" src={'https://i.ytimg.com/vi/' + r.videoId + '/mqdefault.jpg'} alt="" width="72" height="40" loading="lazy" />
+                    {r.kind === 'playlist' ? (
+                      <span className="ws-thumb ws-thumb-pl" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                          <path d="M4 6h11v2H4zM4 11h11v2H4zM4 16h7v2H4zM17 10.5v7.2a1.6 1.6 0 1 0 1.4 1.6V11l4 1.1v5.8a1.6 1.6 0 1 0 1.4 1.6V9.2z" />
+                        </svg>
+                      </span>
+                    ) : (
+                      <img className="ws-thumb" src={'https://i.ytimg.com/vi/' + r.videoId + '/mqdefault.jpg'} alt="" width="72" height="40" loading="lazy" />
+                    )}
                     <div className="ws-res-main">
                       <b>{r.title}</b>
                       <span className="meta">
-                        {[r.topic, r.exam ? ({ neet: 'NEET', 'jee-main': 'JEE Main', 'jee-advanced': 'JEE Advanced' }[r.exam] || r.exam) + ' students' : 'Everyone', r.isPublished ? 'Published' : 'Hidden']
+                        {[
+                          r.kind === 'playlist' ? 'Playlist' : 'Video',
+                          r.topic,
+                          r.exam ? ({ neet: 'NEET', 'jee-main': 'JEE Main', 'jee-advanced': 'JEE Advanced' }[r.exam] || r.exam) + ' students' : 'Everyone',
+                          r.isPublished ? 'Published' : 'Hidden',
+                        ]
                           .filter(Boolean)
                           .join(' · ')}
                       </span>
@@ -501,84 +505,13 @@ export default function WebsiteAdmin() {
                 ))}
               </ul>
             ) : !resLive.error ? (
-              <p className="hint ws-empty">No videos yet. Add the first one above — it appears on the homepage and in students’ Resources page.</p>
+              <p className="hint ws-empty">No videos or playlists yet. Add the first one above — it appears on the homepage and in students’ Resources page.</p>
             ) : null}
           </section>
         </div>
 
         {/* ---------------- read-only column ---------------- */}
         <div className="ws-col">
-          <section className="card" aria-labelledby="ws-vid-t">
-            <div className="card-head">
-              <div>
-                <h2 id="ws-vid-t">Video library</h2>
-                <p className="meta">Where the “Video library” button sends students — your channel, with a playlist per exam.</p>
-              </div>
-              <span className={'pill ' + (playlistsSet === lib0.exams.length && lib0.exams.length ? 'p-published' : 'p-draft')}>
-                {playlistsSet} of {lib0.exams.length} playlists set
-              </span>
-            </div>
-
-            <div className="stack">
-              <div>
-                <label className="l" htmlFor="ws-ch">
-                  Channel link
-                </label>
-                <div className="ws-row">
-                  <input
-                    id="ws-ch"
-                    className="input"
-                    type="url"
-                    inputMode="url"
-                    value={lib.channel}
-                    aria-invalid={channelBad ? 'true' : undefined}
-                    onChange={(e) => setL('channel', e.target.value)}
-                    placeholder="https://www.youtube.com/@yourchannel"
-                  />
-                  {YT_HOSTS.test(channel) ? (
-                    <a className="btn btn-outline btn-sm" href={channel} target="_blank" rel="noreferrer">
-                      Open
-                    </a>
-                  ) : null}
-                </div>
-                <p className={'hint' + (channelBad ? ' is-bad' : '')}>
-                  {channelBad ? 'That is not a YouTube link — use https://youtube.com/… or https://youtu.be/…' : 'Shown in the app and the site footer. Required.'}
-                </p>
-              </div>
-
-              <div className="ws-rows">
-                <span className="ws-sub">Exam playlists (optional)</span>
-                {lib0.exams.map((e) => {
-                  const val = (lib.playlists[e.id] || '').trim()
-                  const bad = val !== '' && !YT_HOSTS.test(val)
-                  return (
-                    <div className="ws-row" key={e.id}>
-                      <label htmlFor={'ws-pl-' + e.id}>{e.label}</label>
-                      <input
-                        id={'ws-pl-' + e.id}
-                        className="input"
-                        type="url"
-                        inputMode="url"
-                        aria-invalid={bad ? 'true' : undefined}
-                        value={lib.playlists[e.id] || ''}
-                        onChange={(e2) => setL('playlists', { ...lib.playlists, [e.id]: e2.target.value })}
-                        placeholder="https://www.youtube.com/playlist?list=…"
-                      />
-                      <span className={'ws-state ' + (bad ? 'is-bad' : val ? 'is-on' : 'is-off')}>{bad ? 'Check link' : val ? 'Set' : 'Empty'}</span>
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-
-            <div className="card-foot ws-foot">
-              <span className={'pill ' + (vidDirty ? 'p-draft' : 'p-published')}>{vidDirty ? 'Unsaved changes' : 'Saved'}</span>
-              <button className="btn btn-primary" type="button" disabled={!vidDirty || !linksReady} onClick={saveLibrary}>
-                Save video links
-              </button>
-            </div>
-          </section>
-
           <section className="card" aria-labelledby="ws-auto-t">
             <div className="card-head">
               <div>

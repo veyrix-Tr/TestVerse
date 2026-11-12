@@ -60,26 +60,36 @@ export default function ResourcesPage({ me }) {
             </div>
           ) : null}
           <ul className="sres-grid">
-            {shown.map((v) => (
-              <li key={v.id}>
-                <a className="card sres-card" href={'https://www.youtube.com/watch?v=' + v.videoId} target="_blank" rel="noreferrer">
-                  <span className="sres-thumb">
-                    <img src={'https://i.ytimg.com/vi/' + v.videoId + '/hqdefault.jpg'} alt="" loading="lazy" width="480" height="270" />
-                    <span className="sres-play" aria-hidden="true">
-                      <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-                        <path d="M8 5.5v13l11-6.5z" />
-                      </svg>
+            {shown.map((v) => {
+              const isPl = v.kind === 'playlist'
+              const href = isPl ? 'https://www.youtube.com/playlist?list=' + v.videoId : 'https://www.youtube.com/watch?v=' + v.videoId
+              return (
+                <li key={v.id}>
+                  <a className="card sres-card" href={href} target="_blank" rel="noreferrer">
+                    <span className={'sres-thumb' + (isPl ? ' is-pl' : '')}>
+                      {isPl ? null : <img src={'https://i.ytimg.com/vi/' + v.videoId + '/hqdefault.jpg'} alt="" loading="lazy" width="480" height="270" />}
+                      <span className="sres-play" aria-hidden="true">
+                        {isPl ? (
+                          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                            <path d="M4 6h11v2H4zM4 11h11v2H4zM4 16h7v2H4zM17 10.5v7.2a1.6 1.6 0 1 0 1.4 1.6V11l4 1.1v5.8a1.6 1.6 0 1 0 1.4 1.6V9.2z" />
+                          </svg>
+                        ) : (
+                          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                            <path d="M8 5.5v13l11-6.5z" />
+                          </svg>
+                        )}
+                      </span>
+                      {v.exam ? <span className="sres-tag">{EXAM[v.exam] || v.exam}</span> : null}
                     </span>
-                    {v.exam ? <span className="sres-tag">{EXAM[v.exam] || v.exam}</span> : null}
-                  </span>
-                  <span className="sres-body">
-                    <b>{v.title}</b>
-                    {v.topic ? <span className="meta">{v.topic}</span> : null}
-                    <span className="sres-cta">Watch on YouTube</span>
-                  </span>
-                </a>
-              </li>
-            ))}
+                    <span className="sres-body">
+                      <b>{v.title}</b>
+                      {v.topic ? <span className="meta">{v.topic}</span> : null}
+                      <span className="sres-cta">{isPl ? 'Open playlist on YouTube' : 'Watch on YouTube'}</span>
+                    </span>
+                  </a>
+                </li>
+              )
+            })}
           </ul>
         </section>
       )}

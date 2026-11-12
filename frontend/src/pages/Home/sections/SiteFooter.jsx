@@ -18,9 +18,6 @@ export default function SiteFooter() {
           <strong>Tests</strong>
           <a href="#plan">Test plan</a>
           <a href="/live-tests">Live tests</a>
-          <a href="https://www.youtube.com/@[your-channel]" target="_blank" rel="noopener">
-            Video library on YouTube
-          </a>
         </div>
         <div className="col">
           <strong>Studyverse</strong>
