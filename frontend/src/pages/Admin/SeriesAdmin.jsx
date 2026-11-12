@@ -4,15 +4,16 @@ import { useToast } from '../../lib/useToast.jsx'
 import TestEditor from './TestEditor.jsx'
 import LiveStamp from './LiveStamp.jsx'
 import { ago, day, plural } from './studentsApi.js'
-import { EXAM_LABEL, createSeries, deleteSeries, deleteTest, getSeries, listSeries, updateSeries } from './testsApi.js'
+import { EXAM_LABEL, createSeries, deleteSeries, deleteTest, getSeries, listSeries, reorderSeriesTests, updateSeries } from './testsApi.js'
 import { useLive, useNow } from './useLive.js'
 
 /*
   Admin › Test series (real, API-backed). Shown by Admin.jsx in place of the
   demo #view while the sidebar's "Test series" item is active. Screens: the
-  list of series (cards), one series (details + its tests), and the test
-  editor for a test inside a series. Series tests are stored only: no student
-  sees them yet, so they have no timing, audience or publishing.
+  list of series (a tree: each series is a root, its tests its children), one
+  series (details + the same tests as an ordered outline), and the test editor
+  for a test inside a series. Series tests are stored only: no student sees
+  them yet, and publishing a series comes later (the button is a placeholder).
 */
 const EXAMS = [
   ['', 'None'],
@@ -60,7 +61,14 @@ export default function SeriesAdmin({ onCount }) {
       />
     )
   } else {
-    body = <SeriesList toast={toast} onCount={onCount} onOpen={(id) => open({ name: 'series', id })} />
+    body = (
+      <SeriesList
+        toast={toast}
+        onCount={onCount}
+        onOpen={(id) => open({ name: 'series', id })}
+        onTest={(seriesId, seriesTitle, id) => open({ name: 'test', seriesId, seriesTitle, id })}
+      />
+    )
   }
 
   return (
@@ -83,8 +91,8 @@ function ExamSeg({ id, value, onChange }) {
   )
 }
 
-/* ---------- List of series ---------- */
-function SeriesList({ toast, onCount, onOpen }) {
+/* ---------- List of series (the tree: a series root with its tests inside) ---------- */
+function SeriesList({ toast, onCount, onOpen, onTest }) {
   const live = useLive(
     () =>
       listSeries().then((list) => {
@@ -95,15 +103,47 @@ function SeriesList({ toast, onCount, onOpen }) {
     'series:list',
   )
   const [creating, setCreating] = useState(false)
+  const [openId, setOpenId] = useState(null) // the expanded root, one at a time
+  const [kids, setKids] = useState({}) // seriesId -> { status: 'loading' | 'ready' | 'error', tests, error }
+  const [busy, setBusy] = useState(null) // 'del:<testId>' while a child is deleted
   const now = useNow(30000)
   const list = live.data
+
+  /* The children of a root: load them the first time it is expanded */
+  function loadKids(id) {
+    setKids((k) => ({ ...k, [id]: { status: 'loading' } }))
+    getSeries(id)
+      .then(({ tests }) => setKids((k) => ({ ...k, [id]: { status: 'ready', tests } })))
+      .catch((e) => setKids((k) => ({ ...k, [id]: { status: 'error', error: e.message } })))
+  }
+
+  function toggle(s) {
+    const next = openId === s.id ? null : s.id
+    setOpenId(next)
+    if (next && !kids[next]) loadKids(s.id)
+  }
+
+  async function removeTest(s, t) {
+    if (!window.confirm(`Delete "${t.title}" from "${s.title}"?\n\nThis can't be undone.`)) return
+    setBusy('del:' + t.id)
+    try {
+      await deleteTest(t.id)
+      loadKids(s.id) // picks up the new order and counts
+      live.refresh()
+      toast('Test deleted')
+    } catch (e) {
+      toast(e.message, 4000)
+    } finally {
+      setBusy(null)
+    }
+  }
 
   return (
     <>
       <div className="head">
         <div>
           <h1>Test series</h1>
-          <p>Group tests into a series for an exam. Add each test from a JSON question paper.</p>
+          <p>Group tests into a series for an exam. Open a series to put its tests in order, each from a JSON question paper.</p>
         </div>
         <div className="actions">
           {!creating && (
@@ -153,28 +193,142 @@ function SeriesList({ toast, onCount, onOpen }) {
           </div>
         )
       ) : (
-        <div className="sg-groups">
-          {list.map((s) => (
-            <button key={s.id} type="button" className="card sg-group sr-card" onClick={() => onOpen(s.id)}>
-              <span className="sr-card-top">
-                <span className="sg-group-name">{s.title}</span>
-                {s.exam && <span className="sr-exam">{EXAM_LABEL[s.exam] || s.exam}</span>}
-              </span>
-              <span className="sg-group-desc">{s.description || <span className="sg-dim">No description</span>}</span>
-              <span className="sg-group-nums">
-                <span>
-                  <b>{s.tests}</b> {s.tests === 1 ? 'test' : 'tests'}
-                </span>
-                <span>
-                  <b>{s.questions}</b> {s.questions === 1 ? 'question' : 'questions'}
-                </span>
-              </span>
-              <span className="sg-group-foot">Updated {ago(s.updatedAt, now)}</span>
-            </button>
-          ))}
+        <div className="tree">
+          {list.map((s) => {
+            const open = openId === s.id
+            const k = kids[s.id]
+            return (
+              <div className="card tree-root" key={s.id}>
+                <div className="tree-head">
+                  <button
+                    type="button"
+                    className="tree-toggle"
+                    aria-expanded={open}
+                    aria-controls={'tree-kids-' + s.id}
+                    aria-label={(open ? 'Hide' : 'Show') + ' the tests in ' + s.title}
+                    onClick={() => toggle(s)}
+                  >
+                    <svg viewBox="0 0 12 12" aria-hidden="true">
+                      <path d="M4 2.5 8 6l-4 3.5" />
+                    </svg>
+                  </button>
+                  <button type="button" className="tree-title" onClick={() => onOpen(s.id)}>
+                    <span className="tree-title-row">
+                      <span className="sg-group-name">{s.title}</span>
+                      {s.exam && <span className="sr-exam">{EXAM_LABEL[s.exam] || s.exam}</span>}
+                    </span>
+                    {s.description && <span className="tree-desc">{s.description}</span>}
+                    <span className="tree-meta">
+                      <span>
+                        <b>{s.tests}</b> {s.tests === 1 ? 'test' : 'tests'}
+                      </span>
+                      <span>
+                        <b>{s.ready}</b> of {s.tests} ready
+                      </span>
+                      <span>
+                        <b>{s.questions}</b> {s.questions === 1 ? 'question' : 'questions'}
+                      </span>
+                      <span className="tree-updated">Updated {ago(s.updatedAt, now)}</span>
+                    </span>
+                  </button>
+                </div>
+
+                {open && (
+                  <ul className="tree-kids" id={'tree-kids-' + s.id}>
+                    {!k || k.status === 'loading' ? (
+                      <li className="tree-node tree-note">
+                        <span className="hint">Loading tests…</span>
+                      </li>
+                    ) : k.status === 'error' ? (
+                      <li className="tree-node tree-note">
+                        <span className="hint">Couldn&apos;t load the tests. {k.error}</span>
+                        <button className="btn btn-outline btn-sm" type="button" onClick={() => loadKids(s.id)}>
+                          Try again
+                        </button>
+                      </li>
+                    ) : k.tests.length ? (
+                      k.tests.map((t, i) => (
+                        <TestNode
+                          key={t.id}
+                          t={t}
+                          pos={i + 1}
+                          busy={busy === 'del:' + t.id}
+                          onOpen={() => onTest(s.id, s.title, t.id)}
+                          onDelete={() => removeTest(s, t)}
+                        />
+                      ))
+                    ) : (
+                      <li className="tree-node tree-note">
+                        <span className="hint">No tests in this series yet. Add the first one from a JSON question paper.</span>
+                      </li>
+                    )}
+                    <li className="tree-add">
+                      <button className="btn btn-outline btn-sm" type="button" onClick={() => onTest(s.id, s.title, null)}>
+                        Add test
+                      </button>
+                    </li>
+                  </ul>
+                )}
+              </div>
+            )
+          })}
         </div>
       )}
     </>
+  )
+}
+
+/*
+  One test as a tree node. The row itself opens the editor; the actions sit
+  beside it (a button can't nest another). `onMove` is only passed where the
+  order can change — the series page.
+*/
+function TestNode({ t, pos, busy, moveBusy, onOpen, onDelete, onMove, canUp, canDown }) {
+  return (
+    <li className="tree-node">
+      <button type="button" className="tree-node-main" onClick={onOpen} aria-label={'Edit ' + t.title}>
+        <span className="sr-n" aria-hidden="true">
+          {pos}
+        </span>
+        <span className="tree-node-text">
+          <b>{t.title}</b>
+          <span className="sub">
+            {EXAM_LABEL[t.exam] ? EXAM_LABEL[t.exam] + ' · ' : ''}
+            {t.subject || 'No subject'} · {t.durationMin} min
+          </span>
+        </span>
+        <span className={'pill ' + (t.hasPaper ? 'p-published' : 'p-warn')}>{t.hasPaper ? 'Ready' : 'No paper yet'}</span>
+      </button>
+      <div className="tree-node-acts">
+        {onMove && (
+          <>
+            <button
+              className="btn btn-outline btn-sm tree-move"
+              type="button"
+              disabled={busy || moveBusy || !canUp}
+              onClick={() => onMove(-1)}
+              aria-label={'Move ' + t.title + ' up'}
+              title="Move up"
+            >
+              ↑
+            </button>
+            <button
+              className="btn btn-outline btn-sm tree-move"
+              type="button"
+              disabled={busy || moveBusy || !canDown}
+              onClick={() => onMove(1)}
+              aria-label={'Move ' + t.title + ' down'}
+              title="Move down"
+            >
+              ↓
+            </button>
+          </>
+        )}
+        <button className="btn btn-danger btn-sm" type="button" disabled={busy || moveBusy} onClick={onDelete} aria-label={'Delete ' + t.title}>
+          {busy ? 'Deleting…' : 'Delete'}
+        </button>
+      </div>
+    </li>
   )
 }
 
@@ -321,6 +475,7 @@ function SeriesPage({ id, toast, onBack, onDeleted, onTest }) {
   const dirty = form && (form.title.trim() !== saved.title || form.exam !== saved.exam || form.description.trim() !== saved.description)
   const questions = tests.reduce((n, t) => n + (t.hasPaper ? t.questionCount || 0 : 0), 0)
   const marks = tests.reduce((n, t) => n + (t.hasPaper ? t.totalMarks || 0 : 0), 0)
+  const ready = tests.filter((t) => t.hasPaper).length
 
   async function saveDetails(e) {
     e.preventDefault()
@@ -345,6 +500,23 @@ function SeriesPage({ id, toast, onBack, onDeleted, onTest }) {
       await deleteTest(t.id)
       await live.refresh()
       toast('Test deleted')
+    } catch (e) {
+      toast(e.message, 4000)
+    } finally {
+      setBusy(null)
+    }
+  }
+
+  /* Swap a test with its neighbour in the tree and save the new order */
+  async function move(i, dir) {
+    const j = i + dir
+    if (j < 0 || j >= tests.length) return
+    const ids = tests.map((t) => t.id)
+    ;[ids[i], ids[j]] = [ids[j], ids[i]]
+    setBusy('move:' + tests[i].id)
+    try {
+      await reorderSeriesTests(s.id, ids)
+      await live.refresh()
     } catch (e) {
       toast(e.message, 4000)
     } finally {
@@ -388,7 +560,7 @@ function SeriesPage({ id, toast, onBack, onDeleted, onTest }) {
         <div className="card stat">
           <span>Tests</span>
           <b>{tests.length}</b>
-          <small>{tests.filter((t) => !t.hasPaper).length ? plural(tests.filter((t) => !t.hasPaper).length, 'test') + ' without a paper' : 'All have a paper'}</small>
+          <small>{ready === tests.length ? 'All have a paper' : ready + ' of ' + tests.length + ' have a paper'}</small>
         </div>
         <div className="card stat">
           <span>Questions</span>
@@ -447,79 +619,40 @@ function SeriesPage({ id, toast, onBack, onDeleted, onTest }) {
         <div className="sect-head sg-sect-head">
           <div>
             <h2>Tests in this series</h2>
-            <p>{tests.length ? plural(tests.length, 'test') + ', oldest first.' : 'No tests yet. Add the first one from a JSON question paper.'}</p>
+            <p>
+              {tests.length
+                ? plural(tests.length, 'test') + ' in order, ' + ready + ' of ' + tests.length + ' with a paper. Use ↑ ↓ to change the order.'
+                : 'No tests yet. Add the first one from a JSON question paper.'}{' '}
+              Publishing a series comes later — every test stays a draft until then.
+            </p>
           </div>
-          <button className="btn btn-primary btn-sm" type="button" onClick={() => onTest(null, s.title)}>
-            Add test
-          </button>
+          <div className="actions">
+            <button className="btn btn-outline btn-sm" type="button" disabled title="Publishing a series comes later">
+              Publish series
+            </button>
+            <button className="btn btn-primary btn-sm" type="button" onClick={() => onTest(null, s.title)}>
+              Add test
+            </button>
+          </div>
         </div>
 
         {tests.length ? (
-          <div className="table-wrap sg-table sr-table">
-            <table>
-              <thead>
-                <tr>
-                  <th>Test</th>
-                  <th>Paper</th>
-                  <th>Updated</th>
-                  <th>
-                    <span className="sr">Actions</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {tests.map((t, i) => (
-                  <tr key={t.id}>
-                    <td>
-                      <b>
-                        <span className="sr-n">{i + 1}</span>
-                        {t.title}
-                      </b>
-                      <span className="sub">
-                        {EXAM_LABEL[t.exam] ? EXAM_LABEL[t.exam] + ' · ' : ''}
-                        {t.subject}
-                      </span>
-                    </td>
-                    <td data-label="Paper">
-                      {t.hasPaper ? (
-                        <>
-                          {plural(t.questionCount, 'question')}
-                          <span className="sub">
-                            {t.totalMarks} marks · {t.durationMin} min
-                          </span>
-                        </>
-                      ) : (
-                        <>
-                          <span className="pill p-warn">No paper yet</span>
-                          <span className="sub">{t.durationMin} min</span>
-                        </>
-                      )}
-                    </td>
-                    <td data-label="Updated">
-                      {ago(t.updatedAt, now)}
-                      <span className="sub">Added {day(t.createdAt)}</span>
-                    </td>
-                    <td>
-                      <div className="row-actions">
-                        <button className="btn btn-outline btn-sm" type="button" onClick={() => onTest(t.id, s.title)} aria-label={'Edit ' + t.title}>
-                          Edit
-                        </button>
-                        <button
-                          className="btn btn-danger btn-sm"
-                          type="button"
-                          disabled={busy === 't:' + t.id}
-                          onClick={() => removeTest(t)}
-                          aria-label={'Delete ' + t.title}
-                        >
-                          {busy === 't:' + t.id ? 'Deleting…' : 'Delete'}
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <ul className="tree tree-outline">
+            {tests.map((t, i) => (
+              <TestNode
+                key={t.id}
+                t={t}
+                pos={i + 1}
+                busy={busy === 't:' + t.id}
+                moveBusy={!!busy && busy.startsWith('move:')}
+                canUp={i > 0}
+                canDown={i < tests.length - 1}
+                onMove={(dir) => move(i, dir)}
+                onOpen={() => onTest(t.id, s.title)}
+                onDelete={() => removeTest(t)}
+              />
+            ))}
+          </ul>
         ) : (
           <div className="card ts-empty sr-empty">
             <h2>No tests in this series yet</h2>

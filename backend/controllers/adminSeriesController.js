@@ -26,12 +26,16 @@ const seriesOf = (s) => ({
 });
 
 // GET /api/admin/series — every series, newest first, with its number of tests
+// and how many are ready (have a question paper).
 const listSeries = async (req, res) => {
   try {
     const series = await prisma.testSeries.findMany({ orderBy: { createdAt: 'desc' }, include: { _count: { select: { tests: true } } } });
     const totals = await prisma.test.groupBy({ by: ['seriesId'], where: { seriesId: { not: null } }, _sum: { questionCount: true } });
     const questions = Object.fromEntries(totals.map((t) => [t.seriesId, t._sum.questionCount || 0]));
-    res.json({ series: series.map((s) => ({ ...seriesOf(s), questions: questions[s.id] || 0 })) });
+    // A test without a paper has no questions, so questionCount counts the ready ones
+    const ready = await prisma.test.groupBy({ by: ['seriesId'], where: { seriesId: { not: null }, questionCount: { gt: 0 } }, _count: { _all: true } });
+    const readyBySeries = Object.fromEntries(ready.map((t) => [t.seriesId, t._count._all]));
+    res.json({ series: series.map((s) => ({ ...seriesOf(s), questions: questions[s.id] || 0, ready: readyBySeries[s.id] || 0 })) });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Could not load test series' });
@@ -44,14 +48,15 @@ const createSeries = async (req, res) => {
     const r = readSeries(req.body);
     if (r.error) return res.status(400).json(r);
     const s = await prisma.testSeries.create({ data: r.data });
-    res.status(201).json({ message: 'Test series created', series: { ...seriesOf(s), tests: 0, questions: 0 } });
+    res.status(201).json({ message: 'Test series created', series: { ...seriesOf(s), tests: 0, questions: 0, ready: 0 } });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Could not create the test series' });
   }
 };
 
-// GET /api/admin/series/:id — the series and its tests (oldest first, the order they were added)
+// GET /api/admin/series/:id — the series and its tests, in the order the admin
+// chose (sortOrder, ties broken by the order they were added)
 const getSeries = async (req, res) => {
   try {
     const s = await prisma.testSeries.findUnique({
@@ -59,8 +64,8 @@ const getSeries = async (req, res) => {
       include: {
         _count: { select: { tests: true } },
         tests:  {
-          orderBy: { createdAt: 'asc' },
-          select:  { id: true, title: true, subject: true, exam: true, durationMin: true, questionCount: true, totalMarks: true, paper: true, createdAt: true, updatedAt: true },
+          orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }],
+          select:  { id: true, title: true, subject: true, exam: true, durationMin: true, questionCount: true, totalMarks: true, paper: true, status: true, sortOrder: true, createdAt: true, updatedAt: true },
         },
       },
     });
@@ -101,4 +106,33 @@ const deleteSeries = async (req, res) => {
   }
 };
 
-module.exports = { listSeries, createSeries, getSeries, updateSeries, deleteSeries };
+// PUT /api/admin/series/:id/order — Body: { testIds: [id, …] }
+// Saves the order of the tests in the tree: testIds must be exactly this
+// series' tests, each once, in their new order (so nothing from another
+// series can be written and no test can silently go missing).
+const reorderSeries = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const ids = Array.isArray(req.body.testIds) ? req.body.testIds.map(String) : null;
+    if (!ids || !ids.length || ids.some((x) => !x)) {
+      return res.status(400).json({ field: 'testIds', error: 'Send the ids of this series’ tests, in their new order.' });
+    }
+    const series = await prisma.testSeries.findUnique({ where: { id }, select: { id: true } });
+    if (!series) return res.status(404).json({ error: 'Test series not found' });
+
+    const tests = await prisma.test.findMany({ where: { seriesId: id }, select: { id: true } });
+    const sameSet = tests.length === ids.length && new Set(ids).size === ids.length;
+    const belongs = sameSet && tests.every((t) => ids.includes(t.id));
+    if (!belongs) {
+      return res.status(400).json({ error: 'That order doesn’t match this series’ tests. Reload the page and try again.' });
+    }
+
+    await prisma.$transaction(ids.map((testId, i) => prisma.test.update({ where: { id: testId }, data: { sortOrder: i } })));
+    res.json({ message: 'Order saved' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Could not save the order' });
+  }
+};
+
+module.exports = { listSeries, createSeries, getSeries, updateSeries, deleteSeries, reorderSeries };

@@ -94,6 +94,7 @@ const summaryOf = (t) => ({
   isFree:        t.isFree,
   kind:          t.kind,
   seriesId:      t.seriesId,
+  sortOrder:     t.sortOrder,
   durationMin:   t.durationMin,
   questionCount: t.questionCount,
   totalMarks:    t.totalMarks,
@@ -140,7 +141,8 @@ const listTests = async (req, res) => {
     if (req.query.seriesId) where.seriesId = String(req.query.seriesId);
     const tests = await prisma.test.findMany({
       where,
-      orderBy: { createdAt: 'desc' },
+      // Inside a series the order is the admin's (the tree order); elsewhere newest first
+      orderBy: req.query.seriesId ? [{ sortOrder: 'asc' }, { createdAt: 'asc' }] : { createdAt: 'desc' },
       include: WITH,
     });
     const done = await prisma.attempt.groupBy({ by: ['testId'], where: { submittedAt: { not: null }, attemptNo: 1 }, _count: { _all: true } });
@@ -183,9 +185,18 @@ const createTest = async (req, res) => {
     if (publish && k.kind === 'series') return res.status(400).json({ error: 'Tests in a test series are stored only, so they can’t be published yet.' });
     if (publish && !p.paper) return res.status(400).json({ field: 'paper', error: 'Add the question paper before publishing.' });
 
+    // Inside a series the test is appended to the end of the tree; the admin
+    // moves it with Move up / Move down (PUT /admin/series/:id/order).
+    let sortOrder;
+    if (k.seriesId) {
+      const last = await prisma.test.aggregate({ where: { seriesId: k.seriesId }, _max: { sortOrder: true } });
+      sortOrder = (last._max.sortOrder == null ? -1 : last._max.sortOrder) + 1;
+    }
+
     const created = await prisma.test.create({
       data: {
         ...d.data,
+        ...(sortOrder === undefined ? {} : { sortOrder }),
         seriesId:      k.seriesId,
         marking:       p.marking,
         paper:         p.paper || undefined,

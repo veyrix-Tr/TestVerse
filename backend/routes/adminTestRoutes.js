@@ -19,6 +19,7 @@ router.get('/series', series.listSeries);
 router.post('/series', series.createSeries);
 router.get('/series/:id', series.getSeries);
 router.put('/series/:id', series.updateSeries);
+router.put('/series/:id/order', series.reorderSeries);
 router.delete('/series/:id', series.deleteSeries);
 
 module.exports = router;

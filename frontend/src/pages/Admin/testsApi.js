@@ -30,6 +30,9 @@ export const getSeries = (id) => call('/series/' + encodeURIComponent(id)) // { 
 export const createSeries = (body) => call('/series', { body }).then((r) => r.series)
 export const updateSeries = (id, body) => call('/series/' + encodeURIComponent(id), { body, method: 'PUT' }).then((r) => r.series)
 export const deleteSeries = (id) => call('/series/' + encodeURIComponent(id), { method: 'DELETE' })
+/* Saves the tree order of a series' tests: testIds in their new order */
+export const reorderSeriesTests = (id, testIds) =>
+  call('/series/' + encodeURIComponent(id) + '/order', { body: { testIds }, method: 'PUT' })
 
 /* Sidebar counts: { free, live, series }; a count is null when it can't be loaded. */
 export function loadCounts() {

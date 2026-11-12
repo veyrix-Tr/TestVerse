@@ -118,6 +118,9 @@ model Test {
   // "live" (Live tests: has a start time, given to chosen people or all paid
   // students) or "series" (stored inside a TestSeries, shown to nobody yet).
   kind          String    @default("live")
+  // Position inside its series: 0, 1, 2… in the order the admin wants (Move up /
+  // Move down in Admin › Test series). Tests added to a series are appended.
+  sortOrder     Int       @default(0)
   seriesId      String?
   series        TestSeries? @relation(fields: [seriesId], references: [id], onDelete: Cascade)
   opensAt       DateTime? // students may start from…
