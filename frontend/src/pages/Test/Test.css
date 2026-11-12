@@ -526,7 +526,6 @@ textarea.input { min-height: 96px; resize: vertical; }
 .sol summary:hover { color: var(--ink); }
 .sol > div { margin-top: 10px; font-size: 15px; line-height: 1.7; white-space: pre-line; color: var(--ink-2); }
 .empty { background: var(--card); border: 1px dashed var(--field); border-radius: 16px; padding: 40px; text-align: center; color: var(--muted); }
-.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--navy); color: #FFFFFF; padding: 12px 18px; border-radius: 10px; font-size: 14px; box-shadow: var(--shadow-lg); border: 1px solid var(--navy-line); z-index: 80; max-width: calc(100vw - 32px); }
 
 /* ---------- Responsive ---------- */
 @media (min-width: 1680px) {

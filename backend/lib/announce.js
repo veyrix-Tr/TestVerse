@@ -30,4 +30,19 @@ const viewer = async (userId) => {
   return { exam: u.exam, paid: !!(u.subscription && u.subscription.status === 'active') };
 };
 
-module.exports = { running, audiencesFor, viewer };
+// Reverse of audiencesFor: the active students an announcement with this
+// audience reaches — used to fan out a personal notification when it goes
+// live, so the bell gets an Updates row instead of just +1 on the count.
+const announcementAudienceIds = async (audience) => {
+  const base = { role: 'student', isActive: true };
+  const where =
+    audience === 'paid'
+      ? { ...base, subscription: { status: 'active' } }
+      : audience && audience.startsWith('exam:')
+        ? { ...base, exam: audience.slice('exam:'.length) }
+        : base; // "all" and "students" reach every signed-in student
+  const rows = await prisma.user.findMany({ where, select: { id: true } });
+  return rows.map((u) => u.id);
+};
+
+module.exports = { running, audiencesFor, viewer, announcementAudienceIds };

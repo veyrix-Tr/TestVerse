@@ -86,6 +86,13 @@ const subscribe = async (req, res) => {
       text: 'New purchase: ' + (student && student.name ? student.name : 'Student') + ' · ' + batch.name + (batch.price ? ' · ₹' + batch.price : ''),
       view: 'students',
     });
+    // The student's bell: their own batch is live.
+    notify({
+      type:   'purchase',
+      text:   'Your ' + batch.name + ' batch is active — start with Part Test 1.',
+      view:   '/student/tests',
+      userId: req.user.id,
+    });
     res.status(201).json({ message: 'Batch activated', subscription: publicSubscription(sub) });
   } catch (error) {
     console.error(error);

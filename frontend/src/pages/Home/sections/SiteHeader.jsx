@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import AuthLink from '../../../components/AuthLink.jsx'
 import { siteResources } from '../../../lib/content.js'
+import StudentBell from '../../StudentHome/sections/StudentBell.jsx'
 
 const LINKS = [
   ['#plan', 'Test plan'],
@@ -89,6 +90,7 @@ export default function SiteHeader() {
           {navLinks}
         </nav>
         <div className="header-actions">
+          <StudentBell />
           <AuthLink className="btn btn-quiet login" to="/login">
             Log in
           </AuthLink>

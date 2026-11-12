@@ -1,7 +1,25 @@
 const prisma = require('../lib/prisma');
+const { notifyMany } = require('../lib/notify');
+const { announcementAudienceIds } = require('../lib/announce');
 
 // Admin > Website info: the resources and announcements the site reads
 // (controllers/siteController.js), plus the admin's own notification inbox.
+
+// Is this row live right now (on, started, not past its end)?
+const isLive = (row, now = new Date()) => !!row.isActive && row.startsAt <= now && (!row.endsAt || row.endsAt >= now);
+
+// An announcement that goes live also fans out a personal notification to
+// every student who can see it (bell → Updates on /student/notifications),
+// instead of only bumping the announcements count. Fire-and-forget: a notify
+// failure never fails the publish.
+async function fanOutAnnouncement(row) {
+  try {
+    const ids = await announcementAudienceIds(row.audience || 'all');
+    await notifyMany(ids, { type: 'announcement', text: row.body, view: '/student/notifications' });
+  } catch (error) {
+    console.error('announce notify:', error.message);
+  }
+}
 
 const EXAMS = ['neet', 'jee-main', 'jee-advanced'];
 const AUDIENCES = ['all', 'students', 'paid', 'exam:neet', 'exam:jee-main', 'exam:jee-advanced'];
@@ -12,6 +30,13 @@ function videoIdOf(input) {
   const s = String(input == null ? '' : input).trim();
   if (/^[\w-]{11}$/.test(s)) return s;
   const m = s.match(/(?:youtube\.com\/(?:watch\?(?:[^&]*&)*v=|embed\/|shorts\/|live\/)|youtu\.be\/)([\w-]{11})/);
+  return m ? m[1] : null;
+}
+
+// "https://www.youtube.com/playlist?list=PLabc…" -> "PLabc…", or null.
+function playlistIdOf(input) {
+  const s = String(input == null ? '' : input).trim();
+  const m = s.match(/[?&]list=([\w-]{12,})/);
   return m ? m[1] : null;
 }
 
@@ -30,6 +55,7 @@ const resourceOf = (r) => ({
   id: r.id,
   title: r.title,
   videoId: r.videoId,
+  kind: r.kind || 'video',
   exam: r.exam,
   topic: r.topic,
   sortOrder: r.sortOrder,
@@ -54,14 +80,20 @@ const listResources = async (req, res) => {
 // added" check when a resource updates itself.
 function readResource(b, id) {
   const title = clean(b.title, 120);
-  if (!title) return { field: 'title', error: 'Give the video a title.' };
-  const videoId = videoIdOf(b.videoId || b.url);
-  if (!videoId) return { field: 'videoId', error: 'Paste a YouTube link or video id (https://youtu.be/…).' };
+  if (!title) return { field: 'title', error: 'Give it a title.' };
+  const kind = b.kind === 'playlist' ? 'playlist' : 'video';
+  const raw = b.videoId || b.url;
+  const videoId = kind === 'playlist' ? playlistIdOf(raw) : videoIdOf(raw);
+  if (!videoId) {
+    return kind === 'playlist'
+      ? { field: 'videoId', error: 'Paste a YouTube playlist link (https://www.youtube.com/playlist?list=…).' }
+      : { field: 'videoId', error: 'Paste a YouTube link or video id (https://youtu.be/…).' };
+  }
   const exam = b.exam ? String(b.exam) : null;
   if (exam && !EXAMS.includes(exam)) return { field: 'exam', error: 'Choose an exam, or leave it open to everyone.' };
   const topic = clean(b.topic, 60) || null;
   const isPublished = b.isPublished === undefined ? true : !!b.isPublished;
-  return { videoId, data: { title, videoId, exam, topic, isPublished } };
+  return { videoId, data: { title, videoId, kind, exam, topic, isPublished } };
 }
 
 // POST /api/admin/resources — { title, videoId | url, exam?, topic?, isPublished? }
@@ -69,7 +101,7 @@ const createResource = async (req, res) => {
   try {
     const r = readResource(req.body);
     if (r.error) return res.status(400).json(r);
-    if (await takenByOther(r.videoId, null)) return res.status(409).json({ field: 'videoId', error: 'That video is already in the list.' });
+    if (await takenByOther(r.videoId, null)) return res.status(409).json({ field: 'videoId', error: 'That link is already in the list.' });
     const last = await prisma.resource.findFirst({ orderBy: { sortOrder: 'desc' }, select: { sortOrder: true } });
     const row = await prisma.resource.create({
       data: { ...r.data, sortOrder: (last ? last.sortOrder : 0) + 1, createdById: req.user.id },
@@ -90,7 +122,7 @@ const updateResource = async (req, res) => {
 
     const r = readResource({ ...existing, ...req.body }, id);
     if (r.error) return res.status(400).json(r);
-    if (await takenByOther(r.videoId, id)) return res.status(409).json({ field: 'videoId', error: 'That video is already in the list.' });
+    if (await takenByOther(r.videoId, id)) return res.status(409).json({ field: 'videoId', error: 'That link is already in the list.' });
 
     const data = { ...r.data };
     if (req.body.sortOrder !== undefined) data.sortOrder = Number(req.body.sortOrder) || 0;
@@ -171,6 +203,7 @@ const createAnnouncement = async (req, res) => {
     const r = readAnnouncement(req.body);
     if (r.error) return res.status(400).json(r);
     const row = await prisma.announcement.create({ data: { ...r.data, createdById: req.user.id } });
+    if (isLive(row)) fanOutAnnouncement(row);
     res.status(201).json({ message: 'Announcement published', announcement: announcementOf(row) });
   } catch (error) {
     console.error(error);
@@ -187,6 +220,9 @@ const updateAnnouncement = async (req, res) => {
     const r = readAnnouncement({ ...existing, ...req.body });
     if (r.error) return res.status(400).json(r);
     const row = await prisma.announcement.update({ where: { id }, data: r.data });
+    // First time it goes live (a schedule starting, or being switched back on):
+    // fan out once. Edits to a live row don't re-notify anyone.
+    if (!isLive(existing) && isLive(row)) fanOutAnnouncement(row);
     res.json({ message: 'Announcement saved', announcement: announcementOf(row) });
   } catch (error) {
     console.error(error);
@@ -219,8 +255,9 @@ const notificationOf = (n) => ({
 // GET /api/admin/notifications — the newest 30 and how many are unread
 const listNotifications = async (req, res) => {
   try {
-    const rows = await prisma.notification.findMany({ orderBy: { createdAt: 'desc' }, take: 30 });
-    const unread = await prisma.notification.count({ where: { readAt: null } });
+    // Admin inbox only: rows with a userId belong to that student's bell.
+    const rows = await prisma.notification.findMany({ where: { userId: null }, orderBy: { createdAt: 'desc' }, take: 30 });
+    const unread = await prisma.notification.count({ where: { userId: null, readAt: null } });
     res.json({ notifications: rows.map(notificationOf), unread });
   } catch (error) {
     console.error(error);
@@ -231,7 +268,7 @@ const listNotifications = async (req, res) => {
 // POST /api/admin/notifications/read — clear the whole inbox (no body)
 const markAllRead = async (req, res) => {
   try {
-    await prisma.notification.updateMany({ where: { readAt: null }, data: { readAt: new Date() } });
+    await prisma.notification.updateMany({ where: { userId: null, readAt: null }, data: { readAt: new Date() } });
     res.json({ message: 'All notifications read' });
   } catch (error) {
     console.error(error);
@@ -242,7 +279,8 @@ const markAllRead = async (req, res) => {
 // POST /api/admin/notifications/:id/read — one item
 const markRead = async (req, res) => {
   try {
-    await prisma.notification.update({ where: { id: req.params.id }, data: { readAt: new Date() } });
+    const { count } = await prisma.notification.updateMany({ where: { id: req.params.id, userId: null }, data: { readAt: new Date() } });
+    if (!count) return res.status(404).json({ error: 'Notification not found' });
     res.json({ message: 'Notification read' });
   } catch (error) {
     console.error(error);

@@ -479,7 +479,11 @@ All require auth unless noted. Admin endpoints check roles.
 | GET | `/resources` | Published homepage videos, admin order (no auth) |
 | GET | `/announcements` | Newest public announcement strip (no auth) |
 | GET | `/announcements/mine` | This student's visible announcements, newest first, with read flags |
+| POST | `/announcements/read` | Bell "Mark all read": every visible running announcement (idempotent) |
 | POST | `/announcements/:id/read` | Mark one read (moves the admin's "N read" count); idempotent |
+| GET | `/notifications/mine` | The **student bell**: rows with `userId` = them, newest 30 + `unread` count (admin rows never returned) |
+| POST | `/notifications/read` | Student bell "Mark all read" (scoped to their rows) |
+| POST | `/notifications/:id/read` | Mark one of their rows read; 404 if it is not theirs |
 
 **Admin**
 
@@ -624,6 +628,8 @@ Admin edits an answer:
 Send in-app always. WhatsApp/SMS where marked (✓). WhatsApp needs approved templates.
 
 > **Built (Nov 2026):** the admin's own in-app inbox — `backend/lib/notify.js` writes a `Notification` on **signup** and **purchase** (fire-and-forget, never fails the request); the bell in the admin top bar reads `/admin/notifications`, marks items read and jumps to the sidebar section in `view`. **Announcements** (separate system, §7): admins publish to `all | students | paid | exam:<key>` from Admin › Website info; the homepage strip reads `/api/announcements`, the student dashboard banner reads `/api/announcements/mine`.
+>
+> **Student bell (Nov 2026):** one `Notification` table serves both inboxes — `userId = null` → admin bell, `userId = <id>` → that student's bell (`/api/notifications/mine`; the admin list filters `userId: null`, verified: no cross-leak, cross-read → 404, mark-all scoped). Student events: **welcome** on signup, **batch active** on purchase, **new test live** on publish (`lib/notify.js` fan-out via `lib/access.js` `audienceStudentIds`, mirrors `visibleTo`, skips students who already attempted). `StudentBell.jsx` is a badge (unread = notifications + announcements) that opens `/student/notifications` — the same destination as the sidebar link — and refreshes every 60 s and on open (session token from `lib/content.js`; it must not read `localStorage.getItem('token')` — the key is `tv-session`). **Announcement fan-out (Nov 2026):** publishing an announcement that is live right now (or first switching a scheduled/off one on) sends a personal `announcement` notification to every active student who can see that audience (`lib/announce.js` `announcementAudienceIds`, the reverse of `audiencesFor`; edits to a live row never re-notify) — view `/student/notifications`. Open tabs toast once per new announcement (`toastAnnouncementOnce` in `lib/useToast.jsx`, deduped through sessionStorage between the strip and the bell).
 
 | Trigger | To | WhatsApp/SMS |
 |---|---|---|

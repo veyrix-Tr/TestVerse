@@ -8,6 +8,7 @@ import ResultPage from '../Test/ResultPage.jsx'
 import AccountPage from './pages/AccountPage.jsx'
 import Overview, { OverviewRail } from './pages/Overview.jsx'
 import ResourcesPage from './pages/ResourcesPage.jsx'
+import NotificationsPage from './pages/NotificationsPage.jsx'
 import ResultsPage from './pages/ResultsPage.jsx'
 import SolutionsPage, { SolutionsRail } from './pages/SolutionsPage.jsx'
 import TestsPage from './pages/TestsPage.jsx'
@@ -26,6 +27,7 @@ const PAGES = {
   results: { Main: ResultsPage, title: 'Results' },
   solutions: { Main: SolutionsPage, Rail: SolutionsRail, title: 'Solutions' },
   resources: { Main: ResourcesPage, title: 'Resources' },
+  notifications: { Main: NotificationsPage, title: 'Notifications' },
   account: { Main: AccountPage, title: 'Account' },
 }
 

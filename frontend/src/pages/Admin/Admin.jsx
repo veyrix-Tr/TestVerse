@@ -7,6 +7,7 @@ import { clearSession, loadSession } from '../../lib/session.js'
 import mountAdmin from './adminApp.js'
 import AdminComingSoon from './AdminComingSoon.jsx'
 import AdminBell from './AdminBell.jsx'
+import AdminNotifications from './AdminNotifications.jsx'
 import AdminDashboard from './AdminDashboard.jsx'
 import SeriesAdmin from './SeriesAdmin.jsx'
 import StudentsAdmin from './StudentsAdmin.jsx'
@@ -74,6 +75,7 @@ export default function Admin() {
   const showWebsite = view === 'website'
   const showSoon = view === 'analysis' || view === 'requests'
   const showDash = view === 'dashboard'
+  const showNotifications = view === 'notifications'
   // Open another section the way its sidebar button does (adminApp owns the routing)
   const goTo = (v) => rootRef.current?.querySelector('.side [data-view="' + v + '"]')?.click()
 
@@ -121,6 +123,9 @@ export default function Admin() {
             <button type="button" data-view="dashboard">
               Dashboard
             </button>
+            <button type="button" data-view="notifications">
+              Notifications
+            </button>
             <span className="nav-label">Content</span>
             <button type="button" data-view="free">
               Free tests <span className="count">{counts.free ?? ''}</span>
@@ -162,7 +167,12 @@ export default function Admin() {
             </button>
           </div>
         </nav>
-        <main className="main" id="view" tabIndex={-1} hidden={showDash || showTests || showSeries || showStudents || showSoon || showWebsite}></main>
+        <main className="main" id="view" tabIndex={-1} hidden={showDash || showNotifications || showTests || showSeries || showStudents || showSoon || showWebsite}></main>
+        {showNotifications && (
+          <main className="main" id="notifications-view">
+            <AdminNotifications key={navKey} onOpen={goTo} />
+          </main>
+        )}
         {showDash && (
           <main className="main" id="dash-view">
             <AdminDashboard onGo={goTo} />

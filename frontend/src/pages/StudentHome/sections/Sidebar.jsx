@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import PendingLink from '../../../components/PendingLink.jsx'
+import StudentBell from './StudentBell.jsx'
 
 // The student pages (keyed by the URL segment after /student/) and pages that are coming soon.
 const NAV = [
@@ -9,6 +10,7 @@ const NAV = [
   { page: 'results', label: 'Results', count: 'results', countLabel: 'attempts' },
   { page: 'solutions', label: 'Solutions' },
   { page: 'resources', label: 'Resources' },
+  { page: 'notifications', label: 'Notifications' },
 ]
 const SOON_NAV = [
   { page: 'test-series', label: 'Test series' },
@@ -81,9 +83,12 @@ export default function Sidebar({ me, active, sheetOpen, setSheetOpen, onLogout,
         <Link className="brand" to="/student" aria-label="Testverse overview">
           <Logo height="26px" />
         </Link>
-        <button ref={menuBtnRef} className="topbar-menu" type="button" aria-expanded={sheetOpen ? 'true' : 'false'} aria-controls="sidebar" onClick={() => setSheetOpen(true)}>
-          Menu
-        </button>
+        <div className="topbar-actions">
+          <StudentBell />
+          <button ref={menuBtnRef} className="topbar-menu" type="button" aria-expanded={sheetOpen ? 'true' : 'false'} aria-controls="sidebar" onClick={() => setSheetOpen(true)}>
+            Menu
+          </button>
+        </div>
       </div>
 
       <div className="sheet-scrim" hidden={!sheetOpen} onClick={() => setSheetOpen(false)} aria-hidden="true"></div>
@@ -93,9 +98,12 @@ export default function Sidebar({ me, active, sheetOpen, setSheetOpen, onLogout,
           <Link className="brand" to="/student" aria-label="Testverse overview">
             <Logo height="32px" />
           </Link>
-          <button ref={closeRef} className="sheet-close" type="button" onClick={() => setSheetOpen(false)}>
-            Close
-          </button>
+          <div className="sidebar-actions">
+            <StudentBell />
+            <button ref={closeRef} className="sheet-close" type="button" onClick={() => setSheetOpen(false)}>
+              Close
+            </button>
+          </div>
         </div>
 
         <nav className="sidenav" aria-label="Main">

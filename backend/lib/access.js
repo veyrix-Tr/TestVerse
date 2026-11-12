@@ -40,4 +40,38 @@ const visibleTo = async (userId) => {
   };
 };
 
-module.exports = { examFamily, visibleTo };
+// The same rules read from the test's side: every ACTIVE student who will see
+// this test once it is published — used to tell them it went live (fan-out on
+// publish). Students who already attempted it are left out, so unpublish →
+// publish again never re-notifies anyone. The test must be loaded with its
+// audience rows: { batches: { batchId }, groups: { groupId }, students: { userId } }.
+const audienceStudentIds = async (test) => {
+  const base = {
+    role:     'student',
+    isActive: true,
+    ...(test.exam ? { exam: test.exam === 'jee' ? { in: ['jee-main', 'jee-advanced'] } : 'neet' } : {}),
+    NOT: { attempts: { some: { testId: test.id } } },
+  };
+  const ids = (rows) => rows.map((u) => u.id);
+
+  // A free test reaches its exam's students whatever the audience says.
+  if (test.isFree) return ids(await prisma.user.findMany({ where: base, select: { id: true } }));
+
+  if (test.audience === 'custom') {
+    const groupIds  = (test.groups   || []).map((x) => x.groupId);
+    const batchIds  = (test.batches  || []).map((x) => x.batchId);
+    const direct    = (test.students || []).map((x) => x.userId);
+    const OR = [
+      ...(direct.length ? [{ id: { in: direct } }] : []),
+      ...(groupIds.length ? [{ groups: { some: { groupId: { in: groupIds } } } }] : []),
+      ...(batchIds.length ? [{ subscription: { status: 'active', batchId: { in: batchIds } } }] : []),
+    ];
+    if (!OR.length) return [];
+    return ids(await prisma.user.findMany({ where: { ...base, OR }, select: { id: true } }));
+  }
+
+  // audience "all": every active student who holds a batch
+  return ids(await prisma.user.findMany({ where: { ...base, subscription: { status: 'active' } }, select: { id: true } }));
+};
+
+module.exports = { examFamily, visibleTo, audienceStudentIds };

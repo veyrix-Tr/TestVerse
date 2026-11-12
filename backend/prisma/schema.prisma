@@ -36,6 +36,7 @@ model User {
   testsAssigned   TestStudent[]
   resources       Resource[]
   announcements   Announcement[]
+  notifications   Notification[]
 }
 
 // A plan a student buys: one exam + class, e.g. "11th JEE". Tests are later
@@ -239,7 +240,8 @@ model TestStudent {
 model Resource {
   id          String   @id @default(cuid())
   title       String
-  videoId     String   // YouTube video id from watch?v=... / youtu.be/...
+  videoId     String   // YouTube video id (watch?v=...) or playlist id (list=...)
+  kind        String   @default("video") // "video" | "playlist"
   exam        String?  // "neet" | "jee-main" | "jee-advanced" | null = for everyone
   topic       String?  // short free-text tag, e.g. "Physics" or "Strategy"
   sortOrder   Int      @default(0)
@@ -285,16 +287,21 @@ model AnnouncementRead {
   @@index([userId])
 }
 
-// The admin's inbox: one row per event (new signup, new purchase, ...). Clicking
-// an item opens the sidebar `view` it names.
+// The notification inbox. One row per event:
+//   userId = null  -> the ADMIN's bell (new signup, new purchase, ...)
+//   userId = <id>  -> that STUDENT's bell (batch active, new test, welcome, ...)
+// `view` names where to go: a sidebar view for admins, a route for students.
 model Notification {
   id        String    @id @default(cuid())
-  type      String // "signup" | "purchase" | ...
+  type      String // "signup" | "purchase" | "welcome" | "test" | ...
   text      String
-  view      String?   // sidebar view to open: "students" | "dashboard" | ...
+  view      String?   // admin: sidebar view "students"; student: "/student/tests"
   readAt    DateTime?
   createdAt DateTime  @default(now())
+  userId    String?
+  user      User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([userId])
   @@index([readAt])
 }
 

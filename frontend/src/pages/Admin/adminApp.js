@@ -2,15 +2,15 @@
   design/admin.html <script> — ported as-is into a module.
   React only owns the static shell (sidebar, empty #view, the two dialogs);
   everything the design did with innerHTML + addEventListener happens here,
-  mounted by Admin.jsx's useEffect. The one change: toasts are appended to the
-  page root (".tv-admin") instead of <body>, so the page's scoped CSS matches.
+  mounted by Admin.jsx's useEffect. Toasts come from react-hot-toast (the
+  <Toaster> in App.jsx), so they render top-right on every page.
 
   REAL APP: every save() below becomes an authenticated API call, and the same
   data is what the website and student app read from the server.
 */
 'use strict';
+import { toast as hotToast } from 'react-hot-toast';
 
-var root = null;
 var onView = null; // Admin.jsx: told which view is showing
 var dlgForm = null,
   onSave = null;
@@ -86,10 +86,7 @@ function when(iso) {
 function examLabel(id) { return id === 'all' ? 'All exams' : (db.exams[id] ? db.exams[id].label : id); }
 var KIND = { part: 'Part test', half: 'Half syllabus', full: 'Full syllabus', live: 'Live test' };
 var SLOTS = { part: 6, half: 3, full: 2 };
-function toast(msg) {
-  var t = document.createElement('div'); t.className = 'toast'; t.setAttribute('role', 'status'); t.textContent = msg;
-  (root || document.body).appendChild(t); setTimeout(function () { t.remove(); }, 2600);
-}
+function toast(msg) { hotToast(msg); }
 function examOptions(sel, withAll) {
   var o = withAll ? '<option value="all"' + (sel === 'all' ? ' selected' : '') + '>All exams</option>' : '';
   Object.keys(db.exams).forEach(function (k) { o += '<option value="' + k + '"' + (sel === k ? ' selected' : '') + '>' + esc(db.exams[k].label) + '</option>'; });
@@ -125,6 +122,9 @@ var bind = {};
    Real, API-backed screen: Admin.jsx renders <AdminDashboard/> beside #view
    while this view is active, so #view stays empty here. */
 VIEWS.dashboard = function () { return ''; };
+/* Notifications — the admin inbox as its own section: Admin.jsx renders
+   <AdminNotifications/> beside #view while this view is active. */
+VIEWS.notifications = function () { return ''; };
 
 /* ---------- Free tests, Live tests, Test series ----------
    Real, API-backed screens: Admin.jsx renders <TestsAdmin/> (free / live) or
@@ -316,7 +316,6 @@ function once(el, fn) {
   el.addEventListener('click', fn);
 }
 export default function mountAdmin(el, opts) {
-  root = el || document.body;
   onView = (opts && opts.onView) || null;
   dlgForm = $('#dlg-form');
   dlgTest = $('#dlg-test');

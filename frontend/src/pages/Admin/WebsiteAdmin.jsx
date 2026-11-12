@@ -187,15 +187,19 @@ export default function WebsiteAdmin() {
   async function removeAnnouncement(a) {
     if (confirm !== a.id) return setConfirm(a.id)
     setConfirm(null)
+    // Optimistic: drop the row right away (the API can take a second against
+    // the remote DB) and put it back only if the delete actually fails.
+    const snapshot = annLive.data
+    annLive.setData((cur) => ({ ...cur, announcements: cur.announcements.filter((x) => x.id !== a.id) }))
+    if (editing === a.id) {
+      setEditing(null)
+      setDraft(EMPTY_DRAFT)
+    }
     try {
       await deleteAnnouncement(a.id)
-      annLive.setData((cur) => ({ ...cur, announcements: cur.announcements.filter((x) => x.id !== a.id) }))
-      if (editing === a.id) {
-        setEditing(null)
-        setDraft(EMPTY_DRAFT)
-      }
       toast('Announcement deleted')
     } catch (err) {
+      annLive.setData(() => snapshot)
       toast(err.message)
     }
   }

@@ -8,6 +8,7 @@ const publicResource = (r) => ({
   id: r.id,
   title: r.title,
   videoId: r.videoId,
+  kind: r.kind || 'video',
   exam: r.exam,
   topic: r.topic,
 });
@@ -60,11 +61,15 @@ const myResources = async (req, res) => {
 // newest running announcement meant for everybody (public, no token).
 const listAnnouncements = async (req, res) => {
   try {
-    const a = await prisma.announcement.findFirst({
+    const rows = await prisma.announcement.findMany({
       where:   { ...running(), audience: 'all' },
       orderBy: { startsAt: 'desc' },
+      take: 20,
     });
-    res.json({ announcement: a ? publicAnnouncement(a, false) : null });
+    res.json({
+      announcement: rows[0] ? publicAnnouncement(rows[0], false) : null,
+      announcements: rows.map((a) => publicAnnouncement(a, false)),
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Could not load announcements' });
@@ -107,4 +112,91 @@ const markRead = async (req, res) => {
   }
 };
 
-module.exports = { listResources, myResources, listAnnouncements, myAnnouncements, markRead };
+// POST /api/announcements/read — the bell's "Mark all read": every running
+// announcement this student can see counts as read.
+const markAllRead = async (req, res) => {
+  try {
+    const who = await viewer(req.user.id);
+    const rows = await prisma.announcement.findMany({
+      where:  { ...running(), audience: { in: audiencesFor(who) } },
+      select: { id: true },
+    });
+    if (rows.length) {
+      await prisma.announcementRead.createMany({
+        data: rows.map((a) => ({ announcementId: a.id, userId: req.user.id })),
+        skipDuplicates: true,
+      });
+    }
+    res.json({ message: 'All announcements read' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Could not update announcements' });
+  }
+};
+
+// --------------------------------------------------- the student's own bell
+
+const notificationOf = (n) => ({
+  id: n.id,
+  type: n.type,
+  text: n.text,
+  view: n.view,
+  read: !!n.readAt,
+  createdAt: n.createdAt,
+});
+
+// GET /api/notifications/mine — this student's rows only (userId = them),
+// newest 30 + how many are unread. Admin rows are never returned here.
+const myNotifications = async (req, res) => {
+  try {
+    const [rows, unread] = await Promise.all([
+      prisma.notification.findMany({ where: { userId: req.user.id }, orderBy: { createdAt: 'desc' }, take: 30 }),
+      prisma.notification.count({ where: { userId: req.user.id, readAt: null } }),
+    ]);
+    res.json({ notifications: rows.map(notificationOf), unread });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Could not load notifications' });
+  }
+};
+
+// POST /api/notifications/:id/read — one of this student's (404 if not theirs)
+const markNotificationRead = async (req, res) => {
+  try {
+    const { count } = await prisma.notification.updateMany({
+      where: { id: req.params.id, userId: req.user.id },
+      data:  { readAt: new Date() },
+    });
+    if (!count) return res.status(404).json({ error: 'Notification not found' });
+    res.json({ message: 'Notification read' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Could not update the notification' });
+  }
+};
+
+// POST /api/notifications/read — the bell's "Mark all read"
+const markAllNotificationsRead = async (req, res) => {
+  try {
+    await prisma.notification.updateMany({
+      where: { userId: req.user.id, readAt: null },
+      data:  { readAt: new Date() },
+    });
+    res.json({ message: 'All notifications read' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Could not update notifications' });
+  }
+};
+
+module.exports = {
+  listResources,
+  myResources,
+  listAnnouncements,
+  myAnnouncements,
+  markRead,
+  markAllRead,
+  myNotifications,
+  markNotificationRead,
+  markAllNotificationsRead,
+};

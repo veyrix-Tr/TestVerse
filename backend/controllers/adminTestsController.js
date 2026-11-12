@@ -2,6 +2,8 @@ const { Prisma } = require('@prisma/client');
 const prisma = require('../lib/prisma');
 const { normalizePaper, normalizeMarking } = require('../lib/paperFormat');
 const { AUDIENCE_INCLUDE, publicAudience, readAudience, writeAudience } = require('../lib/audience');
+const { audienceStudentIds } = require('../lib/access');
+const { notifyMany } = require('../lib/notify');
 
 // What every admin test reply loads: how many students started it (first
 // attempts only, so retakes don't count twice) + who it's given to.
@@ -264,11 +266,27 @@ const updateTest = async (req, res) => {
 // POST /api/admin/tests/:id/publish and /unpublish
 const setStatus = (status) => async (req, res) => {
   try {
-    const test = await prisma.test.findUnique({ where: { id: req.params.id } });
+    const test = await prisma.test.findUnique({
+      where:  { id: req.params.id },
+      include: {
+        batches:  { select: { batchId: true } },
+        groups:   { select: { groupId: true } },
+        students: { select: { userId: true } },
+      },
+    });
     if (!test) return res.status(404).json({ error: 'Test not found' });
     if (status === 'published' && test.kind === 'series') return res.status(400).json({ error: 'Tests in a test series are stored only, so they can’t be published yet.' });
     if (status === 'published' && !test.paper) return res.status(400).json({ field: 'paper', error: 'Add the question paper before publishing.' });
     const updated = await prisma.test.update({ where: { id: test.id }, data: { status }, include: WITH });
+
+    // Going live: tell every student who can see it (rules in lib/access.js).
+    // Fire-and-forget — a notify failure never fails the publish.
+    if (status === 'published') {
+      audienceStudentIds(test)
+        .then((ids) => notifyMany(ids, { type: 'test', text: 'New test live: ' + test.title, view: '/student/tests' }))
+        .catch((e) => console.error('publish notify:', e.message));
+    }
+
     res.json({ message: status === 'published' ? 'Test published' : 'Test moved back to drafts', test: summaryOf(updated) });
   } catch (error) {
     console.error(error);

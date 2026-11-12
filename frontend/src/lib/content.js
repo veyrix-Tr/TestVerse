@@ -25,11 +25,24 @@ export const siteResources = () => {
   return p
 }
 export const siteAnnouncement = () => api('/announcements').then((r) => r.announcement)
+export const siteAnnouncements = () => api('/announcements').then((r) => r.announcements || [])
 
 /* ---- the signed-in student ---- */
 export const myResources = () => api('/resources/mine', { token: getToken() }).then((r) => r.resources || [])
-export const myAnnouncements = () => api('/announcements/mine', { token: getToken() }).then((r) => r.announcements)
+// Signed-in: this student's audience-filtered list with read flags. Signed
+// out (the homepage bell is for everyone): the public list, treated as read
+// so anonymous visitors don't carry a permanent badge.
+export const myAnnouncements = () =>
+  getToken()
+    ? api('/announcements/mine', { token: getToken() }).then((r) => r.announcements)
+    : siteAnnouncements().then((rows) => rows.map((a) => ({ ...a, read: true })))
 export const markAnnouncementRead = (id) => api('/announcements/' + encodeURIComponent(id) + '/read', { method: 'POST', body: {}, token: getToken() })
+export const readAllAnnouncements = () => api('/announcements/read', { method: 'POST', body: {}, token: getToken() })
+
+/* ---- the student's own bell ---- */
+export const myNotifications = () => api('/notifications/mine', { token: getToken() })
+export const readNotification = (id) => api('/notifications/' + encodeURIComponent(id) + '/read', { method: 'POST', body: {}, token: getToken() })
+export const readAllNotifications = () => api('/notifications/read', { method: 'POST', body: {}, token: getToken() })
 
 /* ---- admin: video resources ---- */
 export const listResources = () => admin('/resources').then((r) => r.resources)

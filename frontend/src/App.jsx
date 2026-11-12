@@ -1,4 +1,5 @@
 import { Navigate, RouterProvider, createBrowserRouter, redirect, useLocation } from 'react-router-dom'
+import { Toaster } from 'react-hot-toast'
 import LegalHost from './components/legal/LegalHost.jsx'
 import { checkSession } from './lib/session.js'
 
@@ -96,7 +97,31 @@ const router = createBrowserRouter([{ element: <LegalHost />, children: [
 ] }])
 
 function App() {
-  return <RouterProvider router={router} />
+  return (
+    <>
+      {/* One toast host for every page: top-right, navy card with a gold edge
+          so it stands out on the light backgrounds. */}
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 3200,
+          style: {
+            background: '#0B1B33',
+            color: '#FFFFFF',
+            border: '1px solid #2A4166',
+            borderLeft: '3px solid #E8B93B',
+            borderRadius: '10px',
+            fontSize: '14px',
+            fontWeight: 600,
+            lineHeight: 1.4,
+            maxWidth: '380px',
+            boxShadow: '0 12px 32px rgba(3, 12, 28, 0.35)',
+          },
+        }}
+      />
+      <RouterProvider router={router} />
+    </>
+  )
 }
 
 export default App
