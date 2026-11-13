@@ -697,7 +697,6 @@ div.ts-hi { margin-top: -4px; }
 .ts-ans span { font: 600 11px/1.4 var(--body); text-transform: uppercase; letter-spacing: 0.08em; color: var(--green-ink); }
 .ts-ans b { font: 700 17px/1.2 var(--display); color: var(--green-ink); font-variant-numeric: tabular-nums; }
 .ts-sol { display: grid; gap: 6px; padding: 14px 16px; border-radius: 10px; background: color-mix(in srgb, var(--soft) 75%, var(--card)); font-size: 14px; line-height: 1.65; color: var(--ink-2); overflow-wrap: anywhere; }
-.ts-sol-l { font: 600 11px/1.4 var(--body); text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
 .ts-sol a { font-weight: 600; justify-self: start; }
 .ts-more { padding: 4px 28px 24px; }
 

@@ -4,359 +4,314 @@
     "chapter": "The Living World",
     "text": "Read the following statements about binomial nomenclature:\nA. Biological names are generally in Latin and are written in italics.\nB. The first word in a biological name represents the specific epithet and the second word the genus.\nC. When handwritten, both words of a biological name are separately underlined.\nD. The first word starts with a capital letter, while the specific epithet starts with a small letter.\nE. The name of the author appears after the specific epithet, in an abbreviated form.\nChoose the correct answer from the options given below:",
     "options": ["A, B and C only", "A, C, D and E only", "B, C, D and E only", "A, C and D only"],
-    "answer": "B",
-    "solution": "In a binomial name the first word is the genus and the second is the specific epithet, so B is wrong. All other statements are NCERT rules (e.g. Mangifera indica Linn.). Correct: A, C, D and E only."
+    "answer": "B"
   },
   {
     "type": "single",
     "chapter": "Biological Classification",
     "text": "Match List-I with List-II:\nList-I\n(A) Diatoms\n(B) Dinoflagellates\n(C) Euglenoids\n(D) Slime moulds\nList-II\n(I) Protein-rich pellicle makes the body flexible\n(II) Rapid multiplication of Gonyaulax makes the sea appear red\n(III) Silica-embedded cell walls; deposits form diatomaceous earth\n(IV) Form an aggregation called plasmodium under suitable conditions\nChoose the correct answer from the options given below:",
     "options": ["A-II, B-III, C-I, D-IV", "A-III, B-I, C-II, D-IV", "A-IV, B-II, C-I, D-III", "A-III, B-II, C-I, D-IV"],
-    "answer": "D",
-    "solution": "Diatoms have siliceous indestructible walls (diatomaceous earth); red dinoflagellates such as Gonyaulax cause red tides; euglenoids have a pellicle instead of a cell wall; slime moulds form a plasmodium. So A-III, B-II, C-I, D-IV."
+    "answer": "D"
   },
   {
     "type": "single",
     "chapter": "Biological Classification",
     "text": "Given below are two statements:\nStatement I: Viroids lack the protein coat found in viruses and consist of free RNA of low molecular weight.\nStatement II: Viruses that infect plants usually have double-stranded DNA as their genetic material.\nIn the light of the above statements, choose the correct answer from the options given below:",
     "options": ["Both Statement I and Statement II are true", "Both Statement I and Statement II are false", "Statement I is true but Statement II is false", "Statement I is false but Statement II is true"],
-    "answer": "C",
-    "solution": "Viroids (e.g. causing potato spindle tuber disease) are free, low molecular weight RNA without a protein coat, so Statement I is true. Plant viruses generally have single-stranded RNA; double-stranded DNA is usual in bacteriophages, so Statement II is false."
+    "answer": "C"
   },
   {
     "type": "single",
     "chapter": "Plant Kingdom",
     "text": "Read the following statements about gymnosperms:\nA. The male and female gametophytes do not have an independent free-living existence.\nB. Cycas has coralloid roots associated with $N_2$-fixing cyanobacteria.\nC. In Pinus, male and female cones are borne on different trees.\nD. The ovules remain exposed both before and after fertilisation.\nE. The giant redwood tree Sequoia is one of the tallest tree species.\nChoose the correct answer from the options given below:",
     "options": ["A, B and C only", "A, B, D and E only", "B, C and E only", "A, C, D and E only"],
-    "answer": "B",
-    "solution": "Pinus bears male and female cones on the same tree; it is Cycas in which they are borne on different trees, so C is wrong. A, B, D and E are NCERT facts. Correct: A, B, D and E only."
+    "answer": "B"
   },
   {
     "type": "single",
     "chapter": "Plant Kingdom",
     "text": "Given below are two statements:\nStatement I: In bryophytes, the main plant body is haploid and the sporophyte remains attached to and dependent on the gametophyte.\nStatement II: Selaginella and Salvinia are pteridophytes that produce two kinds of spores, macrospores and microspores.\nIn the light of the above statements, choose the correct answer from the options given below:",
     "options": ["Both Statement I and Statement II are true", "Both Statement I and Statement II are false", "Statement I is true but Statement II is false", "Statement I is false but Statement II is true"],
-    "answer": "A",
-    "solution": "The bryophyte plant body is the haploid gametophyte, and the sporophyte is attached to it for nourishment. Selaginella and Salvinia are heterosporous. Both statements are true."
+    "answer": "A"
   },
   {
     "type": "single",
     "chapter": "Morphology of Flowering Plants",
     "text": "Match List-I with List-II:\nList-I\n(A) Pneumatophores\n(B) Stilt roots\n(C) Prop roots\n(D) Stem tendrils\nList-II\n(I) Banyan tree\n(II) Rhizophora\n(III) Sugarcane\n(IV) Cucumber\nChoose the correct answer from the options given below:",
     "options": ["A-III, B-II, C-I, D-IV", "A-II, B-I, C-III, D-IV", "A-II, B-III, C-I, D-IV", "A-I, B-III, C-II, D-IV"],
-    "answer": "C",
-    "solution": "Rhizophora in swamps has upward-growing respiratory roots (pneumatophores); maize and sugarcane have stilt roots; banyan has prop roots; cucumber has stem tendrils. So A-II, B-III, C-I, D-IV."
+    "answer": "C"
   },
   {
     "type": "single",
     "chapter": "Morphology of Flowering Plants",
     "text": "How many of the following plants show axile placentation?\nChina rose, tomato, mustard, pea, lemon, Dianthus, sunflower, Primrose",
     "options": ["2", "3", "4", "5"],
-    "answer": "B",
-    "solution": "Axile: China rose, tomato and lemon. Mustard is parietal, pea is marginal, Dianthus and Primrose are free central, and sunflower is basal. The answer is 3."
+    "answer": "B"
   },
   {
     "type": "single",
     "chapter": "Morphology of Flowering Plants",
     "text": "Read the following statements about the family Fabaceae:\nA. Flowers are zygomorphic.\nB. Aestivation of the corolla is vexillary.\nC. Stamens are ten and diadelphous.\nD. The ovary is inferior and bilocular.\nE. Placentation is marginal.\nChoose the correct answer from the options given below:",
     "options": ["A, B and D only", "B, C, D and E only", "A, C and D only", "A, B, C and E only"],
-    "answer": "D",
-    "solution": "In Fabaceae the gynoecium is a superior, monocarpellary, unilocular ovary with marginal placentation, so D is wrong. Flowers are zygomorphic with papilionaceous corolla in vexillary aestivation and ten diadelphous stamens. Correct: A, B, C and E only."
+    "answer": "D"
   },
   {
     "type": "single",
     "chapter": "Anatomy of Flowering Plants",
     "text": "Given below are two statements: one is labelled as Assertion A and the other is labelled as Reason R.\nAssertion A: The radial and tangential walls of the endodermal cells of a root have deposits of suberin in the form of casparian strips.\nReason R: The endodermis is the outermost layer of the stele.\nIn the light of the above statements, choose the correct answer from the options given below:",
     "options": ["Both A and R are true and R is the correct explanation of A", "Both A and R are true but R is NOT the correct explanation of A", "A is true but R is false", "A is false but R is true"],
-    "answer": "C",
-    "solution": "Casparian strips of water-impermeable suberin are present on the tangential and radial walls of endodermal cells, so A is true. The endodermis is the innermost layer of the cortex; the outermost layer of the stele is the pericycle, so R is false."
+    "answer": "C"
   },
   {
     "type": "single",
     "chapter": "Anatomy of Flowering Plants",
     "text": "Match List-I with List-II:\nList-I\n(A) Bulliform cells\n(B) Guard cells of grasses\n(C) Root hairs\n(D) Pericycle of dicot root\nList-II\n(I) Dumb-bell shaped\n(II) Unicellular elongations of epidermal cells\n(III) Make the leaves curl inwards when flaccid to minimise water loss\n(IV) Initiation of lateral roots\nChoose the correct answer from the options given below:",
     "options": ["A-III, B-I, C-II, D-IV", "A-I, B-III, C-II, D-IV", "A-III, B-II, C-IV, D-I", "A-IV, B-I, C-II, D-III"],
-    "answer": "A",
-    "solution": "Bulliform cells of grass leaves become flaccid under water stress and curl the leaf inwards; grass guard cells are dumb-bell shaped; root hairs are unicellular outgrowths of epidermal cells; lateral roots arise from the pericycle. So A-III, B-I, C-II, D-IV."
+    "answer": "A"
   },
   {
     "type": "single",
     "chapter": "Cell: The Unit of Life",
     "text": "Match List-I with List-II:\nList-I\n(A) Cristae\n(B) Cisternae of Golgi apparatus\n(C) Centriole\n(D) Mesosome\nList-II\n(I) Cartwheel arrangement of nine peripheral triplet microtubules\n(II) Extension of the plasma membrane into the cell in prokaryotes\n(III) Infoldings of the inner mitochondrial membrane\n(IV) Flat, disc-shaped sacs stacked parallel to each other\nChoose the correct answer from the options given below:",
     "options": ["A-IV, B-III, C-I, D-II", "A-III, B-IV, C-II, D-I", "A-III, B-IV, C-I, D-II", "A-I, B-IV, C-III, D-II"],
-    "answer": "C",
-    "solution": "Cristae are infoldings of the inner mitochondrial membrane; Golgi cisternae are flat disc-shaped stacked sacs; centrioles have a cartwheel of nine triplet microtubules; mesosomes are infoldings of the plasma membrane in prokaryotes. So A-III, B-IV, C-I, D-II."
+    "answer": "C"
   },
   {
     "type": "single",
     "chapter": "Cell: The Unit of Life",
     "text": "Which of the following statements about ribosomes is incorrect?",
     "options": ["70S ribosomes of prokaryotes consist of 50S and 30S subunits", "80S ribosomes of eukaryotes consist of 60S and 40S subunits", "Ribosomes are not surrounded by any membrane", "'S' in 70S stands for the size of the ribosome measured directly in nanometres"],
-    "answer": "D",
-    "solution": "'S' stands for the sedimentation coefficient (Svedberg unit), which is only an indirect measure of density and size. The other three statements are correct as given in NCERT."
+    "answer": "D"
   },
   {
     "type": "single",
     "chapter": "Cell: The Unit of Life",
     "text": "Given below are two statements:\nStatement I: The membrane of human erythrocytes has approximately 52 per cent protein and 40 per cent lipids.\nStatement II: The $Na^+/K^+$ pump is an example of passive transport across the plasma membrane.\nIn the light of the above statements, choose the correct answer from the options given below:",
     "options": ["Both Statement I and Statement II are true", "Both Statement I and Statement II are false", "Statement I is true but Statement II is false", "Statement I is false but Statement II is true"],
-    "answer": "C",
-    "solution": "NCERT gives the RBC membrane composition as about 52% protein and 40% lipid, so Statement I is true. The $Na^+/K^+$ pump uses ATP to move ions against the concentration gradient, so it is active transport and Statement II is false."
+    "answer": "C"
   },
   {
     "type": "single",
     "chapter": "Cell Cycle and Cell Division",
     "text": "Match List-I (stages of prophase I) with List-II (events):\nList-I\n(A) Leptotene\n(B) Zygotene\n(C) Pachytene\n(D) Diplotene\nList-II\n(I) Dissolution of the synaptonemal complex and appearance of chiasmata\n(II) Chromosomes become gradually visible under the light microscope\n(III) Appearance of recombination nodules; crossing over takes place\n(IV) Synapsis, accompanied by formation of the synaptonemal complex\nChoose the correct answer from the options given below:",
     "options": ["A-IV, B-II, C-III, D-I", "A-II, B-IV, C-III, D-I", "A-II, B-III, C-IV, D-I", "A-I, B-IV, C-III, D-II"],
-    "answer": "B",
-    "solution": "Chromosomes become visible in leptotene, synapse in zygotene (synaptonemal complex), cross over at recombination nodules in pachytene, and separate except at chiasmata in diplotene. So A-II, B-IV, C-III, D-I."
+    "answer": "B"
   },
   {
     "type": "single",
     "chapter": "Cell Cycle and Cell Division",
     "text": "A diploid plant cell ($2n = 16$) contains 2C amount of DNA in the $G_1$ phase. What will be the DNA content and the number of chromosomes in each cell at the end of meiosis I?",
     "options": ["2C DNA and 8 chromosomes", "C DNA and 8 chromosomes", "4C DNA and 16 chromosomes", "2C DNA and 16 chromosomes"],
-    "answer": "A",
-    "solution": "After S phase the cell has 4C DNA and still 16 chromosomes, each with two chromatids. Meiosis I separates homologous chromosomes, so each daughter cell gets 8 chromosomes (each still with two chromatids) and half the DNA, i.e. 2C. The answer is 2C DNA and 8 chromosomes."
+    "answer": "A"
   },
   {
     "type": "single",
     "chapter": "Photosynthesis in Higher Plants",
     "text": "Read the following statements about $C_4$ plants:\nA. The primary $CO_2$ acceptor is phosphoenol pyruvate, a 3-carbon molecule present in mesophyll cells.\nB. The first stable product of $CO_2$ fixation is oxaloacetic acid, a 4-carbon compound.\nC. RuBisCO is abundant in the mesophyll cells.\nD. Bundle sheath cells have a large number of chloroplasts, thick walls impervious to gaseous exchange and no intercellular spaces.\nE. Photorespiration occurs at a high rate.\nChoose the correct answer from the options given below:",
     "options": ["A, B, C and D only", "B, D and E only", "A, B and D only", "A, C and E only"],
-    "answer": "C",
-    "solution": "In $C_4$ plants the mesophyll cells lack RuBisCO (it is in bundle sheath cells), so C is wrong, and the $CO_2$-concentrating mechanism minimises photorespiration, so E is wrong. Correct: A, B and D only."
+    "answer": "C"
   },
   {
     "type": "single",
     "chapter": "Photosynthesis in Higher Plants",
     "text": "How many molecules of ATP and NADPH are required to synthesise one molecule of glucose through the Calvin cycle?",
     "options": ["12 ATP and 18 NADPH", "18 ATP and 12 NADPH", "18 ATP and 18 NADPH", "6 ATP and 12 NADPH"],
-    "answer": "B",
-    "solution": "Each $CO_2$ fixed needs 3 ATP and 2 NADPH. One glucose needs 6 turns (6 $CO_2$), so $6 \\times 3 = 18$ ATP and $6 \\times 2 = 12$ NADPH."
+    "answer": "B"
   },
   {
     "type": "single",
     "chapter": "Photosynthesis in Higher Plants",
     "text": "Given below are two statements: one is labelled as Assertion A and the other is labelled as Reason R.\nAssertion A: Cyclic photophosphorylation results in the synthesis of ATP but not of NADPH + $H^+$.\nReason R: In cyclic photophosphorylation only PS I is functional, and the excited electron is circulated back to the photosystem through the electron transport chain instead of reaching $NADP^+$.\nIn the light of the above statements, choose the correct answer from the options given below:",
     "options": ["Both A and R are true and R is the correct explanation of A", "Both A and R are true but R is NOT the correct explanation of A", "A is true but R is false", "A is false but R is true"],
-    "answer": "A",
-    "solution": "When only PS I works, the electron cycles back within the photosystem; ATP is made during this flow, but since the electron never reaches $NADP^+$, no NADPH is formed. R explains A."
+    "answer": "A"
   },
   {
     "type": "single",
     "chapter": "Respiration in Plants",
     "text": "One molecule of pyruvic acid enters the mitochondrion and is completely oxidised through the link reaction (oxidative decarboxylation) and the Krebs cycle. How many molecules of NADH + $H^+$ are produced?",
     "options": ["3", "4", "5", "6"],
-    "answer": "B",
-    "solution": "Pyruvate to acetyl CoA gives 1 NADH. One turn of the Krebs cycle gives 3 NADH, 1 $FADH_2$ and 1 GTP. Total NADH = 1 + 3 = 4."
+    "answer": "B"
   },
   {
     "type": "single",
     "chapter": "Respiration in Plants",
     "text": "Match List-I (components of the mitochondrial electron transport system) with List-II:\nList-I\n(A) Complex I\n(B) Complex III\n(C) Complex IV\n(D) Complex V\nList-II\n(I) ATP synthase\n(II) Cytochrome $bc_1$ complex\n(III) NADH dehydrogenase\n(IV) Cytochrome c oxidase containing cytochromes a, $a_3$ and two copper centres\nChoose the correct answer from the options given below:",
     "options": ["A-II, B-III, C-IV, D-I", "A-III, B-IV, C-II, D-I", "A-III, B-II, C-I, D-IV", "A-III, B-II, C-IV, D-I"],
-    "answer": "D",
-    "solution": "Complex I is NADH dehydrogenase, complex III is the cytochrome $bc_1$ complex, complex IV is cytochrome c oxidase (cytochromes a, $a_3$ and two copper centres), and complex V is ATP synthase. So A-III, B-II, C-IV, D-I."
+    "answer": "D"
   },
   {
     "type": "single",
     "chapter": "Plant Growth and Development",
     "text": "Match List-I (plant growth regulators) with List-II (functions):\nList-I\n(A) Auxin\n(B) Gibberellin\n(C) Cytokinin\n(D) Abscisic acid\nList-II\n(I) Delays leaf senescence\n(II) Stimulates closure of stomata\n(III) Apical dominance\n(IV) Bolting in beet and cabbage\nChoose the correct answer from the options given below:",
     "options": ["A-III, B-IV, C-I, D-II", "A-IV, B-III, C-I, D-II", "A-III, B-I, C-IV, D-II", "A-II, B-IV, C-I, D-III"],
-    "answer": "A",
-    "solution": "Auxin from the growing apex causes apical dominance; gibberellins promote bolting in beet and cabbage; cytokinins delay leaf senescence; ABA causes stomatal closure. So A-III, B-IV, C-I, D-II."
+    "answer": "A"
   },
   {
     "type": "single",
     "chapter": "Plant Growth and Development",
     "text": "Given below are two statements:\nStatement I: Ethylene inhibits root growth and root hair formation, and so reduces the absorption surface of plants.\nStatement II: Ethephon is used to delay fruit ripening in tomatoes and apples.\nIn the light of the above statements, choose the correct answer from the options given below:",
     "options": ["Both Statement I and Statement II are true", "Both Statement I and Statement II are false", "Statement I is true but Statement II is false", "Statement I is false but Statement II is true"],
-    "answer": "B",
-    "solution": "Ethylene promotes root growth and root hair formation, increasing the absorption surface, so Statement I is false. Ethephon releases ethylene and hastens fruit ripening in tomatoes and apples, so Statement II is also false."
+    "answer": "B"
   },
   {
     "type": "single",
     "chapter": "Sexual Reproduction in Flowering Plants",
     "text": "Read the following statements:\nA. The wall of a typical microsporangium has four layers: epidermis, endothecium, middle layers and tapetum.\nB. Cells of the tapetum have dense cytoplasm and generally more than one nucleus.\nC. Sporopollenin can be degraded by specific enzymes present in the soil.\nD. Pollen grains are well preserved as fossils because of the presence of sporopollenin.\nE. In over 60 per cent of angiosperms, pollen grains are shed at the 3-celled stage.\nChoose the correct answer from the options given below:",
     "options": ["A, B and C only", "B, C and E only", "A, B and D only", "A, C, D and E only"],
-    "answer": "C",
-    "solution": "No enzyme that degrades sporopollenin is known so far, so C is wrong. In over 60% of angiosperms pollen is shed at the 2-celled stage, so E is wrong. Correct: A, B and D only."
+    "answer": "C"
   },
   {
     "type": "single",
     "chapter": "Sexual Reproduction in Flowering Plants",
     "text": "The leaf cells of a flowering plant contain 24 chromosomes. What will be the number of chromosomes in its endosperm, nucellus and synergid cells respectively?",
     "options": ["24, 12, 36", "36, 12, 12", "12, 24, 36", "36, 24, 12"],
-    "answer": "D",
-    "solution": "Leaf cells are 2n = 24, so n = 12. The endosperm is triploid (3n = 36), the nucellus is maternal diploid tissue (2n = 24), and the synergids are part of the haploid embryo sac (n = 12). Answer: 36, 24, 12."
+    "answer": "D"
   },
   {
     "type": "single",
     "chapter": "Sexual Reproduction in Flowering Plants",
     "text": "Given below are two statements: one is labelled as Assertion A and the other is labelled as Reason R.\nAssertion A: Cleistogamous flowers produce assured seed-set even in the absence of pollinators.\nReason R: Cleistogamous flowers do not open at all, and their anthers and stigma lie close to each other, so they are invariably autogamous.\nIn the light of the above statements, choose the correct answer from the options given below:",
     "options": ["Both A and R are true and R is the correct explanation of A", "Both A and R are true but R is NOT the correct explanation of A", "A is true but R is false", "A is false but R is true"],
-    "answer": "A",
-    "solution": "Cleistogamous flowers (e.g. Viola, Oxalis, Commelina) never open, so pollen from the dehiscing anthers falls directly on the nearby stigma. This self-pollination needs no pollinator, so seed-set is assured. R explains A."
+    "answer": "A"
   },
   {
     "type": "single",
     "chapter": "Sexual Reproduction in Flowering Plants",
     "text": "Given below are two statements:\nStatement I: In apomixis, seeds are produced after fertilisation of an unreduced egg cell.\nStatement II: In many Citrus and mango varieties, nucellar cells surrounding the embryo sac develop into embryos, so a seed may contain more than one embryo.\nIn the light of the above statements, choose the correct answer from the options given below:",
     "options": ["Both Statement I and Statement II are true", "Both Statement I and Statement II are false", "Statement I is true but Statement II is false", "Statement I is false but Statement II is true"],
-    "answer": "D",
-    "solution": "Apomixis is the production of seeds without fertilisation, so Statement I is false. Development of nucellar cells into embryos, giving polyembryony, is described for Citrus and mango, so Statement II is true."
+    "answer": "D"
   },
   {
     "type": "single",
     "chapter": "Principles of Inheritance and Variation",
     "text": "Assuming independent assortment, what fraction of the progeny of the cross $AaBbCc \\times AaBbCc$ will be heterozygous for all three genes?",
     "options": ["$\\frac{1}{8}$", "$\\frac{1}{64}$", "$\\frac{27}{64}$", "$\\frac{1}{16}$"],
-    "answer": "A",
-    "solution": "For each gene, $Aa \\times Aa$ gives $\\frac{1}{2}$ heterozygotes. For three independent genes the fraction is $\\frac{1}{2} \\times \\frac{1}{2} \\times \\frac{1}{2} = \\frac{1}{8}$."
+    "answer": "A"
   },
   {
     "type": "single",
     "chapter": "Principles of Inheritance and Variation",
     "text": "A man with blood group A marries a woman with blood group B. Their first child has blood group O. What is the probability that their second child will have blood group AB?",
     "options": ["$\\frac{1}{2}$", "0", "$\\frac{1}{4}$", "$\\frac{3}{4}$"],
-    "answer": "C",
-    "solution": "An O child ($ii$) means both parents carry $i$: the father is $I^Ai$ and the mother is $I^Bi$. The probability of $I^AI^B$ is $\\frac{1}{2} \\times \\frac{1}{2} = \\frac{1}{4}$."
+    "answer": "C"
   },
   {
     "type": "single",
     "chapter": "Principles of Inheritance and Variation",
     "text": "Given below are two statements:\nStatement I: Morgan found that when two genes in a dihybrid cross were situated on the same chromosome, the proportion of parental gene combinations was much higher than the non-parental type.\nStatement II: Alfred Sturtevant used the frequency of recombination between gene pairs on the same chromosome as a measure of the distance between the genes and mapped their positions on the chromosome.\nIn the light of the above statements, choose the correct answer from the options given below:",
     "options": ["Both Statement I and Statement II are true", "Both Statement I and Statement II are false", "Statement I is true but Statement II is false", "Statement I is false but Statement II is true"],
-    "answer": "A",
-    "solution": "Morgan attributed the excess of parental types to physical linkage of the genes. Sturtevant, his student, used recombination frequency as a measure of gene distance to make genetic maps. Both statements are true."
+    "answer": "A"
   },
   {
     "type": "single",
     "chapter": "Principles of Inheritance and Variation",
     "text": "Match List-I (mechanism of sex determination) with List-II (organism):\nList-I\n(A) XO type\n(B) ZW type\n(C) XY type\n(D) Haplo-diploid type\nList-II\n(I) Birds\n(II) Honey bee\n(III) Grasshopper\n(IV) Drosophila\nChoose the correct answer from the options given below:",
     "options": ["A-I, B-III, C-IV, D-II", "A-III, B-I, C-IV, D-II", "A-III, B-IV, C-I, D-II", "A-II, B-I, C-IV, D-III"],
-    "answer": "B",
-    "solution": "Grasshopper males are XO; in birds the female is heterogametic (ZW); Drosophila, like humans, has XY males; in honey bees males develop from unfertilised eggs (haplo-diploid). So A-III, B-I, C-IV, D-II."
+    "answer": "B"
   },
   {
     "type": "single",
     "chapter": "Principles of Inheritance and Variation",
     "text": "Read the following statements about genetic disorders:\nA. A heterozygous female carrier of haemophilia may transmit the disease to her sons.\nB. Sickle-cell anaemia is an X-linked recessive disorder.\nC. Phenylketonuria is inherited as an autosomal dominant trait.\nD. Individuals with Klinefelter's syndrome have the karyotype 47, XXY.\nE. Thalassemia is an autosome-linked recessive blood disease.\nChoose the correct answer from the options given below:",
     "options": ["A, B and D only", "B, C and E only", "A, C, D and E only", "A, D and E only"],
-    "answer": "D",
-    "solution": "Sickle-cell anaemia is autosomal recessive (not X-linked) and phenylketonuria is autosomal recessive (not dominant), so B and C are wrong. Haemophilia carriers can pass the gene to sons, Klinefelter's is 47, XXY, and thalassemia is autosomal recessive. Correct: A, D and E only."
+    "answer": "D"
   },
   {
     "type": "single",
     "chapter": "Molecular Basis of Inheritance",
     "text": "A double-stranded DNA molecule of 1000 base pairs contains 30% guanine. How many thymine bases does it contain?",
     "options": ["200", "300", "400", "600"],
-    "answer": "C",
-    "solution": "By Chargaff's rule G = C = 30%, so A + T = 40% and T = 20%. The molecule has 2000 nucleotides, so T = 0.20 × 2000 = 400."
+    "answer": "C"
   },
   {
     "type": "single",
     "chapter": "Molecular Basis of Inheritance",
     "text": "Given below are two statements: one is labelled as Assertion A and the other is labelled as Reason R.\nAssertion A: In the lac operon of E. coli, lactose acts as an inducer.\nReason R: The z gene of the lac operon codes for permease, which increases the permeability of the cell to lactose.\nIn the light of the above statements, choose the correct answer from the options given below:",
     "options": ["Both A and R are true and R is the correct explanation of A", "Both A and R are true but R is NOT the correct explanation of A", "A is true but R is false", "A is false but R is true"],
-    "answer": "C",
-    "solution": "Lactose (the substrate of beta-galactosidase) binds and inactivates the repressor, switching the operon on, so A is true. The z gene codes for beta-galactosidase; permease is coded by the y gene, so R is false."
+    "answer": "C"
   },
   {
     "type": "single",
     "chapter": "Molecular Basis of Inheritance",
     "text": "Match List-I (scientists) with List-II (contributions):\nList-I\n(A) Frederick Griffith\n(B) Alfred Hershey and Martha Chase\n(C) Matthew Meselson and Franklin Stahl\n(D) Oswald Avery, Colin MacLeod and Maclyn McCarty\nList-II\n(I) Showed semiconservative replication of DNA using $^{15}N$\n(II) Discovered the 'transforming principle' in Streptococcus pneumoniae\n(III) Used bacteriophages labelled with radioactive phosphorus and sulphur\n(IV) Used proteases, RNases and DNase to show that DNA is the transforming principle\nChoose the correct answer from the options given below:",
     "options": ["A-III, B-II, C-I, D-IV", "A-II, B-III, C-I, D-IV", "A-II, B-IV, C-I, D-III", "A-IV, B-III, C-II, D-I"],
-    "answer": "B",
-    "solution": "Griffith observed transformation of R strain by heat-killed S strain; Hershey and Chase used $^{32}P$ and $^{35}S$ labelled phages; Meselson and Stahl used $^{15}N$ to show semiconservative replication; Avery, MacLeod and McCarty identified DNA as the transforming principle using enzymes. So A-II, B-III, C-I, D-IV."
+    "answer": "B"
   },
   {
     "type": "single",
     "chapter": "Molecular Basis of Inheritance",
     "text": "Read the following statements about transcription in eukaryotes:\nA. RNA polymerase I transcribes 28S, 18S and 5.8S rRNAs.\nB. RNA polymerase III transcribes tRNA, 5S rRNA and snRNAs.\nC. RNA polymerase II transcribes the heterogeneous nuclear RNA (hnRNA).\nD. During capping, 200 to 300 adenylate residues are added to the 5' end of hnRNA.\nE. During splicing, exons are removed and introns are joined together.\nChoose the correct answer from the options given below:",
     "options": ["A, B and C only", "A, B, C and D only", "B, C and E only", "A, D and E only"],
-    "answer": "A",
-    "solution": "Capping adds methyl guanosine triphosphate at the 5' end; adenylate residues are added at the 3' end during tailing, so D is wrong. In splicing introns are removed and exons joined, so E is wrong. Correct: A, B and C only."
+    "answer": "A"
   },
   {
     "type": "single",
     "chapter": "Molecular Basis of Inheritance",
     "text": "Given below are two statements:\nStatement I: The genetic code is degenerate, which means that one codon codes for more than one amino acid.\nStatement II: The genetic code is nearly universal; for example, UUU codes for phenylalanine in bacteria as well as in humans.\nIn the light of the above statements, choose the correct answer from the options given below:",
     "options": ["Both Statement I and Statement II are true", "Both Statement I and Statement II are false", "Statement I is true but Statement II is false", "Statement I is false but Statement II is true"],
-    "answer": "D",
-    "solution": "Degeneracy means some amino acids are coded by more than one codon; each codon is specific for one amino acid, so Statement I is false. The code is nearly universal (UUU codes for Phe from bacteria to humans), so Statement II is true."
+    "answer": "D"
   },
   {
     "type": "single",
     "chapter": "Molecular Basis of Inheritance",
     "text": "How many of the following statements about the Human Genome Project findings are correct?\n(i) The human genome contains 3164.7 million base pairs.\n(ii) The largest known human gene is dystrophin, at 2.4 million bases.\n(iii) The total number of genes is estimated at about 30,000.\n(iv) Chromosome Y has the largest number of genes.\n(v) Less than 2 per cent of the genome codes for proteins.\n(vi) Repeated sequences make up a very large portion of the human genome.",
     "options": ["3", "4", "5", "6"],
-    "answer": "C",
-    "solution": "Chromosome 1 has the most genes (2968) and Y has the fewest (231), so (iv) is wrong. The other five statements are salient features listed in NCERT. The answer is 5."
+    "answer": "C"
   },
   {
     "type": "single",
     "chapter": "Microbes in Human Welfare",
     "text": "Match List-I (microbes) with List-II (uses):\nList-I\n(A) Lactobacillus\n(B) Saccharomyces cerevisiae\n(C) Propionibacterium sharmanii\n(D) Aspergillus niger\nList-II\n(I) Swiss cheese with large holes\n(II) Production of citric acid\n(III) Curd from milk\n(IV) Fermenting dough for bread\nChoose the correct answer from the options given below:",
     "options": ["A-IV, B-III, C-I, D-II", "A-III, B-IV, C-II, D-I", "A-I, B-IV, C-III, D-II", "A-III, B-IV, C-I, D-II"],
-    "answer": "D",
-    "solution": "Lactobacillus (LAB) converts milk to curd; baker's yeast ferments bread dough; Propionibacterium sharmanii produces large amounts of $CO_2$ giving holes in Swiss cheese; Aspergillus niger produces citric acid. So A-III, B-IV, C-I, D-II."
+    "answer": "D"
   },
   {
     "type": "single",
     "chapter": "Microbes in Human Welfare",
     "text": "Given below are two statements:\nStatement I: Statins produced by the yeast Monascus purpureus lower blood cholesterol by competitively inhibiting the enzyme responsible for cholesterol synthesis.\nStatement II: Cyclosporin A, produced by the fungus Trichoderma polysporum, is used as an immunosuppressive agent in organ-transplant patients.\nIn the light of the above statements, choose the correct answer from the options given below:",
     "options": ["Both Statement I and Statement II are true", "Both Statement I and Statement II are false", "Statement I is true but Statement II is false", "Statement I is false but Statement II is true"],
-    "answer": "A",
-    "solution": "Both are bioactive molecules described in NCERT: statins from Monascus purpureus act as competitive inhibitors of cholesterol synthesis, and cyclosporin A from Trichoderma polysporum is an immunosuppressant. Both statements are true."
+    "answer": "A"
   },
   {
     "type": "single",
     "chapter": "Organisms and Populations",
     "text": "Match List-I (examples) with List-II (population interactions):\nList-I\n(A) An orchid growing as an epiphyte on a mango branch\n(B) Cuckoo laying its eggs in the nest of a crow\n(C) Fig tree and its pollinator wasp\n(D) Abingdon tortoise and goats introduced on the Galapagos Islands\nList-II\n(I) Mutualism\n(II) Commensalism\n(III) Competition\n(IV) Brood parasitism\nChoose the correct answer from the options given below:",
     "options": ["A-II, B-IV, C-I, D-III", "A-I, B-IV, C-II, D-III", "A-II, B-III, C-I, D-IV", "A-IV, B-II, C-I, D-III"],
-    "answer": "A",
-    "solution": "The epiphytic orchid benefits while the mango is unaffected (commensalism); the crow incubates cuckoo eggs (brood parasitism); fig and wasp both benefit (mutualism); the tortoise became extinct after goats arrived, because the goats were better at browsing (competition). So A-II, B-IV, C-I, D-III."
+    "answer": "A"
   },
   {
     "type": "single",
     "chapter": "Organisms and Populations",
     "text": "Read the following statements:\nA. A pond had 30 lotus plants last year and 12 new plants were added by reproduction. The birth rate is 0.4 offspring per lotus per year.\nB. If 5 individuals of a laboratory population of 50 fruit flies died in a week, the death rate is 0.1 individuals per fruit fly per week.\nC. Natality and immigration decrease population density.\nD. In logistic growth, the population density reaches a plateau at the carrying capacity (K).\nChoose the correct answer from the options given below:",
     "options": ["A, B and C only", "A, B and D only", "B, C and D only", "A, C and D only"],
-    "answer": "B",
-    "solution": "Birth rate = 12/30 = 0.4 and death rate = 5/50 = 0.1, so A and B are correct. Natality and immigration increase population density, so C is wrong. The logistic (sigmoid) curve levels off at K, so D is correct. Correct: A, B and D only."
+    "answer": "B"
   },
   {
     "type": "single",
     "chapter": "Ecosystem",
     "text": "In a food chain, producers trap 20 J of energy. According to the 10 per cent law, how much energy will be available to the tertiary consumers?",
     "options": ["2 J", "0.2 J", "0.002 J", "0.02 J"],
-    "answer": "D",
-    "solution": "Only about 10% of energy passes to each next trophic level: producers 20 J, primary consumers 2 J, secondary consumers 0.2 J, tertiary consumers 0.02 J."
+    "answer": "D"
   },
   {
     "type": "single",
     "chapter": "Ecosystem",
     "text": "Given below are two statements:\nStatement I: The pyramid of numbers in a grassland ecosystem is generally inverted.\nStatement II: The pyramid of energy is always upright and can never be inverted.\nIn the light of the above statements, choose the correct answer from the options given below:",
     "options": ["Both Statement I and Statement II are true", "Both Statement I and Statement II are false", "Statement I is true but Statement II is false", "Statement I is false but Statement II is true"],
-    "answer": "D",
-    "solution": "In a grassland there are far more producers than herbivores, and more herbivores than carnivores, so the pyramid of numbers is upright and Statement I is false. Energy is lost as heat at every step, so the energy pyramid is always upright and Statement II is true."
+    "answer": "D"
   },
   {
     "type": "single",
     "chapter": "Biodiversity and Conservation",
     "text": "Read the following statements:\nA. In the species-area relationship, the value of Z (slope of the regression line) usually lies in the range of 0.1 to 0.2, regardless of taxonomic group or region.\nB. For frugivorous birds and mammals in the tropical forests of different continents, the slope is much steeper, in the range of 0.6 to 1.2.\nC. Western Ghats and Sri Lanka, Indo-Burma, and Himalaya are the hotspots that cover India's exceptionally high biodiversity regions.\nD. The total number of biodiversity hotspots in the world is 25.\nE. All the biodiversity hotspots together cover less than 2 per cent of the earth's land area.\nChoose the correct answer from the options given below:",
     "options": ["A, B and D only", "B, C, D and E only", "A, B, C and E only", "A, C and D only"],
-    "answer": "C",
-    "solution": "25 hotspots were identified initially, but nine more were added later, bringing the total to 34, so D is wrong. The other statements match NCERT. Correct: A, B, C and E only."
+    "answer": "C"
   },
   {
     "type": "single",
     "chapter": "Biodiversity and Conservation",
     "text": "Given below are two statements: one is labelled as Assertion A and the other is labelled as Reason R.\nAssertion A: Tropical latitudes have greater species diversity than temperate latitudes.\nReason R: India has only 2.4 per cent of the world's land area, but its share of global species diversity is 8.1 per cent.\nIn the light of the above statements, choose the correct answer from the options given below:",
     "options": ["Both A and R are true and R is the correct explanation of A", "Both A and R are true but R is NOT the correct explanation of A", "A is true but R is false", "A is false but R is true"],
-    "answer": "B",
-    "solution": "Both are NCERT facts. However, the latitudinal gradient is explained by factors such as the long undisturbed evolutionary time, less seasonal environment and greater solar energy of the tropics, not by India's share of species. So both are true, but R does not explain A."
+    "answer": "B"
   }
 ]

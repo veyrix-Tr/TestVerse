@@ -6,7 +6,7 @@ import { signed, typeLabel } from './testsApi.js'
 /*
   Read-only preview of a normalized paper (the `paper` returned by
   POST /admin/tests/validate): sections, questions, options lettered A, B, C…
-  with the correct ones highlighted, numeric answers, solutions and videos.
+  with the correct ones highlighted, numeric answers and videos.
 */
 const FIRST = 10
 const letter = (i) => String.fromCharCode(65 + i)
@@ -104,19 +104,11 @@ function Question({ q, n }) {
           </b>
         </p>
       )}
-      {(q.solution || q.video) && (
+      {q.video && (
         <div className="ts-sol">
-          {q.solution && (
-            <>
-              <span className="ts-sol-l">Solution</span>
-              <Bi value={q.solution} />
-            </>
-          )}
-          {q.video && (
-            <a href={q.video} target="_blank" rel="noreferrer">
-              Video solution
-            </a>
-          )}
+          <a href={q.video} target="_blank" rel="noreferrer">
+            Video solution
+          </a>
         </div>
       )}
     </li>

@@ -1,5 +1,5 @@
 const prisma = require('../lib/prisma');
-const { stripAnswers } = require('../lib/paperFormat');
+const { stripAnswers, stripSolutions } = require('../lib/paperFormat');
 const { scoreAttempt, cleanResponses } = require('../lib/scoring');
 const { visibleTo } = require('../lib/access');
 
@@ -96,7 +96,7 @@ const canRetake = (test, attempt, now = Date.now()) =>
   !(test.opensAt && now < test.opensAt.getTime()) &&
   !(test.closesAt && now >= test.closesAt.getTime());
 
-// The full paper with answers, one submitted attempt, and the student's other
+// The paper with correct answers (no written solutions), one submitted attempt, and the student's other
 // submitted attempts. `latest` is their newest attempt (maybe a retake in progress).
 const resultPayload = async (test, attempt, latest) => {
   const done = await prisma.attempt.findMany({
@@ -104,7 +104,7 @@ const resultPayload = async (test, attempt, latest) => {
     orderBy: { attemptNo: 'desc' },
   });
   return {
-    test:       { ...meta(test), instructions: test.instructions, marking: test.marking, paper: test.paper },
+    test:       { ...meta(test), instructions: test.instructions, marking: test.marking, paper: stripSolutions(test.paper) },
     attempt:    publicAttempt(attempt),
     history:    done.map(summaryOf),
     inProgress: !!(latest && !latest.submittedAt),
@@ -263,8 +263,8 @@ const submitTest = async (req, res) => {
   }
 };
 
-// GET /api/tests/:id/result[?attempt=n] — the full paper with answers and
-// solutions for a submitted attempt (default: the latest submitted one)
+// GET /api/tests/:id/result[?attempt=n] — the paper with correct answers
+// (no written solutions) for a submitted attempt (default: the latest submitted one)
 const getResult = async (req, res) => {
   try {
     const test = await findTest(req);

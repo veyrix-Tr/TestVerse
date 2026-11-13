@@ -4,194 +4,169 @@
     "chapter": "Sets, Relations and Functions",
     "text": "Let $A = \\{1, 2, 3\\}$. The number of relations on $A$ which are reflexive and symmetric but NOT transitive is",
     "options": ["5", "3", "4", "8"],
-    "answer": "B",
-    "solution": "A reflexive symmetric relation must contain $(1,1),(2,2),(3,3)$ and is fixed by choosing which of the unordered pairs $\\{1,2\\},\\{1,3\\},\\{2,3\\}$ to include: $2^3 = 8$ relations. Of these, the transitive ones are the equivalence relations, i.e. partitions of a 3-element set: 5. Hence $8 - 5 = 3$ (the ones containing exactly two of the three pairs)."
+    "answer": "B"
   },
   {
     "type": "single",
     "chapter": "Complex Numbers",
     "text": "The number of complex numbers $z$ satisfying $z^2 + |z| = 0$ is",
     "options": ["1", "2", "3", "4"],
-    "answer": "C",
-    "solution": "Put $z = x + iy$: $x^2 - y^2 + \\sqrt{x^2+y^2} = 0$ and $2xy = 0$. If $y = 0$: $x^2 + |x| = 0 \\Rightarrow x = 0$. If $x = 0$: $|y| - y^2 = 0 \\Rightarrow y = 0, \\pm 1$. So $z = 0, i, -i$: 3 solutions."
+    "answer": "C"
   },
   {
     "type": "single",
     "chapter": "Quadratic Equations",
     "text": "Let $\\alpha$ and $\\beta$ be the roots of $x^2 - 5x - 3 = 0$ and $a_n = \\alpha^n - \\beta^n$ for $n \\ge 1$. Then the value of $\\dfrac{a_{12} - 3a_{10}}{a_{11}}$ is",
     "options": ["3", "15", "$\\dfrac{1}{5}$", "5"],
-    "answer": "D",
-    "solution": "Since $\\alpha^2 = 5\\alpha + 3$, multiplying by $\\alpha^{10}$ gives $\\alpha^{12} - 3\\alpha^{10} = 5\\alpha^{11}$; similarly for $\\beta$. Subtracting, $a_{12} - 3a_{10} = 5a_{11}$, so the ratio is 5."
+    "answer": "D"
   },
   {
     "type": "single",
     "chapter": "Matrices and Determinants",
     "text": "Given below are two statements:\nStatement I: If $A$ is a $3 \\times 3$ matrix with $|A| = 4$, then $|\\text{adj}(2A)| = 256$.\nStatement II: Every skew-symmetric matrix of order 3 is singular.\nIn the light of the above statements, choose the correct answer from the options given below:",
     "options": ["Both Statement I and Statement II are true", "Both Statement I and Statement II are false", "Statement I is true but Statement II is false", "Statement I is false but Statement II is true"],
-    "answer": "D",
-    "solution": "For order $n$, $|\\text{adj}(B)| = |B|^{n-1}$. Here $|2A| = 2^3 \\cdot 4 = 32$, so $|\\text{adj}(2A)| = 32^2 = 1024$, not 256: Statement I is false. For skew-symmetric $A$ of odd order, $|A| = |A^T| = |-A| = (-1)^3|A| \\Rightarrow |A| = 0$: Statement II is true."
+    "answer": "D"
   },
   {
     "type": "single",
     "chapter": "Permutations and Combinations",
     "text": "The number of 5-digit numbers, divisible by 5, that can be formed using the digits $0, 1, 2, 3, 4, 5$ without repetition is",
     "options": ["216", "240", "120", "192"],
-    "answer": "A",
-    "solution": "Last digit 0: the remaining 4 places are filled from 5 digits in $^5P_4 = 120$ ways. Last digit 5: first digit from $\\{1,2,3,4\\}$ (4 ways), then the middle 3 places from the remaining 4 digits in $^4P_3 = 24$ ways, giving 96. Total $= 120 + 96 = 216$."
+    "answer": "A"
   },
   {
     "type": "single",
     "chapter": "Binomial Theorem",
     "text": "The term independent of $x$ in the expansion of $\\left(2x^2 - \\dfrac{1}{x}\\right)^9$ is",
     "options": ["$-672$", "$672$", "$5376$", "$84$"],
-    "answer": "B",
-    "solution": "$T_{r+1} = {}^9C_r (2x^2)^{9-r}(-1/x)^r = {}^9C_r\\, 2^{9-r} (-1)^r x^{18-3r}$. Setting $18 - 3r = 0$ gives $r = 6$, so the term is ${}^9C_6 \\cdot 2^3 \\cdot 1 = 84 \\times 8 = 672$."
+    "answer": "B"
   },
   {
     "type": "single",
     "chapter": "Sequences and Series",
     "text": "The value of $\\displaystyle\\sum_{k=1}^{10} \\frac{k}{k^4 + k^2 + 1}$ is",
     "options": ["$\\dfrac{110}{111}$", "$\\dfrac{56}{111}$", "$\\dfrac{55}{111}$", "$\\dfrac{50}{111}$"],
-    "answer": "C",
-    "solution": "$k^4 + k^2 + 1 = (k^2 - k + 1)(k^2 + k + 1)$, so $\\dfrac{k}{k^4+k^2+1} = \\dfrac{1}{2}\\left[\\dfrac{1}{k^2-k+1} - \\dfrac{1}{k^2+k+1}\\right]$. Since $k^2 + k + 1 = (k+1)^2 - (k+1) + 1$, the sum telescopes to $\\dfrac{1}{2}\\left(1 - \\dfrac{1}{111}\\right) = \\dfrac{55}{111}$."
+    "answer": "C"
   },
   {
     "type": "single",
     "chapter": "Limits and Continuity",
     "text": "The value of $\\displaystyle\\lim_{x \\to 0} \\frac{(1 - \\cos 4x)(5 + \\cos x)}{x \\tan 3x}$ is",
     "options": ["16", "8", "12", "24"],
-    "answer": "A",
-    "solution": "$1 - \\cos 4x = 2\\sin^2 2x \\approx 8x^2$, $5 + \\cos x \\to 6$ and $x \\tan 3x \\approx 3x^2$. Hence the limit is $\\dfrac{8 \\times 6}{3} = 16$."
+    "answer": "A"
   },
   {
     "type": "single",
     "chapter": "Differentiability and Derivatives",
     "text": "Let $f : \\mathbb{R} \\rightarrow \\mathbb{R}$ be defined by $f(x) = |(x-1)^2(x+2)| + |x| \\sin x$. The number of points at which $f$ is NOT differentiable is",
     "options": ["0", "1", "2", "3"],
-    "answer": "B",
-    "solution": "$|(x-1)^2(x+2)| = (x-1)^2|x+2|$. At $x = 1$ the factor $(x-1)^2$ makes both one-sided derivatives 0, so it is differentiable; at $x = -2$ there is a corner (derivative $\\pm 9$). $|x|\\sin x$ is differentiable at 0 since $\\lim_{h\\to0} \\frac{|h|\\sin h}{h} = 0$ from both sides. So $f$ fails to be differentiable only at $x = -2$: 1 point."
+    "answer": "B"
   },
   {
     "type": "single",
     "chapter": "Application of Derivatives",
     "text": "Let $f(x) = 2x^3 - 9x^2 + 12x + 5$. The difference between the maximum and the minimum values of $f$ on the interval $[0, 3]$ is",
     "options": ["1", "4", "5", "9"],
-    "answer": "D",
-    "solution": "$f'(x) = 6(x-1)(x-2)$, so the critical points are $x = 1, 2$. $f(0) = 5$, $f(1) = 10$, $f(2) = 9$, $f(3) = 14$. Absolute max $= 14$, absolute min $= 5$, difference $= 9$."
+    "answer": "D"
   },
   {
     "type": "single",
     "chapter": "Indefinite Integrals",
     "text": "For $x \\gt 0$, $\\displaystyle\\int \\frac{dx}{x^2 (x^4 + 1)^{3/4}}$ is equal to (where $C$ is a constant of integration)",
     "options": ["$-\\dfrac{(x^4+1)^{1/4}}{x} + C$", "$\\dfrac{(x^4+1)^{1/4}}{x} + C$", "$-\\dfrac{(x^4+1)^{3/4}}{3x^3} + C$", "$-\\dfrac{(x^4+1)^{1/4}}{4x} + C$"],
-    "answer": "A",
-    "solution": "Write $x^2(x^4+1)^{3/4} = x^5(1 + x^{-4})^{3/4}$. Put $t = 1 + x^{-4}$, $dt = -4x^{-5}dx$: the integral becomes $-\\frac{1}{4}\\int t^{-3/4}dt = -t^{1/4} + C = -\\dfrac{(x^4+1)^{1/4}}{x} + C$."
+    "answer": "A"
   },
   {
     "type": "single",
     "chapter": "Definite Integrals and Area",
     "text": "The area of the region $\\{(x, y) : x^2 \\le y \\le 4 - x^2\\}$ (in square units) is",
     "options": ["$\\dfrac{8\\sqrt{2}}{3}$", "$\\dfrac{32}{3}$", "$\\dfrac{16\\sqrt{2}}{3}$", "$\\dfrac{16}{3}$"],
-    "answer": "C",
-    "solution": "The curves meet where $x^2 = 4 - x^2$, i.e. $x = \\pm\\sqrt{2}$. Area $= \\int_{-\\sqrt2}^{\\sqrt2} (4 - 2x^2)\\,dx = 2\\left[4x - \\frac{2x^3}{3}\\right]_0^{\\sqrt2} = 2\\left(4\\sqrt2 - \\frac{4\\sqrt2}{3}\\right) = \\dfrac{16\\sqrt2}{3}$."
+    "answer": "C"
   },
   {
     "type": "single",
     "chapter": "Differential Equations",
     "text": "Let $y = y(x)$ be the solution of the differential equation $(1 + x^2)\\dfrac{dy}{dx} + 2xy = 4x^2$ with $y(0) = 0$. Then $y(1)$ is equal to",
     "options": ["$\\dfrac{1}{3}$", "$\\dfrac{4}{3}$", "1", "$\\dfrac{2}{3}$"],
-    "answer": "D",
-    "solution": "The left side is $\\dfrac{d}{dx}\\left[(1+x^2)y\\right]$, so $(1+x^2)y = \\dfrac{4x^3}{3} + C$. $y(0) = 0$ gives $C = 0$. At $x = 1$: $2y = \\dfrac{4}{3}$, so $y(1) = \\dfrac{2}{3}$."
+    "answer": "D"
   },
   {
     "type": "single",
     "chapter": "Straight Lines",
     "text": "The orthocentre of the triangle with vertices $O(0, 0)$, $A(4, 0)$ and $B(1, 3)$ is",
     "options": ["$\\left(\\dfrac{5}{3}, 1\\right)$", "$(1, 1)$", "$(1, 2)$", "$(2, 1)$"],
-    "answer": "B",
-    "solution": "The altitude from $B$ is perpendicular to $OA$ (the x-axis): $x = 1$. Side $AB$ has slope $\\frac{3-0}{1-4} = -1$, so the altitude from $O$ has slope 1: $y = x$. They meet at $(1, 1)$."
+    "answer": "B"
   },
   {
     "type": "single",
     "chapter": "Circles",
     "text": "The length of the chord cut off by the line $3x + 4y = 8$ on the circle $x^2 + y^2 - 4x - 6y - 12 = 0$ is",
     "options": ["$\\sqrt{21}$", "$2\\sqrt{29}$", "$2\\sqrt{21}$", "$4\\sqrt{6}$"],
-    "answer": "C",
-    "solution": "Centre $(2, 3)$, radius $\\sqrt{4 + 9 + 12} = 5$. Distance of centre from the line $= \\frac{|6 + 12 - 8|}{5} = 2$. Chord length $= 2\\sqrt{25 - 4} = 2\\sqrt{21}$."
+    "answer": "C"
   },
   {
     "type": "single",
     "chapter": "Conic Sections",
     "text": "An ellipse $\\dfrac{x^2}{a^2} + \\dfrac{y^2}{b^2} = 1$ $(a \\gt b)$ has eccentricity $\\dfrac{1}{2}$ and length of latus rectum 6. The area (in square units) of the quadrilateral whose vertices are the end points of its two latera recta is",
     "options": ["12", "24", "48", "36"],
-    "answer": "B",
-    "solution": "$b^2 = a^2(1 - e^2) = \\frac{3}{4}a^2$ and $\\frac{2b^2}{a} = 6 \\Rightarrow \\frac{3a}{2} = 6 \\Rightarrow a = 4$, $b^2 = 12$. The ends of the latera recta are $(\\pm ae, \\pm b^2/a) = (\\pm 2, \\pm 3)$, forming a $4 \\times 6$ rectangle of area 24."
+    "answer": "B"
   },
   {
     "type": "single",
     "chapter": "Three Dimensional Geometry",
     "text": "Let $(\\alpha, \\beta, \\gamma)$ be the image of the point $P(2, 3, 4)$ in the plane $x + 2y + 2z = 7$. Then $\\alpha + \\beta + \\gamma$ is equal to",
     "options": ["$-1$", "$4$", "$9$", "$-3$"],
-    "answer": "A",
-    "solution": "Image: $\\frac{x-2}{1} = \\frac{y-3}{2} = \\frac{z-4}{2} = \\frac{-2(2 + 6 + 8 - 7)}{1 + 4 + 4} = -2$. So the image is $(0, -1, 0)$ and $\\alpha + \\beta + \\gamma = -1$. (The foot of the perpendicular is $(1, 1, 2)$, whose coordinate sum 4 is a common slip.)"
+    "answer": "A"
   },
   {
     "type": "single",
     "chapter": "Statistics",
     "text": "The mean and variance of five observations are 5 and 8 respectively. If three of the observations are 2, 4 and 6, and the remaining two are $a$ and $b$, then $|a - b|$ is equal to",
     "options": ["5", "3", "13", "7"],
-    "answer": "D",
-    "solution": "Sum $= 25 \\Rightarrow a + b = 13$. $\\sum x_i^2 = 5(8 + 25) = 165 \\Rightarrow a^2 + b^2 = 165 - 56 = 109$. Then $2ab = 169 - 109 = 60$, $(a-b)^2 = 109 - 60 = 49$, so $|a - b| = 7$ (the numbers are 10 and 3)."
+    "answer": "D"
   },
   {
     "type": "single",
     "chapter": "Probability",
     "text": "Bag A contains 3 red and 5 black balls, and bag B contains 4 red and 4 black balls. A fair die is thrown: if it shows 1 or 2, a ball is drawn from bag A; otherwise a ball is drawn from bag B. If the ball drawn is red, the probability that it was drawn from bag A is",
     "options": ["$\\dfrac{8}{11}$", "$\\dfrac{1}{3}$", "$\\dfrac{3}{11}$", "$\\dfrac{3}{8}$"],
-    "answer": "C",
-    "solution": "$P(A)P(R|A) = \\frac{1}{3} \\cdot \\frac{3}{8} = \\frac{1}{8}$ and $P(B)P(R|B) = \\frac{2}{3} \\cdot \\frac{1}{2} = \\frac{1}{3}$. By Bayes' theorem, $P(A|R) = \\dfrac{1/8}{1/8 + 1/3} = \\dfrac{3}{11}$."
+    "answer": "C"
   },
   {
     "type": "single",
     "chapter": "Trigonometry",
     "text": "The number of solutions of the equation $\\cos 2x + 3\\sin x = 2$ in the interval $[0, 4\\pi]$ is",
     "options": ["6", "4", "3", "8"],
-    "answer": "A",
-    "solution": "$1 - 2\\sin^2 x + 3\\sin x = 2 \\Rightarrow 2\\sin^2 x - 3\\sin x + 1 = 0 \\Rightarrow \\sin x = 1$ or $\\frac{1}{2}$. In $[0, 4\\pi]$: $\\sin x = 1$ at $\\frac{\\pi}{2}, \\frac{5\\pi}{2}$ (2 values); $\\sin x = \\frac12$ at $\\frac{\\pi}{6}, \\frac{5\\pi}{6}, \\frac{13\\pi}{6}, \\frac{17\\pi}{6}$ (4 values). Total 6."
+    "answer": "A"
   },
   {
     "type": "integer",
     "chapter": "Matrices and Determinants",
     "text": "Let $A$ be the $2 \\times 2$ matrix with rows $(1, 2)$ and $(2, 1)$, and let $I$ be the $2 \\times 2$ identity matrix. If $A^5 = \\alpha A + \\beta I$, then $\\alpha + \\beta$ is equal to",
-    "answer": 121,
-    "solution": "trace $A = 2$, $|A| = -3$, so by Cayley–Hamilton $A^2 = 2A + 3I$. Then $A^3 = 2A^2 + 3A = 7A + 6I$, $A^4 = 7A^2 + 6A = 20A + 21I$, $A^5 = 20A^2 + 21A = 61A + 60I$. So $\\alpha + \\beta = 121$."
+    "answer": 121
   },
   {
     "type": "integer",
     "chapter": "Definite Integrals and Area",
     "text": "The value of $\\displaystyle\\int_{-\\pi/2}^{\\pi/2} \\frac{12\\cos x}{1 + e^{x}}\\,dx$ is",
-    "answer": 12,
-    "solution": "Replacing $x$ by $-x$, $I = \\int_{-\\pi/2}^{\\pi/2} \\frac{12 e^x \\cos x}{1 + e^x}dx$. Adding, $2I = \\int_{-\\pi/2}^{\\pi/2} 12\\cos x\\,dx = 24$, so $I = 12$."
+    "answer": 12
   },
   {
     "type": "integer",
     "chapter": "Conic Sections",
     "text": "One end of a focal chord of the parabola $y^2 = 16x$ is the point $(16, 16)$. The length of this focal chord is",
-    "answer": 25,
-    "solution": "Here $a = 4$; $(16, 16) = (at^2, 2at)$ with $t = 2$. The other end has parameter $-\\frac{1}{t} = -\\frac12$, i.e. the point $(1, -4)$. Length $= (16 + 4) + (1 + 4) = 25$ (sum of focal distances $x + a$)."
+    "answer": 25
   },
   {
     "type": "integer",
     "chapter": "Three Dimensional Geometry",
     "text": "The shortest distance between the lines $\\dfrac{x-1}{2} = \\dfrac{y+1}{1} = \\dfrac{z-2}{-2}$ and $\\dfrac{x-4}{1} = \\dfrac{y+4}{2} = \\dfrac{z-8}{2}$ is",
-    "answer": 6,
-    "solution": "$\\vec{d_1} = (2, 1, -2)$, $\\vec{d_2} = (1, 2, 2)$, $\\vec{d_1} \\times \\vec{d_2} = (6, -6, 3)$ with magnitude 9. Joining vector of the points $(1,-1,2)$ and $(4,-4,8)$ is $(3, -3, 6)$. Shortest distance $= \\frac{|18 + 18 + 18|}{9} = 6$."
+    "answer": 6
   },
   {
     "type": "integer",
     "chapter": "Vector Algebra",
     "text": "Let $\\vec{a} = 2\\hat{i} + \\hat{j} - \\hat{k}$ and $\\vec{b} = \\hat{i} - \\hat{j} + \\hat{k}$. If $\\vec{c}$ is a vector such that $\\vec{a} \\times \\vec{c} = \\vec{b}$ and $\\vec{a} \\cdot \\vec{c} = 3$, then $|\\vec{b} + 2\\vec{c}|^2$ is equal to",
-    "answer": 11,
-    "solution": "Take $\\vec{a} \\times$ both sides: $(\\vec a \\cdot \\vec c)\\vec a - |\\vec a|^2 \\vec c = \\vec a \\times \\vec b = -3\\hat j - 3\\hat k$. With $|\\vec a|^2 = 6$: $6\\vec c = 3\\vec a + 3\\hat j + 3\\hat k = 6\\hat i + 6\\hat j$, so $\\vec c = \\hat i + \\hat j$. Then $\\vec b + 2\\vec c = 3\\hat i + \\hat j + \\hat k$ and its squared magnitude is $9 + 1 + 1 = 11$."
+    "answer": 11
   }
 ]

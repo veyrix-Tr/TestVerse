@@ -37,7 +37,6 @@ A full example is in `frontend/public/sample-test.json`. In the admin panel,
 | `tolerance` | numerical only, optional | How far off still counts as correct, e.g. `0.05`. Default `0` |
 | `marks` | optional | Override the test's marking for this question: `{"correct": 4, "wrong": -1}`; for multiple also `"partial": true/false` |
 | `chapter` | optional | Shown in the student's chapter-wise analysis |
-| `solution` | optional | Shown after the student submits. `"…"` or `{"en": "…", "hi": "…"}` |
 | `video` | optional | YouTube link to a video solution, shown after submitting |
 
 ### Maths and formulas

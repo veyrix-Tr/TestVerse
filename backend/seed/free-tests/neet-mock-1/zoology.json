@@ -9,8 +9,7 @@
       "A-II, B-I, C-IV, D-III",
       "A-II, B-III, C-IV, D-I"
     ],
-    "answer": "D",
-    "solution": "Pleurobrachia is a ctenophore, a group in which bioluminescence is well marked. Ascaris (Aschelminthes) is pseudocoelomate. Pila (Mollusca) has a radula in its mouth. Balanoglossus (Hemichordata) excretes through the proboscis gland. So A-II, B-III, C-IV, D-I."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -22,8 +21,7 @@
       "Statement I is true but Statement II is false",
       "Statement I is false but Statement II is true"
     ],
-    "answer": "C",
-    "solution": "NCERT says that in Chondrichthyes the notochord persists throughout life, so Statement I is true. Fishes, both cartilaginous and bony, have a two-chambered heart (one auricle and one ventricle), so Statement II is false."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -35,8 +33,7 @@
       "6",
       "3"
     ],
-    "answer": "B",
-    "solution": "Chelone (turtle), Calotes (garden lizard) and Naja (cobra) are reptiles, Hyla (tree frog) is an amphibian and Exocoetus (flying fish) is a bony fish. All five are cold-blooded. Pteropus (flying fox) and Delphinus (dolphin) are mammals and Columba (pigeon) is a bird, so these three are warm-blooded. Answer: 5."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -48,8 +45,7 @@
       "A, B and D only",
       "A, B, C and D only"
     ],
-    "answer": "C",
-    "solution": "A, B and D are NCERT statements. C is wrong because flatworms are acoelomate. E is wrong because arthropods have an open circulatory system. So the answer is A, B and D only."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -61,8 +57,7 @@
       "The ventral nerve cord has three ganglia in the abdomen and six in the thorax",
       "The mushroom-shaped gland is present in the 2nd and 3rd abdominal segments"
     ],
-    "answer": "B",
-    "solution": "Each compound eye of a cockroach has about 2000 hexagonal ommatidia, which gives mosaic vision. Malpighian tubules lie at the junction of the midgut and the hindgut. The nerve cord has three ganglia in the thorax and six in the abdomen. The mushroom-shaped gland lies in the 6th and 7th abdominal segments."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -74,8 +69,7 @@
       "A-I, B-III, C-II, D-IV",
       "A-II, B-III, C-I, D-IV"
     ],
-    "answer": "D",
-    "solution": "Areolar tissue lies beneath the skin and supports epithelium. Adipose tissue stores fat. Dense regular tissue forms tendons and ligaments. Cuboidal epithelium lines the ducts of glands and the tubular parts of nephrons. So A-II, B-III, C-I, D-IV."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -87,8 +81,7 @@
       "A is true but R is false",
       "A is false but R is true"
     ],
-    "answer": "A",
-    "solution": "Malonate is the NCERT example of a competitive inhibitor. It looks like succinate, binds to the active site of succinic dehydrogenase and blocks the substrate. Both statements are true, and R explains A."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -100,8 +93,7 @@
       "A-II, B-III, C-IV, D-I",
       "A-I, B-III, C-IV, D-II"
     ],
-    "answer": "C",
-    "solution": "Oxidoreductases carry out redox reactions (II). Transferases transfer a group other than hydrogen (III). Hydrolases break bonds by hydrolysis (IV). Lyases remove groups without hydrolysis and leave double bonds (I). So A-II, B-III, C-IV, D-I."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -113,8 +105,7 @@
       "B, C and D only",
       "C, D and E only"
     ],
-    "answer": "A",
-    "solution": "A, C and D are NCERT facts. B is wrong: starch forms helices that hold $I_2$ and turn blue, but cellulose has no complex helices and cannot hold $I_2$. E is wrong because inulin is a polymer of fructose. Answer: A, C and D only."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -126,8 +117,7 @@
       "Statement I is true but Statement II is false",
       "Statement I is false but Statement II is true"
     ],
-    "answer": "A",
-    "solution": "According to the NCERT table, alveolar $pO_2$ is 104 mm Hg and $pCO_2$ is 40 mm Hg. NCERT also says that every 100 mL of deoxygenated blood delivers about 4 mL of $CO_2$ to the alveoli. Both statements are true."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -139,8 +129,7 @@
       "5800 mL and 2300 mL",
       "3500 mL and 2300 mL"
     ],
-    "answer": "D",
-    "solution": "Inspiratory capacity = TV + IRV = 500 + 3000 = 3500 mL. Functional residual capacity = ERV + RV = 1100 + 1200 = 2300 mL."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -152,8 +141,7 @@
       "A-III, B-I, C-II, D-IV",
       "A-III, B-IV, C-I, D-II"
     ],
-    "answer": "B",
-    "solution": "The P-wave shows atrial depolarisation and the QRS complex shows ventricular depolarisation. The T-wave shows the ventricles returning to the normal state (repolarisation), and the end of the T-wave marks the end of systole. So A-III, B-I, C-IV, D-II."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -165,8 +153,7 @@
       "Statement I is true but Statement II is false",
       "Statement I is false but Statement II is true"
     ],
-    "answer": "C",
-    "solution": "Blood group O has no A or B antigens on its RBCs, and its plasma has both anti-A and anti-B, so Statement I is true. Erythroblastosis foetalis happens when an Rh-negative mother carries an Rh-positive foetus, the reverse of what Statement II says. So Statement II is false."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -178,8 +165,7 @@
       "A, B and E only",
       "A, C and E only"
     ],
-    "answer": "C",
-    "solution": "A, B and E are correct (72 beats/min × 70 mL is about 5 L/min). C is wrong because atrial systole adds only about 30 per cent to ventricular filling. D is wrong because 'lub' comes from the closure of the AV (tricuspid and bicuspid) valves; 'dub' comes from the semilunar valves."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -191,8 +177,7 @@
       "Statement I is true but Statement II is false",
       "Statement I is false but Statement II is true"
     ],
-    "answer": "D",
-    "solution": "The descending limb is permeable to water and almost impermeable to electrolytes; the ascending limb is the reverse. So Statement I is false. The medullary osmotic gradient (300 to about 1200 $\\text{mOsmol L}^{-1}$) is mainly due to NaCl and urea, so Statement II is true."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -204,8 +189,7 @@
       "A-II, B-III, C-IV, D-I",
       "A-I, B-IV, C-III, D-II"
     ],
-    "answer": "A",
-    "solution": "Planaria uses protonephridia (flame cells) and the earthworm uses nephridia. Cockroaches and other insects use Malpighian tubules, and crustaceans like the prawn use antennal (green) glands. So A-II, B-IV, C-III, D-I."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -217,8 +201,7 @@
       "B, C and E only",
       "A, B, D and E only"
     ],
-    "answer": "D",
-    "solution": "A, B, D and E are NCERT statements. C is wrong: ANF causes vasodilation and lowers blood pressure, which is why it checks the renin-angiotensin mechanism. Answer: A, B, D and E only."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -230,8 +213,7 @@
       "Statement I is true but Statement II is false",
       "Statement I is false but Statement II is true"
     ],
-    "answer": "B",
-    "solution": "During contraction the A-band keeps its length while the I-bands shorten, so Statement I is false. $Ca^{2+}$ binds to a subunit of troponin, not tropomyosin, and this removes the masking of the active sites, so Statement II is also false."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -243,8 +225,7 @@
       "4",
       "2"
     ],
-    "answer": "C",
-    "solution": "(i) 8 cranial + 14 facial = 22, correct. (ii) Correct. (iii) Wrong: ribs 8 to 10 are vertebrochondral (false) ribs, and the 11th and 12th pairs are floating ribs. (iv) Correct. (v) Wrong: ilium, ischium and pubis form the pelvic girdle (coxal bone). (vi) Correct. So 4 are correct."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -256,8 +237,7 @@
       "A-III, B-IV, C-II, D-I",
       "A-I, B-IV, C-III, D-II"
     ],
-    "answer": "B",
-    "solution": "Myasthenia gravis is an autoimmune disease of the neuromuscular junction (III). Muscular dystrophy is genetic degeneration of skeletal muscle (IV). Tetany is caused by low $Ca^{2+}$ (I). Gout is caused by uric acid crystals in the joints (II)."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -269,8 +249,7 @@
       "A is true but R is false",
       "A is false but R is true"
     ],
-    "answer": "A",
-    "solution": "NCERT explains that the Na-K pump moves 3 $Na^+$ out for every 2 $K^+$ in. As a result, the outer surface carries a positive charge and the inner surface a negative charge, so the membrane is polarised. Both statements are true, and R explains A."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -282,8 +261,7 @@
       "A-IV, B-I, C-II, D-III",
       "A-IV, B-I, C-III, D-II"
     ],
-    "answer": "D",
-    "solution": "The hypothalamus controls body temperature, eating and drinking (IV). The corpus callosum connects the two cerebral hemispheres (I). The medulla holds the respiratory, cardiovascular and gastric centres (III). The limbic system, together with the hypothalamus, governs sexual behaviour and emotions (II)."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -295,8 +273,7 @@
       "A-II, B-IV, C-III, D-I",
       "A-II, B-I, C-IV, D-III"
     ],
-    "answer": "A",
-    "solution": "Melatonin from the pineal gland regulates the diurnal rhythm. Thyrocalcitonin (TCT) from the thyroid regulates blood calcium. Thymosins from the thymus help T-lymphocytes differentiate. Erythropoietin from the JG cells of the kidney stimulates RBC formation. So A-II, B-IV, C-I, D-III."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -308,8 +285,7 @@
       "Statement I is true but Statement II is false",
       "Statement I is false but Statement II is true"
     ],
-    "answer": "A",
-    "solution": "Both statements describe the two mechanisms of hormone action in NCERT. Protein and peptide hormones act through membrane receptors and second messengers such as cAMP, IP3 and $Ca^{2+}$. Steroid hormones and thyroid hormones bind intracellular receptors and act on genes. Both are true."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -321,8 +297,7 @@
       "C, D and E only",
       "A, B, C and E only"
     ],
-    "answer": "B",
-    "solution": "A, D and E are correct. B is wrong because diabetes insipidus comes from a defect in the synthesis or release of ADH (vasopressin), not insulin. C is wrong because Graves' disease is a form of hyperthyroidism. Answer: A, D and E only."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -334,8 +309,7 @@
       "Statement I is true but Statement II is false",
       "Statement I is false but Statement II is true"
     ],
-    "answer": "D",
-    "solution": "Primary spermatocytes are diploid with 46 chromosomes. Only after meiosis I do the secondary spermatocytes have 23. So Statement I is false. The release of sperms from the seminiferous tubules is called spermiation, so Statement II is true. (Spermiogenesis is the change of spermatids into sperms.)"
+    "answer": "D"
   },
   {
     "type": "single",
@@ -347,8 +321,7 @@
       "A, C and D only",
       "A, B, C and E only"
     ],
-    "answer": "D",
-    "solution": "A, B, C and E follow NCERT. D is wrong: in the follicular phase the endometrium regenerates under the rising level of oestrogens from the growing follicles. Progesterone comes from the corpus luteum in the luteal phase. Answer: A, B, C and E only."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -360,8 +333,7 @@
       "A-II, B-I, C-IV, D-III",
       "A-II, B-I, C-III, D-IV"
     ],
-    "answer": "C",
-    "solution": "The morula is the 8-16 cell stage (II). The trophoblast is the outer layer of the blastocyst that attaches to the endometrium (I). The inner cell mass becomes the embryo (IV). Chorionic villi are finger-like projections that grow from the trophoblast after implantation (III)."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -373,8 +345,7 @@
       "The secondary oocyte completes its second meiotic division before it is released from the ovary",
       "The primary oocytes enter prophase-I of meiosis and get temporarily arrested at that stage"
     ],
-    "answer": "C",
-    "solution": "The secondary oocyte is released at ovulation while still in meiosis II. It completes the second meiotic division only when a sperm enters it during fertilisation, forming the ovum and a second polar body. The other three statements are correct."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -386,8 +357,7 @@
       "A-IV, B-III, C-I, D-II",
       "A-I, B-III, C-II, D-IV"
     ],
-    "answer": "B",
-    "solution": "Multiload 375 is a copper-releasing IUD (IV). Progestasert is a hormone-releasing IUD (III). Saheli is a non-steroidal pill taken once a week (II). The Lippes loop is a non-medicated IUD (I)."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -399,8 +369,7 @@
       "Statement I is true but Statement II is false",
       "Statement I is false but Statement II is true"
     ],
-    "answer": "B",
-    "solution": "Embryos with up to 8 blastomeres go into the fallopian tube in ZIFT. In IUT, embryos with more than 8 blastomeres go into the uterus. So Statement I is false. In ICSI, the sperm is injected directly into the ovum in the laboratory, not into the uterus, so Statement II is also false."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -412,8 +381,7 @@
       "3",
       "5"
     ],
-    "answer": "D",
-    "solution": "NCERT: except for hepatitis-B, genital herpes and HIV infections, other STIs are completely curable if detected early and treated properly. That leaves gonorrhoea, syphilis, chlamydiasis, trichomoniasis and genital warts, which is 5."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -425,8 +393,7 @@
       "0.36",
       "0.16"
     ],
-    "answer": "A",
-    "solution": "$q^2 = 0.16$, so $q = 0.4$ and $p = 1 - 0.4 = 0.6$. Heterozygote frequency $= 2pq = 2 \\times 0.6 \\times 0.4 = 0.48$."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -438,8 +405,7 @@
       "Thorns of Bougainvillea and tendrils of Cucurbita",
       "Hearts of different vertebrates"
     ],
-    "answer": "B",
-    "solution": "The wings of a butterfly and a bird do the same job but have different structure and origin, so they are analogous structures produced by convergent evolution. Vertebrate forelimbs, Bougainvillea thorns with Cucurbita tendrils, and vertebrate hearts are all homologous structures, which point to divergent evolution."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -451,8 +417,7 @@
       "A-I, B-II, C-III, D-IV",
       "A-IV, B-II, C-III, D-I"
     ],
-    "answer": "C",
-    "solution": "Homo habilis had a 650-800 cc brain and probably did not eat meat. Homo erectus (about 1.5 mya) had a brain of about 900 cc and probably ate meat. Neanderthals had a 1400 cc brain, used hides and buried their dead. Dryopithecus (about 15 mya) was hairy and walked like gorillas and chimpanzees. So A-I, B-II, C-III, D-IV."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -464,8 +429,7 @@
       "A-IV, B-II, C-III, D-I",
       "A-IV, B-III, C-II, D-I"
     ],
-    "answer": "D",
-    "solution": "Salmonella typhi causes typhoid and Haemophilus influenzae causes pneumonia (along with Streptococcus pneumoniae). Wuchereria causes filariasis (elephantiasis), and Microsporum is one of the fungi that cause ringworm. So A-IV, B-III, C-II, D-I."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -477,8 +441,7 @@
       "Statement I is true but Statement II is false",
       "Statement I is false but Statement II is true"
     ],
-    "answer": "D",
-    "solution": "Plasmodium enters the human body as sporozoites. Gametocytes form later in the RBCs and are taken up by the mosquito. So Statement I is false. Statement II is true as written in NCERT."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -490,8 +453,7 @@
       "B, C, D and E only",
       "A, C and E only"
     ],
-    "answer": "A",
-    "solution": "A, B, C and D are NCERT statements. E is wrong: active immunity is slow and takes time to give its full effective response. Passive immunity, from ready-made antibodies, is the quick one. Answer: A, B, C and D only."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -503,8 +465,7 @@
       "Cannabinoids – obtained from the coca plant Erythroxylum coca",
       "Smack – a cannabinoid obtained from the inflorescences of Cannabis sativa"
     ],
-    "answer": "B",
-    "solution": "Heroin (smack) is diacetylmorphine, made by acetylating morphine from the poppy (Papaver somniferum). It is a depressant that slows down body functions. Cocaine comes from Erythroxylum coca, and cannabinoids come from Cannabis sativa. Smack is heroin, not a cannabinoid."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -516,8 +477,7 @@
       "Statement I is true but Statement II is false",
       "Statement I is false but Statement II is true"
     ],
-    "answer": "C",
-    "solution": "Statement I is the NCERT description of EcoRI. Statement II is false: the Roman numerals show the order in which the enzymes were isolated from that bacterial strain."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -529,8 +489,7 @@
       "grow on tetracycline but not on ampicillin",
       "grow on neither antibiotic"
     ],
-    "answer": "C",
-    "solution": "In pBR322 the PstI site (like PvuI) lies inside the ampicillin resistance gene ($amp^R$). An insert at this site inactivates $amp^R$ by insertional inactivation, while $tet^R$ stays intact. Recombinant cells therefore grow on tetracycline but not on ampicillin."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -542,8 +501,7 @@
       "A, C and E only",
       "B, C and E only"
     ],
-    "answer": "D",
-    "solution": "DNA is negatively charged and moves towards the anode, so A is wrong. Pure DNA cannot be seen in visible light; it is visible only after ethidium bromide staining and UV exposure, so D is wrong. B, C and E are correct."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -555,8 +513,7 @@
       "Statement I is true but Statement II is false",
       "Statement I is false but Statement II is true"
     ],
-    "answer": "A",
-    "solution": "Both statements are taken from NCERT. The protoxin is solubilised and activated by the alkaline pH of the insect gut, binds to the midgut epithelium, makes pores and kills the insect. cryIAc and cryIIAb target cotton bollworms and cryIAb targets corn borer."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -568,8 +525,7 @@
       "A-III, B-IV, C-I, D-II",
       "A-II, B-IV, C-III, D-I"
     ],
-    "answer": "A",
-    "solution": "ADA deficiency was the first disease treated by gene therapy, using lymphocytes given a functional ADA cDNA. Rosie, the transgenic cow, gave milk with human alpha-lactalbumin. ELISA works on antigen-antibody interaction. RNAi silences a specific mRNA with a complementary dsRNA. So A-III, B-IV, C-II, D-I."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -581,7 +537,6 @@
       "A is true but R is false",
       "A is false but R is true"
     ],
-    "answer": "B",
-    "solution": "Insulin is made as a pro-hormone. The extra C-peptide is removed during maturation, so A is true. R is also true, since Eli Lilly made the A and B chains separately and joined them by disulphide bonds. But R describes how insulin is produced commercially and does not explain why mature insulin lacks the C-peptide."
+    "answer": "B"
   }
 ]

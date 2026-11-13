@@ -9,8 +9,7 @@
       "$[FV^{-2}T^{-2}]$",
       "$[FV^{-2}T^{-1}]$"
     ],
-    "answer": "C",
-    "solution": "Length has dimensions $[VT]$, so area is $[V^2T^2]$. Pressure $= \\dfrac{\\text{force}}{\\text{area}} = [FV^{-2}T^{-2}]$."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -22,8 +21,7 @@
       "2",
       "$\\frac{1}{8}$"
     ],
-    "answer": "A",
-    "solution": "At projection: speed $u$, normal acceleration $g\\cos\\theta$, so $r_1 = \\dfrac{u^2}{g\\cos\\theta}$. At the top: speed $u\\cos\\theta$, normal acceleration $g$, so $r_2 = \\dfrac{u^2\\cos^2\\theta}{g}$. Ratio $= \\dfrac{1}{\\cos^3\\theta} = \\dfrac{1}{(1/2)^3} = 8$."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -35,8 +33,7 @@
       "9 N",
       "20 N"
     ],
-    "answer": "B",
-    "solution": "For pull at angle $\\theta$: $F\\cos\\theta = \\mu(mg - F\\sin\\theta)$, so $F = \\dfrac{\\mu mg}{\\cos\\theta + \\mu\\sin\\theta}$. Its minimum is $\\dfrac{\\mu mg}{\\sqrt{1+\\mu^2}} = \\dfrac{15}{1.25} = 12$ N (at $\\tan\\theta = \\mu$, i.e. $\\theta = 37^\\circ$)."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -48,8 +45,7 @@
       "$2\\sqrt{2}\\ \\text{m s}^{-1}$",
       "$2\\sqrt{3}\\ \\text{m s}^{-1}$"
     ],
-    "answer": "D",
-    "solution": "$U$ is minimum where $dU/dx = 2x - 4 = 0$, i.e. $x = 2$ m, giving $U_{min} = 4 - 8 + 3 = -1$ J. Maximum KE $= 5 - (-1) = 6$ J, so $\\frac{1}{2}(1)v^2 = 6$ and $v = \\sqrt{12} = 2\\sqrt{3}\\ \\text{m s}^{-1}$."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -61,8 +57,7 @@
       "$\\frac{3}{7}$",
       "$\\frac{2}{5}$"
     ],
-    "answer": "A",
-    "solution": "Angular momentum about the contact point is conserved: $\\frac{2}{5}mR^2\\omega_0 = \\frac{7}{5}mR^2\\omega$, so $\\omega = \\frac{2}{7}\\omega_0$. $K_i = \\frac{1}{5}mR^2\\omega_0^2$, $K_f = \\frac{1}{2}\\cdot\\frac{7}{5}mR^2\\omega^2 = \\frac{2}{35}mR^2\\omega_0^2$. $K_f/K_i = \\frac{2}{7}$, so the fraction lost is $\\frac{5}{7}$."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -74,8 +69,7 @@
       "$\\frac{mgR}{12}$",
       "$\\frac{mgR}{3}$"
     ],
-    "answer": "C",
-    "solution": "Total energy in orbit of radius $r$ is $-\\dfrac{GMm}{2r}$. $\\Delta E = \\dfrac{GMm}{2}\\left(\\dfrac{1}{2R} - \\dfrac{1}{3R}\\right) = \\dfrac{GMm}{12R} = \\dfrac{mgR}{12}$ (using $GM = gR^2$)."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -87,8 +81,7 @@
       "Statement I is true but Statement II is false",
       "Statement I is false but Statement II is true"
     ],
-    "answer": "C",
-    "solution": "Statement I is Pascal's law for a fluid at rest: true. By continuity the speed is greater at the narrower section, but by Bernoulli's theorem (horizontal pipe) the pressure is then smaller there, so Statement II is false."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -100,8 +93,7 @@
       "$\\frac{5}{2}R$",
       "$3R$"
     ],
-    "answer": "B",
-    "solution": "$W = \\int P\\,dV = \\frac{k}{2}(V_2^2 - V_1^2) = \\frac{1}{2}(P_2V_2 - P_1V_1) = \\frac{1}{2}R\\Delta T$. So $Q = C_V\\Delta T + \\frac{1}{2}R\\Delta T$ and $C = \\frac{3}{2}R + \\frac{1}{2}R = 2R$."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -113,8 +105,7 @@
       "$T\\sqrt{6}$",
       "$\\frac{T}{\\sqrt{6}}$"
     ],
-    "answer": "D",
-    "solution": "Each one-third piece has spring constant $3k$. Two in parallel give $k' = 6k$. Since $T \\propto 1/\\sqrt{k}$, $T' = \\dfrac{T}{\\sqrt{6}}$."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -126,8 +117,7 @@
       "196 N",
       "24.5 N"
     ],
-    "answer": "A",
-    "solution": "Consecutive harmonics differ by the fundamental, so $f_1 = 70$ Hz. Wave speed $v = 2Lf_1 = 140\\ \\text{m s}^{-1}$. Tension $= \\mu v^2 = 5\\times10^{-3}\\times 19600 = 98$ N."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -139,8 +129,7 @@
       "$+0.8\\,\\hat{k}$ N m",
       "$-0.8\\,\\hat{k}$ N m"
     ],
-    "answer": "B",
-    "solution": "$\\vec{\\tau} = \\vec{p}\\times\\vec{E} = (2\\hat{i} + 3\\hat{j})\\times10^{-6}\\times 4\\times10^{5}\\,\\hat{i} = 1.2\\,(\\hat{j}\\times\\hat{i}) = -1.2\\,\\hat{k}$ N m (the $\\hat{i}\\times\\hat{i}$ term vanishes)."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -152,8 +141,7 @@
       "A is true but R is false",
       "A is false but R is true"
     ],
-    "answer": "A",
-    "solution": "$r = \\dfrac{mv}{qB} = \\dfrac{\\sqrt{2mK}}{qB}$, so R is true. For the $\\alpha$-particle $m \\to 4m$ and $q \\to 2e$: $r_\\alpha = \\dfrac{\\sqrt{8mK}}{2eB} = \\dfrac{\\sqrt{2mK}}{eB} = r_p$. A is true and follows directly from R."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -165,8 +153,7 @@
       "0.5 V",
       "0.75 V"
     ],
-    "answer": "D",
-    "solution": "emf between radii $r_1$ and $r_2$ is $\\int_{r_1}^{r_2} B\\omega r\\,dr = \\frac{1}{2}B\\omega(r_2^2 - r_1^2)$. With $r_1 = 0.5$ m, $r_2 = 1$ m: $\\frac{1}{2}(0.2)(10)(1 - 0.25) = 0.75$ V."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -178,8 +165,7 @@
       "50 V and 0.6",
       "70 V and 0.6"
     ],
-    "answer": "C",
-    "solution": "$V = \\sqrt{V_R^2 + (V_L - V_C)^2} = \\sqrt{30^2 + 40^2} = 50$ V. Power factor $= \\cos\\phi = V_R/V = 30/50 = 0.6$."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -191,8 +177,7 @@
       "A-III, B-I, C-II, D-IV",
       "A-II, B-I, C-IV, D-III"
     ],
-    "answer": "B",
-    "solution": "Microwaves come from klystron/magnetron valves (III); infrared from hot bodies and molecular vibrations (I); UV is largely absorbed by the ozone layer (IV); X-rays are produced when high-energy electrons strike a metal target (II)."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -204,8 +189,7 @@
       "$-80$ cm",
       "$-160$ cm"
     ],
-    "answer": "D",
-    "solution": "In air: $\\frac{1}{20} = (1.5 - 1)\\frac{2}{R}$, so $R = 20$ cm. In liquid: $\\frac{1}{f} = \\left(\\frac{1.5}{1.6} - 1\\right)\\frac{2}{20} = -\\frac{1}{16}\\times\\frac{1}{10} = -\\frac{1}{160}$, so $f = -160$ cm (diverging)."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -217,8 +201,7 @@
       "$\\frac{I_0}{4}$",
       "$\\frac{I_0}{8}$"
     ],
-    "answer": "C",
-    "solution": "Phase difference $\\phi = \\frac{2\\pi}{\\lambda}\\cdot\\frac{\\lambda}{3} = \\frac{2\\pi}{3}$. $I = I_0\\cos^2\\frac{\\phi}{2} = I_0\\cos^2 60^\\circ = \\frac{I_0}{4}$."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -230,8 +213,7 @@
       "$\\frac{V}{2}$",
       "$2V$"
     ],
-    "answer": "A",
-    "solution": "$\\lambda = \\dfrac{h}{\\sqrt{2mqV}}$. Equal wavelengths need $m_p eV = (4m_p)(2e)V'$, so $V' = \\dfrac{V}{8}$."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -243,8 +225,7 @@
       "204 MeV",
       "216 MeV"
     ],
-    "answer": "D",
-    "solution": "Energy released $=$ (final BE) $-$ (initial BE) $= 2\\times120\\times8.5 - 240\\times7.6 = 2040 - 1824 = 216$ MeV."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -256,42 +237,36 @@
       "B, C and D only",
       "A, B, C and D"
     ],
-    "answer": "B",
-    "solution": "A, B and C are correct. D is wrong: a pentavalent (donor) impurity such as P or As gives extra electrons and makes silicon n-type; a trivalent impurity makes it p-type."
+    "answer": "B"
   },
   {
     "type": "integer",
     "chapter": "System of Particles and Rotational Motion",
     "text": "A uniform circular disc of mass $16$ kg and radius $1$ m lies in a plane. A circular portion of radius $0.5$ m is removed from it such that the rim of the removed portion passes through the centre of the disc. The moment of inertia of the remaining part about an axis through the centre of the original disc and perpendicular to its plane is $\\frac{x}{2}\\ \\text{kg m}^2$. The value of $x$ is ______.",
-    "answer": 13,
-    "solution": "Full disc: $I = \\frac{1}{2}(16)(1)^2 = 8$. Removed part has mass $16/4 = 4$ kg, centre at $0.5$ m: $I' = \\frac{1}{2}(4)(0.5)^2 + 4(0.5)^2 = 0.5 + 1 = 1.5$. Remaining $= 8 - 1.5 = 6.5 = \\frac{13}{2}\\ \\text{kg m}^2$, so $x = 13$."
+    "answer": 13
   },
   {
     "type": "integer",
     "chapter": "Kinetic Theory",
     "text": "The rms speed of oxygen $(O_2)$ molecules at $927^\\circ$C is equal to the rms speed of helium $(He)$ atoms at temperature $T$. The value of $T$ in kelvin is ______. (Molar masses: $O_2 = 32\\ \\text{g mol}^{-1}$, $He = 4\\ \\text{g mol}^{-1}$)",
-    "answer": 150,
-    "solution": "$v_{rms} = \\sqrt{3RT/M}$, so equal speeds need $T_1/M_1 = T_2/M_2$: $\\dfrac{1200}{32} = \\dfrac{T}{4}$, giving $T = 150$ K."
+    "answer": 150
   },
   {
     "type": "integer",
     "chapter": "Electrostatic Potential and Capacitance",
     "text": "An air-filled parallel plate capacitor has capacitance $14\\ \\mu\\text{F}$ and plate separation $d$. A dielectric slab of dielectric constant $4$, having the same area as the plates and thickness $\\frac{3d}{4}$, is inserted between the plates. The new capacitance (in $\\mu$F) is ______.",
-    "answer": 32,
-    "solution": "$C = \\dfrac{\\varepsilon_0 A}{d - t + t/K} = \\dfrac{\\varepsilon_0 A}{\\frac{d}{4} + \\frac{3d}{16}} = \\dfrac{16}{7}\\cdot\\dfrac{\\varepsilon_0 A}{d} = \\dfrac{16}{7}\\times 14 = 32\\ \\mu\\text{F}$."
+    "answer": 32
   },
   {
     "type": "integer",
     "chapter": "Current Electricity",
     "text": "The resistance of a metal wire varies with temperature as $R_t = R_0(1 + \\alpha t)$, where $R_0$ is its resistance at $0^\\circ$C and $t$ is in $^\\circ$C. Its resistance is $20\\ \\Omega$ at $20^\\circ$C and $25\\ \\Omega$ at $70^\\circ$C. The temperature (in $^\\circ$C) at which its resistance becomes $30\\ \\Omega$ is ______.",
-    "answer": 120,
-    "solution": "$20 = R_0(1 + 20\\alpha)$ and $25 = R_0(1 + 70\\alpha)$. Dividing: $25 + 500\\alpha = 20 + 1400\\alpha$, so $\\alpha = \\frac{1}{180}\\ ^\\circ\\text{C}^{-1}$ and $R_0 = 18\\ \\Omega$. Then $30 = 18\\left(1 + \\frac{t}{180}\\right)$ gives $t = 120^\\circ$C."
+    "answer": 120
   },
   {
     "type": "integer",
     "chapter": "Atoms",
     "text": "The wavelength of the first line of the Balmer series ($n = 3 \\rightarrow n = 2$) of the hydrogen atom is $656$ nm. The wavelength (in nm) of the photon emitted in the same transition ($n = 3 \\rightarrow n = 2$) of a singly ionised helium ion $(He^+)$ is ______. (Ignore nuclear motion.)",
-    "answer": 164,
-    "solution": "For hydrogen-like species $\\dfrac{1}{\\lambda} = RZ^2\\left(\\dfrac{1}{n_1^2} - \\dfrac{1}{n_2^2}\\right)$, so $\\lambda \\propto \\dfrac{1}{Z^2}$. For $He^+$ $(Z = 2)$: $\\lambda = \\dfrac{656}{4} = 164$ nm."
+    "answer": 164
   }
 ]

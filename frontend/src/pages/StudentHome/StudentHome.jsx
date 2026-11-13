@@ -11,7 +11,6 @@ import ResourcesPage from './pages/ResourcesPage.jsx'
 import NotificationsPage from './pages/NotificationsPage.jsx'
 import ResultsPage from './pages/ResultsPage.jsx'
 import SeriesPage from './pages/SeriesPage.jsx'
-import SolutionsPage, { SolutionsRail } from './pages/SolutionsPage.jsx'
 import TestsPage from './pages/TestsPage.jsx'
 import AnnouncementBanner from './sections/AnnouncementBanner.jsx'
 import ComingSoon from './sections/ComingSoon.jsx'
@@ -27,7 +26,6 @@ const PAGES = {
   tests: { Main: TestsPage, title: 'Your tests' },
   'test-series': { Main: SeriesPage, title: 'Test series' },
   results: { Main: ResultsPage, title: 'Results' },
-  solutions: { Main: SolutionsPage, Rail: SolutionsRail, title: 'Solutions' },
   resources: { Main: ResourcesPage, title: 'Resources' },
   notifications: { Main: NotificationsPage, title: 'Notifications' },
   account: { Main: AccountPage, title: 'Account' },
@@ -55,7 +53,7 @@ function meOf(user) {
 /*
   design/student-home.html -> "/student/:page?". One shell (sidebar + content)
   for every student page, so moving between them keeps the shell and the test
-  list mounted: Overview (/student), Your tests, Results, Solutions, Account,
+  list mounted: Overview (/student), Your tests, Results, Account,
   a test's result (/student/result?test=…&attempt=…, Test/ResultPage.jsx) and
   the coming-soon pages (sections/ComingSoon.jsx). The test list is loaded once
   here and handed to each page.

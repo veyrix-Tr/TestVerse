@@ -9,8 +9,7 @@
       "$[E v^{-2} T^{-2}]$",
       "$[E^{-1} v^{2} T^{-2}]$"
     ],
-    "answer": "C",
-    "solution": "Surface tension $=$ force/length $= [MT^{-2}]$. Since $E = [ML^2T^{-2}]$ and $v = [LT^{-1}]$, mass $[M] = [E v^{-2}]$. Hence surface tension $= [E v^{-2} T^{-2}]$."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -22,8 +21,7 @@
       "$1.5\\ \\text{m s}^{-2}$",
       "$2\\ \\text{m s}^{-2}$"
     ],
-    "answer": "B",
-    "solution": "Area of the v–t triangle: $\\frac{1}{2}v_{max}(30) = 300 \\Rightarrow v_{max} = 20$ m/s. Times: $t_1 = \\frac{20}{a}$, $t_2 = \\frac{20}{2a}$, so $\\frac{30}{a} = 30 \\Rightarrow a = 1\\ \\text{m s}^{-2}$."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -35,8 +33,7 @@
       "$\\tan^{-1}2$",
       "$60^\\circ$"
     ],
-    "answer": "D",
-    "solution": "At the top, $v = u\\cos\\theta$. At height $H/2$: $v^2 = u^2 - gH = u^2 - \\frac{u^2\\sin^2\\theta}{2}$. So $\\frac{\\cos^2\\theta}{1 - \\frac{\\sin^2\\theta}{2}} = \\frac{2}{5}$. Writing $c = \\cos^2\\theta$: $5c = 2 - (1 - c) = 1 + c \\Rightarrow c = \\frac{1}{4}$, so $\\theta = 60^\\circ$."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -48,8 +45,7 @@
       "$13.3\\ \\text{m s}^{-2}$ and 25 N",
       "$6\\ \\text{m s}^{-2}$ and 20 N"
     ],
-    "answer": "A",
-    "solution": "In the wedge frame, the pseudo force $ma$ and gravity $mg$ must have a resultant normal to the incline: $\\tan\\theta = \\frac{a}{g} \\Rightarrow a = g\\tan37^\\circ = 7.5\\ \\text{m s}^{-2}$. Normal reaction $N = \\frac{mg}{\\cos37^\\circ} = \\frac{20}{0.8} = 25$ N."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -61,8 +57,7 @@
       "$10\\sqrt{6}$ m/s",
       "$20\\sqrt{2}$ m/s"
     ],
-    "answer": "C",
-    "solution": "$v_{max}^2 = rg\\,\\frac{\\mu + \\tan\\theta}{1 - \\mu\\tan\\theta} = 300 \\times \\frac{1.25}{0.625} = 600$, so $v_{max} = 10\\sqrt{6} \\approx 24.5$ m/s."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -74,8 +69,7 @@
       "32 J",
       "64 J"
     ],
-    "answer": "B",
-    "solution": "$v = \\frac{dx}{dt} = t^2$, so $v(0) = 0$ and $v(2) = 4$ m/s. By the work–energy theorem, $W = \\frac{1}{2}(2)(4)^2 - 0 = 16$ J."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -87,8 +81,7 @@
       "8 s",
       "6 s"
     ],
-    "answer": "D",
-    "solution": "Time of fall $t_0 = \\sqrt{2h/g} = 2$ s, striking speed 20 m/s. After the $n$-th bounce the speed is $20e^n$ and the time in air is $2(20e^n)/g = 4e^n$ s. Total $= 2 + 4(0.5 + 0.25 + \\dots) = 2 + 4 = 6$ s."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -100,8 +93,7 @@
       "$\\frac{3\\omega_0}{5}$",
       "$\\frac{\\omega_0}{4}$"
     ],
-    "answer": "B",
-    "solution": "$I_i = \\frac{ML^2}{12}$; $I_f = \\frac{ML^2}{12} + 2\\cdot\\frac{M}{4}\\left(\\frac{L}{2}\\right)^2 = \\frac{ML^2}{12} + \\frac{ML^2}{8} = \\frac{5ML^2}{24}$. Conserving angular momentum, $\\omega = \\omega_0\\frac{2/24}{5/24} = \\frac{2\\omega_0}{5}$."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -113,8 +105,7 @@
       "4 N, in the direction of the applied force",
       "8 N, in the direction of the applied force"
     ],
-    "answer": "C",
-    "solution": "Take friction $f$ along $F$. Translation: $F + f = ma$. Rotation about the centre: $(F - f)R = \\frac{1}{2}mR^2\\frac{a}{R} \\Rightarrow F - f = \\frac{ma}{2}$. Adding: $2F = \\frac{3ma}{2} \\Rightarrow a = \\frac{4F}{3m} = 4\\ \\text{m s}^{-2}$. Then $f = ma - F = 16 - 12 = 4$ N, positive, so it acts along the applied force."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -126,8 +117,7 @@
       "Statement I is true but Statement II is false",
       "Statement I is false but Statement II is true"
     ],
-    "answer": "A",
-    "solution": "Statement I: in pure rolling the contact point is instantaneously at rest, so static friction does no work and mechanical energy is conserved; true. Statement II: $a$ depends only on $k^2/R^2$, which is fixed by the shape; true."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -139,8 +129,7 @@
       "$\\frac{v_e}{2}$",
       "$\\left(1-\\frac{1}{\\sqrt{2}}\\right)v_e$"
     ],
-    "answer": "A",
-    "solution": "With $v_e = \\sqrt{2GM/R}$: orbital speed $v_0 = \\sqrt{\\frac{GM}{2R}} = \\frac{v_e}{2}$, and escape speed from $r = 2R$ is $\\sqrt{\\frac{2GM}{2R}} = \\frac{v_e}{\\sqrt{2}}$. Additional speed $= \\frac{v_e}{\\sqrt{2}} - \\frac{v_e}{2} = \\frac{(\\sqrt{2}-1)v_e}{2}$."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -152,8 +141,7 @@
       "Statement I is true but Statement II is false",
       "Statement I is false but Statement II is true"
     ],
-    "answer": "D",
-    "solution": "Statement I: $g = \\frac{GM}{R^2}$, so halving $R$ makes $g$ four times; false. Statement II: $K = \\frac{GMm}{2r}$ and $E = -\\frac{GMm}{2r} = -K$; true."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -165,8 +153,7 @@
       "$\\frac{81}{32}$",
       "$\\frac{81}{16}$"
     ],
-    "answer": "D",
-    "solution": "Energy density $u = \\frac{\\sigma^2}{2Y}$ with stress $\\sigma = \\frac{F}{\\pi d^2/4} \\propto \\frac{1}{d^2}$. So $\\frac{\\sigma_A}{\\sigma_B} = \\left(\\frac{3}{2}\\right)^2 = \\frac{9}{4}$ and $\\frac{u_A}{u_B} = \\left(\\frac{9}{4}\\right)^2 = \\frac{81}{16}$. The lengths do not matter."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -178,8 +165,7 @@
       "A is true but R is false",
       "A is false but R is true"
     ],
-    "answer": "C",
-    "solution": "A soap bubble has two free surfaces, so its excess pressure is $\\frac{4T}{R}$, while a drop has one surface and excess pressure $\\frac{2T}{R}$; A is true. Soap (a surfactant) lowers the surface tension of water, so R is false."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -191,8 +177,7 @@
       "$30^\\circ$C",
       "$45^\\circ$C"
     ],
-    "answer": "B",
-    "solution": "Using the average form: $\\frac{100-60}{10} = k(80-20) \\Rightarrow k = \\frac{1}{15}\\ \\text{min}^{-1}$. Next interval: $\\frac{60-T}{10} = \\frac{1}{15}\\left(\\frac{60+T}{2} - 20\\right) \\Rightarrow 180 - 3T = T + 20 \\Rightarrow T = 40^\\circ$C. (The exponential form gives the same: the excess temperature halves from 80 to 40 and then to 20, i.e. $T = 40^\\circ$C.)"
+    "answer": "B"
   },
   {
     "type": "single",
@@ -204,8 +189,7 @@
       "600 J absorbed",
       "300 J absorbed"
     ],
-    "answer": "D",
-    "solution": "Net work = area of the triangle $= \\frac{1}{2}(4-1)\\times10^{-3} \\times (3-1)\\times10^5 = 300$ J. With V on the x-axis the cycle (up AB, down-right BC, left CA) is clockwise, so the gas does positive net work. For a cycle $\\Delta U = 0$, so $Q = W = 300$ J absorbed."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -217,8 +201,7 @@
       "A-II, B-I, C-III, D-IV",
       "A-I, B-II, C-III, D-IV"
     ],
-    "answer": "A",
-    "solution": "$C = \\frac{dQ}{n\\,dT}$. Isothermal: $dT = 0$ with $dQ \\ne 0$, so $C \\rightarrow \\infty$. Adiabatic: $dQ = 0$, so $C = 0$. Isobaric: $C_p = \\frac{5}{2}R$. Isochoric: $C_v = \\frac{3}{2}R$. Hence A-II, B-I, C-IV, D-III."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -230,8 +213,7 @@
       "$\\sqrt{2}$ times",
       "$2\\sqrt{2}$ times"
     ],
-    "answer": "A",
-    "solution": "Mean free path $\\lambda = \\frac{k_BT}{\\sqrt{2}\\pi d^2 P} \\propto \\frac{T}{P}$ and mean speed $\\bar{v} \\propto \\sqrt{T}$. Collision frequency $= \\frac{\\bar{v}}{\\lambda} \\propto \\frac{P}{\\sqrt{T}}$, which changes by $\\frac{1/2}{\\sqrt{2}} = \\frac{1}{2\\sqrt{2}}$."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -243,8 +225,7 @@
       "Statement I is true but Statement II is false",
       "Statement I is false but Statement II is true"
     ],
-    "answer": "C",
-    "solution": "Statement I: $K = \\frac{1}{2}m\\omega^2A^2\\cos^2\\omega t = \\frac{1}{4}m\\omega^2A^2(1 + \\cos2\\omega t)$, so it varies at $2\\omega$; true. Statement II: $v = A\\omega\\cos\\omega t$ and $a = -A\\omega^2\\sin\\omega t$, which differ in phase by $\\frac{\\pi}{2}$; false."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -256,8 +237,7 @@
       "$2\\pi\\sqrt{\\frac{2m}{9k}}$",
       "$2\\pi\\sqrt{\\frac{2m}{3k}}$"
     ],
-    "answer": "C",
-    "solution": "Spring constant is inversely proportional to length: the piece of length $\\frac{L}{3}$ has $3k$ and the piece of length $\\frac{2L}{3}$ has $\\frac{3k}{2}$. In parallel, $k_{eq} = 3k + \\frac{3k}{2} = \\frac{9k}{2}$, so $T = 2\\pi\\sqrt{\\frac{2m}{9k}}$."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -269,8 +249,7 @@
       "$\\frac{3}{7}$",
       "$\\frac{12}{7}$"
     ],
-    "answer": "A",
-    "solution": "Second overtone of the open pipe is the 3rd harmonic: $\\frac{3v}{2L_o}$. Third overtone of the closed pipe is the 7th harmonic: $\\frac{7v}{4L_c}$. Equating, $12L_c = 14L_o \\Rightarrow \\frac{L_o}{L_c} = \\frac{6}{7}$."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -282,8 +261,7 @@
       "$5.0\\times10^4$ N/C",
       "$3.75\\times10^4$ N/C"
     ],
-    "answer": "D",
-    "solution": "Equilibrium: $T\\sin\\theta = qE$ and $T\\cos\\theta = mg$, so $E = \\frac{mg\\tan\\theta}{q} = \\frac{0.01\\times10\\times0.75}{2\\times10^{-6}} = 3.75\\times10^4$ N/C."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -295,8 +273,7 @@
       "A, B and D only",
       "C, D and E only"
     ],
-    "answer": "B",
-    "solution": "A is true (the electrostatic field is conservative). B is false: by Gauss's law the flux depends only on the enclosed charge. C is true. D is true (Gauss's law with zero enclosed charge and symmetry). E is false: the field of an infinite sheet, $\\frac{\\sigma}{2\\varepsilon_0}$, is independent of distance. Correct: A, C and D only."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -308,8 +285,7 @@
       "$15\\ \\mu$F",
       "$24\\ \\mu$F"
     ],
-    "answer": "B",
-    "solution": "$C = \\frac{\\varepsilon_0A}{d - t + t/K} = \\frac{\\varepsilon_0A}{d/2 + d/8} = \\frac{8}{5}C_0 = \\frac{8}{5}\\times6 = 9.6\\ \\mu$F."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -321,8 +297,7 @@
       "11.76 mJ",
       "0.64 mJ"
     ],
-    "answer": "C",
-    "solution": "Charges: 200 $\\mu$C and 120 $\\mu$C; with opposite plates joined the net charge is 80 $\\mu$C and the common potential is $\\frac{80}{5} = 16$ V. Initial energy $= \\frac{1}{2}(2)(100)^2 + \\frac{1}{2}(3)(40)^2 = 12400\\ \\mu$J; final $= \\frac{1}{2}(5)(16)^2 = 640\\ \\mu$J. Loss $= 11760\\ \\mu$J $= 11.76$ mJ."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -334,8 +309,7 @@
       "0.97 A",
       "4.5 A"
     ],
-    "answer": "A",
-    "solution": "With $n$ cells per row and $m$ rows ($nm = 12$), the current $I = \\frac{nE}{R + nr/m}$ is maximum when $\\frac{nr}{m} = R$, i.e. $\\frac{0.5n}{m} = 1.5 \\Rightarrow n = 3m$, giving $m = 2$, $n = 6$. Then $I = \\frac{6\\times1.5}{1.5 + 1.5} = 3$ A."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -347,8 +321,7 @@
       "becomes one-fourth",
       "is halved"
     ],
-    "answer": "D",
-    "solution": "$v_d = \\frac{eE\\tau}{m}$ with $E = \\frac{V}{L}$. Doubling $L$ at the same $V$ halves $E$, so $v_d$ is halved. (Check: $R$ becomes $4R$, $I$ becomes $\\frac{I}{4}$, $A$ becomes $\\frac{A}{2}$, so $v_d = \\frac{I}{neA}$ becomes half.)"
+    "answer": "D"
   },
   {
     "type": "single",
@@ -360,8 +333,7 @@
       "1.8 A",
       "0.9 A"
     ],
-    "answer": "C",
-    "solution": "Let $V$ be the terminal voltage. Junction rule: $\\frac{12 - V}{2} + \\frac{6 - V}{2} = \\frac{V}{4}$, so $9 - V = \\frac{V}{4}$ and $V = 7.2$ V. Current through the resistor $= \\frac{7.2}{4} = 1.8$ A."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -373,8 +345,7 @@
       "B, C and E only",
       "A, B and D only"
     ],
-    "answer": "B",
-    "solution": "The magnetic force $q\\vec{v}\\times\\vec{B}$ is always perpendicular to $\\vec{v}$, so it does no work: speed and KE stay constant (A true, D false). $T = \\frac{2\\pi m}{qB}$ is independent of speed (B true). The parallel component is unaffected, giving a helix (C true). $r = \\frac{mv}{qB} = \\frac{p}{qB}$ (E true)."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -386,8 +357,7 @@
       "$\\frac{\\mu_0 I}{2R}\\left(1 + \\frac{2}{\\pi}\\right)$",
       "$\\frac{\\mu_0 I}{4R}\\left(1 - \\frac{2}{\\pi}\\right)$"
     ],
-    "answer": "A",
-    "solution": "Semicircle: $\\frac{\\mu_0 I}{4R}$. Each semi-infinite straight portion ends at the foot of the perpendicular from the centre, at distance $R$: $\\frac{\\mu_0 I}{4\\pi R}$ each. All three fields point the same way, so $B = \\frac{\\mu_0 I}{4R} + \\frac{2\\mu_0 I}{4\\pi R} = \\frac{\\mu_0 I}{4R}\\left(1 + \\frac{2}{\\pi}\\right)$."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -399,8 +369,7 @@
       "0.3 J and 0.52 N m",
       "0.52 J and 0.30 N m"
     ],
-    "answer": "C",
-    "solution": "$W = mB(1 - \\cos60^\\circ) = 2\\times0.3\\times0.5 = 0.3$ J. Torque $\\tau = mB\\sin60^\\circ = 0.6\\times\\frac{\\sqrt{3}}{2} \\approx 0.52$ N m."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -412,8 +381,7 @@
       "20 m/s",
       "10 m/s"
     ],
-    "answer": "D",
-    "solution": "At terminal speed the magnetic force balances gravity: $\\frac{B^2L^2v}{R} = mg \\Rightarrow v = \\frac{mgR}{B^2L^2} = \\frac{0.5\\times10\\times2}{1\\times1} = 10$ m/s."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -425,8 +393,7 @@
       "A is true but R is false",
       "A is false but R is true"
     ],
-    "answer": "A",
-    "solution": "The changing flux through the copper walls induces eddy currents which, by Lenz's law, oppose the fall of the magnet, so its acceleration is less than $g$ (it may even reach a terminal speed). Both are true and R explains A."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -438,8 +405,7 @@
       "Four",
       "Five"
     ],
-    "answer": "B",
-    "solution": "At resonance $X_L = X_C$, so $Z = R$ (minimum) and $\\cos\\phi = 1$: (a), (b) true. $V_L$ and $V_C$ are equal and $180^\\circ$ out of phase: (c) true. $V_C = IX_C = QV$ can greatly exceed the source voltage when $Q \\gt 1$: (d) false. $\\omega_0 = \\frac{1}{\\sqrt{LC}}$ does not depend on $R$: (e) false. Three are correct."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -451,8 +417,7 @@
       "1250 W",
       "750 W"
     ],
-    "answer": "A",
-    "solution": "$Z = \\sqrt{40^2 + (50 - 20)^2} = 50\\ \\Omega$. $V_{rms} = 250$ V, so $I_{rms} = 5$ A. $P = I_{rms}^2R = 25\\times40 = 1000$ W (equivalently $V_{rms}I_{rms}\\cos\\phi = 1250\\times0.8$)."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -464,8 +429,7 @@
       "$2.7\\times10^{9}$ T along $+z$",
       "$3\\times10^{-8}$ T along $+y$"
     ],
-    "answer": "B",
-    "solution": "$B = \\frac{E}{c} = \\frac{9}{3\\times10^8} = 3\\times10^{-8}$ T. The direction of propagation is along $\\vec{E}\\times\\vec{B}$; $\\hat{j}\\times\\hat{k} = \\hat{i}$, so $\\vec{B}$ is along $+z$."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -477,8 +441,7 @@
       "60 cm",
       "20 cm"
     ],
-    "answer": "D",
-    "solution": "Power of the system $P = 2P_L + P_M$, with $P_L = \\frac{\\mu - 1}{R} = \\frac{1}{60}\\ \\text{cm}^{-1}$ and $P_M = \\frac{2}{R} = \\frac{1}{15}\\ \\text{cm}^{-1}$. So $P = \\frac{1}{30} + \\frac{1}{15} = \\frac{1}{10}$: it acts as a concave mirror of focal length 10 cm. The image coincides with the object at the centre of curvature, i.e. at 20 cm."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -490,8 +453,7 @@
       "16",
       "25"
     ],
-    "answer": "A",
-    "solution": "Normal adjustment: $f_o + f_e = 105$ and $\\frac{f_o}{f_e} = 20$, so $f_o = 100$ cm and $f_e = 5$ cm. With the final image at $D = 25$ cm, $M = \\frac{f_o}{f_e}\\left(1 + \\frac{f_e}{D}\\right) = 20\\times1.2 = 24$."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -503,8 +465,7 @@
       "$6\\ \\mu$m",
       "$1.2\\ \\mu$m"
     ],
-    "answer": "C",
-    "solution": "The sheet adds an optical path $(\\mu - 1)t$; a shift of 5 fringes requires $(\\mu - 1)t = 5\\lambda \\Rightarrow 0.5t = 3000$ nm $\\Rightarrow t = 6000$ nm $= 6\\ \\mu$m."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -516,8 +477,7 @@
       "Statement I is true but Statement II is false",
       "Statement I is false but Statement II is true"
     ],
-    "answer": "D",
-    "solution": "Statement I: at Brewster's angle the reflected light is completely polarised; the refracted light is only partially polarised, so I is false. Statement II: the angular width of the central maximum is $\\frac{2\\lambda}{a}$, which decreases as $a$ increases; true."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -529,8 +489,7 @@
       "1.23 nm",
       "0.43 nm"
     ],
-    "answer": "B",
-    "solution": "Photon energy $= \\frac{1240}{310} = 4.0$ eV, so $K_{max} = 4.0 - 2.0 = 2.0$ eV. $\\lambda = \\frac{1.227}{\\sqrt{2}} \\approx 0.87$ nm."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -542,8 +501,7 @@
       "$n = 4 \\rightarrow n = 2$",
       "$n = 4 \\rightarrow n = 3$"
     ],
-    "answer": "C",
-    "solution": "$\\frac{1}{\\lambda} = RZ^2\\left(\\frac{1}{n_1^2} - \\frac{1}{n_2^2}\\right)$. For H (2→1): $R\\cdot\\frac{3}{4}$. For $He^+$ ($Z = 2$) we need $4\\left(\\frac{1}{n_1^2} - \\frac{1}{n_2^2}\\right) = \\frac{3}{4}$, which is satisfied by $n_1 = 2$, $n_2 = 4$: $4\\left(\\frac{1}{4} - \\frac{1}{16}\\right) = \\frac{3}{4}$."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -555,8 +513,7 @@
       "2",
       "$\\frac{1}{2}$"
     ],
-    "answer": "D",
-    "solution": "After 80 min, A has gone through 4 half-lives ($N_A = \\frac{N_0}{16}$) and B through 2 ($N_B = \\frac{N_0}{4}$). Activity $R = \\lambda N$ and $\\lambda_A = 2\\lambda_B$, so $\\frac{R_A}{R_B} = 2\\times\\frac{1/16}{1/4} = \\frac{1}{2}$."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -568,8 +525,7 @@
       "$A\\bar{B}$",
       "1 for all combinations of inputs"
     ],
-    "answer": "B",
-    "solution": "The NOT-OR stage gives $\\overline{A + B} = \\bar{A}\\,\\bar{B}$. Then $Y = A\\cdot\\bar{A}\\,\\bar{B} = 0$, since $A\\bar{A} = 0$. So Y is 0 for every input combination."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -581,7 +537,6 @@
       "A, C and E only",
       "A and E only"
     ],
-    "answer": "C",
-    "solution": "A is true: each acceptor ion carries an opposite charge, so the crystal is neutral. B is false: a trivalent impurity (B, Al, In) makes p-type. C is true. D is false: more electron–hole pairs are generated at higher temperature, so conductivity increases. E is true: both half-cycles are rectified. Correct: A, C and E only."
+    "answer": "C"
   }
 ]

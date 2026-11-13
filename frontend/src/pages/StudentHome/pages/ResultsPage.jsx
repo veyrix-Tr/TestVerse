@@ -1,4 +1,4 @@
-import { Link, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import { BestBars, ScoreTrend } from '../sections/Charts.jsx'
 import PageHeader, { Stats } from '../sections/PageHeader.jsx'
 import { AttemptsTable } from '../sections/ResultsSection.jsx'
@@ -39,13 +39,6 @@ export default function ResultsPage({ data }) {
       <PageHeader
         title="Results"
         desc="Every attempt you’ve submitted: how you scored, how it’s changing, and where to look next."
-        actions={
-          rows.length ? (
-            <Link className="btn btn-outline" to="/student/solutions">
-              Go to solutions
-            </Link>
-          ) : null
-        }
       >
         {status === 'error' ? null : (
           <Stats

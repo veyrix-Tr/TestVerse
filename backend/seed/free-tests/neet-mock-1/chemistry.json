@@ -9,8 +9,7 @@
       "0.04",
       "0.4"
     ],
-    "answer": "D",
-    "solution": "Moles of $H_2SO_4$ = 9.8/98 = 0.1 mol. Each molecule has 4 O atoms, so moles of O atoms = $4 \\times 0.1$ = 0.4 mol."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -22,8 +21,7 @@
       "27 g",
       "13.5 g"
     ],
-    "answer": "C",
-    "solution": "$n(H_2)$ = 3/2 = 1.5 mol, $n(O_2)$ = 32/32 = 1 mol. 1 mol $O_2$ needs 2 mol $H_2$, so $H_2$ is the limiting reagent. 1.5 mol $H_2$ gives 1.5 mol $H_2O$ = $1.5 \\times 18$ = 27 g."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -35,8 +33,7 @@
       "4 : 9",
       "8 : 9"
     ],
-    "answer": "B",
-    "solution": "$r_n \\propto n^2/Z$. For $He^+$ (n = 2, Z = 2): 4/2 = 2. For $Li^{2+}$ (n = 3, Z = 3): 9/3 = 3. Ratio = 2 : 3."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -48,8 +45,7 @@
       "4",
       "5"
     ],
-    "answer": "B",
-    "solution": "$l$ can be 0 to $n-1$ and $m_l$ from $-l$ to $+l$. $(2, 2, 0)$ fails ($l$ cannot equal $n$) and $(3, 1, -2)$ fails ($|m_l| \\gt l$). The other three are allowed, so the answer is 3."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -61,8 +57,7 @@
       "$-92.4$ kJ $\\text{mol}^{-1}$",
       "$-89.9$ kJ $\\text{mol}^{-1}$"
     ],
-    "answer": "A",
-    "solution": "$\\Delta n_g = 2 - 4 = -2$. $\\Delta U = \\Delta H - \\Delta n_g RT = -92.4 + 2 \\times 8.314 \\times 298 \\times 10^{-3} = -92.4 + 4.96 \\approx -87.4$ kJ $\\text{mol}^{-1}$."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -74,8 +69,7 @@
       "40 K",
       "400 K"
     ],
-    "answer": "D",
-    "solution": "Spontaneous when $\\Delta G = \\Delta H - T\\Delta S \\lt 0$, i.e. $T \\gt \\Delta H/\\Delta S = 40000/100 = 400$ K. (Converting kJ to J is the key step.)"
+    "answer": "D"
   },
   {
     "type": "single",
@@ -87,8 +81,7 @@
       "6.76",
       "5.76"
     ],
-    "answer": "D",
-    "solution": "Henderson equation: pH = $pK_a + \\log\\frac{[\\text{salt}]}{[\\text{acid}]} = 4.76 + \\log\\frac{0.2}{0.02} = 4.76 + 1 = 5.76$."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -100,8 +93,7 @@
       "$3.2 \\times 10^{-4}$ M",
       "$1.0 \\times 10^{-4}$ M"
     ],
-    "answer": "A",
-    "solution": "$Ag_2CrO_4 \\rightleftharpoons 2Ag^+ + CrO_4^{2-}$, so $K_{sp} = (2s)^2(s) = 4s^3$. $s^3 = 3.2 \\times 10^{-11}/4 = 8 \\times 10^{-12}$, giving $s = 2.0 \\times 10^{-4}$ M."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -113,8 +105,7 @@
       "$N_2(g) + O_2(g) \\rightleftharpoons 2NO(g)$",
       "$2SO_2(g) + O_2(g) \\rightleftharpoons 2SO_3(g)$"
     ],
-    "answer": "C",
-    "solution": "$K_p = K_c(RT)^{\\Delta n_g}$, so $K_p = K_c$ only when $\\Delta n_g = 0$. For $N_2 + O_2 \\rightleftharpoons 2NO$, $\\Delta n_g = 2 - 2 = 0$. The others have $\\Delta n_g$ = +1, +1 and $-1$."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -126,8 +117,7 @@
       "$Zn(s) + CuSO_4(aq) \\rightarrow ZnSO_4(aq) + Cu(s)$",
       "$CaCO_3(s) \\rightarrow CaO(s) + CO_2(g)$"
     ],
-    "answer": "B",
-    "solution": "In $H_2O_2$, oxygen is in the $-1$ state; it is simultaneously reduced to $-2$ (in $H_2O$) and oxidised to 0 (in $O_2$), so it disproportionates. In $KClO_3$ decomposition two different elements (Cl and O) change oxidation state; the last reaction is not a redox reaction."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -139,8 +129,7 @@
       "360 g $\\text{mol}^{-1}$",
       "18 g $\\text{mol}^{-1}$"
     ],
-    "answer": "B",
-    "solution": "$M = \\frac{K_f \\times w \\times 1000}{\\Delta T_f \\times W} = \\frac{1.86 \\times 3.0 \\times 1000}{0.31 \\times 100} = 180$ g $\\text{mol}^{-1}$."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -152,8 +141,7 @@
       "Statement I is true but Statement II is false",
       "Statement I is false but Statement II is true"
     ],
-    "answer": "C",
-    "solution": "Chloroform forms a hydrogen bond with acetone, so attractive forces increase, vapour pressure decreases and the mixture shows negative deviation (Statement I true). Negative deviation gives a maximum boiling azeotrope, not a minimum boiling one (Statement II false)."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -165,8 +153,7 @@
       "$-424.6$ kJ $\\text{mol}^{-1}$",
       "$-212.3$ kJ $\\text{mol}^{-1}$"
     ],
-    "answer": "D",
-    "solution": "$\\Delta_r G^\\circ = -nFE^\\circ_{cell}$ with n = 2: $-2 \\times 96500 \\times 1.10 = -212300$ J $\\text{mol}^{-1}$ = $-212.3$ kJ $\\text{mol}^{-1}$."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -178,8 +165,7 @@
       "$4.825 \\times 10^5$ C",
       "$1.93 \\times 10^5$ C"
     ],
-    "answer": "C",
-    "solution": "Mn changes from +7 to +2: $MnO_4^- + 8H^+ + 5e^- \\rightarrow Mn^{2+} + 4H_2O$. 5 F are needed = $5 \\times 96500 = 4.825 \\times 10^5$ C."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -191,8 +177,7 @@
       "75 min",
       "90 min"
     ],
-    "answer": "D",
-    "solution": "After 87.5% completion, 12.5% = 1/8 = $(1/2)^3$ of the reactant remains, i.e. 3 half-lives. Time = $3 \\times 30$ = 90 min."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -204,8 +189,7 @@
       "3",
       "4"
     ],
-    "answer": "C",
-    "solution": "Let rate = $k[A]^x[B]^y$. Doubling A alone doubles the rate, so x = 1. Doubling both: $2^1 \\times 2^y = 8$, so y = 2. Overall order = 1 + 2 = 3. (Order is found from experiment, not from the coefficients.)"
+    "answer": "C"
   },
   {
     "type": "single",
@@ -217,8 +201,7 @@
       "$B \\lt Be \\lt N \\lt O$",
       "$Be \\lt B \\lt O \\lt N$"
     ],
-    "answer": "B",
-    "solution": "B is lower than Be because its 2p electron is less penetrating than the 2s electron of Be. O is lower than N because N has a stable half-filled 2p shell and O has a paired 2p electron that is easier to remove. So $B \\lt Be \\lt O \\lt N$."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -230,8 +213,7 @@
       "O",
       "S"
     ],
-    "answer": "A",
-    "solution": "Although F is more electronegative, its small 2p subshell causes strong electron–electron repulsion to the added electron. Hence Cl (3p) has the most negative electron gain enthalpy."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -243,8 +225,7 @@
       "5",
       "6"
     ],
-    "answer": "C",
-    "solution": "Symmetrical molecules whose bond dipoles cancel: $CO_2$ (linear), $BF_3$ (trigonal planar), $CH_4$ and $CCl_4$ (tetrahedral), $SF_6$ (octahedral), giving 5. $NH_3$, $H_2O$ and $CHCl_3$ are polar."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -256,8 +237,7 @@
       "A-II, B-I, C-IV, D-III",
       "A-IV, B-I, C-II, D-III"
     ],
-    "answer": "C",
-    "solution": "$SF_4$: 4 bp + 1 lp, see-saw. $ClF_3$: 3 bp + 2 lp, T-shaped. $BrF_5$: 5 bp + 1 lp, square pyramidal. $XeF_4$: 4 bp + 2 lp, square planar."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -269,8 +249,7 @@
       "2 and paramagnetic",
       "1.5 and paramagnetic"
     ],
-    "answer": "D",
-    "solution": "$O_2^-$ has 17 electrons: 10 in bonding and 7 in antibonding MOs. Bond order = (10 − 7)/2 = 1.5. One $\\pi^*2p$ orbital has an unpaired electron, so it is paramagnetic."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -282,8 +261,7 @@
       "A is true but R is false",
       "A is false but R is true"
     ],
-    "answer": "A",
-    "solution": "Intramolecular H-bonding in o-nitrophenol prevents association between molecules, so it is more volatile (steam volatile). p-Nitrophenol molecules are held together by intermolecular H-bonds, so it is less volatile. R correctly explains A."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -295,8 +273,7 @@
       "$PH_3$",
       "$AsH_3$"
     ],
-    "answer": "A",
-    "solution": "Down the group the E–H bond dissociation enthalpy decreases, so the hydrides lose hydrogen more easily. Reducing character increases from $NH_3$ to $BiH_3$, making $BiH_3$ the strongest reducing agent."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -308,8 +285,7 @@
       "A, C and D only",
       "A, B, C and D"
     ],
-    "answer": "C",
-    "solution": "A is true: F is the most electronegative element. B is false: acid strength is HF $\\lt$ HCl $\\lt$ HBr $\\lt$ HI, so HI is the strongest. C is true: lone-pair repulsion in the small $F_2$ molecule weakens the F–F bond. D is true: the X–X$'$ bond is weaker than the X–X bond."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -321,8 +297,7 @@
       "$Cu^{2+}$",
       "$Cr^{3+}$"
     ],
-    "answer": "D",
-    "solution": "$\\mu = \\sqrt{n(n+2)}$ = 3.87 BM gives n = 3. $Cr^{3+}$ is $3d^3$ (3 unpaired). $Fe^{3+}$ ($3d^5$) gives 5.92, $Ni^{2+}$ ($3d^8$) gives 2.83 and $Cu^{2+}$ ($3d^9$) gives 1.73 BM."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -334,8 +309,7 @@
       "Statement I is true but Statement II is false",
       "Statement I is false but Statement II is true"
     ],
-    "answer": "A",
-    "solution": "Because of lanthanoid contraction, the expected increase in size from the 4d to the 5d series is cancelled, so Zr (160 pm) and Hf (159 pm) have nearly equal radii. The lanthanoids most commonly show the +3 state. Both are true."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -347,8 +321,7 @@
       "5",
       "6"
     ],
-    "answer": "D",
-    "solution": "$Cr_2O_7^{2-} + 14H^+ + 6e^- \\rightarrow 2Cr^{3+} + 7H_2O$, so one dichromate ion takes 6 electrons. Each $Fe^{2+}$ gives one electron, so 6 mol $Fe^{2+}$ are oxidised."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -360,8 +333,7 @@
       "+2 and 6",
       "+1 and 6"
     ],
-    "answer": "B",
-    "solution": "The complex ion is $[Co(en)_2Cl_2]^+$: x + 0 + 2(−1) = +1, so x = +3. en is bidentate, so CN = 2 × 2 + 2 = 6."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -373,8 +345,7 @@
       "cis-$[Co(NH_3)_4Cl_2]^+$",
       "cis-$[Pt(NH_3)_2Cl_2]$"
     ],
-    "answer": "A",
-    "solution": "cis-$[Co(en)_2Cl_2]^+$ has no plane of symmetry, so its mirror images do not superimpose and it is optically active. The trans isomer and cis-$[Co(NH_3)_4Cl_2]^+$ have mirror planes, and square planar $[Pt(NH_3)_2Cl_2]$ is planar, so none of these is chiral."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -386,8 +357,7 @@
       "2 and 0",
       "4 and 0"
     ],
-    "answer": "D",
-    "solution": "Both contain $Co^{3+}$ ($3d^6$). $F^-$ is a weak field ligand, so $[CoF_6]^{3-}$ is high spin ($t_{2g}^4 e_g^2$) with 4 unpaired electrons. $NH_3$ pairs the electrons in $Co^{3+}$ ($t_{2g}^6$, $d^2sp^3$), so $[Co(NH_3)_6]^{3+}$ has 0 unpaired electrons."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -399,8 +369,7 @@
       "1,3-Dimethylbutan-1-ol",
       "2-Hydroxy-4-methylpentane"
     ],
-    "answer": "A",
-    "solution": "The longest chain has 5 carbons. Number it so the –OH carbon gets the lowest locant: OH at C-2, methyl at C-4. Name: 4-methylpentan-2-ol."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -412,8 +381,7 @@
       "A-III, B-I, C-IV, D-II",
       "A-I, B-IV, C-III, D-II"
     ],
-    "answer": "B",
-    "solution": "Aniline is steam volatile and immiscible with water, so steam distillation is used. Glycerol decomposes at its boiling point, so it is distilled under reduced pressure. Chloroform and aniline boil far apart, so simple distillation works. Coloured pigments are separated by chromatography."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -425,8 +393,7 @@
       "1,2-Dibromopropane",
       "Propane"
     ],
-    "answer": "A",
-    "solution": "With peroxide, HBr adds by a free radical mechanism (peroxide or Kharash effect). The more stable secondary radical forms, giving the anti-Markovnikov product $CH_3CH_2CH_2Br$, 1-bromopropane."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -438,8 +405,7 @@
       "2-Methylbut-2-ene",
       "3-Methylbut-1-ene"
     ],
-    "answer": "C",
-    "solution": "Join the two carbonyl carbons with a double bond: $(CH_3)_2C=O$ + $O=CHCH_3$ comes from $(CH_3)_2C=CHCH_3$, which is 2-methylbut-2-ene. 2-Methylbut-1-ene gives HCHO + butanone, pent-2-ene gives ethanal + propanal, and 3-methylbut-1-ene gives HCHO + 2-methylpropanal."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -451,8 +417,7 @@
       "n-Butane",
       "n-Hexane"
     ],
-    "answer": "B",
-    "solution": "Ethane, n-butane and n-hexane come from a single alkyl halide (two identical halves). Propane would need $CH_3X$ + $C_2H_5X$. That gives a mixture of ethane, propane and butane that is hard to separate, so the Wurtz reaction suits alkanes with an even number of carbons."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -464,8 +429,7 @@
       "$C_6H_5CH_2Br$",
       "$C_6H_5C(CH_3)(C_6H_5)Br$"
     ],
-    "answer": "D",
-    "solution": "$S_N1$ rate depends on carbocation stability. $C_6H_5C^+(CH_3)(C_6H_5)$ is tertiary and is stabilised by resonance with two phenyl rings plus hyperconjugation from $CH_3$, so it is the most stable carbocation. That bromide reacts fastest."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -477,8 +441,7 @@
       "A is true but R is false",
       "A is false but R is true"
     ],
-    "answer": "B",
-    "solution": "Both are true. The slower reaction (deactivation) comes from the strong −I effect of Cl, which withdraws electron density from the ring. The ortho/para orientation comes from its +R effect. R explains the orientation, not the lower reactivity, so R is not the correct explanation of A."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -490,8 +453,7 @@
       "p-nitrophenol $\\gt$ o-cresol $\\gt$ phenol $\\gt$ ethanol",
       "o-cresol $\\gt$ phenol $\\gt$ p-nitrophenol $\\gt$ ethanol"
     ],
-    "answer": "B",
-    "solution": "The electron-withdrawing $-NO_2$ group at the para position stabilises the phenoxide ion, which raises acidity. The electron-releasing $-CH_3$ in o-cresol lowers it. Ethanol is far less acidic than any phenol. Order: p-nitrophenol $\\gt$ phenol $\\gt$ o-cresol $\\gt$ ethanol."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -503,8 +465,7 @@
       "2-Methylpropane",
       "2-Methylpropene"
     ],
-    "answer": "D",
-    "solution": "Methoxide is a strong base and a tertiary halide is too hindered for $S_N2$. Elimination wins and gives $(CH_3)_2C=CH_2$, 2-methylpropene. This is why tert-butyl methyl ether is made from $(CH_3)_3CONa$ and $CH_3Br$."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -516,8 +477,7 @@
       "$C_6H_5CHO$",
       "$(CH_3)_3CCHO$"
     ],
-    "answer": "A",
-    "solution": "The Cannizzaro reaction is given by aldehydes with no $\\alpha$-hydrogen. $HCHO$, $C_6H_5CHO$ and $(CH_3)_3CCHO$ have no $\\alpha$-H. $CH_3CHO$ has three $\\alpha$-H atoms and gives aldol condensation instead."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -529,8 +489,7 @@
       "$ClCH_2COOH \\gt C_6H_5COOH \\gt HCOOH \\gt CH_3COOH$",
       "$C_6H_5COOH \\gt ClCH_2COOH \\gt HCOOH \\gt CH_3COOH$"
     ],
-    "answer": "A",
-    "solution": "The −I effect of Cl makes chloroacetic acid strongest ($pK_a$ 2.86). $HCOOH$ (3.75) has no electron-releasing alkyl group. Benzoic acid (4.19) is stronger than acetic acid (4.76) because the sp² phenyl carbon is electron-withdrawing compared with $CH_3$."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -542,8 +501,7 @@
       "$(CH_3)_2NH \\gt CH_3NH_2 \\gt (CH_3)_3N \\gt NH_3$",
       "$(CH_3)_2NH \\gt (CH_3)_3N \\gt CH_3NH_2 \\gt NH_3$"
     ],
-    "answer": "C",
-    "solution": "In water, basicity depends on the +I effect, solvation of the ammonium ion by H-bonding, and steric hindrance. For methylamines the net result is $(CH_3)_2NH \\gt CH_3NH_2 \\gt (CH_3)_3N \\gt NH_3$. ($pK_b$: 3.27, 3.38, 4.22, 4.75.)"
+    "answer": "C"
   },
   {
     "type": "single",
@@ -555,8 +513,7 @@
       "Methanamine",
       "Phenylmethanamine (benzylamine)"
     ],
-    "answer": "B",
-    "solution": "Only primary amines (aliphatic or aromatic) give foul-smelling isocyanides on heating with $CHCl_3$ and alcoholic KOH. N-Methylaniline, $C_6H_5NHCH_3$, is a secondary amine, so it does not respond."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -568,8 +525,7 @@
       "Statement I is true but Statement II is false",
       "Statement I is false but Statement II is true"
     ],
-    "answer": "D",
-    "solution": "Amylose is a long unbranched chain of $\\alpha$-D-glucose with C1–C4 glycosidic links; amylopectin is the branched one (Statement I false). In sucrose the reducing groups (C1 of glucose and C2 of fructose) are tied up in the glycosidic bond, so it is non-reducing (Statement II true)."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -581,7 +537,6 @@
       "A-III, B-IV, C-I, D-II",
       "A-II, B-IV, C-I, D-III"
     ],
-    "answer": "C",
-    "solution": "Vitamin $B_{12}$ deficiency causes pernicious anaemia, vitamin D causes rickets, vitamin C causes scurvy, and vitamin K deficiency increases blood clotting time."
+    "answer": "C"
   }
 ]

@@ -504,7 +504,6 @@ textarea.input { min-height: 96px; resize: vertical; }
 .rq-meta { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
 .rq-text { font-family: var(--qfont); font-size: 16px; line-height: 1.7; color: var(--ink); }
 .rq-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-.sol-none { border-top: 1px solid var(--line); padding-top: 14px; font-size: 14px; color: var(--muted); }
 .pill { display: inline-block; font-size: 12px; font-weight: 600; line-height: 1.5; padding: 3px 10px; border-radius: 999px; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .p-correct { background: var(--green-soft); color: var(--green-ink); }
 .p-wrong { background: var(--red-soft); color: var(--red); }
@@ -518,13 +517,6 @@ textarea.input { min-height: 96px; resize: vertical; }
 .ans .yours.good { background: var(--green-soft); }
 .ans .right { background: var(--green-soft); color: var(--green-ink); }
 .ans .right > span:first-child { color: var(--green-ink); }
-.sol { border-top: 1px solid var(--line); padding-top: 14px; }
-.sol summary { cursor: pointer; font: 600 12px/1.4 var(--body); text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); list-style: none; display: inline-flex; align-items: center; gap: 8px; padding: 4px 0; }
-.sol summary::-webkit-details-marker { display: none; }
-.sol summary::after { content: "Show"; text-transform: none; letter-spacing: 0; font-weight: 600; font-size: 13px; color: var(--blue); }
-.sol[open] summary::after { content: "Hide"; }
-.sol summary:hover { color: var(--ink); }
-.sol > div { margin-top: 10px; font-size: 15px; line-height: 1.7; white-space: pre-line; color: var(--ink-2); }
 .empty { background: var(--card); border: 1px dashed var(--field); border-radius: 16px; padding: 40px; text-align: center; color: var(--muted); }
 
 /* ---------- Responsive ---------- */
@@ -580,7 +572,7 @@ textarea.input { min-height: 96px; resize: vertical; }
   .hide-sm { display: none; }
   th { white-space: normal; letter-spacing: 0.04em; font-size: 11px; }
   .ans { grid-template-columns: minmax(0, 1fr); }
-  .rq-text, .sol > div, .ans > div { overflow-x: auto; overflow-y: hidden; }
+  .rq-text, .ans > div { overflow-x: auto; overflow-y: hidden; }
 
   .exam .bar .in { gap: 10px; min-height: 58px; }
   .top-tools { gap: 6px; }

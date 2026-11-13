@@ -11,6 +11,7 @@
     "create-admin": "node scripts/createAdmin.js",
     "create-student": "node scripts/createStudent.js",
     "seed:free-tests": "node scripts/seedFreeTests.js",
+    "strip-solutions": "node scripts/stripSolutions.js",
     "postinstall": "prisma generate"
   },
   "keywords": [

@@ -751,7 +751,7 @@ export default function TestEditor({ id, kind: newKind = 'live', seriesId, backT
                     <code>tolerance</code>.
                   </li>
                   <li>
-                    Optional: <code>marks</code> (<code>{'{"correct": 4, "wrong": -1}'}</code>), <code>chapter</code>, <code>solution</code> and a YouTube{' '}
+                    Optional: <code>marks</code> (<code>{'{"correct": 4, "wrong": -1}'}</code>), <code>chapter</code> and a YouTube{' '}
                     <code>video</code> link.
                   </li>
                   <li>

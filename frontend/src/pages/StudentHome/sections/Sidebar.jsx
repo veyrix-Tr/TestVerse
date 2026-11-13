@@ -9,11 +9,11 @@ const NAV = [
   { page: 'tests', label: 'Your tests', count: 'todo', countLabel: 'to do' },
   { page: 'test-series', label: 'Test series' },
   { page: 'results', label: 'Results', count: 'results', countLabel: 'attempts' },
-  { page: 'solutions', label: 'Solutions' },
   { page: 'resources', label: 'Resources' },
   { page: 'notifications', label: 'Notifications' },
 ]
 const SOON_NAV = [
+  { page: 'solutions', label: 'Solutions' },
   { page: 'analysis', label: 'Analysis' },
   { page: 'video-requests', label: 'Video requests' },
 ]

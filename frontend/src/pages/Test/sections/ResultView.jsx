@@ -328,8 +328,8 @@ export default function ResultView({ paper, flat, attempt, meta, reviewFilter, s
         <section className="block" aria-labelledby="rv-t">
           <div className="block-head review-head">
             <div>
-              <h2 id="rv-t">Questions and solutions</h2>
-              <p>Jump to any question, or filter the list below.</p>
+              <h2 id="rv-t">Question review</h2>
+              <p>Your answer, the correct answer and your time for each question.</p>
             </div>
             <div className="seg" role="group" aria-label="Show">
               {[
@@ -419,16 +419,6 @@ export default function ResultView({ paper, flat, attempt, meta, reviewFilter, s
                         <MathText html={esc(correctText)} />
                       </div>
                     </div>
-                    {q.solution ? (
-                      <details className="sol" open={it.sc.status !== 'correct'}>
-                        <summary>Solution</summary>
-                        <div>
-                          <MathText html={esc(tx(q.solution, lang))} />
-                        </div>
-                      </details>
-                    ) : (
-                      <p className="sol-none">No written solution for this question.</p>
-                    )}
                     {videoUrl(q.video) ? (
                       <div className="rq-actions">
                         <a className="btn btn-outline btn-sm" href={videoUrl(q.video)} target="_blank" rel="noopener noreferrer">

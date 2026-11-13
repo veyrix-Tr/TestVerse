@@ -2,7 +2,9 @@
 // Reads a question paper in the admin JSON format (docs/test-format.md),
 // checks it, and turns it into the shape the CBT screen uses:
 //   { languages, sections: [{ name, questions: [{ id, type, chapter, marks,
-//     text: {en, hi?}, options?: [{en, hi?}], answer, tolerance?, solution?, video? }] }] }
+//     text: {en, hi?}, options?: [{en, hi?}], answer, tolerance?, video? }] }] }
+// There are no written solutions: the site only ever shows the correct answer.
+// Solutions and analysis reach students by email, outside the website.
 // Option answers arrive as letters ("B", ["A","C"]) and are stored as 0-based
 // indexes. Every problem is reported, each with a readable place, so the admin
 // can fix them all in one go.
@@ -154,12 +156,7 @@ const readQuestion = (raw, n, where, marking, errors) => {
     }
   }
 
-  if (raw.solution != null) {
-    const s = readText(raw.solution);
-    if (!s) errors.push(`${where}: "solution" must be text or {"en": "…", "hi": "…"}.`);
-    else if (tooLong(s)) errors.push(`${where}: "solution" is too long.`);
-    else q.solution = s.hi ? s : s.en;
-  }
+  if (raw.solution != null) errors.push(`${where}: remove "solution"; written solutions aren't stored on the website (they're sent by email).`);
 
   if (raw.video != null && raw.video !== '') {
     if (typeof raw.video !== 'string' || !YOUTUBE.test(raw.video.trim())) errors.push(`${where}: "video" must be a YouTube link (https://youtu.be/… or https://www.youtube.com/watch?v=…).`);
@@ -234,7 +231,8 @@ const normalizePaper = (input, { subject, marking } = {}) => {
   return { paper: { languages, sections }, summary, marking: mk.marking };
 };
 
-// The student's copy before submitting: no answers, tolerances, solutions or videos.
+// The student's copy before submitting: no answers, tolerances or videos.
+// (`solution` is dropped too, in case a paper saved before solutions were removed still has one.)
 const stripAnswers = (paper) => ({
   languages: paper.languages,
   sections: paper.sections.map((s) => ({
@@ -244,4 +242,15 @@ const stripAnswers = (paper) => ({
   })),
 });
 
-module.exports = { TYPES, DEFAULT_MARKING, normalizeMarking, normalizePaper, stripAnswers };
+// The copy shown after submitting: answers included, never a written solution
+// (older papers saved before solutions were removed may still carry one).
+const stripSolutions = (paper) => ({
+  ...paper,
+  sections: paper.sections.map((s) => ({
+    ...s,
+    // eslint-disable-next-line no-unused-vars
+    questions: s.questions.map(({ solution, ...q }) => q),
+  })),
+});
+
+module.exports = { TYPES, DEFAULT_MARKING, normalizeMarking, normalizePaper, stripAnswers, stripSolutions };

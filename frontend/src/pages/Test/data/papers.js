@@ -1,9 +1,10 @@
 /*
   Shared CBT helpers. The paper itself comes from the server (GET /api/tests/:id,
-  without answers; the full paper with answers and solutions only after submitting).
+  without answers; the paper with correct answers only after submitting. There are
+  no written solutions: those are emailed to students outside the website).
   Question shape (backend/lib/paperFormat.js):
     { id, type, chapter?, text:{en,hi?}, options?:[{en,hi?}], answer, tolerance?,
-      marks:{correct, wrong, partial?}, solution?, video? }
+      marks:{correct, wrong, partial?}, video? }
   type: single | multiple | integer | numerical (ar | match are still rendered)
 */
 export const AR_OPTIONS = [

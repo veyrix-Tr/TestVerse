@@ -9,8 +9,7 @@
       "7",
       "10"
     ],
-    "answer": "B",
-    "solution": "The smallest equivalence relation containing $R$ has classes $\\{1,2,3\\}$ and $\\{4\\}$, so it has $3^2 + 1^2 = 10$ ordered pairs. $R$ already has 2, so $10 - 2 = 8$ pairs must be added."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -22,8 +21,7 @@
       "$\\frac{4\\pi}{3} - \\sqrt{3}$",
       "$\\frac{8\\pi}{3} - \\sqrt{3}$"
     ],
-    "answer": "C",
-    "solution": "The line $x = 1$ cuts the circle $|z| = 2$ at $(1, \\pm\\sqrt{3})$, subtending angle $\\theta = \\frac{2\\pi}{3}$ at the origin. Segment area $= \\frac{r^2}{2}(\\theta - \\sin\\theta) = 2\\left(\\frac{2\\pi}{3} - \\frac{\\sqrt{3}}{2}\\right) = \\frac{4\\pi}{3} - \\sqrt{3}$."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -35,8 +33,7 @@
       "$(4, 5]$",
       "$(-\\infty, 4]$"
     ],
-    "answer": "A",
-    "solution": "Let $f(x) = x^2 - 2kx + k^2 + k - 5$. Real roots: $D = 4(5 - k) \\ge 0 \\Rightarrow k \\le 5$. Both roots less than 5: $f(5) \\gt 0$ and vertex $k \\lt 5$. $f(5) = k^2 - 9k + 20 = (k-4)(k-5) \\gt 0 \\Rightarrow k \\lt 4$ or $k \\gt 5$. Combining, $k \\in (-\\infty, 4)$."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -48,8 +45,7 @@
       "A is true but R is false",
       "A is false but R is true"
     ],
-    "answer": "C",
-    "solution": "$|\\text{adj}\\,B| = |B|^{n-1}$, so $|\\text{adj}(2A)| = |2A|^2 = (2^3 \\cdot 4)^2 = 1024$; A is true. The correct result is $\\text{adj}(kA) = k^{n-1}\\text{adj}(A)$, so R is false."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -61,8 +57,7 @@
       "132",
       "108"
     ],
-    "answer": "D",
-    "solution": "The digit sum must be divisible by 3. The six digits sum to 15, so the omitted digit is 0 or 3. Omit 0: digits $1,2,3,4,5$, last digit 2 or 4: $2 \\times 4! = 48$. Omit 3: digits $0,1,2,4,5$; last digit 0 gives $4! = 24$; last digit 2 or 4 gives $3 \\times 3! = 18$ each. Total $= 48 + 24 + 18 + 18 = 108$."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -74,8 +69,7 @@
       "6",
       "9"
     ],
-    "answer": "B",
-    "solution": "Let the coefficients be $^nC_{r-1}, {}^nC_r, {}^nC_{r+1}$. Then $\\frac{n - r + 1}{r} = 3 \\Rightarrow n = 4r - 1$ and $\\frac{n - r}{r + 1} = \\frac{5}{3} \\Rightarrow 3n = 8r + 5$. Solving, $r = 2$, $n = 7$ (coefficients 7, 21, 35)."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -87,8 +81,7 @@
       "$\\frac{230}{231}$",
       "$\\frac{57}{231}$"
     ],
-    "answer": "A",
-    "solution": "$\\frac{1}{k(k+1)(k+2)} = \\frac{1}{2}\\left[\\frac{1}{k(k+1)} - \\frac{1}{(k+1)(k+2)}\\right]$. Telescoping, the sum is $\\frac{1}{2}\\left[\\frac{1}{2} - \\frac{1}{21 \\cdot 22}\\right] = \\frac{1}{2} \\cdot \\frac{230}{462} = \\frac{115}{462}$."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -100,8 +93,7 @@
       "2",
       "$\\frac{3}{2}$"
     ],
-    "answer": "D",
-    "solution": "For small $x$: $\\cos x \\approx 1 - \\frac{x^2}{2}$ and $\\sqrt{\\cos 2x} \\approx (1 - 2x^2)^{1/2} \\approx 1 - x^2$. The product is $\\approx 1 - \\frac{3x^2}{2}$, so the limit is $\\frac{3}{2}$."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -113,8 +105,7 @@
       "Statement I is true but Statement II is false",
       "Statement I is false but Statement II is true"
     ],
-    "answer": "D",
-    "solution": "$f(x) = (x+1)(x-1)|x-1|\\,|x-2|$. Near $x = 1$, the factor $(x-1)|x-1|$ is differentiable (derivative 0), so $f$ is differentiable at 1: Statement I is false. Near $x = 2$, $f(x) = g(x)|x - 2|$ with $g(2) = 3 \\ne 0$, so $f$ is not differentiable at 2: Statement II is true."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -126,8 +117,7 @@
       "$\\frac{1}{\\sqrt{3}}\\tan^{-1}\\left(\\frac{x^2 - 1}{\\sqrt{3}\\,x}\\right) + C$",
       "$\\ln\\left|\\frac{x^2 - x + 1}{x^2 + x + 1}\\right| + C$"
     ],
-    "answer": "B",
-    "solution": "Divide by $x^2$: $\\int \\frac{1 - 1/x^2}{(x + 1/x)^2 - 1}dx$. Put $t = x + \\frac{1}{x}$: $\\int \\frac{dt}{t^2 - 1} = \\frac{1}{2}\\ln\\left|\\frac{t-1}{t+1}\\right| = \\frac{1}{2}\\ln\\left|\\frac{x^2 - x + 1}{x^2 + x + 1}\\right| + C$."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -139,8 +129,7 @@
       "$5 - \\sqrt{2} - \\sqrt{3}$",
       "$4 - \\sqrt{2} - \\sqrt{3}$"
     ],
-    "answer": "C",
-    "solution": "$[x^2] = 0, 1, 2, 3$ on $[0,1), [1,\\sqrt{2}), [\\sqrt{2},\\sqrt{3}), [\\sqrt{3},2)$. Integral $= (\\sqrt{2} - 1) + 2(\\sqrt{3} - \\sqrt{2}) + 3(2 - \\sqrt{3}) = 5 - \\sqrt{2} - \\sqrt{3}$."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -152,8 +141,7 @@
       "$\\sqrt{3} + 1$",
       "$\\frac{\\sqrt{3} + 1}{4}$"
     ],
-    "answer": "A",
-    "solution": "Integrating factor $= e^{\\int \\tan x\\,dx} = \\sec x$. So $y\\sec x = \\int \\sec^2 x\\,dx = \\tan x + C$; $y(0) = 1 \\Rightarrow C = 1$. Hence $y = \\sin x + \\cos x$ and $y\\left(\\frac{\\pi}{3}\\right) = \\frac{\\sqrt{3}}{2} + \\frac{1}{2} = \\frac{\\sqrt{3} + 1}{2}$."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -165,8 +153,7 @@
       "5",
       "6"
     ],
-    "answer": "C",
-    "solution": "Vertices: $A(0,0)$, $B(4,0)$, $C(1,3)$. Altitude from $C$: $x = 1$; $BC$ has slope $-1$, so altitude from $A$ is $y = x$. Orthocentre $(1,1)$. Circumcentre lies on $x = 2$ with $4 + y^2 = 1 + (y-3)^2 \\Rightarrow y = 1$, so $(2,1)$. Sum $= 1 + 1 + 2 + 1 = 5$."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -178,8 +165,7 @@
       "$\\frac{16}{3}$",
       "$2\\sqrt{5}$"
     ],
-    "answer": "B",
-    "solution": "Subtracting the equations, the common chord is $6x = 16$, i.e. $x = \\frac{8}{3}$. Its distance from the centre $(0,0)$ of the first circle is $\\frac{8}{3}$, so half-length $= \\sqrt{16 - \\frac{64}{9}} = \\frac{4\\sqrt{5}}{3}$. Length $= \\frac{8\\sqrt{5}}{3}$."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -191,8 +177,7 @@
       "12",
       "$\\frac{25}{2}$"
     ],
-    "answer": "D",
-    "solution": "Here $a = 2$ and $(8,8) = (2t^2, 4t)$ with $t = 2$. The other end has parameter $-\\frac{1}{t} = -\\frac{1}{2}$, i.e. $\\left(\\frac{1}{2}, -2\\right)$. Focal chord length $= x_1 + x_2 + 2a = 8 + \\frac{1}{2} + 4 = \\frac{25}{2}$."
+    "answer": "D"
   },
   {
     "type": "single",
@@ -204,8 +189,7 @@
       "$\\frac{32}{5}$",
       "9"
     ],
-    "answer": "A",
-    "solution": "$\\frac{x^2}{a^2} - \\frac{y^2}{b^2} = 1$ with $a^2 + b^2 = 25$ and $\\frac{32}{a^2} - \\frac{9}{b^2} = 1$. With $a^2 = p$: $p^2 - 66p + 800 = 0 \\Rightarrow p = 16$ (since $p \\lt 25$), so $b^2 = 9$. Latus rectum $= \\frac{2b^2}{a} = \\frac{18}{4} = \\frac{9}{2}$."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -217,8 +201,7 @@
       "$\\frac{2}{3}$",
       "$\\frac{\\sqrt{6}}{2}$"
     ],
-    "answer": "B",
-    "solution": "$\\vec{b}_1 \\times \\vec{b}_2 = (2,3,4) \\times (3,4,5) = (-1, 2, -1)$, magnitude $\\sqrt{6}$. $\\vec{a}_2 - \\vec{a}_1 = (3, 1, 1)$, and its dot product with $(-1,2,-1)$ is $-2$. Shortest distance $= \\frac{2}{\\sqrt{6}} = \\frac{\\sqrt{6}}{3}$."
+    "answer": "B"
   },
   {
     "type": "single",
@@ -230,8 +213,7 @@
       "$\\frac{12}{5}$",
       "$\\frac{14}{5}$"
     ],
-    "answer": "C",
-    "solution": "Let the other two be $a, b$. Then $a + b = 25 - 15 = 10$ and $\\sum x^2 = 5(8 + 25) = 165$, so $a^2 + b^2 = 165 - 107 = 58$, giving $ab = 21$: $a, b = 3, 7$. Data: 1, 3, 5, 7, 9; mean deviation $= \\frac{4 + 2 + 0 + 2 + 4}{5} = \\frac{12}{5}$."
+    "answer": "C"
   },
   {
     "type": "single",
@@ -243,8 +225,7 @@
       "$\\frac{5}{11}$",
       "$\\frac{36}{61}$"
     ],
-    "answer": "A",
-    "solution": "$P(\\text{sum } 6) = \\frac{5}{36}$ and $P(\\text{sum } 7) = \\frac{6}{36} = \\frac{1}{6}$. A wins on the first throw, or after both miss once, and so on: $P(A) = \\frac{5/36}{1 - \\frac{31}{36}\\cdot\\frac{5}{6}} = \\frac{5/36}{61/216} = \\frac{30}{61}$."
+    "answer": "A"
   },
   {
     "type": "single",
@@ -256,42 +237,36 @@
       "8",
       "6"
     ],
-    "answer": "D",
-    "solution": "$1 - 2\\sin^2 x + 3\\sin x = 2 \\Rightarrow 2\\sin^2 x - 3\\sin x + 1 = 0 \\Rightarrow \\sin x = 1$ or $\\frac{1}{2}$. In $[0, 4\\pi]$: $\\sin x = 1$ at $\\frac{\\pi}{2}, \\frac{5\\pi}{2}$; $\\sin x = \\frac{1}{2}$ at $\\frac{\\pi}{6}, \\frac{5\\pi}{6}, \\frac{13\\pi}{6}, \\frac{17\\pi}{6}$. Total 6."
+    "answer": "D"
   },
   {
     "type": "integer",
     "chapter": "Matrices and Determinants",
     "text": "If the system of equations $x + 2y + z = 4$, $2x + y + 3z = 5$, $3x + 3y + \\lambda z = \\mu$ has infinitely many solutions, then $\\lambda + \\mu$ is equal to",
-    "answer": 13,
-    "solution": "The coefficient determinant is $1(\\lambda - 9) - 2(2\\lambda - 9) + 1(6 - 3) = 12 - 3\\lambda$, which must be 0, so $\\lambda = 4$. Then the third equation's left side is the sum of the first two, so consistency needs $\\mu = 4 + 5 = 9$. Hence $\\lambda + \\mu = 13$."
+    "answer": 13
   },
   {
     "type": "integer",
     "chapter": "Application of Derivatives",
     "text": "Let $f(x) = 2x^3 - 15x^2 + 36x + 1$. The sum of the absolute maximum and absolute minimum values of $f$ on the interval $[1, 5]$ is",
-    "answer": 80,
-    "solution": "$f'(x) = 6(x - 2)(x - 3)$. Values: $f(1) = 24$, $f(2) = 29$, $f(3) = 28$, $f(5) = 56$. Absolute maximum 56, absolute minimum 24; sum $= 80$."
+    "answer": 80
   },
   {
     "type": "integer",
     "chapter": "Definite Integrals and Area",
     "text": "If $A$ is the area of the region bounded by the parabola $y = x^2$ and the line $y = 2x + 3$, then $3A$ is equal to",
-    "answer": 32,
-    "solution": "The curves meet where $x^2 - 2x - 3 = 0$, i.e. $x = -1, 3$. $A = \\int_{-1}^{3}(2x + 3 - x^2)\\,dx = \\left[x^2 + 3x - \\frac{x^3}{3}\\right]_{-1}^{3} = 9 - \\left(-\\frac{5}{3}\\right) = \\frac{32}{3}$. So $3A = 32$."
+    "answer": 32
   },
   {
     "type": "integer",
     "chapter": "Three Dimensional Geometry",
     "text": "The distance of the point $(2, 1, -1)$ from the plane $x - y + z = 4$, measured parallel to the line $\\frac{x}{2} = \\frac{y}{3} = \\frac{z}{-6}$, is",
-    "answer": 4,
-    "solution": "A point on the line through $(2,1,-1)$ parallel to $(2,3,-6)$ is $(2 + 2t, 1 + 3t, -1 - 6t)$. Substituting in the plane: $-7t = 4$, so $t = -\\frac{4}{7}$. Distance $= |t|\\sqrt{4 + 9 + 36} = \\frac{4}{7} \\cdot 7 = 4$."
+    "answer": 4
   },
   {
     "type": "integer",
     "chapter": "Vector Algebra",
     "text": "Let $\\vec{a} = \\hat{i} + \\hat{j} + \\hat{k}$ and $\\vec{b} = \\hat{i} - 2\\hat{j} + \\hat{k}$. If $\\vec{c}$ is a vector such that $\\vec{a} \\times \\vec{c} = \\vec{b}$ and $\\vec{a} \\cdot \\vec{c} = 3$, then $|\\vec{c}|^2$ is equal to",
-    "answer": 5,
-    "solution": "From $\\vec{a} \\times (\\vec{a} \\times \\vec{c}) = \\vec{a} \\times \\vec{b}$: $3\\vec{a} - 3\\vec{c} = \\vec{a} \\times \\vec{b} = 3\\hat{i} - 3\\hat{k}$. So $\\vec{c} = \\vec{a} - (\\hat{i} - \\hat{k}) = \\hat{j} + 2\\hat{k}$, and $|\\vec{c}|^2 = 5$."
+    "answer": 5
   }
 ]

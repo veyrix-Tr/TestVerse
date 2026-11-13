@@ -1,5 +1,14 @@
 /* Features in the sidebar that aren't built yet. Keyed by the URL segment after /student/. */
 export const SOON = {
+  solutions: {
+    eyebrow: 'Solutions',
+    title: 'Worked solutions',
+    text: 'Step-by-step solutions for the tests you take. Until then, your result shows the correct answer for every question, and your solutions and analysis come by email.',
+    points: [
+      ['Every question explained', 'A worked solution for each question, not just the answer.'],
+      ['Start with your mistakes', 'Jump straight to the questions you got wrong.'],
+    ],
+  },
   analysis: {
     eyebrow: 'Analysis',
     title: 'Your performance analysis',
