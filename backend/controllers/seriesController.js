@@ -1,15 +1,13 @@
 const prisma = require('../lib/prisma');
 const { seriesVisibleTo } = require('../lib/access');
-const { notify } = require('../lib/notify');
+const { paymentMethod, startCheckout, grantNow, markPending } = require('../lib/purchases');
 const { testRow } = require('./testsController');
 
 // The student's side of a test series: the catalog of published series they
 // may see and buy, the inside of one (its tests with their attempt state),
-// and the purchase. Until Cashfree is wired in, MOCK_PAYMENTS=true activates a
-// purchase straight away — the same seam as the batch purchase in
-// subscriptionController — and a series priced at 0 (free) is always
-// activated at once. Never in production.
-const mockPayments = () => process.env.MOCK_PAYMENTS === 'true' && process.env.NODE_ENV !== 'production';
+// and the purchase — paid through Cashfree (lib/purchases.js), the same flow as
+// the batch purchase in subscriptionController. A series priced at 0 (free) is
+// unlocked at once.
 
 const publicOrder = (o) => ({
   id:          o.id,
@@ -146,10 +144,12 @@ const getSeries = async (req, res) => {
   }
 };
 
-// POST /api/series/:id/orders — the one-time purchase. No body.
-// Free series (price 0) and MOCK_PAYMENTS=true activate at once; otherwise the
-// order stays "pending" and the call answers 503 — REAL PAYMENTS: create a
-// Cashfree order here and return its session id, the webhook activates it.
+// POST /api/series/:id/orders — the one-time purchase. No body. Answers:
+//   201 { order }                                  — unlocked now (price 0, or MOCK_PAYMENTS in dev)
+//   200 { checkout: { orderId, paymentSessionId, mode }, order }
+//                                                  — open Cashfree's checkout; /payment/return
+//                                                    (or the webhook) unlocks it once paid
+//   503                                            — no way to pay online right now
 const buySeries = async (req, res) => {
   try {
     const where = await seriesVisibleTo(req.user.id);
@@ -163,43 +163,36 @@ const buySeries = async (req, res) => {
       return res.status(409).json({ error: 'You already own this series.', order: publicOrder(existing) });
     }
 
-    const free = s.price === 0;
-    const paid = free || mockPayments();
-    const data = {
-      amount:      s.price,
-      status:      paid ? 'active' : 'pending',
-      activatedAt: paid ? new Date() : null,
-      paymentRef:  paid ? (free ? 'free' : 'mock') : null,
-    };
-    const order = await prisma.seriesOrder.upsert({
-      where:  key,
-      update: data,
-      create: { userId: req.user.id, seriesId: s.id, ...data },
-    });
-
-    if (!paid) {
-      return res.status(503).json({
-        error: "Online payment isn't available yet. Please contact us to get this series.",
-        order: publicOrder(order),
-      });
+    const free   = s.price === 0;
+    const method = free ? 'free' : paymentMethod();
+    if (!method) {
+      return res.status(503).json({ error: "Online payment isn't available right now. Please contact us to get this series." });
     }
 
-    // The admin's bell: a student just bought a series.
-    const student = await prisma.user.findUnique({ where: { id: req.user.id }, select: { name: true } });
-    notify({
-      type: 'purchase',
-      text: 'New purchase: ' + (student && student.name ? student.name : 'Student') + ' · ' + s.title + (s.price ? ' · ₹' + s.price : ''),
-      view: 'series',
-    });
-    // The student's bell: their series is unlocked.
-    notify({
-      type:   'purchase',
-      text:   'Your ' + s.title + ' series is unlocked — start with its first test.',
-      view:   '/student/test-series',
-      userId: req.user.id,
-    });
+    if (method === 'cashfree') {
+      const checkout = await startCheckout(req, {
+        kind:     'series',
+        userId:   req.user.id,
+        amount:   s.price,
+        seriesId: s.id,
+        note:     `Testverse test series: ${s.title}`.slice(0, 200),
+      });
+      // Never overwrites an active order (e.g. another tab's payment landing meanwhile)
+      const wrote = await markPending({ kind: 'series', userId: req.user.id, seriesId: s.id, amount: s.price, ref: checkout.orderId });
+      const order = await prisma.seriesOrder.findUnique({ where: key });
+      if (!wrote) return res.status(409).json({ error: 'You already own this series.', order: publicOrder(order) });
+      return res.json({ checkout, order: publicOrder(order) });
+    }
+
+    // Free, or MOCK_PAYMENTS in dev
+    const granted = await grantNow({ kind: 'series', userId: req.user.id, seriesId: s.id, amount: s.price, ref: method });
+    if (granted.orphan) return res.status(404).json({ error: 'Test series not found' }); // deleted just now
+    const order = await prisma.seriesOrder.findUnique({ where: key });
+    // Lost a race with a concurrent request (double-click): it was unlocked once, by that one
+    if (granted.duplicate) return res.status(409).json({ error: 'You already own this series.', order: publicOrder(order) });
     res.status(201).json({ message: free ? 'Series unlocked' : 'Series purchased', order: publicOrder(order) });
   } catch (error) {
+    if (error.expose) return res.status(error.status).json({ error: error.message });
     console.error(error);
     res.status(500).json({ error: 'Could not complete the purchase' });
   }

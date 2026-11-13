@@ -82,6 +82,8 @@ const router = createBrowserRouter([{ element: <LegalHost />, children: [
   { path: '/signup', ...page(() => import('./pages/Signup/Signup.jsx')) },
   { path: '/subscribe', loader: requireNoSubscription, ...page(() => import('./pages/Subscribe/Subscribe.jsx')) },
   { path: '/checkout', element: <Navigate to="/subscribe" replace /> },
+  // Cashfree sends the student back here after paying for a batch or a series
+  { path: '/payment/return', loader: requireSession, ...page(() => import('./pages/Subscribe/PaymentReturn.jsx')) },
   // One route for the dashboard and its coming-soon pages (/student/analysis …),
   // so moving between them keeps the page mounted instead of rebuilding it.
   {

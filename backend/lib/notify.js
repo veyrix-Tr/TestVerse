@@ -12,9 +12,11 @@ const EXAM_LABEL = { neet: 'NEET', 'jee-main': 'JEE Main', 'jee-advanced': 'JEE 
 // text: one line as it should read in the bell
 // view: where clicking opens — admin: sidebar view ("students"); student: route ("/student/tests")
 // userId: the student it belongs to; omit for the admin inbox
+// Returns a promise that never rejects: callers may ignore it, or await it
+// where the process can stop right after the response (Vercel functions).
 function notify({ type, text, view, userId }) {
-  if (!text) return;
-  prisma.notification
+  if (!text) return Promise.resolve();
+  return prisma.notification
     .create({ data: { type, text, view: view || null, userId: userId || null } })
     .then(() => {})
     .catch((e) => console.error('notify:', e.message));

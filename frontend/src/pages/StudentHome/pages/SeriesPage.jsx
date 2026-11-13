@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import BackButton from '../../../components/BackButton.jsx'
 import { api } from '../../../lib/api.js'
+import { onReturnFromCheckout, openCheckout } from '../../../lib/cashfree.js'
 import { getToken } from '../../../lib/session.js'
 import { useToast } from '../../../lib/useToast.jsx'
 import { scopeOf, subjectsOf } from '../fmt.js'
@@ -16,15 +17,17 @@ const rupees = (n) => (n ? '₹' + Number(n).toLocaleString('en-IN') : 'Free')
 /*
   /student/test-series — the series on sale, what you already own, and the
   inside of one: its tests with your attempt state. A one-time payment buys a
-  series (price 0 = free); until the payment gateway is wired in, the server
-  activates the purchase at once when MOCK_PAYMENTS=true (see backend
-  seriesController.js). The tests themselves open on the normal CBT screen,
+  series (price 0 = free, unlocked at once): the server creates a Cashfree
+  order, we open Cashfree's checkout, and /payment/return confirms it and
+  brings the student back here with ?series=<id> open. The tests themselves open on the normal CBT screen,
   and once bought they also appear under "Your tests".
 */
 export default function SeriesPage({ data }) {
   const { toast, node } = useToast()
   const [list, setList] = useState({ status: 'loading', series: null, error: null })
-  const [openId, setOpenId] = useState(null) // the series being looked at, or null
+  // the series being looked at, or null. Back from Cashfree, /payment/return
+  // sends us here with ?series=<id>, which opens that series.
+  const [openId, setOpenId] = useState(() => new URLSearchParams(window.location.search).get('series'))
   const [detail, setDetail] = useState({ id: null, status: 'idle', series: null, tests: null, error: null })
   const [reloadKey, setReloadKey] = useState(0) // bump to refetch the open series
   const [buying, setBuying] = useState(null) // series id while a purchase runs
@@ -54,23 +57,35 @@ export default function SeriesPage({ data }) {
     }
   }, [openId, reloadKey])
 
-  /* One-time purchase: free series (or MOCK_PAYMENTS=true) activate at once.
+  /* One-time purchase. Paid series go to Cashfree's checkout (the tab leaves
+     and comes back through /payment/return); free ones (or MOCK_PAYMENTS=true
+     in dev) are unlocked at once.
      A failure stays on screen (inline in the detail, toast in the catalog). */
+  // Back from Cashfree's page via the browser's Back button: re-enable Buy
+  useEffect(() => onReturnFromCheckout(() => setBuying(null)), [])
+
   async function buy(s) {
     if (buying) return
     setBuying(s.id)
     setBuyError(null)
+    let leaving = false
     try {
-      await api('/series/' + encodeURIComponent(s.id) + '/orders', { method: 'POST', token: getToken() })
+      const res = await api('/series/' + encodeURIComponent(s.id) + '/orders', { method: 'POST', token: getToken() })
+      if (res.checkout) {
+        leaving = true // keep the button busy while the tab goes to Cashfree
+        await openCheckout(res.checkout)
+        return
+      }
       toast(s.price ? 'Purchase complete — the series is yours' : 'Unlocked — the series is yours')
       load() // the catalog shows it as owned
       setReloadKey((k) => k + 1) // an open detail picks up ownership too
       if (data && data.reload) data.reload() // "Your tests" gains its tests at once
     } catch (e) {
+      leaving = false
       setBuyError({ id: s.id, message: e.message })
       if (openId !== s.id) toast(e.message, 6000)
     } finally {
-      setBuying(null)
+      if (!leaving) setBuying(null)
     }
   }
 

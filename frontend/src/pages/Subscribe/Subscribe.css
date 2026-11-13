@@ -117,6 +117,23 @@ p { margin: 0; }
 .free-card b { display: block; font: 600 16px/1.3 var(--display); color: var(--ink); }
 .free-card span { display: block; margin-top: 4px; font-size: 14px; color: var(--muted); }
 
+/* ---------- /payment/return ---------- */
+.pr-page { display: grid; justify-items: center; align-content: start; }
+.pr-card { width: min(480px, 100%); text-align: center; }
+.pr-icon {
+  width: 64px; height: 64px; margin: 0 auto 18px; border-radius: 50%;
+  display: grid; place-items: center; font: 700 28px/1 var(--display); color: #fff;
+}
+.pr-paid { background: var(--green); }
+.pr-unpaid, .pr-error { background: var(--gold); color: #0B1B33; }
+.pr-checking { border: 4px solid var(--navy-line); border-top-color: var(--gold); animation: pr-spin 0.9s linear infinite; }
+@keyframes pr-spin { to { transform: rotate(360deg); } }
+.pr-title { margin-top: 12px; color: #fff; font-size: 26px; line-height: 1.2; letter-spacing: -0.02em; }
+.pr-order { margin-top: 18px; font-size: 13px; color: var(--on-navy-muted); word-break: break-all; }
+.pr-actions { margin-top: 24px; display: grid; gap: 10px; }
+.pr-again { min-height: 44px; }
+.pr-help { margin-top: 18px; font-size: 14px; color: var(--muted); text-align: center; }
+
 @media (max-width: 1080px) {
   .layout { grid-template-columns: 1fr; }
   .summary { position: static; }
@@ -129,4 +146,5 @@ p { margin: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
+  .pr-checking { animation-duration: 2.4s; }
 }

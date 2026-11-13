@@ -39,6 +39,7 @@ model User {
   notifications   Notification[]
   seriesOrders    SeriesOrder[]
   seriesAccess    SeriesStudent[]
+  payments        Payment[]
 }
 
 // A plan a student buys: one exam + class, e.g. "11th JEE". Tests are later
@@ -57,6 +58,7 @@ model Batch {
   subscriptions Subscription[]
   tests         TestBatch[]
   series        SeriesBatch[]
+  payments      Payment[]
 
   @@unique([exam, grade])
 }
@@ -168,6 +170,7 @@ model TestSeries {
   groups      SeriesGroup[]
   students    SeriesStudent[]
   orders      SeriesOrder[]
+  payments    Payment[]
 }
 
 // Who a "custom" series is sold to: batches, groups and individual students.
@@ -220,6 +223,32 @@ model SeriesOrder {
 
   @@unique([userId, seriesId])
   @@index([seriesId])
+}
+
+// One Cashfree checkout. A row is written when a student starts paying for a
+// batch or a series; the webhook or the return page then confirms the order
+// with Cashfree and, once it is PAID, activates the Subscription / SeriesOrder
+// it was for. `orderId` is the id Cashfree knows the order by. Kept even if the
+// batch or series is later deleted, as the record of money received.
+model Payment {
+  id          String      @id @default(cuid())
+  orderId     String      @unique
+  kind        String      // "batch" | "series"
+  userId      String
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  batchId     String?
+  batch       Batch?      @relation(fields: [batchId], references: [id], onDelete: SetNull)
+  seriesId    String?
+  series      TestSeries? @relation(fields: [seriesId], references: [id], onDelete: SetNull)
+  amount      Int         // rupees
+  status      String      @default("pending") // "pending" | "paid" | "failed"
+  cfPaymentId String?     // Cashfree's payment id, once paid
+  paidAt      DateTime?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([userId])
+  @@index([status])
 }
 
 // One student's attempt at one test. A student may retake a test once they've

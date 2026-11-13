@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import './Subscribe.css'
 import LogoSprite from '../../components/LogoSprite.jsx'
 import { api } from '../../lib/api.js'
+import { onReturnFromCheckout, openCheckout } from '../../lib/cashfree.js'
 import { usePageMeta } from '../../lib/hooks.js'
 import { clearSession, getToken, loadSession, saveSession } from '../../lib/session.js'
 
@@ -11,8 +12,9 @@ import { clearSession, getToken, loadSession, saveSession } from '../../lib/sess
   ahead to the dashboard to take the free mock tests first. The batch
   isn't chosen here: it follows from the exam and class they gave at sign-up
   (JEE + Class 11 -> "11th JEE"), and the server works it out the same way.
-  Payment isn't wired in yet: the server activates the batch at once when
-  MOCK_PAYMENTS=true (see backend subscriptionController).
+  Paying goes through Cashfree: the server creates the order, we open
+  Cashfree's checkout, and /payment/return confirms it and activates the batch.
+  A free batch (or MOCK_PAYMENTS=true in dev) is activated at once.
 */
 
 const EXAM_NAME = { jee: 'JEE', neet: 'NEET' }
@@ -36,7 +38,7 @@ export default function Subscribe() {
   const [batch, setBatch] = useState(undefined) // undefined: loading, null: none for this profile
   const [loadErr, setLoadErr] = useState(null)
   const [error, setError] = useState(null)
-  const [busy, setBusy] = useState(false)
+  const [busy, setBusy] = useState(false) // false | 'starting' | 'redirecting'
 
   useEffect(() => {
     let live = true
@@ -48,11 +50,20 @@ export default function Subscribe() {
     }
   }, [])
 
+  // Back from Cashfree's page via the browser's Back button: re-enable Pay
+  useEffect(() => onReturnFromCheckout(() => setBusy(false)), [])
+
   async function subscribe() {
-    setBusy(true)
+    setBusy('starting')
     setError(null)
     try {
-      const { subscription } = await api('/subscription', { body: {}, token: getToken() })
+      const { subscription, checkout } = await api('/subscription', { body: {}, token: getToken() })
+      if (checkout) {
+        // Off to Cashfree; it sends the student back to /payment/return
+        setBusy('redirecting')
+        await openCheckout(checkout)
+        return
+      }
       saveSession({ token: getToken(), user: { ...user, subscription } })
       navigate('/student', { replace: true, viewTransition: true })
     } catch (e) {
@@ -152,8 +163,9 @@ export default function Subscribe() {
                     </p>
                   )}
                   <button type="button" className="btn btn-gold btn-lg btn-block" disabled={busy} onClick={subscribe}>
-                    {busy ? 'Activating…' : price(batch) ? 'Pay ' + price(batch) : 'Subscribe to ' + batch.name}
+                    {busy === 'redirecting' ? 'Opening secure payment…' : busy ? 'Please wait…' : price(batch) ? 'Pay ' + price(batch) : 'Subscribe to ' + batch.name}
                   </button>
+                  <p className="sum-note">Secure payment by Cashfree · UPI, cards, net banking</p>
                   <p className="sum-note">Wrong exam or class? Contact us before you pay and we'll change it.</p>
                 </>
               )}

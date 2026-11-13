@@ -18,7 +18,8 @@ app.use(cors({ origin: allowedOrigins }));
 // Question papers are big (180 questions, Hindi, solutions), so admin routes
 // get a larger limit. This must come before the general parser.
 app.use('/api/admin', express.json({ limit: '5mb' }));
-app.use(express.json({ limit: '100kb' }));
+// The raw body is kept so the Cashfree webhook's HMAC signature can be checked.
+app.use(express.json({ limit: '100kb', verify: (req, res, buf) => { req.rawBody = buf.toString('utf8'); } }));
 // Express 5 leaves req.body undefined when nothing was sent (DELETE, empty POST)
 app.use((req, res, next) => { if (req.body === undefined) req.body = {}; next(); });
 
@@ -53,6 +54,11 @@ app.use('/api/admin/website', adminWebsiteRoutes);
 
 const testRoutes = require('./routes/testRoutes');
 app.use('/api/tests', testRoutes);
+
+// Cashfree: verify after the return redirect, and the public webhook. Mounted
+// before seriesRoutes, whose router-wide requireAuth would otherwise 401 it.
+const paymentRoutes = require('./routes/paymentRoutes');
+app.use('/api', paymentRoutes);
 
 const subscriptionRoutes = require('./routes/subscriptionRoutes');
 app.use('/api', subscriptionRoutes);
