@@ -9,6 +9,9 @@ import { Empty, LoadError } from '../sections/States.jsx'
 import { TestCard } from '../sections/TestsSection.jsx'
 
 const EXAM_LABEL = { jee: 'JEE', neet: 'NEET' }
+const FULL = 'Full syllabus'
+/* ₹1,999 (Indian grouping) or "Free" */
+const rupees = (n) => (n ? '₹' + Number(n).toLocaleString('en-IN') : 'Free')
 
 /*
   /student/test-series — the series on sale, what you already own, and the
@@ -26,6 +29,7 @@ export default function SeriesPage({ data }) {
   const [reloadKey, setReloadKey] = useState(0) // bump to refetch the open series
   const [buying, setBuying] = useState(null) // series id while a purchase runs
   const [filter, setFilter] = useState('all') // the open series' test filter: 'all' or a scope
+  const [buyError, setBuyError] = useState(null) // { id, message } of the last failed purchase
 
   const load = useCallback(() => {
     api('/series', { token: getToken() })
@@ -50,29 +54,37 @@ export default function SeriesPage({ data }) {
     }
   }, [openId, reloadKey])
 
-  /* One-time purchase: free series (or MOCK_PAYMENTS=true) activate at once */
+  /* One-time purchase: free series (or MOCK_PAYMENTS=true) activate at once.
+     A failure stays on screen (inline in the detail, toast in the catalog). */
   async function buy(s) {
     if (buying) return
     setBuying(s.id)
+    setBuyError(null)
     try {
       await api('/series/' + encodeURIComponent(s.id) + '/orders', { method: 'POST', token: getToken() })
-      toast(s.price ? 'Purchased — the series is yours now' : 'Unlocked — the series is yours')
+      toast(s.price ? 'Purchase complete — the series is yours' : 'Unlocked — the series is yours')
       load() // the catalog shows it as owned
       setReloadKey((k) => k + 1) // an open detail picks up ownership too
       if (data && data.reload) data.reload() // "Your tests" gains its tests at once
     } catch (e) {
-      toast(e.message, 6000)
+      setBuyError({ id: s.id, message: e.message })
+      if (openId !== s.id) toast(e.message, 6000)
     } finally {
       setBuying(null)
     }
   }
 
-  const back = <BackButton
+  const back = (
+    <BackButton
       onClick={() => {
         setOpenId(null)
         setFilter('all')
+        setBuyError(null)
       }}
-    >Back to test series</BackButton>
+    >
+      Back to test series
+    </BackButton>
+  )
   const skeleton = (
     <ul className="tcards" aria-hidden="true">
       {[0, 1, 2].map((i) => (
@@ -92,15 +104,17 @@ export default function SeriesPage({ data }) {
     const owned = !!(s && s.owned)
     const tests = (s && detail.tests) || []
     const done = tests.filter((t) => t.status === 'done').length
-    const scopes = [...new Set(tests.map(scopeOf))].sort((a, b) => (a === 'Full syllabus' ? -1 : b === 'Full syllabus' ? 1 : a.localeCompare(b)))
+    const scopes = [...new Set(tests.map(scopeOf))].sort((a, b) => (a === FULL ? -1 : b === FULL ? 1 : a.localeCompare(b)))
     const active = filter !== 'all' && scopes.includes(filter) ? filter : 'all'
     const shown = active === 'all' ? tests : tests.filter((t) => scopeOf(t) === active)
+    const err = buyError && s && buyError.id === s.id ? buyError.message : null
+    const pending = s && !owned && s.orderStatus === 'pending'
     const tabs =
       scopes.length > 1 ? (
         <div className="filter-tabs sr-tabs" role="group" aria-label="Filter tests by subject">
           {['all', ...scopes].map((v) => (
             <button key={v} type="button" aria-pressed={active === v ? 'true' : 'false'} onClick={() => setFilter(v)}>
-              {v === 'all' ? 'All' : v}
+              {v === 'all' ? 'All tests' : v}
               <span>{v === 'all' ? tests.length : tests.filter((t) => scopeOf(t) === v).length}</span>
             </button>
           ))}
@@ -111,22 +125,24 @@ export default function SeriesPage({ data }) {
       <>
         <PageHeader
           back={back}
-          eyebrow="Test series"
+          eyebrow={s && EXAM_LABEL[s.exam] ? EXAM_LABEL[s.exam] + ' test series' : 'Test series'}
           title={(s && s.title) || 'Test series'}
           desc={(s && s.description) || undefined}
           actions={
             s ? (
               <div className="sr-buy">
-                <span className="sr-price">
-                  {s.price ? '₹' + s.price : 'Free'}
-                  {s.price ? <small> one-time</small> : null}
-                </span>
                 {owned ? (
-                  <span className="status status-green">Yours</span>
+                  <span className="status status-green">Purchased</span>
                 ) : (
-                  <button className="btn btn-gold" type="button" disabled={buying === s.id} onClick={() => buy(s)}>
-                    {buying === s.id ? '…' : s.price ? 'Buy ₹' + s.price : 'Get this series'}
-                  </button>
+                  <>
+                    <span className="sr-price">
+                      {rupees(s.price)}
+                      {s.price ? <small> one-time</small> : null}
+                    </span>
+                    <button className="btn btn-gold" type="button" disabled={buying === s.id} onClick={() => buy(s)}>
+                      {buying === s.id ? 'Processing…' : s.price ? 'Buy now' : 'Get it free'}
+                    </button>
+                  </>
                 )}
               </div>
             ) : null
@@ -137,76 +153,84 @@ export default function SeriesPage({ data }) {
               items={[
                 { label: 'Tests', v: s.tests },
                 { label: 'Questions', v: s.questions },
-                { label: 'Marks', v: s.marks },
+                { label: 'Total marks', v: s.marks },
               ]}
             />
           ) : null}
         </PageHeader>
 
-        {owned && tests.length ? (
-          <div className="sr-progress" aria-label="Your progress">
-            <div>
-              <b>
-                {done} of {tests.length}
-              </b>{' '}
-              tests completed
-            </div>
-            <span className="tile-bar" aria-hidden="true">
-              <i style={{ width: Math.round((done / tests.length) * 100) + '%' }}></i>
-            </span>
-          </div>
-        ) : null}
-
-        {loading ? (
-          skeleton
-        ) : detail.error ? (
-          <LoadError error={detail.error} onRetry={() => setReloadKey((k) => k + 1)} what="this series" />
-        ) : !s ? (
-          skeleton
-        ) : !owned ? (
-          <>
-            <div className="card state-card sr-unlock">
-              <div>
-                <h3>Buy the series to open its tests</h3>
-                <p className="meta">You can see what&apos;s inside first — each test opens on the normal exam screen once the series is yours.</p>
-              </div>
-              <button className="btn btn-gold" type="button" disabled={buying === s.id} onClick={() => buy(s)}>
-                {buying === s.id ? '…' : s.price ? 'Buy ₹' + s.price : 'Get this series'}
-              </button>
-            </div>
-            {tabs}
-            <ul className="sr-locked">
-              {shown.map((t) => (
-                <li key={t.id}>
-                  <span className="sr-n" aria-hidden="true">
-                    {tests.indexOf(t) + 1}
-                  </span>
-                  <span className="sr-locked-text">
-                    <b>{t.title}</b>
-                    <span>
-                      <i className={'subj-tag' + (scopeOf(t) === 'Full syllabus' ? ' is-full' : '')}>{scopeOf(t)}</i>{' '}
-                      {subjectsOf(t).length > 1 ? subjectsOf(t).join(' · ') + ' · ' : ''}
-                      {t.questionCount ? t.questionCount + ' questions · ' : ''} {t.durationMin} min · {t.totalMarks} marks
-                    </span>
-                  </span>
-                  <svg className="sr-lock" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                    <rect x="4" y="11" width="16" height="10" rx="2" />
-                    <path d="M8 11V7a4 4 0 0 1 8 0v4" />
-                  </svg>
-                </li>
-              ))}
-            </ul>
-          </>
+        {loading || !s ? (
+          detail.error && !loading ? (
+            <LoadError error={detail.error} onRetry={() => setReloadKey((k) => k + 1)} what="this series" />
+          ) : (
+            skeleton
+          )
         ) : !tests.length ? (
           <Empty title="No tests yet" text="The first test of this series will appear here as soon as it's added." />
         ) : (
-          <section className="section" aria-label="Tests in this series">
+          <section className="section sr-body" aria-label="Tests in this series">
+            {owned ? (
+              <div className="sr-progress">
+                <div className="sr-progress-top">
+                  <span>Your progress</span>
+                  <b>
+                    {done} / {tests.length} completed
+                  </b>
+                </div>
+                <span className="tile-bar" aria-hidden="true">
+                  <i style={{ width: Math.round((done / tests.length) * 100) + '%' }}></i>
+                </span>
+              </div>
+            ) : (
+              <div className={'sr-unlock' + (err ? ' is-error' : '')} role={err ? 'alert' : undefined}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <rect x="4" y="11" width="16" height="10" rx="2" />
+                  <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+                </svg>
+                <p>
+                  {err ||
+                    (pending
+                      ? 'Your payment for this series is pending. It unlocks as soon as the payment is confirmed.'
+                      : 'Preview the tests below. Every test unlocks after a one-time purchase and opens on the regular exam screen.')}
+                </p>
+              </div>
+            )}
+
             {tabs}
-            <ul className="tcards">
-              {shown.map((t) => (
-                <TestCard key={t.id} t={{ ...t, seriesTitle: null }} now={data ? data.now : 0} />
-              ))}
-            </ul>
+
+            {owned ? (
+              <ul className="tcards">
+                {shown.map((t) => (
+                  <TestCard key={t.id} t={{ ...t, seriesTitle: null }} now={data ? data.now : 0} />
+                ))}
+              </ul>
+            ) : (
+              <ol className="sr-locked">
+                {shown.map((t) => (
+                  <li key={t.id}>
+                    <span className="sr-n" aria-hidden="true">
+                      {tests.indexOf(t) + 1}
+                    </span>
+                    <span className="sr-locked-text">
+                      <b>{t.title}</b>
+                      <span>
+                        <i className={'subj-tag' + (scopeOf(t) === FULL ? ' is-full' : '')}>{scopeOf(t)}</i>
+                        {subjectsOf(t).length > 1 ? <span>{subjectsOf(t).join(' · ')}</span> : null}
+                      </span>
+                    </span>
+                    <span className="sr-locked-facts">
+                      <span>{t.questionCount} Qs</span>
+                      <span>{t.durationMin} min</span>
+                      <span>{t.totalMarks} marks</span>
+                    </span>
+                    <svg className="sr-lock" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-label="Locked">
+                      <rect x="4" y="11" width="16" height="10" rx="2" />
+                      <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+                    </svg>
+                  </li>
+                ))}
+              </ol>
+            )}
           </section>
         )}
         {node}
@@ -266,7 +290,13 @@ function SeriesCard({ s, buying, onBuy, onOpen }) {
       <article className={'tcard is-series' + (s.owned ? ' is-owned' : '')} aria-labelledby={'sr-' + s.id}>
         <div className="tc-badges">
           {EXAM_LABEL[s.exam] ? <span className="chip chip-grey">{EXAM_LABEL[s.exam]}</span> : null}
-          {s.owned ? <span className="status status-green">Yours</span> : !s.price ? <span className="chip chip-gold">Free</span> : null}
+          {s.owned ? (
+            <span className="status status-green">Purchased</span>
+          ) : s.orderStatus === 'pending' ? (
+            <span className="status status-amber">Payment pending</span>
+          ) : !s.price ? (
+            <span className="chip chip-gold">Free</span>
+          ) : null}
         </div>
 
         <h3 className="tc-title" id={'sr-' + s.id}>
@@ -308,10 +338,10 @@ function SeriesCard({ s, buying, onBuy, onOpen }) {
 
         <div className="tc-foot">
           {s.owned ? (
-            <span className="tc-when">Bought · open any time</span>
+            <span className="tc-when">{s.tests} {s.tests === 1 ? 'test' : 'tests'} unlocked</span>
           ) : (
             <span className="sr-price">
-              {s.price ? '₹' + s.price : 'Free'}
+              {rupees(s.price)}
               {s.price ? <small> one-time</small> : null}
             </span>
           )}
@@ -326,7 +356,7 @@ function SeriesCard({ s, buying, onBuy, onOpen }) {
                   View tests
                 </button>
                 <button className="btn btn-gold btn-sm" type="button" onClick={onBuy} disabled={buying}>
-                  {buying ? '…' : s.price ? 'Buy now' : 'Get free'}
+                  {buying ? 'Processing…' : s.price ? 'Buy now' : 'Get it free'}
                 </button>
               </>
             )}

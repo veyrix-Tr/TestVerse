@@ -23,6 +23,8 @@ const EXAMS = [
   ['neet', 'NEET'],
 ]
 
+const rupees = (n) => (n ? '₹' + Number(n).toLocaleString('en-IN') : 'Free')
+
 const HINT_LIST = 'Set a price and an audience, then publish a series — students buy it from Test series in their sidebar.'
 const HINT_PAGE =
   'Published series show up in the student’s Test series sidebar at the price you set. Students buy it once (0 = free) and its tests open for them.'
@@ -236,7 +238,7 @@ function SeriesList({ toast, onCount, onOpen, onTest }) {
                         <b>{s.questions}</b> {s.questions === 1 ? 'question' : 'questions'}
                       </span>
                       <span className="tree-price">
-                        {s.price == null ? 'No price yet' : s.price === 0 ? 'Free' : '₹' + s.price}
+                        {s.price == null ? 'No price yet' : rupees(s.price)}
                       </span>
                       <span className="tree-updated">Updated {ago(s.updatedAt, now)}</span>
                     </span>
@@ -379,7 +381,7 @@ function NewSeries({ onCancel, onCreated }) {
           setExam(f.exam)
           setDesc(f.description)
           setPrice(f.price)
-          if (err && (err.field === 'title' || err.field === 'price') && f.title !== title) setErr(null)
+          if (err && ((err.field === 'title' && f.title !== title) || (err.field === 'price' && f.price !== price))) setErr(null)
         }}
       />
       {err && err.field !== 'title' && err.field !== 'price' && (
@@ -561,6 +563,7 @@ function SeriesPage({ id, toast, onBack, onDeleted, onTest }) {
   }
 
   async function unpublish() {
+    if (!window.confirm(`Unpublish "${s.title}"?\n\nIt disappears from the Test series page, and students who already bought it can't open its tests until you publish it again.`)) return
     setBusy('unpublish')
     try {
       await unpublishSeries(s.id)
@@ -617,7 +620,7 @@ function SeriesPage({ id, toast, onBack, onDeleted, onTest }) {
       onDeleted()
     } catch (e) {
       setBusy(null)
-      toast(e.message, 4000)
+      toast(e.message, 6000)
     }
   }
 
@@ -721,7 +724,7 @@ function SeriesPage({ id, toast, onBack, onDeleted, onTest }) {
           <h3>Before you publish</h3>
           <ul>
             {[
-              [s.price != null, s.price != null ? (s.price ? 'Price set: ₹' + s.price : 'Price set: Free') : 'Set a price (0 makes it free)'],
+              [s.price != null, s.price != null ? 'Price: ' + rupees(s.price) : 'Set a price (0 makes it free)'],
               [ready > 0, ready ? plural(ready, 'test') + ' ready with a question paper' : 'Add at least one test with a question paper'],
               [!dirty, dirty ? 'Save your changes to the details above' : 'Details saved'],
             ].map(([ok, text]) => (

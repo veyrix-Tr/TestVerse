@@ -175,6 +175,12 @@ const unpublishSeries = async (req, res) => {
 // DELETE /api/admin/series/:id — deletes the series and every test in it
 const deleteSeries = async (req, res) => {
   try {
+    // Paid orders and students' results live under the series: never wipe them
+    // with one click. Unpublish hides it instead.
+    const bought = await prisma.seriesOrder.count({ where: { seriesId: req.params.id, status: 'active' } });
+    if (bought) {
+      return res.status(409).json({ error: `${bought} student${bought === 1 ? ' has' : 's have'} bought this series, so it can't be deleted. Unpublish it to hide it from new students.` });
+    }
     const r = await prisma.testSeries.deleteMany({ where: { id: req.params.id } });
     if (!r.count) return res.status(404).json({ error: 'Test series not found' });
     res.json({ message: 'Test series deleted' });

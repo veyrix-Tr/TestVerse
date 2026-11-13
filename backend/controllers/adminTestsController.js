@@ -250,6 +250,10 @@ const updateTest = async (req, res) => {
       return res.status(409).json({ field: 'paper', error: 'Students have already started this test, so its questions and marking can no longer change. You can still edit the title, instructions and timings.' });
     }
     if (existing.status === 'published' && !p.paper) return res.status(400).json({ field: 'paper', error: 'A published test needs its question paper.' });
+    if (!p.paper) {
+      const last = await lastReadyOfPublishedSeries(existing);
+      if (last) return res.status(400).json({ field: 'paper', error: last });
+    }
 
     const data = { ...d.data };
     if (!locked) {
@@ -306,10 +310,22 @@ const setStatus = (status) => async (req, res) => {
 };
 
 // DELETE /api/admin/tests/:id — also deletes its attempts
+// A published series must keep at least one test with a question paper — its
+// buyers paid for it. Returns an error message when `testId` is that last one.
+const lastReadyOfPublishedSeries = async (test) => {
+  if (!test.seriesId || !test.questionCount) return null;
+  const series = await prisma.testSeries.findUnique({ where: { id: test.seriesId }, select: { status: true } });
+  if (!series || series.status !== 'published') return null;
+  const others = await prisma.test.count({ where: { seriesId: test.seriesId, id: { not: test.id }, questionCount: { gt: 0 } } });
+  return others ? null : 'This is the only test with questions in a published series. Add another test first, or unpublish the series.';
+};
+
 const deleteTest = async (req, res) => {
   try {
     const test = await prisma.test.findUnique({ where: { id: req.params.id } });
     if (!test) return res.status(404).json({ error: 'Test not found' });
+    const last = await lastReadyOfPublishedSeries(test);
+    if (last) return res.status(409).json({ error: last });
     await prisma.test.delete({ where: { id: test.id } });
     res.json({ message: 'Test deleted' });
   } catch (error) {
