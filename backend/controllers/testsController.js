@@ -12,7 +12,8 @@ const GRACE_MS = 2 * 60 * 1000;
 // is "not found". Admins can open any test, e.g. to preview it.
 const findTest = async (req) =>
   prisma.test.findFirst({
-    where: { id: req.params.id, ...(req.user.role === 'admin' ? {} : await visibleTo(req.user.id)) },
+    where:   { id: req.params.id, ...(req.user.role === 'admin' ? {} : await visibleTo(req.user.id)) },
+    include: { series: { select: { title: true } } },
   });
 
 // A student can retake a test after submitting it, so they may have several
@@ -32,6 +33,9 @@ const meta = (t) => ({
   languages:     t.languages,
   opensAt:       t.opensAt,
   closesAt:      t.closesAt,
+  // Where a test comes from when it belongs to a test series
+  seriesId:      t.seriesId || null,
+  seriesTitle:   t.series ? t.series.title : null,
 });
 
 const publicAttempt = (a) =>
@@ -108,6 +112,24 @@ const resultPayload = async (test, attempt, latest) => {
   };
 };
 
+// One test as the student's list sees it: metadata, status, latest attempt
+// (without answers), best score and history. Also used by the series detail
+// (seriesController) so both places read and shape attempts identically.
+const rowOf = async (t) => {
+  const [first, ...older] = t.attempts || [];
+  const attempt = await settle(first, t);
+  const done = [attempt, ...older].filter((a) => a && a.submittedAt);
+  const best = done.reduce((b, a) => (!b || a.score > b.score ? a : b), null);
+  return {
+    ...meta(t),
+    status:    statusOf(t, attempt),
+    canRetake: canRetake(t, attempt),
+    attempt:   attempt ? { ...publicAttempt(attempt), responses: undefined } : null,
+    best:      best ? { attemptNo: best.attemptNo, score: best.score, maxScore: best.maxScore } : null,
+    history:   done.map(summaryOf),
+  };
+};
+
 // GET /api/tests — the published tests meant for this student, with their
 // status, latest attempt (without answers), best score and score history
 const listTests = async (req, res) => {
@@ -115,23 +137,13 @@ const listTests = async (req, res) => {
     const tests = await prisma.test.findMany({
       where:   await visibleTo(req.user.id),
       orderBy: [{ opensAt: 'asc' }, { createdAt: 'desc' }],
-      include: { attempts: { where: { userId: req.user.id }, orderBy: { attemptNo: 'desc' } } },
+      include: {
+        attempts: { where: { userId: req.user.id }, orderBy: { attemptNo: 'desc' } },
+        series:   { select: { title: true } },
+      },
     });
     const out = [];
-    for (const t of tests) {
-      const [first, ...older] = t.attempts;
-      const attempt = await settle(first, t);
-      const done = [attempt, ...older].filter((a) => a && a.submittedAt);
-      const best = done.reduce((b, a) => (!b || a.score > b.score ? a : b), null);
-      out.push({
-        ...meta(t),
-        status:    statusOf(t, attempt),
-        canRetake: canRetake(t, attempt),
-        attempt:   attempt ? { ...publicAttempt(attempt), responses: undefined } : null,
-        best:      best ? { attemptNo: best.attemptNo, score: best.score, maxScore: best.maxScore } : null,
-        history:   done.map(summaryOf),
-      });
-    }
+    for (const t of tests) out.push(await rowOf(t));
     res.json({ tests: out, serverNow: new Date() });
   } catch (error) {
     console.error(error);
@@ -271,4 +283,4 @@ const getResult = async (req, res) => {
   }
 };
 
-module.exports = { listTests, getTest, startTest, saveAttempt, submitTest, getResult };
+module.exports = { listTests, getTest, startTest, saveAttempt, submitTest, getResult, testRow: rowOf };

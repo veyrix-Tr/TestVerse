@@ -50,4 +50,15 @@ const writeAudience = (tx, testId, a) => [
   ...(a.studentIds.length ? [tx.testStudent.createMany({ data: a.studentIds.map((userId) => ({ testId, userId })) })] : []),
 ];
 
-module.exports = { AUDIENCE_INCLUDE, publicAudience, readAudience, writeAudience };
+// The same for a test series (SeriesBatch / SeriesGroup / SeriesStudent).
+const writeSeriesAudience = (tx, seriesId, a) => [
+  tx.seriesBatch.deleteMany({ where: { seriesId } }),
+  tx.seriesGroup.deleteMany({ where: { seriesId } }),
+  tx.seriesStudent.deleteMany({ where: { seriesId } }),
+  tx.testSeries.update({ where: { id: seriesId }, data: { audience: a.mode } }),
+  ...(a.batchIds.length ? [tx.seriesBatch.createMany({ data: a.batchIds.map((batchId) => ({ seriesId, batchId })) })] : []),
+  ...(a.groupIds.length ? [tx.seriesGroup.createMany({ data: a.groupIds.map((groupId) => ({ seriesId, groupId })) })] : []),
+  ...(a.studentIds.length ? [tx.seriesStudent.createMany({ data: a.studentIds.map((userId) => ({ seriesId, userId })) })] : []),
+];
+
+module.exports = { AUDIENCE_INCLUDE, publicAudience, readAudience, writeAudience, writeSeriesAudience };

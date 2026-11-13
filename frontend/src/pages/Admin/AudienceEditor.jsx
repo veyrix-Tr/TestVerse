@@ -3,11 +3,36 @@ import { Chip, OptionPicker } from './Pickers.jsx'
 import { studentOption } from './pickerHooks.js'
 import { audienceText, listBatches, listGroups, listStudents, plural } from './studentsApi.js'
 
-/* "Who can take this test": everyone, or chosen batches, groups and students. */
-export default function AudienceEditor({ value, onChange, error }) {
+/*
+  "Who can take this test" — or, with context="series", "who can see and buy
+  this test series". Everyone, or chosen batches, groups and students.
+*/
+const COPY = {
+  test: {
+    seg:         'Who can take this test',
+    all:         'All paid students',
+    allSummary:  'Every student with an active batch for this exam can see it once it is published.',
+    givenTo:     'Given to',
+    nobody:      'No student can see this test yet.',
+    nobodyWarn:  'Choose at least one batch, group or student, or switch to All paid students. Until then nobody can see this test.',
+    hint:        'Students who have already started the test keep access to it and their result, whatever you choose here.',
+  },
+  series: {
+    seg:         'Who can see and buy this series',
+    all:         'Everyone',
+    allSummary:  'Every student preparing for this exam can see and buy it once it is published.',
+    givenTo:     'Sold to',
+    nobody:      'No student can see this series yet.',
+    nobodyWarn:  'Choose at least one batch, group or student, or switch to Everyone. Until then nobody can see this series.',
+    hint:        'Students who have bought the series keep access to it and their results, whatever you choose here.',
+  },
+}
+
+export default function AudienceEditor({ value, onChange, error, context = 'test' }) {
   const [batches, setBatches] = useState(null)
   const [groups, setGroups] = useState(null)
   const [loadErr, setLoadErr] = useState(null)
+  const copy = COPY[context] || COPY.test
   const custom = value.mode === 'custom'
   const nobody = custom && !value.batches.length && !value.groups.length && !value.students.length
 
@@ -56,9 +81,9 @@ export default function AudienceEditor({ value, onChange, error }) {
   return (
     <div className="card au-card">
       <div className="au-top">
-        <div className="seg" role="group" aria-label="Who can take this test">
+        <div className="seg" role="group" aria-label={copy.seg}>
           <button type="button" aria-pressed={!custom ? 'true' : 'false'} onClick={() => onChange({ ...value, mode: 'all' })}>
-            All paid students
+            {copy.all}
           </button>
           <button type="button" aria-pressed={custom ? 'true' : 'false'} onClick={() => onChange({ ...value, mode: 'custom' })}>
             Chosen people
@@ -67,14 +92,14 @@ export default function AudienceEditor({ value, onChange, error }) {
         <p className="au-summary">
           {custom ? (
             nobody ? (
-              <span className="au-none">No student can see this test yet.</span>
+              <span className="au-none">{copy.nobody}</span>
             ) : (
               <>
-                Given to <b>{audienceText(value)}</b>.
+                {copy.givenTo} <b>{audienceText(value)}</b>.
               </>
             )
           ) : (
-            'Every student with an active batch for this exam can see it once it is published.'
+            copy.allSummary
           )}
         </p>
       </div>
@@ -138,10 +163,10 @@ export default function AudienceEditor({ value, onChange, error }) {
           </div>
           {nobody && (
             <div className="alert a-warn">
-              <span>Choose at least one batch, group or student, or switch to All paid students. Until then nobody can see this test.</span>
+              <span>{copy.nobodyWarn}</span>
             </div>
           )}
-          <p className="hint">Students who have already started the test keep access to it and their result, whatever you choose here.</p>
+          <p className="hint">{copy.hint}</p>
         </>
       )}
       {error && (

@@ -69,6 +69,13 @@ function defaultInstructions(minutes, f) {
   ].join('\n')
 }
 
+/* Subjects an exam's tests are made of. A single-subject test picks one of
+   them; a full-syllabus test lists them all (editable). Stored as plain text
+   in `subject`, so "Physics" = single subject, "Physics, Chemistry" = full. */
+const SUBJECTS = { jee: ['Physics', 'Chemistry', 'Maths'], neet: ['Physics', 'Chemistry', 'Biology'], '': ['Physics', 'Chemistry', 'Maths', 'Biology'] }
+const subjectsFor = (exam) => SUBJECTS[exam] || SUBJECTS['']
+const isSingle = (subject) => !!subject && !/[,&/+]| and /i.test(subject)
+
 const examWord = (exam) => (exam === 'jee' ? 'JEE ' : exam === 'neet' ? 'NEET ' : '')
 
 export default function TestEditor({ id, kind: newKind = 'live', seriesId, backText = 'Back to tests', onBack, onSaved }) {
@@ -79,6 +86,7 @@ export default function TestEditor({ id, kind: newKind = 'live', seriesId, backT
 
   const [title, setTitle] = useState('')
   const [subject, setSubject] = useState('')
+  const [scope, setScope] = useState('full') // 'full' | 'single' — the test type
   const [exam, setExam] = useState('')
   const [duration, setDuration] = useState('180')
   const [opensAt, setOpensAt] = useState('')
@@ -115,6 +123,7 @@ export default function TestEditor({ id, kind: newKind = 'live', seriesId, backT
         setOriginal(t)
         setTitle(t.title || '')
         setSubject(t.subject || '')
+        setScope(isSingle(t.subject) ? 'single' : 'full')
         setExam(t.exam || '')
         setDuration(String(t.durationMin || ''))
         setOpensAt(toLocalInput(t.opensAt))
@@ -338,23 +347,82 @@ export default function TestEditor({ id, kind: newKind = 'live', seriesId, backT
               />
               {err('title')}
             </div>
-            <div data-field="subject">
-              <label className="l" htmlFor="ts-subject">
-                Subject
-              </label>
-              <input
-                className="input"
-                id="ts-subject"
-                value={subject}
-                maxLength={120}
-                placeholder="e.g. Physics, Chemistry, Biology"
-                aria-invalid={invalid('subject')}
-                onChange={(e) => {
-                  setSubject(e.target.value)
-                  clearErr('subject')
-                }}
-              />
-              {err('subject') || <p className="hint">A paper without sections becomes one section with this name.</p>}
+            <div className="full" data-field="subject">
+              <span className="l ts-l" id="ts-scope-l">
+                Test type
+              </span>
+              <div className="seg" role="group" aria-labelledby="ts-scope-l">
+                {[
+                  ['full', 'Full syllabus'],
+                  ['single', 'Single subject'],
+                ].map(([v, l]) => (
+                  <button
+                    key={v}
+                    type="button"
+                    aria-pressed={scope === v ? 'true' : 'false'}
+                    onClick={() => {
+                      if (scope === v) return
+                      setScope(v)
+                      clearErr('subject')
+                      const list = subjectsFor(exam)
+                      setSubject(v === 'single' ? (isSingle(subject) ? subject : list[0]) : list.join(', '))
+                    }}
+                  >
+                    {l}
+                  </button>
+                ))}
+              </div>
+              {scope === 'single' ? (
+                <>
+                  <div className="ts-subjects" role="group" aria-label="Subject">
+                    {subjectsFor(exam).map((v) => (
+                      <button
+                        key={v}
+                        type="button"
+                        className="chip-btn"
+                        aria-pressed={subject === v ? 'true' : 'false'}
+                        onClick={() => {
+                          setSubject(v)
+                          clearErr('subject')
+                        }}
+                      >
+                        {v}
+                      </button>
+                    ))}
+                    <input
+                      className="input ts-subject-other"
+                      id="ts-subject"
+                      value={subjectsFor(exam).includes(subject) ? '' : subject}
+                      maxLength={60}
+                      placeholder="Other subject…"
+                      aria-label="Other subject"
+                      aria-invalid={invalid('subject')}
+                      onChange={(e) => {
+                        setSubject(e.target.value.replace(/[,&/+]/g, ''))
+                        clearErr('subject')
+                      }}
+                    />
+                  </div>
+                  {err('subject') || <p className="hint">Students can filter a series by subject. A paper without sections becomes one section named after it.</p>}
+                </>
+              ) : (
+                <>
+                  <input
+                    className="input"
+                    id="ts-subject"
+                    value={subject}
+                    maxLength={120}
+                    placeholder={'e.g. ' + subjectsFor(exam).join(', ')}
+                    aria-label="Subjects covered"
+                    aria-invalid={invalid('subject')}
+                    onChange={(e) => {
+                      setSubject(e.target.value)
+                      clearErr('subject')
+                    }}
+                  />
+                  {err('subject') || <p className="hint">The subjects this paper covers, separated by commas.</p>}
+                </>
+              )}
             </div>
             <div data-field="exam">
               <span className="l ts-l" id="ts-exam-l">

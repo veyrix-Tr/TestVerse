@@ -37,6 +37,8 @@ model User {
   resources       Resource[]
   announcements   Announcement[]
   notifications   Notification[]
+  seriesOrders    SeriesOrder[]
+  seriesAccess    SeriesStudent[]
 }
 
 // A plan a student buys: one exam + class, e.g. "11th JEE". Tests are later
@@ -54,6 +56,7 @@ model Batch {
 
   subscriptions Subscription[]
   tests         TestBatch[]
+  series        SeriesBatch[]
 
   @@unique([exam, grade])
 }
@@ -141,17 +144,82 @@ model Test {
   @@index([seriesId])
 }
 
-// A test series an admin builds: a named set of tests. For now its tests are
-// stored only (no student can see them); selling series comes later.
+// A test series an admin builds and sells: a named set of tests with a
+// one-time price. `status` is the series' own publish switch (the tests inside
+// follow it — test-level publish stays blocked for kind "series"), `audience`
+// is who may see and buy it, and a SeriesOrder is one student's purchase.
 model TestSeries {
   id          String   @id @default(cuid())
   title       String
   exam        String?  // "jee" | "neet" | null
   description String   @default("")
+  // One-time price in rupees; null = not set (publishing requires it, 0 = free)
+  price       Int?
+  status      String   @default("draft") // "draft" | "published"
+  publishedAt DateTime?
+  // Who may see and buy it: "all" (every student of its exam) or "custom"
+  // (the batches / groups / students listed below).
+  audience    String   @default("all")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   tests       Test[]
+  batches     SeriesBatch[]
+  groups      SeriesGroup[]
+  students    SeriesStudent[]
+  orders      SeriesOrder[]
+}
+
+// Who a "custom" series is sold to: batches, groups and individual students.
+model SeriesBatch {
+  seriesId String
+  series   TestSeries @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+  batchId  String
+  batch    Batch      @relation(fields: [batchId], references: [id], onDelete: Cascade)
+
+  @@id([seriesId, batchId])
+  @@index([batchId])
+}
+
+model SeriesGroup {
+  seriesId String
+  series   TestSeries @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+  groupId  String
+  group    Group      @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@id([seriesId, groupId])
+  @@index([groupId])
+}
+
+model SeriesStudent {
+  seriesId String
+  series   TestSeries @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+  userId   String
+  user     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([seriesId, userId])
+  @@index([userId])
+}
+
+// One student's purchase of one series. "pending" until the payment is
+// confirmed, then "active" (which is what unlocks the series' tests).
+// The amount is copied from the series at purchase time, so a later price
+// change never touches an old order.
+model SeriesOrder {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  seriesId    String
+  series      TestSeries @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+  status      String    @default("pending") // "pending" | "active"
+  amount      Int?      // rupees charged
+  paymentRef  String?   // gateway order/payment id (Cashfree), once payments exist
+  activatedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([userId, seriesId])
+  @@index([seriesId])
 }
 
 // One student's attempt at one test. A student may retake a test once they've
@@ -194,6 +262,7 @@ model Group {
 
   members     GroupMember[]
   tests       TestGroup[]
+  series      SeriesGroup[]
 }
 
 model GroupMember {

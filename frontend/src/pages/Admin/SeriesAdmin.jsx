@@ -1,19 +1,21 @@
 import { useState } from 'react'
 import BackButton from '../../components/BackButton.jsx'
 import { useToast } from '../../lib/useToast.jsx'
+import AudienceEditor from './AudienceEditor.jsx'
 import TestEditor from './TestEditor.jsx'
 import LiveStamp from './LiveStamp.jsx'
-import { ago, day, plural } from './studentsApi.js'
-import { EXAM_LABEL, createSeries, deleteSeries, deleteTest, getSeries, listSeries, reorderSeriesTests, updateSeries } from './testsApi.js'
+import { ago, audienceBody, audienceFrom, day, plural } from './studentsApi.js'
+import { EXAM_LABEL, createSeries, deleteSeries, deleteTest, getSeries, listSeries, publishSeries, reorderSeriesTests, unpublishSeries, updateSeries } from './testsApi.js'
 import { useLive, useNow } from './useLive.js'
 
 /*
   Admin › Test series (real, API-backed). Shown by Admin.jsx in place of the
   demo #view while the sidebar's "Test series" item is active. Screens: the
   list of series (a tree: each series is a root, its tests its children), one
-  series (details + the same tests as an ordered outline), and the test editor
-  for a test inside a series. Series tests are stored only: no student sees
-  them yet, and publishing a series comes later (the button is a placeholder).
+  series (details, price, audience, publish + the same tests as an ordered
+  outline), and the test editor for a test inside a series. Publishing makes
+  the series visible and buyable in the student's Test series sidebar; its
+  tests then belong to whoever bought it (backend lib/access.js).
 */
 const EXAMS = [
   ['', 'None'],
@@ -21,7 +23,9 @@ const EXAMS = [
   ['neet', 'NEET'],
 ]
 
-const NOT_SHOWN = 'Tests in a series are stored only for now. No student sees them yet.'
+const HINT_LIST = 'Set a price and an audience, then publish a series — students buy it from Test series in their sidebar.'
+const HINT_PAGE =
+  'Published series show up in the student’s Test series sidebar at the price you set. Students buy it once (0 = free) and its tests open for them.'
 
 export default function SeriesAdmin({ onCount }) {
   const [screen, setScreen] = useState({ name: 'list' }) // | { name: 'series', id } | { name: 'test', seriesId, seriesTitle, id }
@@ -155,7 +159,7 @@ function SeriesList({ toast, onCount, onOpen, onTest }) {
       </div>
 
       <div className="alert a-info">
-        <span>{NOT_SHOWN}</span>
+        <span>{HINT_LIST}</span>
       </div>
 
       {creating && (
@@ -216,6 +220,9 @@ function SeriesList({ toast, onCount, onOpen, onTest }) {
                     <span className="tree-title-row">
                       <span className="sg-group-name">{s.title}</span>
                       {s.exam && <span className="sr-exam">{EXAM_LABEL[s.exam] || s.exam}</span>}
+                      <span className={'pill ' + (s.status === 'published' ? 'p-published' : 'p-draft')}>
+                        {s.status === 'published' ? 'Published' : 'Draft'}
+                      </span>
                     </span>
                     {s.description && <span className="tree-desc">{s.description}</span>}
                     <span className="tree-meta">
@@ -227,6 +234,9 @@ function SeriesList({ toast, onCount, onOpen, onTest }) {
                       </span>
                       <span>
                         <b>{s.questions}</b> {s.questions === 1 ? 'question' : 'questions'}
+                      </span>
+                      <span className="tree-price">
+                        {s.price == null ? 'No price yet' : s.price === 0 ? 'Free' : '₹' + s.price}
                       </span>
                       <span className="tree-updated">Updated {ago(s.updatedAt, now)}</span>
                     </span>
@@ -294,9 +304,10 @@ function TestNode({ t, pos, busy, moveBusy, onOpen, onDelete, onMove, canUp, can
           <b>{t.title}</b>
           <span className="sub">
             {EXAM_LABEL[t.exam] ? EXAM_LABEL[t.exam] + ' · ' : ''}
-            {t.subject || 'No subject'} · {t.durationMin} min
+            {t.durationMin} min
           </span>
         </span>
+        {t.subject ? <span className={'subj-tag' + (/[,&/+]| and /i.test(t.subject) ? ' is-full' : '')}>{/[,&/+]| and /i.test(t.subject) ? 'Full syllabus' : t.subject}</span> : null}
         <span className={'pill ' + (t.hasPaper ? 'p-published' : 'p-warn')}>{t.hasPaper ? 'Ready' : 'No paper yet'}</span>
       </button>
       <div className="tree-node-acts">
@@ -336,6 +347,7 @@ function NewSeries({ onCancel, onCreated }) {
   const [title, setTitle] = useState('')
   const [exam, setExam] = useState('')
   const [desc, setDesc] = useState('')
+  const [price, setPrice] = useState('')
   const [err, setErr] = useState(null)
   const [saving, setSaving] = useState(false)
 
@@ -344,7 +356,7 @@ function NewSeries({ onCancel, onCreated }) {
     setSaving(true)
     setErr(null)
     try {
-      const s = await createSeries({ title: title.trim(), exam: exam || null, description: desc.trim() })
+      const s = await createSeries({ title: title.trim(), exam: exam || null, description: desc.trim(), price: price.trim() })
       onCreated(s)
     } catch (e2) {
       setSaving(false)
@@ -359,17 +371,18 @@ function NewSeries({ onCancel, onCreated }) {
       </div>
       <SeriesFields
         prefix="sr-new"
-        value={{ title, exam, description: desc }}
+        value={{ title, exam, description: desc, price }}
         err={err}
         autoFocus
         onChange={(f) => {
           setTitle(f.title)
           setExam(f.exam)
           setDesc(f.description)
-          if (err && err.field === 'title' && f.title !== title) setErr(null)
+          setPrice(f.price)
+          if (err && (err.field === 'title' || err.field === 'price') && f.title !== title) setErr(null)
         }}
       />
-      {err && err.field !== 'title' && (
+      {err && err.field !== 'title' && err.field !== 'price' && (
         <div className="alert a-err" role="alert">
           <span>{err.message}</span>
         </div>
@@ -389,7 +402,7 @@ function NewSeries({ onCancel, onCreated }) {
   )
 }
 
-/* Name, exam and description: shared by "New series" and the series page. */
+/* Name, exam, price and description: shared by "New series" and the series page. */
 function SeriesFields({ prefix, value, err, autoFocus, onChange }) {
   const set = (k) => (v) => onChange({ ...value, [k]: v })
   return (
@@ -416,6 +429,28 @@ function SeriesFields({ prefix, value, err, autoFocus, onChange }) {
         </span>
         <ExamSeg id={prefix + '-exam'} value={value.exam} onChange={set('exam')} />
       </div>
+      <div>
+        <label className="l" htmlFor={prefix + '-price'}>
+          Price (₹) <span className="ts-opt">one-time</span>
+        </label>
+        <input
+          className="input"
+          id={prefix + '-price'}
+          type="number"
+          min="0"
+          step="1"
+          inputMode="numeric"
+          value={value.price}
+          placeholder="e.g. 499"
+          aria-invalid={err && err.field === 'price' ? 'true' : undefined}
+          onChange={(e) => set('price')(e.target.value)}
+        />
+        {err && err.field === 'price' ? (
+          <p className="ts-field-err">{err.message}</p>
+        ) : (
+          <p className="hint">One-time payment for the whole series · 0 = free · needed to publish.</p>
+        )}
+      </div>
       <div className="full">
         <label className="l" htmlFor={prefix + '-desc'}>
           Description <span className="ts-opt">optional</span>
@@ -437,7 +472,7 @@ function SeriesFields({ prefix, value, err, autoFocus, onChange }) {
 /* ---------- One series ---------- */
 function SeriesPage({ id, toast, onBack, onDeleted, onTest }) {
   const live = useLive(() => getSeries(id), id, 'series:' + id)
-  const [form, setForm] = useState(null) // { title, exam, description } while editing
+  const [form, setForm] = useState(null) // { title, exam, description, price, audience } while editing
   const [formErr, setFormErr] = useState(null)
   const [busy, setBusy] = useState(null)
   const now = useNow(30000)
@@ -470,9 +505,21 @@ function SeriesPage({ id, toast, onBack, onDeleted, onTest }) {
   }
 
   const { series: s, tests } = live.data
-  const saved = { title: s.title, exam: s.exam || '', description: s.description || '' }
+  const saved = {
+    title:     s.title,
+    exam:      s.exam || '',
+    description: s.description || '',
+    price:     s.price == null ? '' : String(s.price),
+    audience:  audienceFrom(s.audience),
+  }
   const f = form || saved
-  const dirty = form && (form.title.trim() !== saved.title || form.exam !== saved.exam || form.description.trim() !== saved.description)
+  const dirty =
+    form &&
+    (form.title.trim() !== saved.title ||
+      form.exam !== saved.exam ||
+      form.description.trim() !== saved.description ||
+      String(form.price).trim() !== saved.price ||
+      JSON.stringify(audienceBody(form.audience)) !== JSON.stringify(audienceBody(saved.audience)))
   const questions = tests.reduce((n, t) => n + (t.hasPaper ? t.questionCount || 0 : 0), 0)
   const marks = tests.reduce((n, t) => n + (t.hasPaper ? t.totalMarks || 0 : 0), 0)
   const ready = tests.filter((t) => t.hasPaper).length
@@ -482,12 +529,45 @@ function SeriesPage({ id, toast, onBack, onDeleted, onTest }) {
     setFormErr(null)
     setBusy('details')
     try {
-      await updateSeries(s.id, { title: f.title.trim(), exam: f.exam || null, description: f.description.trim() })
+      await updateSeries(s.id, {
+        title:       f.title.trim(),
+        exam:        f.exam || null,
+        description: f.description.trim(),
+        price:       String(f.price).trim(),
+        audience:    audienceBody(f.audience),
+      })
       await live.refresh()
       setForm(null)
       toast('Series saved')
     } catch (e2) {
       setFormErr({ field: e2.field, message: e2.message })
+    } finally {
+      setBusy(null)
+    }
+  }
+
+  /* Publish: needs a price and at least one test with a paper (server checks) */
+  async function publish() {
+    setBusy('publish')
+    try {
+      await publishSeries(s.id)
+      await live.refresh()
+      toast('Series published — students can buy it now')
+    } catch (e) {
+      toast(e.message, 5000)
+    } finally {
+      setBusy(null)
+    }
+  }
+
+  async function unpublish() {
+    setBusy('unpublish')
+    try {
+      await unpublishSeries(s.id)
+      await live.refresh()
+      toast('Series unpublished — hidden from students again')
+    } catch (e) {
+      toast(e.message, 5000)
     } finally {
       setBusy(null)
     }
@@ -553,7 +633,7 @@ function SeriesPage({ id, toast, onBack, onDeleted, onTest }) {
       </div>
 
       <div className="alert a-info">
-        <span>{NOT_SHOWN}</span>
+        <span>{HINT_PAGE}</span>
       </div>
 
       <div className="stats sg-stats sg-stats-3">
@@ -574,25 +654,46 @@ function SeriesPage({ id, toast, onBack, onDeleted, onTest }) {
         </div>
       </div>
 
-      <form className="card sg-card" onSubmit={saveDetails} aria-labelledby="sr-details">
-        <div className="card-head">
-          <h2 id="sr-details">Details</h2>
-          <span className="hint">Updated {ago(s.updatedAt, now)}</span>
-        </div>
-        <SeriesFields
-          prefix="sr-edit"
-          value={f}
-          err={formErr}
-          onChange={(next) => {
-            setForm(next)
-            if (formErr) setFormErr(null)
-          }}
-        />
-        {formErr && formErr.field !== 'title' && (
-          <div className="alert a-err" role="alert">
-            <span>{formErr.message}</span>
+      <form className="sg-form" onSubmit={saveDetails} aria-labelledby="sr-details">
+        <div className="card sg-card">
+          <div className="card-head">
+            <h2 id="sr-details">Details</h2>
+            <span className="hint">Updated {ago(s.updatedAt, now)}</span>
           </div>
-        )}
+          <SeriesFields
+            prefix="sr-edit"
+            value={f}
+            err={formErr}
+            onChange={(next) => {
+              setForm(next)
+              if (formErr && formErr.field !== 'audience') setFormErr(null)
+            }}
+          />
+          {formErr && formErr.field !== 'title' && formErr.field !== 'price' && formErr.field !== 'audience' && (
+            <div className="alert a-err" role="alert">
+              <span>{formErr.message}</span>
+            </div>
+          )}
+        </div>
+
+        <section className="sect" aria-labelledby="sr-audience">
+          <div className="sect-head sg-sect-head">
+            <div>
+              <h2 id="sr-audience">Who can see and buy</h2>
+              <p>Everyone of the exam, or only the batches, groups and students you choose. Applies to the listing and the purchase — you can change it at any time.</p>
+            </div>
+          </div>
+          <AudienceEditor
+            context="series"
+            value={f.audience}
+            error={formErr && formErr.field === 'audience' ? formErr.message : null}
+            onChange={(a) => {
+              setForm({ ...f, audience: a })
+              if (formErr) setFormErr(null)
+            }}
+          />
+        </section>
+
         {dirty && (
           <div className="sg-form-foot">
             <span className="hint">Unsaved changes</span>
@@ -615,6 +716,25 @@ function SeriesPage({ id, toast, onBack, onDeleted, onTest }) {
         )}
       </form>
 
+      {s.status !== 'published' && (
+        <div className="card sr-checklist" aria-label="Before you publish">
+          <h3>Before you publish</h3>
+          <ul>
+            {[
+              [s.price != null, s.price != null ? (s.price ? 'Price set: ₹' + s.price : 'Price set: Free') : 'Set a price (0 makes it free)'],
+              [ready > 0, ready ? plural(ready, 'test') + ' ready with a question paper' : 'Add at least one test with a question paper'],
+              [!dirty, dirty ? 'Save your changes to the details above' : 'Details saved'],
+            ].map(([ok, text]) => (
+              <li key={text} className={ok ? 'is-ok' : 'is-todo'}>
+                <span aria-hidden="true">{ok ? '✓' : '•'}</span>
+                {text}
+              </li>
+            ))}
+          </ul>
+          <p className="hint">Once published, the series appears under Test series for its audience. You can unpublish it any time.</p>
+        </div>
+      )}
+
       <section className="sect">
         <div className="sect-head sg-sect-head">
           <div>
@@ -623,16 +743,32 @@ function SeriesPage({ id, toast, onBack, onDeleted, onTest }) {
               {tests.length
                 ? plural(tests.length, 'test') + ' in order, ' + ready + ' of ' + tests.length + ' with a paper. Use ↑ ↓ to change the order.'
                 : 'No tests yet. Add the first one from a JSON question paper.'}{' '}
-              Publishing a series comes later — every test stays a draft until then.
+              {s.status === 'published'
+                ? 'Students who buy the series can take these tests.'
+                : 'They open up for students only once the series is published.'}
             </p>
           </div>
           <div className="actions">
-            <button className="btn btn-outline btn-sm" type="button" disabled title="Publishing a series comes later">
-              Publish series
-            </button>
-            <button className="btn btn-primary btn-sm" type="button" onClick={() => onTest(null, s.title)}>
-              Add test
-            </button>
+            {s.status === 'published' ? (
+              <>
+                <span className="pill p-published">{s.publishedAt ? 'Published ' + day(s.publishedAt) : 'Published'}</span>
+                <button className="btn btn-outline btn-sm" type="button" onClick={unpublish} disabled={busy === 'unpublish'}>
+                  {busy === 'unpublish' ? 'Unpublishing…' : 'Unpublish'}
+                </button>
+                <button className="btn btn-primary btn-sm" type="button" onClick={() => onTest(null, s.title)}>
+                  Add test
+                </button>
+              </>
+            ) : (
+              <>
+                <button className="btn btn-primary btn-sm" type="button" onClick={publish} disabled={busy === 'publish'}>
+                  {busy === 'publish' ? 'Publishing…' : 'Publish series'}
+                </button>
+                <button className="btn btn-outline btn-sm" type="button" onClick={() => onTest(null, s.title)}>
+                  Add test
+                </button>
+              </>
+            )}
           </div>
         </div>
 

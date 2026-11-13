@@ -18,3 +18,7 @@ export function until(ms) {
 
 /* "Physics, Chemistry, Biology" -> ["Physics", "Chemistry", "Biology"] */
 export const subjectsOf = (t) => (t.subject || '').split(',').map((x) => x.trim()).filter(Boolean)
+
+/* A test's type: one subject ("Physics") or the full syllabus (several listed) */
+export const isFullSyllabus = (t) => subjectsOf(t).length !== 1 || /&|\/|\+| and /i.test(t.subject || '')
+export const scopeOf = (t) => (isFullSyllabus(t) ? 'Full syllabus' : subjectsOf(t)[0])

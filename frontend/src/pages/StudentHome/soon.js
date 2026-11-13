@@ -1,16 +1,5 @@
 /* Features in the sidebar that aren't built yet. Keyed by the URL segment after /student/. */
 export const SOON = {
-  'test-series': {
-    eyebrow: 'Test series',
-    title: 'Test series you can buy',
-    text: 'Complete test series for NEET and JEE that you buy once and take at your own pace, on top of the tests your teachers give you.',
-    points: [
-      ['Buy only what you need', 'Pick a series for your exam with a one-time payment. No subscription needed.'],
-      ['Planned from part to full syllabus', 'Part tests as you finish chapters, then half and full-syllabus papers to rehearse the real exam.'],
-      ['The same real CBT screen', 'Timer, question palette and auto-submit, exactly like exam day.'],
-      ['Score, review and solutions', 'Your score right after you submit, every answer reviewed, with solutions.'],
-    ],
-  },
   analysis: {
     eyebrow: 'Analysis',
     title: 'Your performance analysis',

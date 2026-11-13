@@ -20,6 +20,8 @@ router.post('/series', series.createSeries);
 router.get('/series/:id', series.getSeries);
 router.put('/series/:id', series.updateSeries);
 router.put('/series/:id/order', series.reorderSeries);
+router.post('/series/:id/publish', series.publishSeries);
+router.post('/series/:id/unpublish', series.unpublishSeries);
 router.delete('/series/:id', series.deleteSeries);
 
 module.exports = router;

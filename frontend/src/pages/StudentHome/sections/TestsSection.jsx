@@ -180,6 +180,7 @@ export function TestCard({ t, now }) {
         <div className="tc-badges">
           {t.isFree ? <span className="chip chip-gold">Free mock</span> : null}
           {EXAM_LABEL[t.exam] ? <span className="chip chip-grey">{EXAM_LABEL[t.exam]}</span> : null}
+          {t.seriesTitle ? <span className="chip chip-blue">{t.seriesTitle}</span> : null}
           {s === 'done' ? <span className="status status-green">Completed{tries > 1 ? ' · ' + tries + ' attempts' : ''}</span> : null}
         </div>
 

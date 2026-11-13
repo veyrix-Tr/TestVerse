@@ -33,6 +33,9 @@ export const deleteSeries = (id) => call('/series/' + encodeURIComponent(id), { 
 /* Saves the tree order of a series' tests: testIds in their new order */
 export const reorderSeriesTests = (id, testIds) =>
   call('/series/' + encodeURIComponent(id) + '/order', { body: { testIds }, method: 'PUT' })
+/* Makes the series visible and buyable (needs a price and a ready test), and back */
+export const publishSeries = (id) => call('/series/' + encodeURIComponent(id) + '/publish', { method: 'POST' }).then((r) => r.series)
+export const unpublishSeries = (id) => call('/series/' + encodeURIComponent(id) + '/unpublish', { method: 'POST' }).then((r) => r.series)
 
 /* Sidebar counts: { free, live, series }; a count is null when it can't be loaded. */
 export function loadCounts() {

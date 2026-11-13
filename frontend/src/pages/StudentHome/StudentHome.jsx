@@ -10,6 +10,7 @@ import Overview, { OverviewRail } from './pages/Overview.jsx'
 import ResourcesPage from './pages/ResourcesPage.jsx'
 import NotificationsPage from './pages/NotificationsPage.jsx'
 import ResultsPage from './pages/ResultsPage.jsx'
+import SeriesPage from './pages/SeriesPage.jsx'
 import SolutionsPage, { SolutionsRail } from './pages/SolutionsPage.jsx'
 import TestsPage from './pages/TestsPage.jsx'
 import AnnouncementBanner from './sections/AnnouncementBanner.jsx'
@@ -24,6 +25,7 @@ const EXAMS = { neet: 'NEET', 'jee-main': 'JEE Main', 'jee-advanced': 'JEE Advan
 const PAGES = {
   '': { Main: Overview, Rail: OverviewRail, title: 'Overview' },
   tests: { Main: TestsPage, title: 'Your tests' },
+  'test-series': { Main: SeriesPage, title: 'Test series' },
   results: { Main: ResultsPage, title: 'Results' },
   solutions: { Main: SolutionsPage, Rail: SolutionsRail, title: 'Solutions' },
   resources: { Main: ResourcesPage, title: 'Resources' },
