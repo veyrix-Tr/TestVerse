@@ -94,6 +94,8 @@ const router = createBrowserRouter([{ element: <LegalHost />, children: [
     ...page(() => import('./pages/StudentHome/StudentHome.jsx')),
   },
   { path: '/test', loader: requireSession, ...testPage },
+  // A submitted test's question paper, to print or save as PDF (the server checks it may be shown)
+  { path: '/paper', loader: requireSession, ...page(() => import('./pages/Paper/Paper.jsx')) },
   { path: '/admin', loader: requireAdmin, ...page(() => import('./pages/Admin/Admin.jsx')) },
   { path: '*', element: <Navigate to="/" replace /> },
 ] }])

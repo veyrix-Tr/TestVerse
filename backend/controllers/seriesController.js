@@ -2,6 +2,7 @@ const prisma = require('../lib/prisma');
 const { seriesVisibleTo } = require('../lib/access');
 const { paymentMethod, startCheckout, grantNow, markPending } = require('../lib/purchases');
 const { testRow } = require('./testsController');
+const { resultSettings } = require('../lib/analysis');
 
 // The student's side of a test series: the catalog of published series they
 // may see and buy, the inside of one (its tests with their attempt state),
@@ -34,7 +35,10 @@ const breakdown = (tests) => {
   return { full, subjects: Object.entries(by).map(([name, n]) => ({ name, tests: n })) };
 };
 
-const testsOf = (s) => Promise.all(s.tests.map((t) => testRow(t)));
+const testsOf = async (s) => {
+  const settings = await resultSettings();
+  return Promise.all(s.tests.map((t) => testRow(t, settings)));
+};
 
 // GET /api/series — published series this student may see and buy, with counts,
 // price and whether they already own one

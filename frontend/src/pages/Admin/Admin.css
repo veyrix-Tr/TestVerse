@@ -1390,3 +1390,8 @@ textarea.input.sr-desc { min-height: 64px; }
 .sr-checklist li.is-ok span { background: var(--green-soft); color: var(--green-ink); }
 .sr-checklist li.is-todo span { background: var(--amber-soft); color: var(--amber); }
 .sr-checklist li.is-todo { color: var(--ink); font-weight: 600; }
+
+/* Test editor watermark + Website info result analysis: checkbox hints */
+.ts-check-hint, .ws-check-hint { margin-top: 4px; padding-left: 28px; }
+/* Website info: Result analysis card */
+.ws-err { color: var(--red); }

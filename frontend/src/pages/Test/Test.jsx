@@ -111,7 +111,8 @@ export default function Test() {
   }
 
   /* ---------- result: shown in the dashboard ---------- */
-  function showResult(d, message) {
+  // `fresh` = this page just submitted it (opens the "Test submitted" pop-up there; auto = time ran out)
+  function showResult(d, message, fresh) {
     clearTimeout(debounceRef.current)
     // The attempt is submitted: nothing left to autosave or flush on the way out
     attemptRef.current = attemptOf(d.attempt, null, flatten(paperOf(d.test)).length)
@@ -119,7 +120,7 @@ export default function Test() {
     removeKey(KEY)
     routerNavigate('/student/result?test=' + encodeURIComponent(testId) + '&attempt=' + (d.attempt.attemptNo || 1), {
       replace: true,
-      state: message ? { notice: message } : null,
+      state: fresh ? { submitted: { auto: !!fresh.auto } } : message ? { notice: message } : null,
     })
   }
 
@@ -439,10 +440,13 @@ export default function Test() {
     setSubmitState({ status: 'sending', auto: !!auto })
     try {
       const d = await api(PATH + '/submit', { body: { responses: a.responses, auto: !!auto }, token: getToken() })
-      showResult(d, auto ? 'Time is up. Your test was submitted automatically.' : null)
+      showResult(d, null, { auto: !!auto })
     } catch (e) {
       if (e.data && e.data.test && e.data.attempt) {
-        showResult(e.data, e.message)
+        // Time ran out before this reached the server (e.g. the laptop slept), so it submitted
+        // the saved answers itself: still a fresh submit for this student, with the time's-up pop-up
+        if (e.data.attempt.autoSubmitted) showResult(e.data, null, { auto: true })
+        else showResult(e.data, e.message)
       } else if (e.status === 401) {
         failFrom(e)
       } else {

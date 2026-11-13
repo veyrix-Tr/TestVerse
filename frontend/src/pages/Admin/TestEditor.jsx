@@ -91,6 +91,8 @@ export default function TestEditor({ id, kind: newKind = 'live', seriesId, backT
   const [duration, setDuration] = useState('180')
   const [opensAt, setOpensAt] = useState('')
   const [closesAt, setClosesAt] = useState('')
+  // Faint name + mobile on the downloadable paper: on by default for paid series
+  const [watermark, setWatermark] = useState(newKind === 'series')
   const [marking, setMarking] = useState(() => markingToForm(DEFAULT_MARKING))
   const [instructions, setInstructions] = useState(null) // null = follow the generated default
   const [audience, setAudience] = useState(EVERYONE)
@@ -128,6 +130,7 @@ export default function TestEditor({ id, kind: newKind = 'live', seriesId, backT
         setDuration(String(t.durationMin || ''))
         setOpensAt(toLocalInput(t.opensAt))
         setClosesAt(toLocalInput(t.closesAt))
+        setWatermark(!!t.watermark)
         setMarking(markingToForm(t.marking))
         setInstructions(t.instructions || '')
         setAudience(audienceFrom(t.audience))
@@ -203,6 +206,7 @@ export default function TestEditor({ id, kind: newKind = 'live', seriesId, backT
       marking: markingFromForm(marking),
       opensAt: isSeries ? null : fromLocalInput(opensAt),
       closesAt: isSeries ? null : fromLocalInput(closesAt),
+      watermark,
       paper: paperText.trim() ? paperText : null,
       ...(isLive ? { audience: audienceBody(audience) } : {}),
     }
@@ -501,10 +505,23 @@ export default function TestEditor({ id, kind: newKind = 'live', seriesId, backT
                       clearErr('closesAt')
                     }}
                   />
-                  {err('closesAt') || <p className="hint">Leave empty to keep it open.</p>}
+                  {err('closesAt') || (
+                    <p className="hint">
+                      {isLive
+                        ? 'Leave empty to keep it open. Students can download the question paper once it closes.'
+                        : 'Leave empty to keep it open.'}
+                    </p>
+                  )}
                 </div>
               </>
             )}
+            <div className="full" data-field="watermark">
+              <label className="check">
+                <input type="checkbox" checked={watermark} onChange={(e) => setWatermark(e.target.checked)} />
+                Watermark the question paper with the student’s name and mobile
+              </label>
+              <p className="hint ts-check-hint">Shown faintly on every page of the downloadable PDF. Recommended for paid series.</p>
+            </div>
           </div>
         </div>
       </section>

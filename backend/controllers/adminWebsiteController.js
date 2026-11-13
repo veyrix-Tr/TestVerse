@@ -22,6 +22,9 @@ exports.getWebsiteSettings = async (req, res) => {
       showAnnouncement: settings.showAnnouncement,
       channel: settings.youtubeChannel,
       playlists: settings.youtubePlaylists || {},
+      guessSeconds: settings.guessSeconds,
+      slowSeconds: settings.slowSeconds,
+      reportNotice: settings.reportNotice,
     })
   } catch (error) {
     console.error('Error fetching website settings:', error)
@@ -32,9 +35,22 @@ exports.getWebsiteSettings = async (req, res) => {
 // Update website settings
 exports.updateWebsiteSettings = async (req, res) => {
   try {
-    const { announcement, showAnnouncement, channel, playlists } = req.body
+    const { announcement, showAnnouncement, channel, playlists, guessSeconds, slowSeconds, reportNotice } = req.body
+
+    // After-test analysis settings: whole seconds in a sensible range
+    const seconds = (v, min, max) => Number.isInteger(v) && v >= min && v <= max
+    if (guessSeconds !== undefined && !seconds(guessSeconds, 5, 300)) return res.status(400).json({ field: 'guessSeconds', error: 'The guess time must be a whole number of seconds from 5 to 300.' })
+    if (slowSeconds !== undefined && !seconds(slowSeconds, 30, 1800)) return res.status(400).json({ field: 'slowSeconds', error: 'The slow-question time must be a whole number of seconds from 30 to 1800.' })
+    if (reportNotice !== undefined && typeof reportNotice !== 'boolean') return res.status(400).json({ field: 'reportNotice', error: 'reportNotice must be true or false.' })
 
     let settings = await prisma.websiteSettings.findFirst()
+
+    // When only one of the two times is sent, compare it with the stored other one
+    if (guessSeconds !== undefined || slowSeconds !== undefined) {
+      const guess = guessSeconds !== undefined ? guessSeconds : settings ? settings.guessSeconds : 30
+      const slow = slowSeconds !== undefined ? slowSeconds : settings ? settings.slowSeconds : 180
+      if (slow <= guess) return res.status(400).json({ field: 'slowSeconds', error: 'The slow-question time must be longer than the guess time.' })
+    }
 
     // Only the fields the caller sent are written: saving the video links
     // must not clear the announcement, and vice versa.
@@ -43,6 +59,9 @@ exports.updateWebsiteSettings = async (req, res) => {
     if (showAnnouncement !== undefined) data.showAnnouncement = showAnnouncement
     if (channel !== undefined) data.youtubeChannel = channel
     if (playlists !== undefined) data.youtubePlaylists = playlists
+    if (guessSeconds !== undefined) data.guessSeconds = guessSeconds
+    if (slowSeconds !== undefined) data.slowSeconds = slowSeconds
+    if (reportNotice !== undefined) data.reportNotice = reportNotice
 
     if (settings) {
       // Update existing settings
@@ -68,6 +87,9 @@ exports.updateWebsiteSettings = async (req, res) => {
       showAnnouncement: settings.showAnnouncement,
       channel: settings.youtubeChannel,
       playlists: settings.youtubePlaylists,
+      guessSeconds: settings.guessSeconds,
+      slowSeconds: settings.slowSeconds,
+      reportNotice: settings.reportNotice,
     })
   } catch (error) {
     console.error('Error updating website settings:', error)

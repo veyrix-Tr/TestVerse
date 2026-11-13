@@ -1,5 +1,5 @@
 import { useSearchParams } from 'react-router-dom'
-import { BestBars, ScoreTrend } from '../sections/Charts.jsx'
+import { BestBars, GuessTrend, ScoreTrend, SubjectTrend } from '../sections/Charts.jsx'
 import PageHeader, { Stats } from '../sections/PageHeader.jsx'
 import { AttemptsTable } from '../sections/ResultsSection.jsx'
 import { Empty, LoadError, SkeletonRows } from '../sections/States.jsx'
@@ -62,7 +62,7 @@ export default function ResultsPage({ data }) {
           <SkeletonRows n={4} />
         </>
       ) : !rows.length ? (
-        <Empty title="No results yet" text="Submit your first test and your score, accuracy and solutions show up here." to="/student/tests" action="See your tests" />
+        <Empty title="No results yet" text="Submit your first test and your score, accuracy and analysis show up here." to="/student/tests" action="See your tests" />
       ) : (
         <>
           <section className="section" aria-labelledby="charts-title">
@@ -73,6 +73,10 @@ export default function ResultsPage({ data }) {
               <ScoreTrend rows={rows} />
               <BestBars tests={taken} />
             </div>
+            <div className="charts">
+              <SubjectTrend rows={rows} />
+              <GuessTrend rows={rows} />
+            </div>
           </section>
 
           <section className="section" aria-labelledby="attempts-title">
@@ -80,7 +84,7 @@ export default function ResultsPage({ data }) {
               <div className="sec-head-text">
                 <h2 id="attempts-title">All attempts</h2>
                 <p>
-                  {shown.length} of {rows.length} attempt{rows.length === 1 ? '' : 's'}. Open one for every question with its solution.
+                  {shown.length} of {rows.length} attempt{rows.length === 1 ? '' : 's'}. Open one for every question with your answer and the correct one.
                 </p>
               </div>
               <div className="sec-head-action filters">

@@ -18,6 +18,7 @@ const PAGE_ROOTS = {
   'Admin.css': 'tv-admin',
   'Login.css': 'tv-login',
   'Signup.css': 'tv-signup',
+  'Paper.css': 'tv-paper',
 }
 
 function pageScoping() {

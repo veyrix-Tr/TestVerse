@@ -11,5 +11,6 @@ router.post('/:id/start', c.startTest);
 router.put('/:id/attempt', c.saveAttempt);
 router.post('/:id/submit', c.submitTest);
 router.get('/:id/result', c.getResult);
+router.get('/:id/paper', c.getPaper);
 
 module.exports = router;

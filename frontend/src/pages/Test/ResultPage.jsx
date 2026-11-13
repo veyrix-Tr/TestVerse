@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import './Test.css'
 import BackButton from '../../components/BackButton.jsx'
 import { api } from '../../lib/api.js'
-import { getToken } from '../../lib/session.js'
+import { getToken, loadSession } from '../../lib/session.js'
 import ResultView from './sections/ResultView.jsx'
+import SubmittedDialog from './sections/SubmittedDialog.jsx'
 import { attemptOf, flatten, paperOf } from './testData.js'
 
 /*
@@ -12,13 +13,22 @@ import { attemptOf, flatten, paperOf } from './testData.js'
   ("/student/result?test=<id>[&attempt=n]"). Loads GET /tests/:id/result and
   renders the same ResultView the test page uses, without its own top bar.
   The wrapper carries the test page's style scope (.tv-test).
-  "#solutions" opens it at the questions and solutions; "#mistakes" there too,
-  showing only the wrong answers.
+  "#solutions" opens it at the question review; "#mistakes" there too,
+  showing only the wrong answers. Arriving straight from submitting
+  (location.state.submitted) opens the "Test submitted" pop-up once.
 */
 export default function ResultPage({ testId, attemptNo }) {
   const location = useLocation()
   const notice = location.state?.notice || null
   const hash = location.hash
+  const navigate = useNavigate()
+  // Just submitted: the pop-up shows once, then the state is cleared so a reload doesn't bring it back
+  const [submitted] = useState(() => location.state?.submitted || null)
+  const [popup, setPopup] = useState(!!submitted)
+  useEffect(() => {
+    if (location.state?.submitted) navigate(location.pathname + location.search + location.hash, { replace: true, state: null })
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- once, on arrival
+  }, [])
   const [state, setState] = useState({ status: 'loading' })
   const [reviewFilter, setReviewFilter] = useState('all')
 
@@ -41,7 +51,14 @@ export default function ResultPage({ testId, attemptNo }) {
           paper,
           flat,
           attempt: attemptOf(d.attempt, null, flat.length),
-          meta: { history: d.history || [], canRetake: !!d.canRetake, inProgress: !!d.inProgress, attemptNo: d.attempt.attemptNo || 1 },
+          meta: {
+            history: d.history || [],
+            canRetake: !!d.canRetake,
+            inProgress: !!d.inProgress,
+            attemptNo: d.attempt.attemptNo || 1,
+            settings: d.settings || null,
+            paperAt: d.paperAt || null,
+          },
         })
       })
       .catch((e) => {
@@ -103,6 +120,18 @@ export default function ResultPage({ testId, attemptNo }) {
       ) : (
         <div className="tv-test result-embed">
           <ResultView embedded paper={state.paper} flat={state.flat} attempt={state.attempt} meta={state.meta} reviewFilter={reviewFilter} setReviewFilter={setReviewFilter} />
+          {submitted ? (
+            <SubmittedDialog
+              open={popup}
+              onClose={() => setPopup(false)}
+              first={((loadSession() || {}).name || '').split(' ')[0]}
+              email={(loadSession() || {}).email || ''}
+              auto={submitted.auto}
+              testId={testId}
+              paperAt={state.meta.paperAt}
+              reportNotice={!state.meta.settings || state.meta.settings.reportNotice !== false}
+            />
+          ) : null}
         </div>
       )}
     </section>

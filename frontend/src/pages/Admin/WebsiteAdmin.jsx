@@ -1,4 +1,6 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { api } from '../../lib/api.js'
+import { getToken } from '../../lib/session.js'
 import { useToast } from '../../lib/useToast.jsx'
 import {
   AUDIENCES,
@@ -53,6 +55,144 @@ function readLibrary() {
       .filter((x) => x.kind === 'live' && x.status === 'scheduled' && new Date(x.start) > new Date())
       .sort((a, b) => new Date(a.start) - new Date(b.start))[0],
   }
+}
+
+/* ---------------- result analysis settings (/api/admin/website) ---------------- */
+// Only these three fields are sent, so saving never touches the other settings.
+const getSiteSettings = () => api('/admin/website', { token: getToken() })
+const saveSiteSettings = (body) => api('/admin/website', { method: 'PUT', body, token: getToken() })
+const ANALYSIS_DEFAULTS = { guessSeconds: 30, slowSeconds: 180, reportNotice: true }
+// 150 -> "2.5"
+const toMinutes = (sec) => String(Math.round((sec / 60) * 100) / 100)
+
+function ResultAnalysisCard({ toast }) {
+  const [form, setForm] = useState(null) // { guess, slowMin, notice } as typed
+  const [saved, setSaved] = useState(null) // last values from the server
+  const [loadErr, setLoadErr] = useState(null)
+  const [err, setErr] = useState(null) // { field, message }
+  const [busy, setBusy] = useState(false)
+
+  function fill(s) {
+    const v = { ...ANALYSIS_DEFAULTS, ...Object.fromEntries(Object.entries(s || {}).filter(([, x]) => x != null)) }
+    const next = { guess: String(v.guessSeconds), slowMin: toMinutes(v.slowSeconds), notice: !!v.reportNotice }
+    setForm(next)
+    setSaved(next)
+  }
+
+  function load() {
+    setLoadErr(null)
+    getSiteSettings()
+      .then(fill)
+      .catch((e) => setLoadErr(e.message))
+  }
+  useEffect(load, [])
+
+  const set = (k, v) => {
+    setForm((f) => ({ ...f, [k]: v }))
+    setErr(null)
+  }
+  const changed = form && saved && (form.guess !== saved.guess || form.slowMin !== saved.slowMin || form.notice !== saved.notice)
+
+  async function save(e) {
+    e.preventDefault()
+    const guessSeconds = Number(form.guess)
+    const slowSeconds = Math.round(Number(form.slowMin) * 60)
+    if (!form.guess.trim() || !Number.isInteger(guessSeconds) || guessSeconds < 5 || guessSeconds > 300)
+      return setErr({ field: 'guessSeconds', message: 'Enter whole seconds from 5 to 300.' })
+    if (!form.slowMin.trim() || !Number.isFinite(slowSeconds) || slowSeconds < 30 || slowSeconds > 1800)
+      return setErr({ field: 'slowSeconds', message: 'Enter minutes from 0.5 to 30.' })
+    if (slowSeconds <= guessSeconds) return setErr({ field: 'slowSeconds', message: 'The time sink limit must be longer than the guess limit.' })
+    setBusy(true)
+    try {
+      const s = await saveSiteSettings({ guessSeconds, slowSeconds, reportNotice: form.notice })
+      fill(s)
+      toast('Result analysis settings saved')
+    } catch (e2) {
+      const field = e2.field
+      if (field === 'guessSeconds' || field === 'slowSeconds') setErr({ field, message: e2.message })
+      else toast(e2.message)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  const fieldErr = (f) => (err && err.field === f ? <p className="hint ws-err" role="alert">{err.message}</p> : null)
+
+  return (
+    <section className="card" aria-labelledby="ws-ra-t">
+      <div className="card-head">
+        <div>
+          <h2 id="ws-ra-t">Result analysis</h2>
+          <p className="meta">How the result page reads a student’s timing, and what they’re told after submitting.</p>
+        </div>
+      </div>
+
+      {loadErr ? (
+        <div className="alert a-err">
+          {loadErr}{' '}
+          <button className="btn btn-outline btn-sm" type="button" onClick={load}>
+            Try again
+          </button>
+        </div>
+      ) : !form ? (
+        <p className="hint">Loading…</p>
+      ) : (
+        <form className="stack" onSubmit={save} noValidate>
+          <div className="ws-form">
+            <div>
+              <label className="l" htmlFor="ws-guess">
+                Likely guess under (seconds)
+              </label>
+              <input
+                id="ws-guess"
+                className="input"
+                type="number"
+                inputMode="numeric"
+                min="5"
+                max="300"
+                step="1"
+                value={form.guess}
+                aria-invalid={err && err.field === 'guessSeconds' ? true : undefined}
+                onChange={(e) => set('guess', e.target.value)}
+              />
+              {fieldErr('guessSeconds') || <p className="hint">A wrong answer faster than this counts as a likely guess on the result page.</p>}
+            </div>
+            <div>
+              <label className="l" htmlFor="ws-slow">
+                Time sink over (minutes)
+              </label>
+              <input
+                id="ws-slow"
+                className="input"
+                type="number"
+                inputMode="decimal"
+                min="0.5"
+                max="30"
+                step="0.5"
+                value={form.slowMin}
+                aria-invalid={err && err.field === 'slowSeconds' ? true : undefined}
+                onChange={(e) => set('slowMin', e.target.value)}
+              />
+              {fieldErr('slowSeconds') || <p className="hint">A wrong answer slower than this counts as a time sink.</p>}
+            </div>
+          </div>
+          <div>
+            <label className="check">
+              <input type="checkbox" checked={form.notice} onChange={(e) => set('notice', e.target.checked)} />
+              Tell students their solutions and analysis will come by email
+            </label>
+            <p className="hint ws-check-hint">Shown in the pop-up after they submit.</p>
+          </div>
+          <div className="ws-foot">
+            <span className="hint">Applies to every result, including past attempts.</span>
+            <button className="btn btn-primary" type="submit" disabled={busy || !changed}>
+              {busy ? 'Saving…' : 'Save'}
+            </button>
+          </div>
+        </form>
+      )}
+    </section>
+  )
 }
 
 /* ---------------- small helpers ---------------- */
@@ -512,6 +652,7 @@ export default function WebsiteAdmin() {
 
         {/* ---------------- read-only column ---------------- */}
         <div className="ws-col">
+          <ResultAnalysisCard toast={toast} />
           <section className="card" aria-labelledby="ws-auto-t">
             <div className="card-head">
               <div>

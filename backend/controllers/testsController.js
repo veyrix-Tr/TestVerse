@@ -2,6 +2,7 @@ const prisma = require('../lib/prisma');
 const { stripAnswers, stripSolutions } = require('../lib/paperFormat');
 const { scoreAttempt, cleanResponses } = require('../lib/scoring');
 const { visibleTo } = require('../lib/access');
+const { DEFAULTS, resultSettings, analyse } = require('../lib/analysis');
 
 // Answers are still accepted this long after the deadline (slow networks,
 // the browser's own auto-submit). Past it, the attempt is submitted with
@@ -27,6 +28,7 @@ const meta = (t) => ({
   subject:       t.subject,
   exam:          t.exam,
   isFree:        t.isFree,
+  kind:          t.kind,
   durationMin:   t.durationMin,
   questionCount: t.questionCount,
   totalMarks:    t.totalMarks,
@@ -56,8 +58,10 @@ const publicAttempt = (a) =>
       }
     : null;
 
-// One line per submitted attempt, newest first, for score history.
-const summaryOf = (a) => ({
+// One line per submitted attempt, newest first, for score history. With the
+// test's paper it also carries the per-subject and guessing numbers the
+// progress charts use (lib/analysis.js), worked out here rather than stored.
+const summaryOf = (a, paper, settings) => ({
   attemptNo:   a.attemptNo,
   submittedAt: a.submittedAt,
   score:       a.score,
@@ -66,7 +70,14 @@ const summaryOf = (a) => ({
   wrong:       a.wrong,
   partial:     a.partial,
   skipped:     a.skipped,
+  ...(paper ? { analysis: analyse(paper, a.responses, settings) } : {}),
 });
+
+// When a submitted student may download the question paper: a live test's
+// paper stays locked until its window closes, so it can't reach students who
+// are still writing. Returns the unlock time, or null when it's open now.
+const paperLockedUntil = (test, now = Date.now()) =>
+  test.kind === 'live' && test.closesAt && now < test.closesAt.getTime() ? test.closesAt : null;
 
 // Scores and closes an attempt.
 const finalize = (attempt, test, responses, auto) =>
@@ -98,24 +109,31 @@ const canRetake = (test, attempt, now = Date.now()) =>
 
 // The paper with correct answers (no written solutions), one submitted attempt, and the student's other
 // submitted attempts. `latest` is their newest attempt (maybe a retake in progress).
+// `settings` are the admin's analysis thresholds; `paperAt` is when the question
+// paper download unlocks (null = now).
 const resultPayload = async (test, attempt, latest) => {
-  const done = await prisma.attempt.findMany({
-    where:   { testId: test.id, userId: attempt.userId, submittedAt: { not: null } },
-    orderBy: { attemptNo: 'desc' },
-  });
+  const [done, settings] = await Promise.all([
+    prisma.attempt.findMany({
+      where:   { testId: test.id, userId: attempt.userId, submittedAt: { not: null } },
+      orderBy: { attemptNo: 'desc' },
+    }),
+    resultSettings(),
+  ]);
   return {
     test:       { ...meta(test), instructions: test.instructions, marking: test.marking, paper: stripSolutions(test.paper) },
     attempt:    publicAttempt(attempt),
-    history:    done.map(summaryOf),
+    history:    done.map((a) => summaryOf(a)),
     inProgress: !!(latest && !latest.submittedAt),
     canRetake:  canRetake(test, latest || attempt),
+    settings,
+    paperAt:    paperLockedUntil(test),
   };
 };
 
 // One test as the student's list sees it: metadata, status, latest attempt
 // (without answers), best score and history. Also used by the series detail
 // (seriesController) so both places read and shape attempts identically.
-const rowOf = async (t) => {
+const rowOf = async (t, settings = DEFAULTS) => {
   const [first, ...older] = t.attempts || [];
   const attempt = await settle(first, t);
   const done = [attempt, ...older].filter((a) => a && a.submittedAt);
@@ -126,7 +144,7 @@ const rowOf = async (t) => {
     canRetake: canRetake(t, attempt),
     attempt:   attempt ? { ...publicAttempt(attempt), responses: undefined } : null,
     best:      best ? { attemptNo: best.attemptNo, score: best.score, maxScore: best.maxScore } : null,
-    history:   done.map(summaryOf),
+    history:   done.map((a) => summaryOf(a, t.paper, settings)),
   };
 };
 
@@ -142,8 +160,9 @@ const listTests = async (req, res) => {
         series:   { select: { title: true } },
       },
     });
+    const settings = await resultSettings();
     const out = [];
-    for (const t of tests) out.push(await rowOf(t));
+    for (const t of tests) out.push(await rowOf(t, settings));
     res.json({ tests: out, serverNow: new Date() });
   } catch (error) {
     console.error(error);
@@ -283,4 +302,35 @@ const getResult = async (req, res) => {
   }
 };
 
-module.exports = { listTests, getTest, startTest, saveAttempt, submitTest, getResult, testRow: rowOf };
+// GET /api/tests/:id/paper — the question paper to print or save as PDF:
+// questions only (no answers), for a student who has submitted the test. A
+// live test's paper unlocks when its window closes. `watermark` carries the
+// student's name and mobile (or email) when the admin turned it on.
+const getPaper = async (req, res) => {
+  try {
+    const test = await findTest(req);
+    if (!test || !test.paper) return res.status(404).json({ error: 'Test not found' });
+    const admin = req.user.role === 'admin';
+    if (!admin) {
+      const done = await prisma.attempt.findFirst({ where: { testId: test.id, userId: req.user.id, submittedAt: { not: null } }, select: { id: true } });
+      if (!done) return res.status(409).json({ error: 'Submit the test to download its question paper.' });
+      const until = paperLockedUntil(test);
+      if (until) return res.status(403).json({ error: 'The question paper unlocks when the test closes for everyone.', unlocksAt: until });
+    }
+    let watermark = null;
+    if (test.watermark) {
+      const u = await prisma.user.findUnique({ where: { id: req.user.id }, select: { name: true, phone: true, email: true } });
+      if (u) watermark = { name: u.name || '', contact: u.phone || u.email };
+    }
+    res.json({
+      test:      { ...meta(test), marking: test.marking },
+      paper:     stripAnswers(test.paper),
+      watermark,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Something went wrong' });
+  }
+};
+
+module.exports = { listTests, getTest, startTest, saveAttempt, submitTest, getResult, getPaper, testRow: rowOf };

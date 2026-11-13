@@ -34,7 +34,9 @@ export function scoreQuestion(q, r) {
 
 export function computeResult(flat, attempt) {
   const max = flat.reduce((a, f) => a + f.q.marks.correct, 0)
-  const res = { total: 0, max, correct: 0, wrong: 0, partial: 0, skipped: 0, negative: 0, sections: {}, chapters: {}, items: [], timeMs: 0 }
+  // lost = full marks of wrong (and the missing part of partly correct) answers plus negative marks;
+  // left = full marks of skipped questions. total + lost + left = max.
+  const res = { total: 0, max, correct: 0, wrong: 0, partial: 0, skipped: 0, negative: 0, lost: 0, left: 0, sections: {}, chapters: {}, items: [], timeMs: 0 }
   flat.forEach((f, i) => {
     const r = attempt.responses[f.q.id] || {}
     const sc = scoreQuestion(f.q, r)
@@ -43,6 +45,8 @@ export function computeResult(flat, attempt) {
     res[sc.status]++
     res.timeMs += t
     if (sc.marks < 0) res.negative += -sc.marks
+    if (sc.status === 'skipped') res.left += f.q.marks.correct
+    else res.lost += f.q.marks.correct - sc.marks
     const S = (res.sections[f.sec] = res.sections[f.sec] || { marks: 0, max: 0, correct: 0, wrong: 0, partial: 0, skipped: 0, time: 0, n: 0 })
     S.marks += sc.marks
     S.max += f.q.marks.correct

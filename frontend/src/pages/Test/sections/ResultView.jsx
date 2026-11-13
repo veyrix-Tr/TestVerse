@@ -4,8 +4,10 @@ import { mmss } from '../../../lib/format.js'
 import { AR_OPTIONS } from '../data/papers.js'
 import { computeResult } from '../scoring.js'
 import { hasAnswer } from '../answers.js'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import BackButton from '../../../components/BackButton.jsx'
+import { DownloadIcon, LockIcon, paperHref, unlockText } from './afterTest.jsx'
 
 function letter(i) {
   return String.fromCharCode(65 + i)
@@ -22,6 +24,30 @@ function videoUrl(v) {
   return typeof v === 'string' && /^https:\/\/(www\.|m\.)?(youtube\.com|youtu\.be)\//.test(v) ? v : null
 }
 
+/* Time used, the way the spec writes it: "2 h 41 min", "46 min 12 s" */
+function longTime(ms) {
+  const s = Math.max(0, Math.round(ms / 1000))
+  const h = Math.floor(s / 3600)
+  const m = Math.floor((s % 3600) / 60)
+  if (h) return h + ' h' + (m ? ' ' + m + ' min' : '')
+  return m + ' min' + (s % 60 ? ' ' + (s % 60) + ' s' : '')
+}
+
+/* A test's length in minutes as "3 h", "1 h 30 min" or "45 min" */
+function durationText(min) {
+  const h = Math.floor(min / 60)
+  const m = min % 60
+  return h ? h + ' h' + (m ? ' ' + m + ' min' : '') : m + ' min'
+}
+
+const CHAPTERS_SHOWN = 8
+
+/* 180 -> "3 minutes", 90 -> "90 seconds" */
+function secondsText(s) {
+  if (s % 60 === 0) return s / 60 + (s === 60 ? ' minute' : ' minutes')
+  return s + ' seconds'
+}
+
 function answerText(q, a, lang) {
   if (!hasAnswer(q, a)) return 'Not answered'
   if (q.type === 'integer' || q.type === 'numerical') return String(a)
@@ -35,6 +61,7 @@ function answerText(q, a, lang) {
   "What to work on", chapter table, review list with filters.
 */
 export default function ResultView({ paper, flat, attempt, meta, reviewFilter, setReviewFilter, embedded }) {
+  const [allChapters, setAllChapters] = useState(false)
   const R = computeResult(flat, attempt)
   // The server's stored score is the headline; computeResult (same rules) drives the breakdown.
   const total = Number.isFinite(attempt.score) ? attempt.score : R.total
@@ -44,8 +71,15 @@ export default function ResultView({ paper, flat, attempt, meta, reviewFilter, s
   const acc = attempted ? Math.round(((R.correct + R.partial * 0.5) / attempted) * 100) : 0
   const used = Math.min(attempt.durationMs, attempt.submittedAt - attempt.startedAt)
   const avg = attempted ? R.timeMs / Math.max(1, totalQ - R.skipped) : 0
-  const slowWrong = R.items.filter((it) => it.sc.status === 'wrong' && it.time > 3 * 60000)
-  const fastWrong = R.items.filter((it) => it.sc.status === 'wrong' && it.time < 30000)
+  // The admin's thresholds (Admin › Website): a wrong answer faster than guessSeconds is a likely guess,
+  // one slower than slowSeconds a time sink
+  const settings = (meta && meta.settings) || {}
+  const guessSec = settings.guessSeconds || 30
+  const slowSec = settings.slowSeconds || 180
+  const slowWrong = R.items.filter((it) => it.sc.status === 'wrong' && it.time > slowSec * 1000)
+  const fastWrong = R.items.filter((it) => it.sc.status === 'wrong' && it.time > 0 && it.time < guessSec * 1000)
+  // Where the marks went: scored + lost + left = max (bar widths can't go below 0)
+  const share = (v) => (max > 0 ? Math.max(0, (v / max) * 100) : 0)
   const chapters = Object.keys(R.chapters)
     .map((k) => ({ name: k, ...R.chapters[k] }))
     .sort((a, b) => b.lost - a.lost)
@@ -128,7 +162,7 @@ export default function ResultView({ paper, flat, attempt, meta, reviewFilter, s
               {attempt.autoSubmitted ? ' (time ran out)' : ''}
               {history.length > 1 ? ` · Attempt ${shownNo} of ${history.length}` : ''}
             </p>
-            {meta && (meta.inProgress || meta.canRetake || history.length > 1) ? (
+            {meta ? (
               <div className="res-actions">
                 {meta.inProgress ? (
                   <Link className="btn btn-gold" to={testHref}>
@@ -139,6 +173,18 @@ export default function ResultView({ paper, flat, attempt, meta, reviewFilter, s
                     Retake test
                   </Link>
                 ) : null}
+                {meta.paperAt ? (
+                  <span className="res-lock">
+                    <LockIcon />
+                    Question paper unlocks at {unlockText(meta.paperAt)}
+                  </span>
+                ) : (
+                  <a className="btn btn-outline-light" href={paperHref(paper.id)} target="_blank" rel="noopener">
+                    <DownloadIcon />
+                    Download question paper
+                    <span className="sr"> (opens in a new tab)</span>
+                  </a>
+                )}
                 {history.length > 1 ? (
                   <nav className="attempts" aria-label="Your attempts">
                     {history
@@ -209,24 +255,57 @@ export default function ResultView({ paper, flat, attempt, meta, reviewFilter, s
           </div>
           <div className="kpi">
             <span>Time used</span>
-            <b>{mmss(used)}</b>
+            <b>{longTime(used)}</b>
             <div className="meter" aria-hidden="true">
               <i style={{ width: usedPct + '%' }}></i>
             </div>
-            <small>of {paper.durationMin} min · {mmss(avg)} per question</small>
+            <small>of {durationText(paper.durationMin)} · {mmss(avg)} per attempted question</small>
           </div>
         </div>
+
+        <section className="block" aria-labelledby="mw-t">
+          <div className="block-head">
+            <h2 id="mw-t">Where your marks went</h2>
+            <p>All {max} marks of the paper: what you scored, what wrong answers cost and what you left in skipped questions.</p>
+          </div>
+          <div className="panel marks-went">
+            <div className="mw-bar" aria-hidden="true">
+              <i className="mw-ok" style={{ width: share(total) + '%' }}></i>
+              <i className="mw-bad" style={{ width: share(R.lost) + '%' }}></i>
+              <i className="mw-left" style={{ width: share(R.left) + '%' }}></i>
+            </div>
+            <dl className="mw-key">
+              <div>
+                <dt><i className="mw-ok" aria-hidden="true"></i>Scored</dt>
+                <dd>{total}</dd>
+              </div>
+              <div>
+                <dt><i className="mw-bad" aria-hidden="true"></i>Lost to wrong answers</dt>
+                <dd>
+                  {R.lost}
+                  {R.negative ? <small> incl. {R.negative} negative</small> : null}
+                </dd>
+              </div>
+              <div>
+                <dt><i className="mw-left" aria-hidden="true"></i>Left in skipped questions</dt>
+                <dd>{R.left}</dd>
+              </div>
+            </dl>
+          </div>
+        </section>
 
         <div className="analysis">
           <section className="block">
             <div className="block-head">
-              <h2>Section-wise</h2>
-              <p>Marks per section against the maximum.</p>
+              <h2>Subject-wise</h2>
+              <p>Marks, accuracy and time for each section of the paper.</p>
             </div>
             <div className="panel section-rows">
               {paper.sections.map((s) => {
                 const S = R.sections[s.name]
                 const p = S.max ? Math.max(0, Math.round((S.marks / S.max) * 100)) : 0
+                const tried = S.correct + S.wrong + S.partial
+                const sAcc = tried ? Math.round(((S.correct + S.partial * 0.5) / tried) * 100) : null
                 return (
                   <div className="srow" key={s.name}>
                     <div className="srow-top">
@@ -243,6 +322,7 @@ export default function ResultView({ paper, flat, attempt, meta, reviewFilter, s
                       <span>{S.correct} correct</span>
                       <span>{S.wrong} wrong</span>
                       <span>{S.skipped} skipped</span>
+                      <span>{sAcc == null ? 'No attempts' : sAcc + '% accuracy'}</span>
                       <span>{mmss(S.time)}</span>
                     </p>
                   </div>
@@ -264,15 +344,19 @@ export default function ResultView({ paper, flat, attempt, meta, reviewFilter, s
               ) : null}
               {R.negative ? (
                 <li>
-                  Negative marking took away <b>{R.negative} marks</b>.
-                  {fastWrong.length ? ' ' + fastWrong.length + ' wrong answer' + (fastWrong.length === 1 ? ' was' : 's were') + ' given in under 30 seconds, likely guesses.' : ''}
+                  You lost <b>{R.negative} marks</b> to negative marking.
                 </li>
               ) : (
                 <li>No marks lost to negative marking. Good control.</li>
               )}
+              {fastWrong.length ? (
+                <li>
+                  <b>Likely guesses:</b> {fastWrong.length} wrong answer{fastWrong.length === 1 ? '' : 's'} in under {secondsText(guessSec)}. Skip a question rather than guess when you can’t narrow it down.
+                </li>
+              ) : null}
               {slowWrong.length ? (
                 <li>
-                  You spent over 3 minutes on {slowWrong.length} question{slowWrong.length === 1 ? '' : 's'} and still got {slowWrong.length === 1 ? 'it' : 'them'} wrong. Next time, move on and come back.
+                  <b>Time sinks:</b> {slowWrong.length} question{slowWrong.length === 1 ? '' : 's'} took over {secondsText(slowSec)} and {slowWrong.length === 1 ? 'was' : 'were'} still wrong. Next time, move on and come back.
                 </li>
               ) : null}
               <li>
@@ -293,21 +377,21 @@ export default function ResultView({ paper, flat, attempt, meta, reviewFilter, s
               <thead>
                 <tr>
                   <th>Chapter</th>
-                  <th>Section</th>
+                  <th className="hide-xs">Section</th>
                   <th className="hide-sm">Accuracy</th>
                   <th className="n">Correct</th>
                   <th className="n">Marks lost</th>
                 </tr>
               </thead>
               <tbody>
-                {chapters.map((c) => {
+                {(allChapters ? chapters : chapters.slice(0, CHAPTERS_SHOWN)).map((c) => {
                   const p = c.n ? Math.round((c.right / c.n) * 100) : 0
                   return (
                     <tr key={c.name + c.sec}>
                       <td>
                         <b>{c.name}</b>
                       </td>
-                      <td className="muted">{c.sec}</td>
+                      <td className="muted hide-xs">{c.sec}</td>
                       <td className="hide-sm">
                         <div className="meter" aria-hidden="true">
                           <i style={{ width: p + '%', background: colour(p) }}></i>
@@ -322,6 +406,13 @@ export default function ResultView({ paper, flat, attempt, meta, reviewFilter, s
                 })}
               </tbody>
             </table>
+            {chapters.length > CHAPTERS_SHOWN ? (
+              <div className="chap-more">
+                <button className="btn btn-outline btn-sm" type="button" aria-expanded={allChapters ? 'true' : 'false'} onClick={() => setAllChapters((v) => !v)}>
+                  {allChapters ? 'Show the top ' + CHAPTERS_SHOWN : 'Show all ' + chapters.length + ' chapters'}
+                </button>
+              </div>
+            ) : null}
           </div>
         </section>
 

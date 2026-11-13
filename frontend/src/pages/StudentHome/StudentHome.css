@@ -542,6 +542,54 @@ a.row-title:hover { color: var(--blue); }
 .hbar-sub { font-size: 12.5px; font-weight: 500; color: var(--muted); }
 .hbar-sub .hbar-flag { font-size: 12.5px; }
 .hbars b small { font-size: 12.5px; font-weight: 500; color: var(--muted); }
+/* Progress over time: subject accuracy + guessing habit */
+.charts + .charts { margin-top: 20px; }
+.chart-hint { margin-top: -8px; }
+.strend-card .trend { padding-right: 16px; }
+.strend-legend { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: -8px; }
+.strend-legend li { display: flex; align-items: baseline; gap: 6px; font-size: 14px; color: var(--ink-2); }
+.strend-legend i { align-self: center; width: 14px; height: 3px; border-radius: 2px; background: var(--c); }
+.strend-legend b { font-weight: 700; font-variant-numeric: tabular-nums; color: var(--ink); }
+.strend-legend small { font-size: 12.5px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.strend-dot { position: absolute; width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 50%; background: var(--card); border: 2px solid var(--c); pointer-events: none; }
+.strend-dot.is-last { width: 10px; height: 10px; margin: -5px 0 0 -5px; background: var(--c); }
+.strend-col { position: absolute; top: 0; bottom: 0; z-index: 2; text-decoration: none; }
+.strend-col::before { content: ""; position: absolute; top: 0; bottom: 0; left: var(--x); border-left: 1px solid var(--field); opacity: 0; transition: opacity 120ms ease; }
+.strend-col:hover::before, .strend-col:focus-visible::before { opacity: 1; }
+.strend-col:hover, .strend-col:focus-visible { z-index: 3; text-decoration: none; }
+.strend-col:focus-visible { outline-offset: -2px; border-radius: 6px; }
+.strend-col .strend-tip { bottom: auto; top: 4px; left: var(--x); }
+.strend-col.tip-left .strend-tip { transform: none; }
+.strend-col.tip-right .strend-tip { left: auto; right: calc(100% - var(--x)); transform: none; }
+.strend-col:hover .strend-tip, .strend-col:focus-visible .strend-tip { display: grid; }
+.strend-tip-row { display: flex; align-items: center; gap: 6px; }
+.strend-tip-row i { width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
+.gbars { display: flex; align-items: stretch; gap: 8px; height: 192px; padding-top: 4px; }
+.gbars li { flex: 1 1 0; min-width: 0; display: flex; }
+.gbar { position: relative; flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; text-decoration: none; border-radius: 8px; }
+.gbar:hover, .gbar:focus-visible { text-decoration: none; z-index: 3; }
+.gbar .bar-col { position: relative; }
+.gbar .bar-col i { background: color-mix(in srgb, var(--amber) 45%, var(--card)); }
+.gbars li.is-last .bar-col i { background: var(--amber); }
+.gbars li.is-last .bar-val { color: var(--ink); font-weight: 700; }
+.gbar:hover .bar-col i, .gbar:focus-visible .bar-col i { background: var(--amber); }
+.gbar .gbar-tip { bottom: calc(100% + 6px); }
+.gbar-x { font-size: 11.5px; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.gbars li.is-last .gbar-x { color: var(--ink); font-weight: 600; }
+/* The card is narrow, so its headline sits under the title as one line: "1 guess latest · 33% of wrong" */
+.guess-card .chart-kpi { display: flex; align-items: baseline; gap: 8px; justify-items: start; text-align: left; }
+.gbar.tip-left .gbar-tip { left: 0; transform: none; }
+.gbar.tip-right .gbar-tip { left: auto; right: 0; transform: none; }
+.gbar:hover .gbar-tip, .gbar:focus-visible .gbar-tip { display: grid; }
+@media (max-width: 640px) {
+  .strend-card .trend { padding-right: 8px; }
+  .gbars { gap: 4px; height: 160px; }
+  .gbar-x { font-size: 10px; }
+  .gbar .bar-val { font-size: 10.5px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .strend-col::before { transition: none; }
+}
 .legend { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-top: -8px; font-size: 13px; }
 .legend span { color: var(--muted); }
 

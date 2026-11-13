@@ -130,6 +130,9 @@ model Test {
   series        TestSeries? @relation(fields: [seriesId], references: [id], onDelete: Cascade)
   opensAt       DateTime? // students may start from…
   closesAt      DateTime? // …until (both optional)
+  // Faint student name + mobile on every page of the downloadable question
+  // paper. Defaults: on for test-series tests (paid), off for live and free.
+  watermark     Boolean   @default(false)
   createdById   String?
   createdBy     User?     @relation(fields: [createdById], references: [id], onDelete: SetNull)
   createdAt     DateTime  @default(now())
@@ -413,6 +416,12 @@ model WebsiteSettings {
   showAnnouncement  Boolean @default(false)
   youtubeChannel    String  @default("")
   youtubePlaylists  Json    @default("{}") // { "neet": "url", "jee-main": "url", "jee-advanced": "url" }
+  // After-test analysis: a wrong answer faster than guessSeconds is a "likely
+  // guess"; a wrong answer slower than slowSeconds is a "time sink".
+  guessSeconds      Int     @default(30)
+  slowSeconds       Int     @default(180)
+  // The submit pop-up says solutions and analysis will come by email.
+  reportNotice      Boolean @default(true)
   updatedAt         DateTime @updatedAt
   createdAt         DateTime @default(now())
 }

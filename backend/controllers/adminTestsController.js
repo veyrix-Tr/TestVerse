@@ -66,7 +66,9 @@ const readDetails = (b, kind) => {
   if (opensAt && closesAt && closesAt <= opensAt) return { field: 'closesAt', error: 'The test must close after it opens.' };
   if (kind === 'live' && !opensAt) return { field: 'opensAt', error: 'A live test needs a start time.' };
   const timing = kind === 'series' ? { opensAt: null, closesAt: null } : { opensAt, closesAt };
-  return { data: { title, subject, exam, kind, isFree: kind === 'free', durationMin, instructions, ...timing } };
+  // Question-paper watermark: kept as is when not sent (createTest fills the default)
+  const watermark = typeof b.watermark === 'boolean' ? { watermark: b.watermark } : {};
+  return { data: { title, subject, exam, kind, isFree: kind === 'free', durationMin, instructions, ...timing, ...watermark } };
 };
 
 // Kind for a new test: a series id makes it a series test; otherwise the body's
@@ -102,6 +104,7 @@ const summaryOf = (t) => ({
   status:        t.status,
   opensAt:       t.opensAt,
   closesAt:      t.closesAt,
+  watermark:     t.watermark,
   hasPaper:      t.paper != null,
   attempts:      t._count ? t._count.attempts : undefined,
   audience:      t.batches ? publicAudience(t) : { mode: t.audience, batches: [], groups: [], students: [] },
@@ -170,7 +173,7 @@ const validatePaper = async (req, res) => {
 
 // POST /api/admin/tests
 // Body: { title, subject, exam, kind ('free'|'live'), seriesId?, durationMin, instructions, marking,
-//         opensAt, closesAt, paper, publish?, audience?: { mode: 'all'|'custom', batchIds, groupIds, studentIds } }
+//         opensAt, closesAt, watermark?, paper, publish?, audience?: { mode: 'all'|'custom', batchIds, groupIds, studentIds } }
 const createTest = async (req, res) => {
   try {
     const k = await readKind(req.body);
@@ -195,6 +198,8 @@ const createTest = async (req, res) => {
 
     const created = await prisma.test.create({
       data: {
+        // Paid series tests are watermarked unless the admin says otherwise
+        watermark: k.kind === 'series',
         ...d.data,
         ...(sortOrder === undefined ? {} : { sortOrder }),
         seriesId:      k.seriesId,
