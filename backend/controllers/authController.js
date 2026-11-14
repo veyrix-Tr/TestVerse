@@ -157,9 +157,10 @@ const signup = async (req, res) => {
     });
 
     // The admin's bell: someone just joined.
-    notify({ type: 'signup', text: 'New signup: ' + user.name + (EXAM_LABEL[user.exam] ? ' · ' + EXAM_LABEL[user.exam] : ''), view: 'students' });
+    // Awaited (they never throw): a Vercel function can stop once it has answered.
+    await notify({ type: 'signup', text: 'New signup: ' + user.name + (EXAM_LABEL[user.exam] ? ' · ' + EXAM_LABEL[user.exam] : ''), view: 'students' });
     // The student's bell: a first hello pointing at where to start.
-    notify({
+    await notify({
       type:   'welcome',
       text:   'Welcome to Testverse' + (EXAM_LABEL[user.exam] ? ', ' + user.name.split(' ')[0] + ' — your ' + EXAM_LABEL[user.exam] + ' tests are ready.' : '! Your tests are ready.'),
       view:   '/student',

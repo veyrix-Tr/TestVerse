@@ -10,8 +10,8 @@ const isLive = (row, now = new Date()) => !!row.isActive && row.startsAt <= now 
 
 // An announcement that goes live also fans out a personal notification to
 // every student who can see it (bell → Updates on /student/notifications),
-// instead of only bumping the announcements count. Fire-and-forget: a notify
-// failure never fails the publish.
+// instead of only bumping the announcements count. Callers await it (a Vercel
+// function can stop once it has answered); a failure is only logged.
 async function fanOutAnnouncement(row) {
   try {
     const ids = await announcementAudienceIds(row.audience || 'all');
@@ -203,7 +203,7 @@ const createAnnouncement = async (req, res) => {
     const r = readAnnouncement(req.body);
     if (r.error) return res.status(400).json(r);
     const row = await prisma.announcement.create({ data: { ...r.data, createdById: req.user.id } });
-    if (isLive(row)) fanOutAnnouncement(row);
+    if (isLive(row)) await fanOutAnnouncement(row);
     res.status(201).json({ message: 'Announcement published', announcement: announcementOf(row) });
   } catch (error) {
     console.error(error);
@@ -222,7 +222,7 @@ const updateAnnouncement = async (req, res) => {
     const row = await prisma.announcement.update({ where: { id }, data: r.data });
     // First time it goes live (a schedule starting, or being switched back on):
     // fan out once. Edits to a live row don't re-notify anyone.
-    if (!isLive(existing) && isLive(row)) fanOutAnnouncement(row);
+    if (!isLive(existing) && isLive(row)) await fanOutAnnouncement(row);
     res.json({ message: 'Announcement saved', announcement: announcementOf(row) });
   } catch (error) {
     console.error(error);

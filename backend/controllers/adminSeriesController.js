@@ -145,8 +145,9 @@ const publishSeries = async (req, res) => {
     if (!ready) return res.status(400).json({ error: 'Add at least one test with a question paper before publishing.' });
 
     const updated = await prisma.testSeries.update({ where: { id: s.id }, data: { status: 'published', publishedAt: new Date() } });
-    // The students who will see it get a bell (fire-and-forget, capped)
-    seriesAudienceStudentIds(s)
+    // The students who will see it get a bell (awaited: a Vercel function can
+    // stop once it has answered; a failure is only logged)
+    await seriesAudienceStudentIds(s)
       .then((ids) => notifyMany(ids, { type: 'test', text: 'New test series: ' + s.title, view: '/student/test-series' }))
       .catch((e) => console.error('series publish notify:', e.message));
     res.json({ message: 'Series published', series: fullOf({ ...s, ...updated }) });

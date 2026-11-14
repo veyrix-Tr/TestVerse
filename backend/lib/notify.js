@@ -22,16 +22,18 @@ function notify({ type, text, view, userId }) {
     .catch((e) => console.error('notify:', e.message));
 }
 
-// Same event to several students at once (a new test going live).
-// Silent on failure, capped so one publish can never flood the table.
+// Same event to several students at once (a new test going live). Every
+// student gets it, written 1000 rows per insert. Silent on failure.
 async function notifyMany(userIds, { type, text, view }) {
-  const ids = [...new Set(userIds.filter(Boolean))].slice(0, 500);
+  const ids = [...new Set(userIds.filter(Boolean))];
   if (!text || !ids.length) return;
   try {
-    await prisma.notification.createMany({
-      data: ids.map((userId) => ({ type, text, view: view || null, userId })),
-      skipDuplicates: true,
-    });
+    for (let i = 0; i < ids.length; i += 1000) {
+      await prisma.notification.createMany({
+        data: ids.slice(i, i + 1000).map((userId) => ({ type, text, view: view || null, userId })),
+        skipDuplicates: true,
+      });
+    }
   } catch (e) {
     console.error('notifyMany:', e.message);
   }

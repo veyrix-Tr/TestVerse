@@ -301,9 +301,10 @@ const setStatus = (status) => async (req, res) => {
     const updated = await prisma.test.update({ where: { id: test.id }, data: { status }, include: WITH });
 
     // Going live: tell every student who can see it (rules in lib/access.js).
-    // Fire-and-forget — a notify failure never fails the publish.
+    // Awaited, since a Vercel function can stop once it has answered; a notify
+    // failure is only logged, so it never fails the publish.
     if (status === 'published') {
-      audienceStudentIds(test)
+      await audienceStudentIds(test)
         .then((ids) => notifyMany(ids, { type: 'test', text: 'New test live: ' + test.title, view: '/student/tests' }))
         .catch((e) => console.error('publish notify:', e.message));
     }
