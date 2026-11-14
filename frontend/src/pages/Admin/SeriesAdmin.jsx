@@ -3,6 +3,7 @@ import BackButton from '../../components/BackButton.jsx'
 import { useToast } from '../../lib/useToast.jsx'
 import AudienceEditor from './AudienceEditor.jsx'
 import TestEditor from './TestEditor.jsx'
+import TestResults from './TestResults.jsx'
 import LiveStamp from './LiveStamp.jsx'
 import { ago, audienceBody, audienceFrom, day, plural } from './studentsApi.js'
 import { EXAM_LABEL, createSeries, deleteSeries, deleteTest, getSeries, listSeries, publishSeries, reorderSeriesTests, unpublishSeries, updateSeries } from './testsApi.js'
@@ -30,7 +31,7 @@ const HINT_PAGE =
   'Published series show up in the student’s Test series sidebar at the price you set. Students buy it once (0 = free) and its tests open for them.'
 
 export default function SeriesAdmin({ onCount }) {
-  const [screen, setScreen] = useState({ name: 'list' }) // | { name: 'series', id } | { name: 'test', seriesId, seriesTitle, id }
+  const [screen, setScreen] = useState({ name: 'list' }) // | { name: 'series', id } | { name: 'test', seriesId, seriesTitle, id } | { name: 'results', seriesId, seriesTitle, id }
   const { toast, node: toastNode } = useToast()
 
   function open(next) {
@@ -48,6 +49,16 @@ export default function SeriesAdmin({ onCount }) {
         onBack={() => open({ name: 'list' })}
         onDeleted={() => open({ name: 'list' })}
         onTest={(id, title) => open({ name: 'test', seriesId: screen.id, seriesTitle: title, id })}
+        onResults={(id, title) => open({ name: 'results', seriesId: screen.id, seriesTitle: title, id })}
+      />
+    )
+  } else if (screen.name === 'results') {
+    body = (
+      <TestResults
+        key={screen.id}
+        id={screen.id}
+        backText={'Back to ' + (screen.seriesTitle || 'the series')}
+        onBack={() => open({ name: 'series', id: screen.seriesId })}
       />
     )
   } else if (screen.name === 'test') {
@@ -73,6 +84,7 @@ export default function SeriesAdmin({ onCount }) {
         onCount={onCount}
         onOpen={(id) => open({ name: 'series', id })}
         onTest={(seriesId, seriesTitle, id) => open({ name: 'test', seriesId, seriesTitle, id })}
+        onResults={(seriesId, seriesTitle, id) => open({ name: 'results', seriesId, seriesTitle, id })}
       />
     )
   }
@@ -98,7 +110,7 @@ function ExamSeg({ id, value, onChange }) {
 }
 
 /* ---------- List of series (the tree: a series root with its tests inside) ---------- */
-function SeriesList({ toast, onCount, onOpen, onTest }) {
+function SeriesList({ toast, onCount, onOpen, onTest, onResults }) {
   const live = useLive(
     () =>
       listSeries().then((list) => {
@@ -266,6 +278,7 @@ function SeriesList({ toast, onCount, onOpen, onTest }) {
                           pos={i + 1}
                           busy={busy === 'del:' + t.id}
                           onOpen={() => onTest(s.id, s.title, t.id)}
+                          onResults={() => onResults(s.id, s.title, t.id)}
                           onDelete={() => removeTest(s, t)}
                         />
                       ))
@@ -295,7 +308,7 @@ function SeriesList({ toast, onCount, onOpen, onTest }) {
   beside it (a button can't nest another). `onMove` is only passed where the
   order can change — the series page.
 */
-function TestNode({ t, pos, busy, moveBusy, onOpen, onDelete, onMove, canUp, canDown }) {
+function TestNode({ t, pos, busy, moveBusy, onOpen, onResults, onDelete, onMove, canUp, canDown }) {
   return (
     <li className="tree-node">
       <button type="button" className="tree-node-main" onClick={onOpen} aria-label={'Edit ' + t.title}>
@@ -337,6 +350,11 @@ function TestNode({ t, pos, busy, moveBusy, onOpen, onDelete, onMove, canUp, can
             </button>
           </>
         )}
+        {onResults && (t.submitted != null ? t.submitted > 0 : t.hasPaper) ? (
+          <button className="btn btn-outline btn-sm" type="button" onClick={onResults} aria-label={'Results of ' + t.title}>
+            Results
+          </button>
+        ) : null}
         <button className="btn btn-danger btn-sm" type="button" disabled={busy || moveBusy} onClick={onDelete} aria-label={'Delete ' + t.title}>
           {busy ? 'Deleting…' : 'Delete'}
         </button>
@@ -472,7 +490,7 @@ function SeriesFields({ prefix, value, err, autoFocus, onChange }) {
 }
 
 /* ---------- One series ---------- */
-function SeriesPage({ id, toast, onBack, onDeleted, onTest }) {
+function SeriesPage({ id, toast, onBack, onDeleted, onTest, onResults }) {
   const live = useLive(() => getSeries(id), id, 'series:' + id)
   const [form, setForm] = useState(null) // { title, exam, description, price, audience } while editing
   const [formErr, setFormErr] = useState(null)
@@ -788,6 +806,7 @@ function SeriesPage({ id, toast, onBack, onDeleted, onTest }) {
                 canDown={i < tests.length - 1}
                 onMove={(dir) => move(i, dir)}
                 onOpen={() => onTest(t.id, s.title)}
+                onResults={() => onResults(t.id, s.title)}
                 onDelete={() => removeTest(t)}
               />
             ))}

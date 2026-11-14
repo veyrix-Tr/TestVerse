@@ -4,6 +4,7 @@ const { normalizePaper, normalizeMarking } = require('../lib/paperFormat');
 const { AUDIENCE_INCLUDE, publicAudience, readAudience, writeAudience } = require('../lib/audience');
 const { audienceStudentIds } = require('../lib/access');
 const { notifyMany } = require('../lib/notify');
+const { rankedFirstAttempts, accuracyOf } = require('../lib/leaderboard');
 
 // What every admin test reply loads: how many students started it (first
 // attempts only, so retakes don't count twice) + who it's given to.
@@ -339,8 +340,61 @@ const deleteTest = async (req, res) => {
   }
 };
 
+// GET /api/admin/tests/:id/results — every student who submitted the test,
+// ranked by first attempt (the same order students see), with contact
+// details, the full breakdown, how many times they've taken it and their
+// best score across retakes. `inProgress` counts first attempts still open.
+const getResults = async (req, res) => {
+  try {
+    const test = await prisma.test.findUnique({
+      where:  { id: req.params.id },
+      select: { id: true, title: true, subject: true, exam: true, kind: true, status: true, durationMin: true, questionCount: true, totalMarks: true, opensAt: true, closesAt: true, series: { select: { title: true } } },
+    });
+    if (!test) return res.status(404).json({ error: 'Test not found' });
+    const [list, tries, inProgress] = await Promise.all([
+      rankedFirstAttempts(test.id, { id: true, name: true, email: true, phone: true, city: true, state: true }),
+      prisma.attempt.groupBy({ by: ['userId'], where: { testId: test.id, submittedAt: { not: null } }, _count: { _all: true }, _max: { score: true } }),
+      prisma.attempt.count({ where: { testId: test.id, attemptNo: 1, submittedAt: null } }),
+    ]);
+    const byUser = new Map(tries.map((t) => [t.userId, t]));
+    res.json({
+      test: { ...test, seriesTitle: test.series ? test.series.title : null, series: undefined },
+      total: list.length,
+      inProgress,
+      rows: list.map((a) => {
+        const t = byUser.get(a.userId);
+        return {
+          rank:          a.rank,
+          userId:        a.userId,
+          name:          a.user ? a.user.name : '',
+          email:         a.user ? a.user.email : '',
+          phone:         a.user ? a.user.phone : null,
+          city:          a.user ? a.user.city : null,
+          state:         a.user ? a.user.state : null,
+          score:         a.score,
+          maxScore:      a.maxScore,
+          accuracy:      accuracyOf(a),
+          correct:       a.correct,
+          wrong:         a.wrong,
+          partial:       a.partial,
+          skipped:       a.skipped,
+          timeMs:        a.timeMs,
+          submittedAt:   a.submittedAt,
+          autoSubmitted: a.autoSubmitted,
+          attempts:      t ? t._count._all : 1,
+          bestScore:     t && t._max.score != null ? t._max.score : a.score,
+        };
+      }),
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Could not load the results' });
+  }
+};
+
 module.exports = {
   listTests,
+  getResults,
   validatePaper,
   createTest,
   getTest,

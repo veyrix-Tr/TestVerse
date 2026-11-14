@@ -3,6 +3,7 @@ const { stripAnswers, stripSolutions } = require('../lib/paperFormat');
 const { scoreAttempt, cleanResponses } = require('../lib/scoring');
 const { visibleTo } = require('../lib/access');
 const { DEFAULTS, resultSettings, analyse } = require('../lib/analysis');
+const { rankedFirstAttempts, wouldRank, accuracyOf, firstName, timeTaken } = require('../lib/leaderboard');
 
 // Answers are still accepted this long after the deadline (slow networks,
 // the browser's own auto-submit). Past it, the attempt is submitted with
@@ -333,4 +334,54 @@ const getPaper = async (req, res) => {
   }
 };
 
-module.exports = { listTests, getTest, startTest, saveAttempt, submitTest, getResult, getPaper, testRow: rowOf };
+// GET /api/tests/:id/leaderboard[?limit=n] — the test's ranking for a student
+// who has submitted it: the top `limit` (default 50, at most 100) by first
+// attempt, their own place, and — after a retake — where that retake would
+// stand (the board itself only ever counts first attempts). Other students
+// appear by first name only. A live test's board opens when it closes.
+const getLeaderboard = async (req, res) => {
+  try {
+    const test = await findTest(req);
+    if (!test || !test.paper) return res.status(404).json({ error: 'Test not found' });
+    const admin = req.user.role === 'admin';
+    const mine = await prisma.attempt.findMany({
+      where:   { testId: test.id, userId: req.user.id, submittedAt: { not: null } },
+      orderBy: { attemptNo: 'desc' },
+      select:  { attemptNo: true, score: true, maxScore: true, startedAt: true, deadline: true, submittedAt: true },
+    });
+    if (!admin && !mine.length) return res.status(409).json({ error: 'Submit the test to see its leaderboard.' });
+    const until = paperLockedUntil(test);
+    if (!admin && until) return res.status(403).json({ error: 'The leaderboard opens when the test closes for everyone.', unlocksAt: until });
+
+    const limit = Math.min(100, Math.max(1, Number(req.query.limit) || 50));
+    const list = await rankedFirstAttempts(test.id, { name: true });
+    const row = (a) => ({
+      rank:     a.rank,
+      name:     firstName(a.user && a.user.name),
+      score:    a.score,
+      maxScore: a.maxScore,
+      accuracy: accuracyOf(a),
+      timeMs:   a.timeMs,
+      isYou:    a.userId === req.user.id,
+    });
+    const me = list.find((a) => a.userId === req.user.id);
+    const latest = mine[0];
+    let retake = null;
+    if (latest && latest.attemptNo > 1) {
+      const entry = { score: latest.score || 0, timeMs: timeTaken(latest), submittedAt: latest.submittedAt };
+      retake = { attemptNo: latest.attemptNo, score: entry.score, maxScore: latest.maxScore, timeMs: entry.timeMs, wouldRank: wouldRank(list, entry, req.user.id) };
+    }
+    res.json({
+      test:   meta(test),
+      total:  list.length,
+      top:    list.slice(0, limit).map(row),
+      me:     me ? row(me) : null,
+      retake,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Could not load the leaderboard' });
+  }
+};
+
+module.exports = { listTests, getTest, startTest, saveAttempt, submitTest, getResult, getPaper, getLeaderboard, testRow: rowOf };

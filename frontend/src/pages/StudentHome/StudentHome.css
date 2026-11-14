@@ -410,6 +410,27 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .result-notice { padding: 12px 16px; border-radius: 12px; background: var(--amber-soft); color: var(--amber); font-size: 14px; font-weight: 500; }
 /* The test page's own styles render inside; let the dashboard's background show */
 .tv-test.result-embed { background: transparent; height: auto; min-width: 0; }
+/* Leaderboard page: tests on the left, the chosen board on the right */
+.tv-test.lb-embed { background: transparent; height: auto; min-width: 0; }
+.lbp { display: grid; grid-template-columns: minmax(220px, 280px) minmax(0, 1fr); gap: 28px; align-items: start; }
+.lbp-tests { position: sticky; top: 24px; display: grid; gap: 10px; }
+.lbp-label { font: 600 12px/1.4 var(--body); text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.lbp-tests ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.lbp-test { width: 100%; display: grid; gap: 4px; text-align: left; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--line); background: var(--card); color: var(--ink); cursor: pointer; transition: border-color 150ms ease, box-shadow 150ms ease, background-color 150ms ease; }
+.lbp-test b { font-size: 15px; font-weight: 600; line-height: 1.35; }
+.lbp-test span { font-size: 13px; color: var(--muted); }
+.lbp-test:hover { border-color: var(--field); }
+.lbp-test[aria-pressed="true"] { border-color: var(--gold); box-shadow: inset 3px 0 0 var(--gold); background: color-mix(in srgb, var(--gold) 8%, var(--card)); }
+.lbp-test:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.lbp-board { display: grid; gap: 16px; min-width: 0; }
+.lbp-board-head h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; }
+.lbp-board-head p { margin-top: 4px; font-size: 14px; color: var(--muted); }
+@media (max-width: 900px) {
+  .lbp { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .lbp-tests { position: static; }
+  .lbp-tests ul { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scroll-snap-type: x mandatory; }
+  .lbp-tests li { flex: 0 0 auto; width: min(240px, 72vw); scroll-snap-align: start; }
+}
 .result-skel { display: grid; gap: 20px; }
 .result-skel .skel-hero { display: block; height: 220px; border-radius: 20px; }
 .result-skel-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 20px; }

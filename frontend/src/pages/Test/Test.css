@@ -426,6 +426,56 @@ textarea.input { min-height: 96px; resize: vertical; }
 .btn svg { width: 18px; height: 18px; flex: none; }
 .res-lock { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border-radius: 10px; border: 1px dashed rgba(255, 255, 255, 0.28); font-size: 14px; color: var(--on-navy-muted); }
 .res-lock svg { width: 16px; height: 16px; flex: none; }
+/* ---------- Leaderboard ---------- */
+.lb { display: grid; gap: 14px; min-width: 0; }
+.lb-me { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px 22px; align-items: center; padding: 18px 22px; border-radius: 16px; background: linear-gradient(120deg, var(--navy), var(--navy-2)); color: var(--on-navy); }
+.lb-me-rank { display: grid; gap: 2px; grid-row: span 2; padding-right: 22px; border-right: 1px solid rgba(255, 255, 255, 0.14); }
+.lb-me-rank span { font: 600 11px/1.4 var(--body); text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold); }
+.lb-me-rank b { font: 700 34px/1 var(--display); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.lb-me-rank b small { font-size: 15px; font-weight: 600; color: var(--on-navy-muted); letter-spacing: 0; }
+.lb-me-text { font-size: 15px; line-height: 1.5; color: var(--on-navy); }
+.lb-retake { font-size: 13.5px; line-height: 1.55; color: var(--on-navy-muted); }
+.lb-retake b { color: var(--on-navy); }
+.lb-panel { padding: 6px 0 0; overflow: hidden; }
+.lb-head, .lb-row { display: grid; grid-template-columns: 64px minmax(0, 1fr) 96px 88px 112px; align-items: center; gap: 12px; padding: 0 24px; }
+.lb-head { min-height: 40px; font: 600 11px/1.4 var(--body); text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); border-bottom: 1px solid var(--line); }
+.lb-list { list-style: none; margin: 0; padding: 0; }
+.lb-row { min-height: 54px; border-bottom: 1px solid var(--line); font-size: 15px; color: var(--ink); font-variant-numeric: tabular-nums; }
+.lb-row:last-child { border-bottom: 0; }
+.lb-row.is-you { background: color-mix(in srgb, var(--gold) 12%, var(--card)); box-shadow: inset 3px 0 0 var(--gold); }
+.lb-rank { font-weight: 700; color: var(--ink-2); }
+.lb-medal { width: 30px; height: 30px; border-radius: 50%; display: inline-grid; place-items: center; font: 700 14px/1 var(--display); color: #FFFFFF; }
+.is-top-1 .lb-medal { background: linear-gradient(140deg, #F2C14E, #C8901C); box-shadow: 0 2px 6px rgba(200, 144, 28, 0.35); }
+.is-top-2 .lb-medal { background: linear-gradient(140deg, #C9D1DC, #8D99A8); }
+.is-top-3 .lb-medal { background: linear-gradient(140deg, #E2A472, #A8653A); }
+.lb-name { display: flex; align-items: center; gap: 8px; min-width: 0; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lb-you { flex: none; font: 700 11px/1 var(--body); text-transform: uppercase; letter-spacing: 0.06em; padding: 4px 8px; border-radius: 999px; background: var(--gold); color: var(--navy); }
+.lb-score, .lb-acc, .lb-time { text-align: right; }
+.lb-score b { font-weight: 700; }
+.lb-score small { color: var(--muted); font-size: 13px; }
+.lb-row .lb-acc, .lb-row .lb-time { color: var(--ink-2); font-size: 14px; }
+.lb-gap { text-align: center; color: var(--muted); letter-spacing: 0.3em; padding: 4px 0; border-bottom: 1px solid var(--line); }
+.lb-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px 16px; flex-wrap: wrap; padding: 14px 24px; border-top: 1px solid var(--line); background: var(--soft); font-size: 13px; color: var(--muted); }
+.lb-more { font-weight: 600; color: var(--blue); text-decoration: none; white-space: nowrap; }
+.lb-more:hover { text-decoration: underline; }
+.lb-skel { display: block; height: 22px; margin: 16px 24px; border-radius: 8px; background: linear-gradient(90deg, var(--soft), var(--line), var(--soft)); background-size: 200% 100%; animation: lb-sh 1.2s ease-in-out infinite; }
+@keyframes lb-sh { to { background-position: -200% 0; } }
+.lb-state { display: flex; align-items: center; gap: 16px; padding: 22px 24px; }
+.lb-state > div { flex: 1; display: grid; gap: 4px; }
+.lb-state b { font-size: 15px; color: var(--ink); }
+.lb-state p { font-size: 14px; color: var(--muted); line-height: 1.5; }
+.lb-state-ic { flex: none; width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: var(--soft); color: var(--gold); border: 1px solid var(--line); }
+.lb-state-ic svg { width: 22px; height: 22px; }
+@media (max-width: 640px) {
+  .lb-me { grid-template-columns: minmax(0, 1fr); padding: 16px 18px; }
+  .lb-me-rank { grid-row: auto; padding: 0 0 10px; border-right: 0; border-bottom: 1px solid rgba(255, 255, 255, 0.14); }
+  .lb-head, .lb-row { grid-template-columns: 44px minmax(0, 1fr) 76px 72px; padding: 0 16px; gap: 8px; }
+  .lb-head .lb-time, .lb-row .lb-time { display: none; }
+  .lb-row { font-size: 14px; }
+  .lb-foot { padding: 12px 16px; }
+}
+@media (prefers-reduced-motion: reduce) { .lb-skel { animation: none; } }
+
 /* Chapter table: the worst chapters first, the rest behind "Show all" */
 .chap-more { display: flex; justify-content: center; padding: 14px 0 18px; border-top: 1px solid var(--line); }
 /* "Test submitted" pop-up */

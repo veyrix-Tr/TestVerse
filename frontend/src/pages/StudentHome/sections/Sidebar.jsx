@@ -9,6 +9,7 @@ const NAV = [
   { page: 'tests', label: 'Your tests', count: 'todo', countLabel: 'to do' },
   { page: 'test-series', label: 'Test series' },
   { page: 'results', label: 'Results', count: 'results', countLabel: 'attempts' },
+  { page: 'leaderboard', label: 'Leaderboard' },
   { page: 'resources', label: 'Resources' },
   { page: 'notifications', label: 'Notifications' },
 ]

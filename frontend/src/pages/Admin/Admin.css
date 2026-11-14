@@ -1395,3 +1395,61 @@ textarea.input.sr-desc { min-height: 64px; }
 .ts-check-hint, .ws-check-hint { margin-top: 4px; padding-left: 28px; }
 /* Website info: Result analysis card */
 .ws-err { color: var(--red); }
+
+/* ---------- Test results: leaderboard + every student's result (TestResults.jsx) ---------- */
+.rr { display: grid; gap: 24px; }
+.rr-head .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.rr-stats { grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
+.rr-filters { margin-bottom: 0; }
+.rr-count { margin-left: auto; }
+.rr-table table { min-width: 1040px; }
+.rr-table th, .rr-table td { padding-left: 12px; padding-right: 12px; }
+.rr-table th:first-child, .rr-table td:first-child { padding-left: 24px; padding-right: 4px; width: 56px; min-width: 0; max-width: none; }
+.rr-table th:last-child, .rr-table td:last-child { padding-right: 24px; }
+/* No actions column here, so the last header is a normal header (not the sticky actions one).
+   Two classes: the generic rule gets :has() specificity once the build wraps it in :is(). */
+.table-wrap.rr-table th:last-child { position: static; background: none; }
+.rr-table td, .rr-table td:nth-child(3), .rr-table td:nth-child(4) { white-space: nowrap; min-width: 0; max-width: none; }
+.rr-table td.rr-student { white-space: normal; min-width: 220px; max-width: 320px; }
+.rr-table td.rr-student .sub { overflow-wrap: anywhere; }
+.rr-who { display: block; min-width: 0; }
+.rr-rank { display: inline-grid; place-items: center; min-width: 30px; height: 30px; padding: 0 7px; border-radius: 999px; background: var(--soft); box-shadow: inset 0 0 0 1px var(--line); font: 700 13px/1 var(--body); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.rr-rank.is-gold { background: var(--gold-soft); color: var(--gold-ink); box-shadow: inset 0 0 0 1.5px var(--gold); }
+.rr-rank.is-silver { background: color-mix(in srgb, #9AA6B8 18%, var(--card)); color: var(--ink-2); box-shadow: inset 0 0 0 1.5px #9AA6B8; }
+.rr-rank.is-bronze { background: color-mix(in srgb, #B87333 14%, var(--card)); color: color-mix(in srgb, #B87333 75%, var(--ink)); box-shadow: inset 0 0 0 1.5px #B87333; }
+.rr-rank-m { display: none; }
+.rr-score b { font-size: 15px; }
+.rr-of { color: var(--muted); }
+.rr-c { color: var(--green); font-weight: 600; }
+.rr-w { color: var(--red); font-weight: 600; }
+.rr-best { display: inline; margin: 0 0 0 4px; }
+.rr-auto { margin: 0 0 0 8px; vertical-align: 1px; }
+td .rr-auto { margin-top: 0; }
+abbr[title] { text-decoration: none; cursor: help; }
+
+.rr-skel { padding: 8px 0; }
+.rr-skel-row { display: flex; align-items: center; gap: 20px; padding: 16px 24px; border-bottom: 1px solid var(--line); }
+.rr-skel-row:last-child { border-bottom: 0; }
+.rr-skel-rank { width: 30px; height: 30px; border-radius: 50%; flex: none; }
+.rr-skel-who { display: grid; gap: 8px; flex: 1 1 auto; }
+.rr-skel-num { width: 64px; flex: none; }
+
+@media (max-width: 720px) {
+  .rr-count { margin-left: 0; width: 100%; }
+  .rr-head .actions { width: 100%; }
+  .rr-head .actions .btn { flex: 1; }
+  /* One card per student */
+  .rr-table table, .rr-table tbody, .rr-table tr, .rr-table td { display: block; min-width: 0; max-width: none; }
+  .rr-table table { min-width: 0; }
+  .rr-table thead { display: none; }
+  .rr-table tr { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; padding: 18px 20px; border-bottom: 1px solid var(--line); }
+  .rr-table tbody tr:last-child { border-bottom: 0; }
+  .rr-table td, .rr-table td:first-child, .rr-table td:last-child, .rr-table td.rr-student { height: auto; padding: 0; border: 0; white-space: normal; min-width: 0; max-width: none; width: auto; }
+  .rr-table td.rr-rank-cell { display: none; }
+  .rr-table td.rr-student { grid-column: 1 / -1; display: flex; align-items: flex-start; gap: 12px; }
+  .rr-table td.rr-student .rr-rank-m { display: inline-grid; flex: none; }
+  .rr-table td.rr-student .sub { -webkit-line-clamp: unset; display: block; }
+  .rr-table td[data-label]::before { content: attr(data-label); display: block; font: 600 11px/1.4 var(--body); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
+  .rr-table td.hint { grid-column: 1 / -1; padding: 24px 0; }
+  .rr-skel-num { display: none; }
+}

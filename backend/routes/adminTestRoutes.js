@@ -10,6 +10,7 @@ router.get('/tests', c.listTests);
 router.post('/tests/validate', c.validatePaper);
 router.post('/tests', c.createTest);
 router.get('/tests/:id', c.getTest);
+router.get('/tests/:id/results', c.getResults);
 router.put('/tests/:id', c.updateTest);
 router.post('/tests/:id/publish', c.publishTest);
 router.post('/tests/:id/unpublish', c.unpublishTest);

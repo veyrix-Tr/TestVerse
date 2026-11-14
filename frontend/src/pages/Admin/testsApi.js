@@ -23,6 +23,8 @@ export const updateTest = (id, body) => call('/tests/' + encodeURIComponent(id),
 export const setPublished = (id, on) =>
   call('/tests/' + encodeURIComponent(id) + (on ? '/publish' : '/unpublish'), { body: {} }).then((r) => r.test)
 export const deleteTest = (id) => call('/tests/' + encodeURIComponent(id), { method: 'DELETE' })
+/* Leaderboard (first attempts) + every student's result: { test, total, inProgress, rows } */
+export const getTestResults = (id) => call('/tests/' + encodeURIComponent(id) + '/results')
 
 /* Test series (backend/controllers/adminSeriesController.js) */
 export const listSeries = () => call('/series').then((r) => r.series)

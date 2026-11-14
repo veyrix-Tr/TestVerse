@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useToast } from '../../lib/useToast.jsx'
 import TestEditor from './TestEditor.jsx'
+import TestResults from './TestResults.jsx'
 import { audienceText } from './studentsApi.js'
 import { EXAM_LABEL, deleteTest, listTests, setPublished, when } from './testsApi.js'
 import { cached, remember } from './cache.js'
@@ -9,7 +10,7 @@ import { cached, remember } from './cache.js'
   Admin › Free tests and Admin › Live tests (real, API-backed). Shown by
   Admin.jsx in place of the demo #view while the sidebar's "Free tests" or
   "Live tests" item is active (`kind` = 'free' | 'live'). Two screens in one
-  place: the list, and the create / edit form (not a modal).
+  place: the list, the create / edit form (not a modal), and a test's results.
 */
 const COPY = {
   free: {
@@ -34,7 +35,7 @@ const COPY = {
 const examWord = (exam) => (exam === 'jee' ? 'JEE ' : exam === 'neet' ? 'NEET ' : '')
 
 export default function TestsAdmin({ kind = 'free', onCount }) {
-  const [screen, setScreen] = useState({ name: 'list' }) // or { name: 'edit', id: null | string }
+  const [screen, setScreen] = useState({ name: 'list' }) // or { name: 'edit', id: null | string } | { name: 'results', id }
   const { toast, node: toastNode } = useToast()
 
   function open(next) {
@@ -45,7 +46,16 @@ export default function TestsAdmin({ kind = 'free', onCount }) {
   return (
     <>
       {screen.name === 'list' ? (
-        <TestsList kind={kind} onCount={onCount} toast={toast} onCreate={() => open({ name: 'edit', id: null })} onEdit={(id) => open({ name: 'edit', id })} />
+        <TestsList
+          kind={kind}
+          onCount={onCount}
+          toast={toast}
+          onCreate={() => open({ name: 'edit', id: null })}
+          onEdit={(id) => open({ name: 'edit', id })}
+          onResults={(id) => open({ name: 'results', id })}
+        />
+      ) : screen.name === 'results' ? (
+        <TestResults key={screen.id} id={screen.id} backText={COPY[kind].back} onBack={() => open({ name: 'list' })} />
       ) : (
         <TestEditor
           key={screen.id || 'new'}
@@ -80,7 +90,7 @@ function freeWindow(t) {
   return 'Always open'
 }
 
-function TestsList({ kind, onCount, toast, onCreate, onEdit }) {
+function TestsList({ kind, onCount, toast, onCreate, onEdit, onResults }) {
   const copy = COPY[kind]
   const isLive = kind === 'live'
   // Last list for this section shows at once; load() then refreshes it
@@ -268,6 +278,11 @@ function TestsList({ kind, onCount, toast, onCreate, onEdit }) {
                         <button className="btn btn-outline btn-sm" type="button" onClick={() => onEdit(t.id)} aria-label={'Edit ' + t.title}>
                           Edit
                         </button>
+                        {t.submitted > 0 ? (
+                          <button className="btn btn-outline btn-sm" type="button" onClick={() => onResults(t.id)} aria-label={'Results of ' + t.title}>
+                            Results
+                          </button>
+                        ) : null}
                         {published ? (
                           <button className="btn btn-outline btn-sm" type="button" disabled={busy?.id === t.id} onClick={() => togglePublish(t)}>
                             {busy?.id === t.id && busy.kind === 'publish' ? 'Unpublishing…' : 'Unpublish'}

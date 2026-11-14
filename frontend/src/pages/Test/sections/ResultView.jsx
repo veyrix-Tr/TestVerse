@@ -8,6 +8,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import BackButton from '../../../components/BackButton.jsx'
 import { DownloadIcon, LockIcon, paperHref, unlockText } from './afterTest.jsx'
+import Leaderboard from './Leaderboard.jsx'
 
 function letter(i) {
   return String.fromCharCode(65 + i)
@@ -366,6 +367,16 @@ export default function ResultView({ paper, flat, attempt, meta, reviewFilter, s
             </ol>
           </section>
         </div>
+
+        {embedded ? (
+          <section className="block" aria-labelledby="lb-t">
+            <div className="block-head">
+              <h2 id="lb-t">Leaderboard</h2>
+              <p>Where you stand among everyone who took this test, ranked by first attempt.</p>
+            </div>
+            <Leaderboard testId={paper.id} compact fullHref={'/student/leaderboard?test=' + encodeURIComponent(paper.id)} />
+          </section>
+        ) : null}
 
         <section className="block">
           <div className="block-head">
