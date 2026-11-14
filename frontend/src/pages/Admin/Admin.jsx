@@ -13,6 +13,7 @@ import SeriesAdmin from './SeriesAdmin.jsx'
 import StudentsAdmin from './StudentsAdmin.jsx'
 import TestsAdmin from './TestsAdmin.jsx'
 import WebsiteAdmin from './WebsiteAdmin.jsx'
+import PaymentsAdmin from './PaymentsAdmin.jsx'
 import { loadCounts } from './testsApi.js'
 import { forgetAll } from './cache.js'
 
@@ -73,6 +74,7 @@ export default function Admin() {
   const showSeries = view === 'series'
   const showStudents = view === 'students'
   const showWebsite = view === 'website'
+  const showPayments = view === 'payments'
   const showSoon = view === 'analysis' || view === 'requests'
   const showDash = view === 'dashboard'
   const showNotifications = view === 'notifications'
@@ -140,6 +142,9 @@ export default function Admin() {
             <button type="button" data-view="students">
               Students &amp; groups
             </button>
+            <button type="button" data-view="payments">
+              Payments
+            </button>
             <span className="nav-label">Growth</span>
             <button type="button" data-view="website">
               Website info
@@ -167,7 +172,7 @@ export default function Admin() {
             </button>
           </div>
         </nav>
-        <main className="main" id="view" tabIndex={-1} hidden={showDash || showNotifications || showTests || showSeries || showStudents || showSoon || showWebsite}></main>
+        <main className="main" id="view" tabIndex={-1} hidden={showDash || showNotifications || showTests || showSeries || showStudents || showSoon || showWebsite || showPayments}></main>
         {showNotifications && (
           <main className="main" id="notifications-view">
             <AdminNotifications key={navKey} onOpen={goTo} />
@@ -196,6 +201,11 @@ export default function Admin() {
         {showSoon && (
           <main className="main" id="soon-view">
             <AdminComingSoon view={view} />
+          </main>
+        )}
+        {showPayments && (
+          <main className="main" id="payments-view">
+            <PaymentsAdmin key={navKey} />
           </main>
         )}
         {showWebsite && (

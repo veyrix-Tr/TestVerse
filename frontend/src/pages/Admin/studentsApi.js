@@ -177,8 +177,12 @@ export function audienceText(a, short) {
 /* Downloads rows (first row = header) as a CSV file. */
 export function downloadCsv(name, rows) {
   const cell = (v) => {
-    const s = String(v == null ? '' : v)
-    return /[",\n\r]/.test(s) || /^[=+\-@]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s
+    let s = String(v == null ? '' : v)
+    // Text a student typed (e.g. a name "=HYPERLINK(…)") must not run as a
+    // formula in Excel or Sheets: a leading ' makes it plain text. Real
+    // numbers (a score of -3) are left alone.
+    if (typeof v !== 'number' && /^[=+\-@\t\r]/.test(s)) s = "'" + s
+    return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s
   }
   const csv = '﻿' + rows.map((r) => r.map(cell).join(',')).join('\r\n')
   const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }))

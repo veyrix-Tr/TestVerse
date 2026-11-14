@@ -147,6 +147,11 @@ VIEWS.analysis = function () { return ''; };
    while this view is active, so #view stays empty here. */
 VIEWS.students = function () { return ''; };
 
+/* ---------- Payments ----------
+   Real, API-backed screen: Admin.jsx renders <PaymentsAdmin/> beside #view
+   while this view is active, so #view stays empty here. */
+VIEWS.payments = function () { return ''; };
+
 /* ---------- Website info ----------
    React screen: Admin.jsx renders <WebsiteAdmin/> beside #view while this view
    is active, so #view stays empty here. */

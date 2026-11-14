@@ -46,6 +46,9 @@ app.use('/api/admin', adminOverviewRoutes);
 const adminContentRoutes = require('./routes/adminContentRoutes');
 app.use('/api/admin', adminContentRoutes);
 
+const adminPaymentRoutes = require('./routes/adminPaymentRoutes');
+app.use('/api/admin', adminPaymentRoutes);
+
 const siteRoutes = require('./routes/siteRoutes');
 app.use('/api', siteRoutes);
 

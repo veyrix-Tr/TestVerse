@@ -115,6 +115,7 @@ function App() {
             border: '1px solid #C9A030',
             borderLeft: '3px solid #0B1B33',
             borderRadius: '10px',
+            fontFamily: '"Inter", "Segoe UI", system-ui, -apple-system, sans-serif',
             fontSize: '14px',
             fontWeight: 600,
             lineHeight: 1.4,
