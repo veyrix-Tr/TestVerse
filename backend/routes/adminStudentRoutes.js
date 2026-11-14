@@ -6,7 +6,12 @@ const router = express.Router();
 router.use(requireAuth, requireAdmin);
 
 router.get('/students', c.listStudents);
+router.post('/students', c.createStudent);
 router.get('/students/:id', c.getStudent);
+// Free access given by the admin: a batch, a test series
+router.put('/students/:id/batch', c.setBatch);
+router.post('/students/:id/series', c.setSeries);
+router.delete('/students/:id/series/:seriesId', c.setSeries);
 router.post('/students/:id/tests', c.giveTestToStudent);
 router.delete('/students/:id/tests/:testId', c.takeTestFromStudent);
 

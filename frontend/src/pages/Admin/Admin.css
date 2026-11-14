@@ -862,6 +862,10 @@ span.ts-l { display: block; font-size: 13px; font-weight: 600; letter-spacing: 0
 
 /* Forms */
 .sg-new, .sg-add { display: grid; gap: 20px; }
+.sg-title-row { display: flex; align-items: center; gap: 10px; min-width: 0; }
+/* Add student: password + "New" button, and the login details to share */
+.ns-pass { display: flex; gap: 8px; align-items: center; }
+.ns-login { margin: 0; padding: 14px 16px; border-radius: 10px; background: var(--soft); border: 1px solid var(--line); font: 500 14px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
 .sg-new .card-head, .sg-add .card-head { margin-bottom: 0; }
 .sg-card .card-head { margin-bottom: 16px; flex-wrap: wrap; }
 .sg-card .alert { margin-top: 16px; }

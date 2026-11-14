@@ -9,15 +9,19 @@ import {
   duration,
   examText,
   getStudent,
+  giveSeries,
   giveTestToStudent,
   gradeText,
+  listBatches,
   listGroups,
   pctText,
   plural,
   removeMember,
+  setStudentBatch,
+  takeSeries,
   takeTestFromStudent,
 } from './studentsApi.js'
-import { listTests } from './testsApi.js'
+import { listSeries, listTests } from './testsApi.js'
 import LiveStamp from './LiveStamp.jsx'
 import { useLive, useNow } from './useLive.js'
 import BackButton from '../../components/BackButton.jsx'
@@ -25,7 +29,7 @@ import BackButton from '../../components/BackButton.jsx'
 /* One student: profile, batch, groups, results, tests in progress and the
    tests given to them directly. */
 export default function StudentPage({ id, toast, backText, onBack, onOpenGroup }) {
-  const live = useLive(() => Promise.all([getStudent(id), listGroups(), listTests('live')]), id, 'student:' + id)
+  const live = useLive(() => Promise.all([getStudent(id), listGroups(), listTests('live'), listBatches(), listSeries()]), id, 'student:' + id)
   const [busy, setBusy] = useState(null)
   const [notice, setNotice] = useState(null)
   const now = useNow(30000)
@@ -74,7 +78,7 @@ export default function StudentPage({ id, toast, backText, onBack, onOpenGroup }
     )
   }
 
-  const [{ student: s, results, inProgress, assignedTests }, groups, tests] = live.data
+  const [{ student: s, results, inProgress, assignedTests, series: owned = [] }, groups, tests, batches, allSeries] = live.data
   const st = batchState(s)
   const first = s.name.split(/\s+/)[0]
   const isPaid = !!(s.batch && s.batch.status === 'active') // only paid students join groups
@@ -102,6 +106,27 @@ export default function StudentPage({ id, toast, backText, onBack, onOpenGroup }
       test: t,
     }
   })
+
+  // Free access the admin gives: a batch (switching keeps one), test series
+  const ownedIds = new Set(owned.map((x) => x.id))
+  const batchOptions = batches.map((b) => {
+    const current = isPaid && s.batch.id === b.id
+    return { id: b.id, label: b.name, sub: plural(b.students, 'student'), disabled: current, note: current ? 'Current batch' : undefined }
+  })
+  const seriesOptions = allSeries.map((x) => ({
+    id: x.id,
+    label: x.title,
+    sub: [x.exam ? x.exam.toUpperCase() : 'Any exam', x.price ? '₹' + x.price : 'Free', plural(x.tests || 0, 'test')].join(' · '),
+    tag: x.status === 'published' ? { cls: 'p-published', text: 'Published' } : { cls: 'p-draft', text: 'Draft' },
+    disabled: ownedIds.has(x.id),
+    note: ownedIds.has(x.id) ? 'Already has it' : undefined,
+  }))
+  const howGot = (x) => (x.byAdmin ? 'Given free' : x.paid ? 'Paid ₹' + x.paid : 'Free') + (x.activatedAt ? ' · ' + day(x.activatedAt) : '')
+  function takeBatch() {
+    const paidNote = s.batch.paid && !s.batch.byAdmin ? ` They paid ₹${s.batch.paid} for it; refund that from Cashfree if needed.` : ''
+    if (!window.confirm(`Take back ${first}'s ${s.batch.name} batch? Its tests stop showing for them.${paidNote}`)) return
+    act('batch', () => setStudentBatch(s.id, null), `${s.batch.name} batch taken back`)
+  }
 
   // How many attempts each test has, to label the first one when there are retakes
   const attemptsOf = (results || []).reduce((m, r) => ({ ...m, [r.testId]: (m[r.testId] || 0) + 1 }), {})
@@ -167,20 +192,85 @@ export default function StudentPage({ id, toast, backText, onBack, onOpenGroup }
         <div className="sg-stack">
           <section className="card sg-card">
             <div className="card-head">
-              <h2>Batch</h2>
-              <span className={'pill ' + st.cls}>{st.text}</span>
+              <div className="sg-title-row">
+                <h2>Batch</h2>
+                <span className={'pill ' + st.cls}>{st.text}</span>
+              </div>
+              <OptionPicker
+                label={isPaid ? 'Change batch' : 'Give batch'}
+                title={(isPaid ? 'Move ' + first + ' to another batch' : 'Give ' + first + ' a batch') + ' (free, no payment)'}
+                placeholder="Search batches"
+                empty="No batches."
+                options={batchOptions}
+                busy={busy === 'batch'}
+                align="right"
+                onPick={(b) => act('batch', () => setStudentBatch(s.id, b.id), `${b.label} batch given to ${first}`)}
+              />
             </div>
             {s.batch ? (
               <div className="sg-batch">
                 <b>{s.batch.name}</b>
                 <span className="hint">
                   {s.batch.status === 'active'
-                    ? 'Active since ' + day(s.batch.activatedAt) + '. Tests given to this batch show up for ' + first + '.'
-                    : 'Waiting for payment. Tests given to this batch show up once it is active.'}
+                    ? (s.batch.byAdmin ? 'Given free' : s.batch.paid ? 'Paid ₹' + s.batch.paid : 'Active') +
+                      ' since ' +
+                      day(s.batch.activatedAt) +
+                      '. Tests given to this batch show up for ' +
+                      first +
+                      '.'
+                    : 'Waiting for payment. Tests given to this batch show up once it is active. Give it above to activate it free.'}
                 </span>
+                {isPaid && (
+                  <div>
+                    <button className="btn btn-danger btn-sm" type="button" disabled={busy === 'batch'} onClick={takeBatch}>
+                      Take back batch
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
               <p className="hint">{first} hasn&apos;t joined a batch yet, so only tests open to everyone or given to them directly show up.</p>
+            )}
+          </section>
+
+          <section className="card sg-card">
+            <div className="card-head">
+              <h2>Test series</h2>
+              <OptionPicker
+                label="Give a series"
+                title={'Give ' + first + ' a test series (free, no payment)'}
+                placeholder="Search test series"
+                empty={allSeries.length ? 'No test series matches.' : 'No test series yet. Create one under Test series.'}
+                options={seriesOptions}
+                busy={busy === 'series'}
+                align="right"
+                onPick={(o) => act('series', () => giveSeries(s.id, o.id), `"${o.label}" given to ${first}`)}
+              />
+            </div>
+            {owned.length ? (
+              <div>
+                {owned.map((x) => (
+                  <div className="list-row" key={x.id}>
+                    <div>
+                      <b>{x.title}</b>
+                      <span className="meta">{howGot(x) + (x.status === 'published' ? '' : ' · Not published yet')}</span>
+                    </div>
+                    <button
+                      className="btn btn-danger btn-sm"
+                      type="button"
+                      disabled={busy === 's:' + x.id}
+                      onClick={() => {
+                        const paidNote = x.paid && !x.byAdmin ? ` They paid ₹${x.paid} for it; refund that from Cashfree if needed.` : ''
+                        if (window.confirm(`Take back "${x.title}" from ${first}?${paidNote}`)) act('s:' + x.id, () => takeSeries(s.id, x.id), `"${x.title}" taken back`)
+                      }}
+                    >
+                      {busy === 's:' + x.id ? 'Taking back…' : 'Take back'}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="hint">No test series yet. Series {first} buys, or you give here, show up under Test series for them.</p>
             )}
           </section>
 

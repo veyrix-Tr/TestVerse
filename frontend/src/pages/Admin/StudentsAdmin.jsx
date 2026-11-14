@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useToast } from '../../lib/useToast.jsx'
 import GroupPage from './GroupPage.jsx'
+import NewStudent from './NewStudent.jsx'
 import { StudentMultiPicker } from './Pickers.jsx'
 import { useDebounced } from './pickerHooks.js'
 import StudentPage from './StudentPage.jsx'
@@ -115,6 +116,7 @@ function ListScreen({ tab, setTab, filters, setFilters, toast, onOpenStudent, on
   const want = useRef(PAGE) // rows to keep loaded across refreshes ("Load more")
   const queryKey = JSON.stringify(query)
   const [more, setMore] = useState(false)
+  const [adding, setAdding] = useState(false)
 
   // runs before useLive's reload below (effects run in order)
   useEffect(() => {
@@ -169,8 +171,26 @@ function ListScreen({ tab, setTab, filters, setFilters, toast, onOpenStudent, on
           <h1>Students &amp; groups</h1>
           <p>Everyone who has signed up, their batch and results. Put students in groups to give them tests together.</p>
         </div>
-        <LiveStamp at={at} loading={students.loading || groups.loading} error={students.error || groups.error} onRefresh={refresh} />
+        <div className="db-head-actions">
+          <LiveStamp at={at} loading={students.loading || groups.loading} error={students.error || groups.error} onRefresh={refresh} />
+          {!adding && (
+            <button className="btn btn-primary" type="button" onClick={() => setAdding(true)}>
+              Add student
+            </button>
+          )}
+        </div>
       </div>
+
+      {adding && (
+        <NewStudent
+          onCancel={() => setAdding(false)}
+          onAdded={() => students.refresh()}
+          onOpen={(id) => {
+            setAdding(false)
+            onOpenStudent(id)
+          }}
+        />
+      )}
 
       <div className="stats sg-stats">
         <Stat

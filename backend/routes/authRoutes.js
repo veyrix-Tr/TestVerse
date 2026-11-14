@@ -1,7 +1,7 @@
 const express = require('express');
 const router  = express.Router();
 const {
-  sendSignupOtp, verifySignupOtp, signup, login, me, forgotPassword, verifyResetOtp, resetPassword,
+  sendSignupOtp, verifySignupOtp, signup, login, me, updateMe, changePassword, forgotPassword, verifyResetOtp, resetPassword,
 } = require('../controllers/authController');
 const { requireAuth } = require('../middleware/auth');
 
@@ -12,6 +12,9 @@ router.post('/signup', signup);
 
 router.post('/login', login);
 router.get('/me', requireAuth, me);
+// My profile: edit details, change password
+router.put('/me', requireAuth, updateMe);
+router.put('/password', requireAuth, changePassword);
 
 // Forgot password: email a code, check it, then set the new password
 router.post('/forgot-password', forgotPassword);

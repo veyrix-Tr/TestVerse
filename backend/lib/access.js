@@ -56,7 +56,7 @@ const visibleTo = async (userId) => {
 
 // Which published series this student may SEE and buy: their exam (or any),
 // and the series' audience ("all", or their batch / a group they're in / them
-// directly). Ownership is added by the caller with `owned`.
+// directly). A series they own (bought, or given by the admin) always shows.
 const seriesVisibleTo = async (userId) => {
   const user = await prisma.user.findUnique({
     where:  { id: userId },
@@ -65,14 +65,19 @@ const seriesVisibleTo = async (userId) => {
   const family = examFamily(user && user.exam);
   return {
     status: 'published',
-    OR:     [{ exam: null }, ...(family ? [{ exam: family }] : [])],
-    AND:    [
+    OR:     [
+      { orders: { some: { userId, status: 'active' } } },
       {
-        OR: [
-          { audience: 'all' },
-          { batches: { some: { batch: { subscriptions: { some: { userId, status: 'active' } } } } } },
-          { groups: { some: { group: { members: { some: { userId } } } } } },
-          { students: { some: { userId } } },
+        AND: [
+          forExam(family),
+          {
+            OR: [
+              { audience: 'all' },
+              { batches: { some: { batch: { subscriptions: { some: { userId, status: 'active' } } } } } },
+              { groups: { some: { group: { members: { some: { userId } } } } } },
+              { students: { some: { userId } } },
+            ],
+          },
         ],
       },
     ],

@@ -56,6 +56,11 @@ export const listStudents = (f, offset, limit) => call('/students?' + studentsQu
 export const getStudent = (sid) => call('/students/' + id(sid))
 export const giveTestToStudent = (sid, testId) => call('/students/' + id(sid) + '/tests', { body: { testId } })
 export const takeTestFromStudent = (sid, testId) => call('/students/' + id(sid) + '/tests/' + id(testId), { method: 'DELETE' })
+// Added by the admin, and free access (no payment): a batch (null takes it back), a test series
+export const createStudent = (body) => call('/students', { body })
+export const setStudentBatch = (sid, batchId) => call('/students/' + id(sid) + '/batch', { body: { batchId }, method: 'PUT' })
+export const giveSeries = (sid, seriesId) => call('/students/' + id(sid) + '/series', { body: { seriesId } })
+export const takeSeries = (sid, seriesId) => call('/students/' + id(sid) + '/series/' + id(seriesId), { method: 'DELETE' })
 
 export const listGroups = () => call('/groups').then((r) => r.groups)
 export const createGroup = (body) => call('/groups', { body }).then((r) => r.group)

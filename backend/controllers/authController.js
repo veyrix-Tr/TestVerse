@@ -5,22 +5,16 @@ const prisma = require('../lib/prisma');
 const { sendOtpEmail } = require('../services/emailService');
 const { WITH_SUBSCRIPTION, publicUser } = require('../lib/publicUser');
 const { notify, EXAM_LABEL } = require('../lib/notify');
+const { examFamily } = require('../lib/access');
+const { MIN_PASSWORD, emailRegex, normEmail, checkProfile, checkPassword, profileData } = require('../lib/profile');
 
-const EXAMS              = ['neet', 'jee-main', 'jee-advanced'];
-const GRADES             = ['Class 11', 'Class 12', 'Dropper / repeater'];
 const SIGNUP_TOKEN_TTL   = '30m'; // time to fill in details after verifying the email
 const OTP_MINUTES        = 10;
 const OTP_RESEND_SECONDS = 30; // matches the frontend's resend countdown
 const OTP_MAX_ATTEMPTS   = 5;
-const MIN_PASSWORD       = 8;
 
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-const normEmail   = (email) => String(email || '').trim().toLowerCase();
 const hashOtp     = (otp) => crypto.createHash('sha256').update(String(otp)).digest('hex');
 const generateOtp = () => crypto.randomInt(100000, 1000000).toString();
-
-const clean = (v, max = 80) => String(v || '').trim().slice(0, max);
 
 const signToken = (user) =>
   jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
@@ -133,21 +127,7 @@ const signupEmail = (token) => {
 };
 
 // Returns { field, error } for the first invalid detail, or null.
-const checkDetails = (b) => {
-  const year = new Date().getFullYear();
-  if (clean(b.name).length < 2)                              return { field: 'name', error: 'Enter your full name.' };
-  if (!/^[6-9]\d{9}$/.test(String(b.phone || '')))           return { field: 'phone', error: 'Enter a valid 10-digit mobile number.' };
-  if (!EXAMS.includes(b.exam))                               return { field: 'exam', error: 'Choose the exam you are preparing for.' };
-  if (!GRADES.includes(b.grade))                             return { field: 'grade', error: 'Choose your class.' };
-  const ty = Number(b.targetYear);
-  if (!Number.isInteger(ty) || ty < year || ty > year + 3)   return { field: 'targetYear', error: 'Choose the year you are taking the exam.' };
-  if (clean(b.state).length < 2)                             return { field: 'state', error: 'Enter your state.' };
-  if (clean(b.city).length < 2)                              return { field: 'city', error: 'Enter your city.' };
-  if (!b.password || String(b.password).length < MIN_PASSWORD) {
-    return { field: 'password', error: `Password must be at least ${MIN_PASSWORD} characters long.` };
-  }
-  return null;
-};
+const checkDetails = (b) => checkProfile(b) || checkPassword(b.password);
 
 // POST /api/auth/signup
 // Body: { signupToken, name, phone, exam, grade, targetYear, state, city, password }
@@ -167,15 +147,9 @@ const signup = async (req, res) => {
     const b = req.body;
     const user = await prisma.user.create({
       data: {
-        name:            clean(b.name),
+        ...profileData(b),
         email,
         password:        await bcrypt.hash(String(b.password), 10),
-        phone:           String(b.phone),
-        exam:            b.exam,
-        grade:           b.grade,
-        targetYear:      Number(b.targetYear),
-        state:           clean(b.state),
-        city:            clean(b.city),
         emailVerifiedAt: new Date(),
         lastLoginAt:     new Date(),
       },
@@ -237,6 +211,47 @@ const me = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Something went wrong' });
+  }
+};
+
+// PUT /api/auth/me — Body: { name, phone, exam, grade, targetYear, state, city }
+// A student edits their own details. The email stays: it is how they log in.
+// With an active batch, exam and class stay with the batch it was given for.
+const updateMe = async (req, res) => {
+  try {
+    const bad = checkProfile(req.body);
+    if (bad) return res.status(400).json(bad);
+    const user = await prisma.user.findUnique({ where: { id: req.user.id }, include: WITH_SUBSCRIPTION });
+    if (!user || !user.isActive) return res.status(401).json({ error: 'Invalid token' });
+    const sub = user.subscription;
+    if (sub && sub.status === 'active') {
+      const fixed = `Your batch is ${sub.batch.name}, so this stays as it is. Contact us to change it.`;
+      if (examFamily(req.body.exam) !== sub.batch.exam) return res.status(400).json({ field: 'exam', error: fixed });
+      if (req.body.grade !== sub.batch.grade) return res.status(400).json({ field: 'grade', error: fixed });
+    }
+    const updated = await prisma.user.update({ where: { id: user.id }, data: profileData(req.body), include: WITH_SUBSCRIPTION });
+    res.json({ message: 'Profile saved', user: publicUser(updated) });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Could not save your profile' });
+  }
+};
+
+// PUT /api/auth/password — Body: { currentPassword, newPassword }
+const changePassword = async (req, res) => {
+  try {
+    const bad = checkPassword(req.body.newPassword, 'newPassword');
+    if (bad) return res.status(400).json(bad);
+    const user = await prisma.user.findUnique({ where: { id: req.user.id }, select: { id: true, password: true, isActive: true } });
+    if (!user || !user.isActive) return res.status(401).json({ error: 'Invalid token' });
+    if (!(await bcrypt.compare(String(req.body.currentPassword || ''), user.password))) {
+      return res.status(400).json({ field: 'currentPassword', error: 'Your current password is not right.' });
+    }
+    await prisma.user.update({ where: { id: user.id }, data: { password: await bcrypt.hash(String(req.body.newPassword), 10) } });
+    res.json({ message: 'Password changed' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Could not change your password' });
   }
 };
 
@@ -307,4 +322,4 @@ const resetPassword = async (req, res) => {
   }
 };
 
-module.exports = { sendSignupOtp, verifySignupOtp, signup, login, me, forgotPassword, verifyResetOtp, resetPassword };
+module.exports = { sendSignupOtp, verifySignupOtp, signup, login, me, updateMe, changePassword, forgotPassword, verifyResetOtp, resetPassword };

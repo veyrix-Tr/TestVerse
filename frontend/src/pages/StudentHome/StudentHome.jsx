@@ -30,7 +30,7 @@ const PAGES = {
   leaderboard: { Main: LeaderboardPage, title: 'Leaderboard' },
   resources: { Main: ResourcesPage, title: 'Resources' },
   notifications: { Main: NotificationsPage, title: 'Notifications' },
-  account: { Main: AccountPage, title: 'Account' },
+  account: { Main: AccountPage, title: 'My profile' },
 }
 
 // The dashboard used to be one long page with these sections: old links land on their pages

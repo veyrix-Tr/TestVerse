@@ -163,7 +163,7 @@ export default function Sidebar({ me, active, sheetOpen, setSheetOpen, onLogout,
                   aria-current={active === 'account' ? 'page' : undefined}
                   onClick={() => setSheetOpen(false)}
                 >
-                  Account
+                  My profile
                 </Link>
               </li>
               <li>

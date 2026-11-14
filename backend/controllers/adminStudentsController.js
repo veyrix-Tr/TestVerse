@@ -1,5 +1,12 @@
+const bcrypt = require('bcrypt');
 const prisma = require('../lib/prisma');
 const { publicBatch } = require('../lib/publicUser');
+const { notify, EXAM_LABEL } = require('../lib/notify');
+const { examFamily } = require('../lib/access');
+const { emailRegex, normEmail, checkProfile, checkPassword, profileData } = require('../lib/profile');
+
+// What the admin gives for free is marked with this instead of a payment id.
+const BY_ADMIN = 'admin';
 
 const PAGE      = 50;
 const MAX_PAGE  = 500;
@@ -45,7 +52,7 @@ const studentRow = (u, stats) => ({
   isActive:    u.isActive,
   joinedAt:    u.createdAt,
   lastLoginAt: u.lastLoginAt,
-  batch:       u.subscription ? { ...publicBatch(u.subscription.batch), status: u.subscription.status, activatedAt: u.subscription.activatedAt } : null,
+  batch:       u.subscription ? { ...publicBatch(u.subscription.batch), status: u.subscription.status, activatedAt: u.subscription.activatedAt, byAdmin: u.subscription.paymentRef === BY_ADMIN, paid: u.subscription.amount || 0 } : null,
   groups:      (u.groups || []).map((m) => ({ id: m.group.id, name: m.group.name })),
   stats:       stats || EMPTY_STATS,
 });
@@ -134,6 +141,7 @@ const getStudent = async (req, res) => {
         ...STUDENT_INCLUDE,
         attempts:      { include: { test: { select: { id: true, title: true, subject: true, totalMarks: true, durationMin: true } } }, orderBy: { startedAt: 'desc' } },
         testsAssigned: { include: { test: { select: { id: true, title: true, subject: true, status: true, questionCount: true, durationMin: true } } } },
+        seriesOrders:  { where: { status: 'active' }, include: { series: { select: { id: true, title: true, exam: true, status: true } } }, orderBy: { activatedAt: 'desc' } },
       },
     });
     if (!u) return res.status(404).json({ error: 'Student not found' });
@@ -161,11 +169,114 @@ const getStudent = async (req, res) => {
       results,
       inProgress,
       assignedTests: u.testsAssigned.map((x) => x.test),
+      series:        u.seriesOrders.map((o) => ({ ...o.series, byAdmin: o.paymentRef === BY_ADMIN, paid: o.amount || 0, activatedAt: o.activatedAt })),
       serverNow:     new Date(),
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Something went wrong' });
+  }
+};
+
+// ---------- Adding students, giving batches and series (no payment) ----------
+
+// Gives a student a batch (or switches theirs), active at once. Their exam and
+// class follow the batch, since its tests are shown by exam. A batch they paid
+// for keeps its payment details.
+const giveBatch = async (user, batch) => {
+  const sub  = await prisma.subscription.findUnique({ where: { userId: user.id } });
+  const free = { status: 'active', amount: 0, paymentRef: BY_ADMIN, activatedAt: new Date() };
+  await prisma.$transaction([
+    prisma.subscription.upsert({
+      where:  { userId: user.id },
+      create: { userId: user.id, batchId: batch.id, ...free },
+      update: sub && sub.status === 'active' ? { batchId: batch.id } : { batchId: batch.id, ...free },
+    }),
+    prisma.user.update({
+      where: { id: user.id },
+      data:  { grade: batch.grade, ...(examFamily(user.exam) === batch.exam ? {} : { exam: batch.exam === 'neet' ? 'neet' : 'jee-main' }) },
+    }),
+  ]);
+  await notify({ type: 'purchase', text: `Your ${batch.name} batch is active — your tests are ready.`, view: '/student/tests', userId: user.id });
+};
+
+// POST /api/admin/students — Body: { name, email, phone, exam, grade, targetYear?,
+// state?, city?, password, giveBatch? }. The admin adds a student (say, one who
+// paid at the centre): they log in with this email and password. giveBatch also
+// activates the batch for their exam and class, free.
+const createStudent = async (req, res) => {
+  try {
+    const b = req.body || {};
+    const email = normEmail(b.email);
+    if (!emailRegex.test(email)) return res.status(400).json({ field: 'email', error: 'Enter a valid email address.' });
+    const bad = checkProfile(b, { optional: true }) || checkPassword(b.password);
+    if (bad) return res.status(400).json(bad);
+    const batch = b.giveBatch ? await prisma.batch.findFirst({ where: { exam: examFamily(b.exam), grade: b.grade } }) : null;
+    if (b.giveBatch && !batch) return res.status(400).json({ field: 'giveBatch', error: 'There is no batch for this exam and class.' });
+
+    const user = await prisma.user.create({
+      data: { ...profileData(b), email, password: await bcrypt.hash(String(b.password), 10), emailVerifiedAt: new Date() },
+    });
+    if (batch) await giveBatch(user, batch);
+    await notify({
+      type:   'welcome',
+      text:   `Welcome to Testverse, ${user.name.split(' ')[0]} — your ${EXAM_LABEL[user.exam]} tests are ready.`,
+      view:   '/student',
+      userId: user.id,
+    });
+    res.status(201).json({ message: 'Student added', student: { id: user.id, name: user.name, email: user.email } });
+  } catch (error) {
+    if (error.code === 'P2002') return res.status(409).json({ field: 'email', error: 'An account with this email already exists.' });
+    console.error(error);
+    res.status(500).json({ error: 'Could not add the student' });
+  }
+};
+
+const findStudent = (id) => prisma.user.findFirst({ where: { id, role: 'student' }, select: { id: true, exam: true } });
+
+// PUT /api/admin/students/:id/batch — Body: { batchId } gives (or switches to)
+// that batch, free; { batchId: null } takes their batch away.
+const setBatch = async (req, res) => {
+  try {
+    const user = await findStudent(req.params.id);
+    if (!user) return res.status(404).json({ error: 'Student not found' });
+    const batchId = req.body && req.body.batchId;
+    if (!batchId) {
+      await prisma.subscription.deleteMany({ where: { userId: user.id } });
+      return res.json({ message: 'Batch taken back' });
+    }
+    const batch = await prisma.batch.findUnique({ where: { id: String(batchId) } });
+    if (!batch) return res.status(404).json({ error: 'Batch not found' });
+    await giveBatch(user, batch);
+    res.json({ message: `${batch.name} batch given` });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Could not change the batch' });
+  }
+};
+
+// POST /api/admin/students/:id/series — Body: { seriesId } unlocks it, free.
+// DELETE /api/admin/students/:id/series/:seriesId takes it back.
+const setSeries = async (req, res) => {
+  try {
+    const user = await findStudent(req.params.id);
+    if (!user) return res.status(404).json({ error: 'Student not found' });
+    const seriesId = String(req.params.seriesId || (req.body && req.body.seriesId) || '');
+    const series = await prisma.testSeries.findUnique({ where: { id: seriesId }, select: { id: true, title: true } });
+    if (!series) return res.status(404).json({ error: 'Test series not found' });
+    if (req.method === 'DELETE') {
+      await prisma.seriesOrder.deleteMany({ where: { userId: user.id, seriesId } });
+      return res.json({ message: `${series.title} taken back` });
+    }
+    const had = await prisma.seriesOrder.findUnique({ where: { userId_seriesId: { userId: user.id, seriesId } } });
+    if (had && had.status === 'active') return res.json({ message: `They already have ${series.title}.` });
+    const free = { status: 'active', amount: 0, paymentRef: BY_ADMIN, activatedAt: new Date() };
+    await prisma.seriesOrder.upsert({ where: { userId_seriesId: { userId: user.id, seriesId } }, create: { userId: user.id, seriesId, ...free }, update: free });
+    await notify({ type: 'purchase', text: `Your ${series.title} series is unlocked — start with its first test.`, view: '/student/test-series', userId: user.id });
+    res.json({ message: `${series.title} given` });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Could not change the test series' });
   }
 };
 
@@ -348,6 +459,9 @@ const listBatches = async (req, res) => {
 module.exports = {
   listStudents,
   getStudent,
+  createStudent,
+  setBatch,
+  setSeries,
   giveTestToStudent:     giveTest('testStudent', 'userId'),
   takeTestFromStudent:   giveTest('testStudent', 'userId'),
   listGroups,
