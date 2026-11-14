@@ -29,7 +29,7 @@ import { forgetAll } from './cache.js'
   groups" and "Website info" are React screens. adminApp reports the current
   view through onView; while it is "free", "live", "series", "students" or
   "website", #view is hidden and the matching screen renders in its place.
-  "Analysis" and "Video requests" show <AdminComingSoon/> the same way.
+  "Video requests" shows <AdminComingSoon/> the same way.
   Clicking a sidebar item again goes back to that section's first screen (its
   `navKey` remounts it).
 */
@@ -75,7 +75,7 @@ export default function Admin() {
   const showStudents = view === 'students'
   const showWebsite = view === 'website'
   const showPayments = view === 'payments'
-  const showSoon = view === 'analysis' || view === 'requests'
+  const showSoon = view === 'requests'
   const showDash = view === 'dashboard'
   const showNotifications = view === 'notifications'
   // Open another section the way its sidebar button does (adminApp owns the routing)
@@ -150,9 +150,6 @@ export default function Admin() {
               Website info
             </button>
             <span className="nav-label">Coming soon</span>
-            <button type="button" data-view="analysis">
-              Analysis <span className="nav-soon">Soon</span>
-            </button>
             <button type="button" data-view="requests">
               Video requests <span className="nav-soon">Soon</span>
             </button>

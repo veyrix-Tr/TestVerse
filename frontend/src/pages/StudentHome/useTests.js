@@ -61,7 +61,7 @@ export const GROUPS = [
   { key: 'in-progress', title: 'In progress', desc: 'The clock is running. Your answers are saved.' },
   { key: 'open', title: 'Available now', desc: 'Start any time before it closes.' },
   { key: 'upcoming', title: 'Upcoming', desc: 'You can read the instructions now and start once it opens.' },
-  { key: 'done', title: 'Completed', desc: 'Open a result for your score, solutions and analysis.' },
+  { key: 'done', title: 'Completed', desc: 'Open a result for your score and answers. Detailed analysis and solutions are sent to your email.' },
   { key: 'closed', title: 'Closed', desc: 'These closed before you started them.' },
 ]
 

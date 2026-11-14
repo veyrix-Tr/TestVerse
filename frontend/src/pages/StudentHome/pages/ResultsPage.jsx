@@ -38,7 +38,7 @@ export default function ResultsPage({ data }) {
     <>
       <PageHeader
         title="Results"
-        desc="Every attempt you’ve submitted: how you scored, how it’s changing, and where to look next."
+        desc="Every attempt you’ve submitted: how you scored, how it’s changing, and where to look next. Your detailed analysis report for each test comes to your email."
       >
         {status === 'error' ? null : (
           <Stats

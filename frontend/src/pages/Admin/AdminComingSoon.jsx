@@ -1,5 +1,5 @@
 /* Admin sections that aren't built yet, keyed by their sidebar view. */
-const TITLES = { analysis: 'Analysis', requests: 'Video requests' }
+const TITLES = { requests: 'Video requests' }
 
 /* The main area for an admin section that's coming soon: one big message on a navy panel. */
 export default function AdminComingSoon({ view }) {

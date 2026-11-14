@@ -15,7 +15,6 @@ const NAV = [
 ]
 const SOON_NAV = [
   { page: 'solutions', label: 'Solutions' },
-  { page: 'analysis', label: 'Analysis' },
   { page: 'video-requests', label: 'Video requests' },
 ]
 

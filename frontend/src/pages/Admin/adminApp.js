@@ -136,11 +136,11 @@ VIEWS.live = function () { return ''; };
 VIEWS.series = function () { return ''; };
 function find(id) { return db.tests.filter(function (x) { return x.id === id; })[0]; }
 
-/* ---------- Video requests and Analysis ----------
+/* ---------- Video requests ----------
    Coming soon: Admin.jsx renders a "coming soon" screen beside #view while
-   either view is active, so #view stays empty here. */
+   this view is active, so #view stays empty here. (There is no Analysis
+   section: each student's analysis report goes to them by email.) */
 VIEWS.requests = function () { return ''; };
-VIEWS.analysis = function () { return ''; };
 
 /* ---------- Students & groups ----------
    Real, API-backed screen: Admin.jsx renders <StudentsAdmin/> beside #view
