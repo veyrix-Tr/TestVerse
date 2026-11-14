@@ -3,6 +3,7 @@ const { seriesVisibleTo } = require('../lib/access');
 const { paymentMethod, startCheckout, grantNow, markPending } = require('../lib/purchases');
 const { testRow } = require('./testsController');
 const { resultSettings } = require('../lib/analysis');
+const { withPaper, TEST_FIELDS } = require('../lib/paperCache');
 
 // The student's side of a test series: the catalog of published series they
 // may see and buy, the inside of one (its tests with their attempt state),
@@ -37,7 +38,8 @@ const breakdown = (tests) => {
 
 const testsOf = async (s) => {
   const settings = await resultSettings();
-  return Promise.all(s.tests.map((t) => testRow(t, settings)));
+  // Only attempted tests need their paper (scoring and charts); it comes from the cache
+  return Promise.all(s.tests.map(async (t) => testRow(t.attempts.length ? await withPaper(t) : t, settings)));
 };
 
 // GET /api/series — published series this student may see and buy, with counts,
@@ -113,10 +115,7 @@ const getSeries = async (req, res) => {
         tests:  {
           where:   { questionCount: { gt: 0 } },
           orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }],
-          include: {
-            attempts: { where: { userId: req.user.id }, orderBy: { attemptNo: 'desc' } },
-            series:   { select: { title: true } },
-          },
+          select: { ...TEST_FIELDS, attempts: { where: { userId: req.user.id }, orderBy: { attemptNo: 'desc' } } },
         },
       },
     });

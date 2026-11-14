@@ -5,6 +5,10 @@
 */
 const BASE = import.meta.env.VITE_API_URL || ''
 
+// A request that hangs (busy server, bad network) gives up after this, so the
+// caller can retry — otherwise one stuck autosave would block every later one.
+const TIMEOUT_MS = 30000
+
 export class ApiError extends Error {
   constructor(message, status, field, data) {
     super(message)
@@ -25,6 +29,7 @@ export async function api(path, { body, token, method } = {}) {
         ...(token ? { Authorization: 'Bearer ' + token } : {}),
       },
       body: body ? JSON.stringify(body) : undefined,
+      signal: typeof AbortSignal !== 'undefined' && AbortSignal.timeout ? AbortSignal.timeout(TIMEOUT_MS) : undefined,
     })
   } catch {
     throw new ApiError("Can't reach Testverse right now. Check your connection and try again.", 0)

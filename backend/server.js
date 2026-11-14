@@ -1,5 +1,6 @@
 const express = require('express');
 const cors    = require('cors');
+const compression = require('compression');
 require('dotenv').config();
 
 const app  = express();
@@ -15,6 +16,8 @@ const allowedOrigins = process.env.FRONTEND_URL
   ? [process.env.FRONTEND_URL, 'http://localhost:5173', 'http://localhost:4173']
   : ['http://localhost:5173', 'http://localhost:4173'];
 app.use(cors({ origin: allowedOrigins }));
+// Gzip replies: a question paper or result (~100 KB of JSON) shrinks to ~20 KB
+app.use(compression());
 // Question papers are big (180 questions, Hindi, solutions), so admin routes
 // get a larger limit. This must come before the general parser.
 app.use('/api/admin', express.json({ limit: '5mb' }));

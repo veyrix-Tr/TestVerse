@@ -4,6 +4,7 @@ const { scoreAttempt, cleanResponses } = require('../lib/scoring');
 const { visibleTo } = require('../lib/access');
 const { DEFAULTS, resultSettings, analyse } = require('../lib/analysis');
 const { rankedFirstAttempts, wouldRank, accuracyOf, firstName, timeTaken } = require('../lib/leaderboard');
+const { withPaper, TEST_FIELDS } = require('../lib/paperCache');
 
 // Answers are still accepted this long after the deadline (slow networks,
 // the browser's own auto-submit). Past it, the attempt is submitted with
@@ -11,12 +12,13 @@ const { rankedFirstAttempts, wouldRank, accuracyOf, firstName, timeTaken } = req
 const GRACE_MS = 2 * 60 * 1000;
 
 // A student only reaches tests meant for them (lib/access.js); anything else
-// is "not found". Admins can open any test, e.g. to preview it.
+// is "not found". Admins can open any test, e.g. to preview it. The paper
+// comes from the in-memory cache (lib/paperCache.js).
 const findTest = async (req) =>
-  prisma.test.findFirst({
-    where:   { id: req.params.id, ...(req.user.role === 'admin' ? {} : await visibleTo(req.user.id)) },
-    include: { series: { select: { title: true } } },
-  });
+  withPaper(await prisma.test.findFirst({
+    where:  { id: req.params.id, ...(req.user.role === 'admin' ? {} : await visibleTo(req.user.id)) },
+    select: TEST_FIELDS,
+  }));
 
 // A student can retake a test after submitting it, so they may have several
 // attempts (attemptNo 1, 2, …). Only the latest one can be in progress.
@@ -111,8 +113,10 @@ const canRetake = (test, attempt, now = Date.now()) =>
 // The paper with correct answers (no written solutions), one submitted attempt, and the student's other
 // submitted attempts. `latest` is their newest attempt (maybe a retake in progress).
 // `settings` are the admin's analysis thresholds; `paperAt` is when the question
-// paper download unlocks (null = now).
-const resultPayload = async (test, attempt, latest) => {
+// paper download unlocks (null = now). Submitting leaves the paper out
+// ({ paper: false }): the browser goes straight to the result page, which loads
+// it, so 500 students submitting together don't each get a 100 KB reply.
+const resultPayload = async (test, attempt, latest, { paper = true } = {}) => {
   const [done, settings] = await Promise.all([
     prisma.attempt.findMany({
       where:   { testId: test.id, userId: attempt.userId, submittedAt: { not: null } },
@@ -121,7 +125,7 @@ const resultPayload = async (test, attempt, latest) => {
     resultSettings(),
   ]);
   return {
-    test:       { ...meta(test), instructions: test.instructions, marking: test.marking, paper: stripSolutions(test.paper) },
+    test:       { ...meta(test), instructions: test.instructions, marking: test.marking, ...(paper ? { paper: stripSolutions(test.paper) } : {}) },
     attempt:    publicAttempt(attempt),
     history:    done.map((a) => summaryOf(a)),
     inProgress: !!(latest && !latest.submittedAt),
@@ -156,13 +160,13 @@ const listTests = async (req, res) => {
     const tests = await prisma.test.findMany({
       where:   await visibleTo(req.user.id),
       orderBy: [{ opensAt: 'asc' }, { createdAt: 'desc' }],
-      include: {
-        attempts: { where: { userId: req.user.id }, orderBy: { attemptNo: 'desc' } },
-        series:   { select: { title: true } },
-      },
+      select:  { ...TEST_FIELDS, attempts: { where: { userId: req.user.id }, orderBy: { attemptNo: 'desc' } } },
     });
     const settings = await resultSettings();
     const out = [];
+    // Only tests the student has attempted need their paper (for scoring and the charts).
+    // Fetch the missing ones all at once, not one after another.
+    await Promise.all(tests.filter((t) => t.attempts.length).map(withPaper));
     for (const t of tests) out.push(await rowOf(t, settings));
     res.json({ tests: out, serverNow: new Date() });
   } catch (error) {
@@ -232,22 +236,31 @@ const startTest = async (req, res) => {
 };
 
 // Shared by save and submit: the student's unsubmitted attempt, or an error reply.
+// The hot path while a test runs (autosave every few seconds), so it is one
+// small query: the student's own latest attempt with its test. Having an
+// attempt means they were allowed to start it, so the full access check isn't
+// repeated; an unpublished test still stops saving.
 const openAttempt = async (req, res) => {
-  const test = await findTest(req);
+  const latest = await prisma.attempt.findFirst({
+    where:   { testId: req.params.id, userId: req.user.id },
+    orderBy: { attemptNo: 'desc' },
+    include: { test: { select: TEST_FIELDS } },
+  });
+  const test = latest && (latest.test.status === 'published' || latest.test.seriesId) ? await withPaper(latest.test) : null;
+  if (!latest) {
+    res.status(409).json({ error: "You haven't started this test." });
+    return null;
+  }
   if (!test || !test.paper) {
     res.status(404).json({ error: 'Test not found' });
     return null;
   }
-  const attempt = await settle(await latestAttempt(test.id, req.user.id), test);
-  if (!attempt) {
-    res.status(409).json({ error: "You haven't started this test." });
-    return null;
-  }
+  const attempt = await settle(latest, test);
   if (attempt.submittedAt) {
     res.status(409).json({
       error: attempt.autoSubmitted ? 'Time was up, so your test was submitted with your saved answers.' : "You've already submitted this test.",
       submitted: true,
-      ...(await resultPayload(test, attempt, attempt)),
+      ...(await resultPayload(test, attempt, attempt, { paper: false })),
     });
     return null;
   }
@@ -276,7 +289,7 @@ const submitTest = async (req, res) => {
     const responses = req.body && req.body.responses ? cleanResponses(open.test.paper, req.body.responses) : open.attempt.responses;
     const auto = req.body && req.body.auto === true;
     const done = await finalize(open.attempt, open.test, responses, auto);
-    res.json({ message: 'Test submitted', ...(await resultPayload(open.test, done, done)) });
+    res.json({ message: 'Test submitted', ...(await resultPayload(open.test, done, done, { paper: false })) });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Could not submit the test' });

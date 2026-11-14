@@ -115,7 +115,8 @@ export default function Test() {
   function showResult(d, message, fresh) {
     clearTimeout(debounceRef.current)
     // The attempt is submitted: nothing left to autosave or flush on the way out
-    attemptRef.current = attemptOf(d.attempt, null, flatten(paperOf(d.test)).length)
+    // (the reply doesn't carry the paper; this page already has it)
+    attemptRef.current = attemptOf(d.attempt, null, flatRef.current.length)
     failedRef.current = null
     removeKey(KEY)
     routerNavigate('/student/result?test=' + encodeURIComponent(testId) + '&attempt=' + (d.attempt.attemptNo || 1), {

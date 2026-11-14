@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import AuthLink from '../../../components/AuthLink.jsx'
 import { siteResources } from '../../../lib/content.js'
+import { loadSession } from '../../../lib/session.js'
 import StudentBell from '../../StudentHome/sections/StudentBell.jsx'
 
 const LINKS = [
@@ -23,6 +24,8 @@ export default function SiteHeader() {
   const [active, setActive] = useState(null)
   const [scrolled, setScrolled] = useState(false)
   const [hasRes, setHasRes] = useState(false)
+  // The bell is for signed-in students only: signed out it has nothing to show
+  const [signedIn] = useState(() => !!loadSession())
 
   useEffect(() => {
     let live = true
@@ -90,7 +93,7 @@ export default function SiteHeader() {
           {navLinks}
         </nav>
         <div className="header-actions">
-          <StudentBell />
+          {signedIn ? <StudentBell /> : null}
           <AuthLink className="btn btn-quiet login" to="/login">
             Log in
           </AuthLink>
