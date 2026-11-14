@@ -253,4 +253,12 @@ const stripSolutions = (paper) => ({
   })),
 });
 
-module.exports = { TYPES, DEFAULT_MARKING, normalizeMarking, normalizePaper, stripAnswers, stripSolutions };
+// Before a test opens: only the paper's shape (question ids, types and marks)
+// for the instructions page. The questions reach students once it opens.
+const outlineOf = (paper) => ({
+  outline:   true,
+  languages: paper.languages,
+  sections:  paper.sections.map((s) => ({ name: s.name, questions: s.questions.map((q) => ({ id: q.id, type: q.type, marks: q.marks })) })),
+});
+
+module.exports = { TYPES, DEFAULT_MARKING, normalizeMarking, normalizePaper, stripAnswers, stripSolutions, outlineOf };

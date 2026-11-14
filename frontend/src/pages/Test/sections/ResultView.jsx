@@ -63,7 +63,9 @@ function answerText(q, a, lang) {
 */
 export default function ResultView({ paper, flat, attempt, meta, reviewFilter, setReviewFilter, embedded }) {
   const [allChapters, setAllChapters] = useState(false)
-  const R = computeResult(flat, attempt)
+  // A live test still running for others: the server sends no answers, so only the score shows until it closes
+  const locked = !!(meta && meta.paperAt)
+  const R = computeResult(locked ? [] : flat, attempt)
   // The server's stored score is the headline; computeResult (same rules) drives the breakdown.
   const total = Number.isFinite(attempt.score) ? attempt.score : R.total
   const max = Number.isFinite(attempt.maxScore) && attempt.maxScore > 0 ? attempt.maxScore : R.max
@@ -213,6 +215,22 @@ export default function ResultView({ paper, flat, attempt, meta, reviewFilter, s
         </div>
       </div>
 
+      {locked ? (
+        <div className="res-shell res-body" id="result">
+          <div className="kpis" style={{ gridTemplateColumns: 'minmax(0, 1fr)' }}>
+            <section className="kpi" aria-labelledby="lk-t">
+              <span>Full result</span>
+              <div className="block-head">
+                <h2 id="lk-t">Your full result opens at {unlockText(meta.paperAt)}</h2>
+                <p>
+                  This live test is still running for other students. Correct answers, your question review and the full breakdown appear here once it closes for everyone. Your
+                  score above is final.
+                </p>
+              </div>
+            </section>
+          </div>
+        </div>
+      ) : (
       <div className="res-shell res-body" id="result">
         <div className="kpis">
           <div className="kpi">
@@ -538,6 +556,7 @@ export default function ResultView({ paper, flat, attempt, meta, reviewFilter, s
           </div>
         </section>
       </div>
+      )}
     </section>
   )
 }

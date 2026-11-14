@@ -29,6 +29,8 @@ export function paperOf(test) {
     instructions: test.instructions || '',
     languages: test.paper.languages && test.paper.languages.length ? test.paper.languages : ['en'],
     sections,
+    // Before a test opens the server sends only its outline (no question text)
+    outline: !!test.paper.outline,
   }
 }
 

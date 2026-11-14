@@ -1,5 +1,5 @@
 const prisma = require('../lib/prisma');
-const { stripAnswers, stripSolutions } = require('../lib/paperFormat');
+const { stripAnswers, stripSolutions, outlineOf } = require('../lib/paperFormat');
 const { scoreAttempt, cleanResponses } = require('../lib/scoring');
 const { visibleTo } = require('../lib/access');
 const { DEFAULTS, resultSettings, analyse } = require('../lib/analysis');
@@ -107,10 +107,12 @@ const statusOf = (test, attempt, now = Date.now()) => {
 // A submitted test can be taken again while it's still open.
 const canRetake = (test, attempt, now = Date.now()) =>
   !!(attempt && attempt.submittedAt) &&
+  !paperLockedUntil(test, now) && // no retakes while a live test is still running
   !(test.opensAt && now < test.opensAt.getTime()) &&
   !(test.closesAt && now >= test.closesAt.getTime());
 
-// The paper with correct answers (no written solutions), one submitted attempt, and the student's other
+// The paper with correct answers (no written solutions; while a live test is
+// still running, no answers either), one submitted attempt, and the student's other
 // submitted attempts. `latest` is their newest attempt (maybe a retake in progress).
 // `settings` are the admin's analysis thresholds; `paperAt` is when the question
 // paper download unlocks (null = now). Submitting leaves the paper out
@@ -125,7 +127,7 @@ const resultPayload = async (test, attempt, latest, { paper = true } = {}) => {
     resultSettings(),
   ]);
   return {
-    test:       { ...meta(test), instructions: test.instructions, marking: test.marking, ...(paper ? { paper: stripSolutions(test.paper) } : {}) },
+    test:       { ...meta(test), instructions: test.instructions, marking: test.marking, ...(paper ? { paper: paperLockedUntil(test) ? stripAnswers(test.paper) : stripSolutions(test.paper) } : {}) },
     attempt:    publicAttempt(attempt),
     history:    done.map((a) => summaryOf(a)),
     inProgress: !!(latest && !latest.submittedAt),
@@ -182,9 +184,12 @@ const getTest = async (req, res) => {
     const test = await findTest(req);
     if (!test || !test.paper) return res.status(404).json({ error: 'Test not found' });
     const attempt = await settle(await latestAttempt(test.id, req.user.id), test);
+    const status = statusOf(test, attempt);
+    // Before it opens, a student gets only the paper's outline; the exam screen loads the questions on Start
+    const early = status === 'upcoming' && req.user.role !== 'admin';
     res.json({
-      test:      { ...meta(test), instructions: test.instructions, marking: test.marking, paper: stripAnswers(test.paper) },
-      status:    statusOf(test, attempt),
+      test:      { ...meta(test), instructions: test.instructions, marking: test.marking, paper: early ? outlineOf(test.paper) : stripAnswers(test.paper) },
+      status,
       canRetake: canRetake(test, attempt),
       attempt:   publicAttempt(attempt),
       serverNow: new Date(),
@@ -205,7 +210,7 @@ const startTest = async (req, res) => {
     let attempt = await settle(await latestAttempt(test.id, req.user.id), test);
     const retake = !!(req.body && req.body.retake === true);
 
-    if (attempt && attempt.submittedAt && !retake) return res.status(409).json({ error: "You've already submitted this test.", attempt: publicAttempt(attempt) });
+    if (attempt && attempt.submittedAt && (!retake || paperLockedUntil(test))) return res.status(409).json({ error: "You've already submitted this test.", attempt: publicAttempt(attempt) });
     if (!attempt || attempt.submittedAt) {
       const status = statusOf(test, null);
       if (status === 'upcoming') return res.status(403).json({ error: 'This test has not opened yet.', opensAt: test.opensAt });

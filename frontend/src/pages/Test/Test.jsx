@@ -393,6 +393,8 @@ export default function Test() {
     try {
       const d = await api(PATH + '/start', { method: 'POST', body: retakeNo ? { retake: true } : {}, token: getToken() })
       syncClock(d.serverNow)
+      // Opened before the start time, the page has only the paper's outline: load the questions now
+      if (paper.outline) setPaper(paperOf((await api(PATH, { token: getToken() })).test))
       const a = attemptOf(d.attempt, loadJSON(KEY), flat.length)
       setBlocked(null)
       if (retakeNo) {
