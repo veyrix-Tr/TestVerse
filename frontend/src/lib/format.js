@@ -9,14 +9,6 @@ export function money(n) {
   return '₹' + Math.round(n).toLocaleString('en-IN')
 }
 
-/* Same as money(); the student pages call it rupee(). */
-export const rupee = money
-
-/* '₹1,500' — the student home uses this exact helper. */
-export function rupeeLabel(n) {
-  return '₹' + Number(n || 0).toLocaleString('en-IN')
-}
-
 /* 02:41:18 from milliseconds */
 export function hms(ms) {
   const s = Math.max(0, Math.floor(ms / 1000))
@@ -36,9 +28,4 @@ export function fmt(iso, opts) {
 export function greet() {
   const h = new Date().getHours()
   return h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening'
-}
-
-/* Copy to clipboard with a graceful fallback. */
-export function copyText(text) {
-  return navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()
 }

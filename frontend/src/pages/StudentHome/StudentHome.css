@@ -185,7 +185,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .sec-head-action { flex: 0 0 auto; }
 
 /* ---------- Page header ---------- */
-.page-head { display: grid; gap: 32px; }
+/* minmax(0, 1fr): the headline numbers wrap to the page width instead of widening it */
+.page-head { display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; }
 .page-head-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px 24px; flex-wrap: wrap; }
 .page-head-text { flex: 1 1 420px; min-width: 0; max-width: 76ch; }
 .page-head h1 { font-size: clamp(28px, 2.6vw, 36px); font-weight: 700; letter-spacing: -0.025em; line-height: 1.15; }
@@ -200,7 +201,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .stat dt { font-size: 13px; color: var(--muted); }
 .stat dd.is-up { color: var(--green); }
 .stat dd.is-down { color: var(--amber); }
-
 
 /* ---------- Hero ---------- */
 .hero {
@@ -648,18 +648,6 @@ a.row-title:hover { color: var(--blue); }
 }
 
 /* ---------- Solutions ---------- */
-.sol-row { grid-template-columns: minmax(0, 1fr) auto auto; gap: 12px 32px; }
-.sol-stats { display: grid; grid-template-columns: auto auto auto; gap: 0 28px; margin: 0; }
-.sol-stats dt { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
-.sol-stats dd { margin: 2px 0 0; font-size: 14px; color: var(--ink-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.sol-stats dd b { font-size: 16px; font-weight: 700; color: var(--ink); }
-.sol-stats dd.is-wrong { color: var(--red); font-weight: 600; }
-@container main (max-width: 900px) {
-  .sol-row { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "main action" "stats stats"; }
-  .sol-row .row-main { grid-area: main; }
-  .sol-row .row-action { grid-area: action; }
-  .sol-stats { grid-area: stats; justify-content: start; gap: 0 40px; }
-}
 
 /* ---------- Plan and account ---------- */
 .rail-foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 4px 12px; }
@@ -727,9 +715,6 @@ a.row-title:hover { color: var(--blue); }
   .row { grid-template-columns: minmax(0, 1fr) auto; }
   .row-side { grid-column: 1; grid-row: 2; justify-content: flex-start; text-align: left; }
   .row-action, .row-score { grid-column: 2; grid-row: 1 / 3; }
-  .sol-row { grid-template-columns: minmax(0, 1fr); grid-template-areas: "main" "stats" "action"; }
-  .sol-row .row-action .btn { flex: 1 1 0; }
-  .sol-stats { gap: 0 20px; }
 }
 
 /* ---------- Under 1024: top bar + nav sheet ---------- */

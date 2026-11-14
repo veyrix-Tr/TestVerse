@@ -76,9 +76,9 @@ const listResources = async (req, res) => {
   }
 };
 
-// Reads the body shared by create and update. `id` skips the "video already
-// added" check when a resource updates itself.
-function readResource(b, id) {
+// Reads the body shared by create and update (the "video already added" check
+// is takenByOther, below).
+function readResource(b) {
   const title = clean(b.title, 120);
   if (!title) return { field: 'title', error: 'Give it a title.' };
   const kind = b.kind === 'playlist' ? 'playlist' : 'video';
@@ -120,7 +120,7 @@ const updateResource = async (req, res) => {
     const existing = await prisma.resource.findUnique({ where: { id } });
     if (!existing) return res.status(404).json({ error: 'Resource not found' });
 
-    const r = readResource({ ...existing, ...req.body }, id);
+    const r = readResource({ ...existing, ...req.body });
     if (r.error) return res.status(400).json(r);
     if (await takenByOther(r.videoId, id)) return res.status(409).json({ field: 'videoId', error: 'That link is already in the list.' });
 

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { api } from '../../lib/api.js'
 import { getToken } from '../../lib/session.js'
 import { useToast } from '../../lib/useToast.jsx'
@@ -28,34 +28,13 @@ import { useLive, useNow } from './useLive.js'
     Video resources-> the homepage "Resources" section and the student's
                       Resources page — a YouTube video or a whole playlist
                       (backend: /api/admin/resources, /api/resources)
-  Right column: the values the site fills in by itself (prices, next live
-  test), read from the demo store until they get their own endpoint.
+  Right column: the result-analysis settings (/api/admin/website).
 */
-const STORE_KEY = 'sv-admin-demo-v4'
 const MAX_BODY = 300
 const PLAYLIST_RE = /[?&]list=[\w-]{12,}/
 
 const EMPTY_DRAFT = { body: '', audience: 'all', link: '', startsAt: '', endsAt: '' }
 const EMPTY_VIDEO = { url: '', title: '', exam: '', topic: '', kind: 'video' }
-
-/* ---------------- demo store: prices, next live test ---------------- */
-function readStore() {
-  try {
-    return JSON.parse(localStorage.getItem(STORE_KEY)) || null
-  } catch {
-    return null
-  }
-}
-// Read-only info for the right-hand column: exam prices and the next live test.
-function readLibrary() {
-  const db = readStore() || {}
-  return {
-    exams: Object.keys(db.exams || {}).map((k) => ({ id: k, label: db.exams[k].label, price: db.exams[k].price, onSale: !!db.exams[k].onSale })),
-    nextLive: (db.tests || [])
-      .filter((x) => x.kind === 'live' && x.status === 'scheduled' && new Date(x.start) > new Date())
-      .sort((a, b) => new Date(a.start) - new Date(b.start))[0],
-  }
-}
 
 /* ---------------- result analysis settings (/api/admin/website) ---------------- */
 // Only these three fields are sent, so saving never touches the other settings.
@@ -237,8 +216,6 @@ export default function WebsiteAdmin() {
   const [confirm, setConfirm] = useState(null) // id of the row whose Delete is waiting for a second click
   const [vDraft, setVDraft] = useState(EMPTY_VIDEO)
 
-  const lib0 = useMemo(() => readLibrary(), [])
-
   const set = (k, v) => setDraft((d) => ({ ...d, [k]: v }))
   const liveCount = anns.filter((a) => annState(a, now).label === 'Live').length
   const pubCount = resources.filter((r) => r.isPublished).length
@@ -386,7 +363,7 @@ export default function WebsiteAdmin() {
       <div className="head sg-head">
         <div>
           <h1>Website info</h1>
-          <p>Announcements, videos and links for the website and the student app. Prices and live test dates keep themselves up to date.</p>
+          <p>Announcements and videos for the website and the student app, and how results are read.</p>
         </div>
         <div className="ws-head-actions">
           <LiveStamp at={annLive.at} loading={annLive.loading || resLive.loading} error={annLive.error || resLive.error} onRefresh={() => { annLive.refresh(); resLive.refresh() }} />
@@ -650,37 +627,9 @@ export default function WebsiteAdmin() {
           </section>
         </div>
 
-        {/* ---------------- read-only column ---------------- */}
+        {/* ---------------- settings column ---------------- */}
         <div className="ws-col">
           <ResultAnalysisCard toast={toast} />
-          <section className="card" aria-labelledby="ws-auto-t">
-            <div className="card-head">
-              <div>
-                <h2 id="ws-auto-t">Shown automatically</h2>
-                <p className="meta">Filled in from Tests and pricing — nothing to edit here.</p>
-              </div>
-            </div>
-            <div className="summary-list">
-              {lib0.exams.map((e) => (
-                <div key={e.id}>
-                  <span>{e.label} price</span>
-                  <span>
-                    {e.onSale ? '₹' + Number(e.price || 0).toLocaleString('en-IN') : 'Not on sale'}
-                    {e.onSale && <span className="pill p-published ws-pill">On sale</span>}
-                  </span>
-                </div>
-              ))}
-              <div>
-                <span>Next live test</span>
-                <span>
-                  {lib0.nextLive
-                    ? (lib0.exams.find((e) => e.id === lib0.nextLive.exam) || {}).label + ' · ' + whenText(lib0.nextLive.start)
-                    : 'None scheduled'}
-                </span>
-              </div>
-            </div>
-            <p className="hint ws-note">Prices and dates are read from the site's test schedule — nothing to edit here.</p>
-          </section>
         </div>
       </div>
       {toastNode}

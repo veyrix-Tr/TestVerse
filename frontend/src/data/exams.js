@@ -72,5 +72,4 @@ export const EXAMS = {
   },
 }
 
-export const EXAM_IDS = ['neet', 'jee-main', 'jee-advanced']
 export const EXAM_KEY = 'sv-exam'

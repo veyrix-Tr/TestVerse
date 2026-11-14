@@ -20,18 +20,12 @@ import { forgetAll } from './cache.js'
 /*
   design/admin.html -> route "/admin"
 
-  This component renders only the static shell exactly as the design marks it
-  up (sidebar, empty <main id="view">, the two dialogs). All content, routing
-  (#dashboard, #tests, …) and every interaction are the design's own script,
-  mounted by mountAdmin() below — see adminApp.js.
-
-  Exceptions: "Free tests", "Live tests", "Test series", "Students &
-  groups" and "Website info" are React screens. adminApp reports the current
-  view through onView; while it is "free", "live", "series", "students" or
-  "website", #view is hidden and the matching screen renders in its place.
-  "Video requests" shows <AdminComingSoon/> the same way.
-  Clicking a sidebar item again goes back to that section's first screen (its
-  `navKey` remounts it).
+  The shell (sidebar, top bar on phones, an empty <main id="view">) and one React
+  screen per section. The sidebar routing (#dashboard, #free, …) lives in
+  adminApp.js, mounted below: it reports the current view through onView, #view
+  is hidden and the matching screen renders in its place. "Video requests"
+  shows <AdminComingSoon/> the same way. Clicking a sidebar item again goes
+  back to that section's first screen (its `navKey` remounts it).
 */
 export default function Admin() {
   usePageMeta({ title: 'Admin — Testverse by Studyverse' })
@@ -211,47 +205,6 @@ export default function Admin() {
           </main>
         )}
       </div>
-
-      {/* Upload / edit test */}
-      <dialog id="dlg-test" aria-labelledby="dt-title">
-        <div className="dlg-head">
-          <h2 id="dt-title">Upload a test</h2>
-          <div className="steps" aria-hidden="true">
-            <span data-st="1">1 Details</span>
-            <span data-st="2">2 Files</span>
-            <span data-st="3">3 Review</span>
-          </div>
-          <button className="close" type="button" data-close aria-label="Close dialog">
-            Close
-          </button>
-        </div>
-        <div className="dlg-body" id="dt-body"></div>
-        <div className="dlg-foot">
-          <button className="btn btn-outline" type="button" id="dt-back">
-            Back
-          </button>
-          <div className="actions" id="dt-next-wrap"></div>
-        </div>
-      </dialog>
-
-      {/* Generic form dialog */}
-      <dialog id="dlg-form" aria-labelledby="df-title">
-        <div className="dlg-head">
-          <h2 id="df-title"></h2>
-          <button className="close" type="button" data-close aria-label="Close dialog">
-            Close
-          </button>
-        </div>
-        <div className="dlg-body" id="df-body"></div>
-        <div className="dlg-foot">
-          <button className="btn btn-outline" type="button" data-close>
-            Cancel
-          </button>
-          <button className="btn btn-primary" type="button" id="df-save">
-            Save
-          </button>
-        </div>
-      </dialog>
     </div>
   )
 }

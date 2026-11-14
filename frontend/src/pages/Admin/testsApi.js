@@ -95,13 +95,3 @@ export function fromLocalInput(v) {
   const d = new Date(v)
   return isNaN(d) ? v : d.toISOString()
 }
-
-/* Load exams for website info (hardcoded for now, should come from API) */
-export async function loadExams() {
-  // TODO: Replace with API call when exams endpoint is ready
-  return [
-    { id: 'neet', label: 'NEET', price: 999, onSale: true },
-    { id: 'jee-main', label: 'JEE Main', price: 999, onSale: true },
-    { id: 'jee-advanced', label: 'JEE Advanced', price: 1199, onSale: false },
-  ]
-}

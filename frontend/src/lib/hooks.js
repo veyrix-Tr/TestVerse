@@ -25,14 +25,6 @@ export function useCountdown(iso) {
   }
 }
 
-/* setInterval that survives React StrictMode double-mounting. */
-export function useInterval(fn, ms) {
-  useEffect(() => {
-    const id = setInterval(fn, ms)
-    return () => clearInterval(id)
-  }, [fn, ms])
-}
-
 /* Sets <title> (and description) for the route, like each design page's <head>. */
 export function usePageMeta({ title, description }) {
   useEffect(() => {

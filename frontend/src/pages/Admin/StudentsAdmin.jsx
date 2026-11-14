@@ -20,7 +20,6 @@ import {
   listStudents,
   pctText,
   plural,
-  studentsKey,
   EXAM_OPTIONS,
   GRADE_OPTIONS,
 } from './studentsApi.js'

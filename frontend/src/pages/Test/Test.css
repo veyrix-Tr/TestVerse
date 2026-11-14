@@ -130,9 +130,6 @@ td .sub { display: block; font-size: 13px; color: var(--muted); margin-top: 3px;
 tfoot td { border-top: 1px solid var(--line); border-bottom: 0; font-weight: 600; color: var(--ink); }
 .notice { border-radius: 12px; padding: 14px 18px; font-size: 14px; border: 1px solid transparent; border-left-width: 3px; }
 .n-warn { background: var(--amber-soft); color: var(--ink); border-color: color-mix(in srgb, var(--amber) 25%, transparent); border-left-color: var(--amber); }
-.n-info { background: var(--blue-soft); color: var(--ink); border-color: color-mix(in srgb, var(--blue) 20%, transparent); border-left-color: var(--blue); }
-.n-ok { background: var(--green-soft); color: var(--green-ink); border-color: color-mix(in srgb, var(--green) 20%, transparent); border-left-color: var(--green); }
-.n-err { background: var(--red-soft); color: var(--red); border-color: color-mix(in srgb, var(--red) 22%, transparent); border-left-color: var(--red); }
 .seg { display: inline-flex; background: var(--soft); border-radius: 10px; padding: 4px; gap: 2px; max-width: 100%; overflow-x: auto; scrollbar-width: none; }
 .seg button { font: 600 13px/1 var(--body); border: 0; background: transparent; color: var(--muted); padding: 10px 14px; border-radius: 7px; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 8px; transition: background-color 150ms ease, color 150ms ease, box-shadow 150ms ease; }
 .seg button:hover { color: var(--ink); }
@@ -392,10 +389,6 @@ label.l { display: block; font-size: 13px; font-weight: 600; letter-spacing: 0.0
 .input { font: 400 16px/1.4 var(--body); padding: 11px 14px; border: 1px solid var(--field); border-radius: 10px; background: var(--card); color: var(--ink); width: 100%; }
 .input:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-soft); }
 textarea.input { min-height: 96px; resize: vertical; }
-.choices { display: flex; flex-wrap: wrap; gap: 8px; }
-.choices button { font: 500 14px/1 var(--body); padding: 11px 14px; border-radius: 999px; border: 1px solid var(--field); background: var(--card); color: var(--ink); cursor: pointer; transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease; }
-.choices button:hover { border-color: var(--ink-2); }
-.choices button[aria-pressed="true"] { background: var(--blue-soft); color: var(--blue-ink); border-color: var(--blue); }
 
 /* ==========================================================================
    Result
