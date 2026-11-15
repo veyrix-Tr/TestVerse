@@ -43,13 +43,15 @@ const visibleTo = async (userId) => {
           { isFree: true, ...forExam(family) },
           ...(subscribed ? [{ audience: 'all', ...forExam(family) }] : []),
           { batches: { some: { batch: { subscriptions: { some: { userId, status: 'active' } } } } } },
-          { groups: { some: { group: { members: { some: { userId } } } } } },
+          // Groups are for paid students: their tests show only while the batch is active
+          ...(subscribed ? [{ groups: { some: { group: { members: { some: { userId } } } } } }] : []),
           { students: { some: { userId } } },
           { attempts: { some: { userId } } },
         ],
       },
-      // The student has bought the series, and it is still published
-      ...(owned.length ? [{ seriesId: { in: owned }, series: { status: 'published' } }] : []),
+      // The student has bought the series, and it is still published (only
+      // tests that have their questions; one saved without a paper waits)
+      ...(owned.length ? [{ seriesId: { in: owned }, series: { status: 'published' }, questionCount: { gt: 0 } }] : []),
     ],
   };
 };
@@ -60,9 +62,10 @@ const visibleTo = async (userId) => {
 const seriesVisibleTo = async (userId) => {
   const user = await prisma.user.findUnique({
     where:  { id: userId },
-    select: { exam: true },
+    select: { exam: true, subscription: { select: { status: true } } },
   });
-  const family = examFamily(user && user.exam);
+  const family     = examFamily(user && user.exam);
+  const subscribed = !!(user && user.subscription && user.subscription.status === 'active');
   return {
     status: 'published',
     OR:     [
@@ -74,7 +77,7 @@ const seriesVisibleTo = async (userId) => {
             OR: [
               { audience: 'all' },
               { batches: { some: { batch: { subscriptions: { some: { userId, status: 'active' } } } } } },
-              { groups: { some: { group: { members: { some: { userId } } } } } },
+              ...(subscribed ? [{ groups: { some: { group: { members: { some: { userId } } } } } }] : []),
               { students: { some: { userId } } },
             ],
           },
@@ -107,7 +110,7 @@ const audienceStudentIds = async (test) => {
     const direct    = (test.students || []).map((x) => x.userId);
     const OR = [
       ...(direct.length ? [{ id: { in: direct } }] : []),
-      ...(groupIds.length ? [{ groups: { some: { groupId: { in: groupIds } } } }] : []),
+      ...(groupIds.length ? [{ groups: { some: { groupId: { in: groupIds } } }, subscription: { status: 'active' } }] : []),
       ...(batchIds.length ? [{ subscription: { status: 'active', batchId: { in: batchIds } } }] : []),
     ];
     if (!OR.length) return [];
@@ -138,7 +141,7 @@ const seriesAudienceStudentIds = async (series) => {
   const direct   = (series.students || []).map((x) => x.userId);
   const OR = [
     ...(direct.length ? [{ id: { in: direct } }] : []),
-    ...(groupIds.length ? [{ groups: { some: { groupId: { in: groupIds } } } }] : []),
+    ...(groupIds.length ? [{ groups: { some: { groupId: { in: groupIds } } }, subscription: { status: 'active' } }] : []),
     ...(batchIds.length ? [{ subscription: { status: 'active', batchId: { in: batchIds } } }] : []),
   ];
   if (!OR.length) return [];

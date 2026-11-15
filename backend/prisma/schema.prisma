@@ -368,6 +368,7 @@ model Announcement {
   link        String?   // optional "Learn more" URL
   startsAt    DateTime  @default(now())
   endsAt      DateTime? // null = runs until it is switched off
+  notifiedAt  DateTime? // when its bells went out (one scheduled for later sends them once it starts)
   isActive    Boolean   @default(true)
   createdById String?
   createdBy   User?     @relation(fields: [createdById], references: [id], onDelete: SetNull)

@@ -4,6 +4,11 @@
 
 const WITH_SUBSCRIPTION = { subscription: { include: { batch: true } } };
 
+// A batch is bought for one year from the day it was activated; after that the
+// subscription becomes "expired" (lib/upkeep.js) and can be bought again.
+const BATCH_DAYS = 365;
+const batchEndsAt = (activatedAt) => (activatedAt ? new Date(new Date(activatedAt).getTime() + BATCH_DAYS * 86400000) : null);
+
 const publicBatch = (batch) => ({
   id:    batch.id,
   name:  batch.name,
@@ -15,9 +20,10 @@ const publicBatch = (batch) => ({
 const publicSubscription = (sub) =>
   sub
     ? {
-        status:      sub.status, // "pending" | "active"
+        status:      sub.status, // "pending" | "active" | "expired"
         batch:       publicBatch(sub.batch),
         activatedAt: sub.activatedAt,
+        expiresAt:   batchEndsAt(sub.activatedAt),
       }
     : null;
 
@@ -35,4 +41,4 @@ const publicUser = (user) => ({
   subscription: publicSubscription(user.subscription),
 });
 
-module.exports = { WITH_SUBSCRIPTION, publicBatch, publicSubscription, publicUser };
+module.exports = { WITH_SUBSCRIPTION, BATCH_DAYS, batchEndsAt, publicBatch, publicSubscription, publicUser };

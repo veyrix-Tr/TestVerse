@@ -215,6 +215,7 @@ const createTest = async (req, res) => {
       },
     });
     if (a.audience) await prisma.$transaction(writeAudience(prisma, created.id, audienceFor(k.kind, a.audience)));
+    await tellSeriesOwners(created);
     const test = await prisma.test.findUnique({ where: { id: created.id }, include: WITH });
     res.status(201).json({ message: publish ? 'Test published' : 'Draft saved', test: fullOf({ ...test, submitted: 0 }) });
   } catch (error) {
@@ -233,6 +234,17 @@ const getTest = async (req, res) => {
     console.error(error);
     res.status(500).json({ error: 'Something went wrong' });
   }
+};
+
+// A test that now has its questions, in a published series: its buyers get a bell.
+const tellSeriesOwners = async (test) => {
+  if (!test.seriesId || !test.questionCount) return;
+  const s = await prisma.testSeries.findUnique({
+    where:  { id: test.seriesId },
+    select: { title: true, status: true, orders: { where: { status: 'active' }, select: { userId: true } } },
+  });
+  if (!s || s.status !== 'published') return;
+  await notifyMany(s.orders.map((o) => o.userId), { type: 'test', text: `New test in ${s.title}: ${test.title}`, view: '/student/test-series' });
 };
 
 // PUT /api/admin/tests/:id — same body as create. Once a student has started
@@ -274,6 +286,8 @@ const updateTest = async (req, res) => {
       });
     }
     await prisma.test.update({ where: { id: existing.id }, data });
+    // Its questions just arrived (saved without a paper before): tell the series' buyers
+    if (!existing.questionCount && data.questionCount) await tellSeriesOwners({ ...existing, ...data });
     // The audience can always change (who may take it), even once attempted
     if (a.audience) await prisma.$transaction(writeAudience(prisma, existing.id, audienceFor(existing.kind, a.audience)));
     const test = await prisma.test.findUnique({ where: { id: existing.id }, include: WITH });

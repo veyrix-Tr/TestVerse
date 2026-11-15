@@ -177,6 +177,14 @@ const signup = async (req, res) => {
   }
 };
 
+// Password guessing: after LOGIN_MAX wrong passwords for one email from one
+// address within 15 minutes, that pair waits until the 15 minutes are up. Kept
+// in memory (each server counts its own), so no extra table is needed.
+const LOGIN_MAX       = 10;
+const LOGIN_WINDOW_MS = 15 * 60 * 1000;
+const failedLogins    = new Map(); // "email|ip" -> { n, until }
+const clientIp = (req) => String(req.headers['x-forwarded-for'] || req.ip || '').split(',')[0].trim();
+
 // POST /api/auth/login
 // Body: { email, password }
 const login = async (req, res) => {
@@ -185,10 +193,23 @@ const login = async (req, res) => {
     const password = req.body.password;
     if (!email || !password) return res.status(400).json({ error: 'Email and password are required.' });
 
+    const key  = email + '|' + clientIp(req);
+    const seen = failedLogins.get(key);
+    if (seen && seen.n >= LOGIN_MAX && seen.until > Date.now()) {
+      const mins = Math.ceil((seen.until - Date.now()) / 60000);
+      return res.status(429).json({ error: `Too many wrong passwords. Try again in ${mins} minute${mins === 1 ? '' : 's'}, or reset your password.` });
+    }
+
     const user = await prisma.user.findUnique({ where: { email }, include: WITH_SUBSCRIPTION });
     if (!user || !(await bcrypt.compare(String(password), user.password))) {
+      const now = Date.now();
+      const f = seen && seen.until > now ? seen : { n: 0, until: now + LOGIN_WINDOW_MS };
+      f.n++;
+      if (failedLogins.size > 10000) failedLogins.clear();
+      failedLogins.set(key, f);
       return res.status(401).json({ error: 'Incorrect email or password.' });
     }
+    failedLogins.delete(key);
     if (!user.isActive) {
       return res.status(403).json({ error: 'Your account has been deactivated. Please contact support.' });
     }

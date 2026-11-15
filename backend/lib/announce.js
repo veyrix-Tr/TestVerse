@@ -1,6 +1,7 @@
 // lib/announce.js — who may see an announcement, as a Prisma `where`.
 // audience on the row: "all" | "students" | "paid" | "exam:neet" | ...
 const prisma = require('./prisma');
+const { notifyMany } = require('./notify');
 
 // Currently running: switched on, started, and not yet past its end.
 const running = (now = new Date()) => ({
@@ -45,4 +46,18 @@ const announcementAudienceIds = async (audience) => {
   return rows.map((u) => u.id);
 };
 
-module.exports = { running, audiencesFor, viewer, announcementAudienceIds };
+// A live announcement also puts a row in the bell of every student it reaches,
+// once: notifiedAt is claimed first, so a second caller (or server) never
+// repeats it. Called when it is published live, and by lib/upkeep.js for one
+// scheduled for later once it starts. Never throws.
+async function announceOnce(a) {
+  try {
+    const { count } = await prisma.announcement.updateMany({ where: { id: a.id, notifiedAt: null }, data: { notifiedAt: new Date() } });
+    if (!count) return;
+    await notifyMany(await announcementAudienceIds(a.audience || 'all'), { type: 'announcement', text: a.body, view: '/student/notifications' });
+  } catch (error) {
+    console.error('announce notify:', error.message);
+  }
+}
+
+module.exports = { running, audiencesFor, viewer, announcementAudienceIds, announceOnce };

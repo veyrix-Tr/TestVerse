@@ -215,10 +215,13 @@ export default function StudentPage({ id, toast, backText, onBack, onOpenGroup }
                     ? (s.batch.byAdmin ? 'Given free' : s.batch.paid ? 'Paid ₹' + s.batch.paid : 'Active') +
                       ' since ' +
                       day(s.batch.activatedAt) +
+                      (s.batch.expiresAt ? ', valid until ' + day(s.batch.expiresAt) : '') +
                       '. Tests given to this batch show up for ' +
                       first +
                       '.'
-                    : 'Waiting for payment. Tests given to this batch show up once it is active. Give it above to activate it free.'}
+                    : s.batch.status === 'expired'
+                      ? `Its year ended on ${day(s.batch.expiresAt)}. ${first} can buy it again, or give it above to renew it free for another year.`
+                      : 'Waiting for payment. Tests given to this batch show up once it is active. Give it above to activate it free.'}
                 </span>
                 {isPaid && (
                   <div>
@@ -304,6 +307,7 @@ export default function StudentPage({ id, toast, backText, onBack, onOpenGroup }
                     </button>
                   </Chip>
                 ))}
+                {isPaid ? null : <p className="hint">Their group tests show up again once their batch is active.</p>}
               </div>
             ) : (
               <p className="hint">

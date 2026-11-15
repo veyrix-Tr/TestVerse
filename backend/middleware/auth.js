@@ -4,6 +4,7 @@
 // On success, attaches decoded token payload (id, role) to req.user.
 
 const jwt = require('jsonwebtoken');
+const { upkeep } = require('../lib/upkeep');
 
 const requireAuth = (req, res, next) => {
   const header = req.headers.authorization;
@@ -16,11 +17,12 @@ const requireAuth = (req, res, next) => {
   try {
     const token = header.split(' ')[1];
     req.user = jwt.verify(token, process.env.JWT_SECRET); // { id, role, iat, exp }
-    next();
   } catch {
     // Token expired or tampered
     return res.status(401).json({ error: 'Invalid token' });
   }
+  // Expired batches and started announcements first (at most every 5 minutes; lib/upkeep.js)
+  upkeep().then(() => next());
 };
 
 // Use after requireAuth on admin-only routes. The role is re-read from the

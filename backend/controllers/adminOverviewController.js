@@ -72,10 +72,17 @@ const getOverview = async (req, res) => {
       prisma.attempt.findMany({ where: { submittedAt: { not: null } }, orderBy: { submittedAt: 'desc' }, take: 8, select: { submittedAt: true, score: true, maxScore: true, attemptNo: true, autoSubmitted: true, user: { select: { id: true, name: true } }, test: { select: { id: true, title: true } } } }),
     ]);
 
-    // Money: what each active purchase was charged, else its batch's price
+    // What a purchase in the activity feed was charged, else its batch's price
     const paidAmount = (s) => (s.amount != null ? s.amount : (s.batch && s.batch.price) || 0);
-    const revenue     = activeSubs.reduce((a, s) => a + paidAmount(s), 0);
-    const revenueWeek = activeSubs.filter((s) => s.activatedAt && s.activatedAt >= weekAgo).reduce((a, s) => a + paidAmount(s), 0);
+    // Revenue: money actually received, from the paid payments (batches, yearly
+    // renewals and series). Not from subscriptions: a batch ends after a year
+    // and a renewal reuses its row, so those would lose earlier payments.
+    const [allPaid, weekPaid] = await Promise.all([
+      prisma.payment.aggregate({ where: { status: 'paid' }, _sum: { amount: true } }),
+      prisma.payment.aggregate({ where: { status: 'paid', paidAt: { gte: weekAgo } }, _sum: { amount: true } }),
+    ]);
+    const revenue     = allPaid._sum.amount || 0;
+    const revenueWeek = weekPaid._sum.amount || 0;
 
     // 14 days of signups and submissions, oldest first
     const daily = [];

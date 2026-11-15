@@ -139,7 +139,9 @@ export const plural = (n, one, many) => n + ' ' + (n === 1 ? one : many || one +
 
 export function batchState(s) {
   if (!s.batch) return { cls: 'p-draft', text: 'No batch' }
-  return s.batch.status === 'active' ? { cls: 'p-published', text: 'Active' } : { cls: 'p-warn', text: 'Pending' }
+  if (s.batch.status === 'active') return { cls: 'p-published', text: 'Active' }
+  // A batch is for one year; after that it has to be bought (or given) again
+  return s.batch.status === 'expired' ? { cls: 'p-draft', text: 'Expired' } : { cls: 'p-warn', text: 'Pending' }
 }
 
 /* Latest activity: last submitted test, else last login. */

@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const prisma = require('../lib/prisma');
-const { publicBatch } = require('../lib/publicUser');
+const { publicBatch, batchEndsAt } = require('../lib/publicUser');
 const { notify, EXAM_LABEL } = require('../lib/notify');
 const { examFamily } = require('../lib/access');
 const { emailRegex, normEmail, checkProfile, checkPassword, profileData } = require('../lib/profile');
@@ -52,7 +52,7 @@ const studentRow = (u, stats) => ({
   isActive:    u.isActive,
   joinedAt:    u.createdAt,
   lastLoginAt: u.lastLoginAt,
-  batch:       u.subscription ? { ...publicBatch(u.subscription.batch), status: u.subscription.status, activatedAt: u.subscription.activatedAt, byAdmin: u.subscription.paymentRef === BY_ADMIN, paid: u.subscription.amount || 0 } : null,
+  batch:       u.subscription ? { ...publicBatch(u.subscription.batch), status: u.subscription.status, activatedAt: u.subscription.activatedAt, expiresAt: batchEndsAt(u.subscription.activatedAt), byAdmin: u.subscription.paymentRef === BY_ADMIN, paid: u.subscription.amount || 0 } : null,
   groups:      (u.groups || []).map((m) => ({ id: m.group.id, name: m.group.name })),
   stats:       stats || EMPTY_STATS,
 });

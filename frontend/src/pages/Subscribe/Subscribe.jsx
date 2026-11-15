@@ -25,7 +25,7 @@ const INCLUDED = [
   ['The real CBT screen', 'Timer, question palette and auto-submit, like exam day.'],
   ['Your score straight away', 'Total, correct and wrong as soon as you submit.'],
   ['Full question review', 'Your answer next to the correct one, for every question.'],
-  ['Video solutions', 'Ask for a video on any question you get stuck on.'],
+  ['Solutions by email', 'Detailed solutions and analysis are sent to your email after your tests.'],
 ]
 
 const price = (b) => (b && b.price != null ? '₹' + b.price.toLocaleString('en-IN') : null)
@@ -115,8 +115,8 @@ export default function Subscribe() {
             <h1 id="sub-title">{first ? first + ', unlock your batch' : 'Unlock your batch'}</h1>
             <p className="lead">
               {batch
-                ? `Based on the exam and class you chose, you're in ${batch.name}. It's a one-time payment, and your batch's tests show up on your dashboard as soon as they're published.`
-                : "It's a one-time payment, and your batch's tests show up on your dashboard as soon as they're published."}
+                ? `Based on the exam and class you chose, you're in ${batch.name}. One payment gives you a full year, and your batch's tests show up on your dashboard as soon as they're published.`
+                : "One payment gives you a full year, and your batch's tests show up on your dashboard as soon as they're published."}
             </p>
 
             <ul className="included">
@@ -154,7 +154,7 @@ export default function Subscribe() {
                     <span>{SUBJECTS[batch.exam]}</span>
                   </p>
                   <div className="sum-price">
-                    <span>One-time payment</span>
+                    <span>One payment · valid for 1 year</span>
                     {price(batch) ? <b className="tnum">{price(batch)}</b> : <b className="tbd">Price to be announced</b>}
                   </div>
                   {error && (

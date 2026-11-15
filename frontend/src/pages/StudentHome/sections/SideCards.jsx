@@ -4,13 +4,13 @@ import { fmt } from '../../../lib/format.js'
 
 const longDay = (iso) => fmt(iso, { day: 'numeric', month: 'long', year: 'numeric' })
 
-const INCLUDED = ['Every test published for your batch', 'The free full-length mocks', 'Score, solutions and analysis after every attempt']
-const UNLOCKS = ['Every test published for your batch', 'Live tests on a fixed schedule', 'Video solutions from your teachers']
+const INCLUDED = ['Every test published for your batch', 'The free full-length mocks', 'Score and analysis after every attempt; solutions by email']
+const UNLOCKS = ['Every test published for your batch', 'Live tests on a fixed schedule', 'A full year of access from the day you join']
 
 const TIPS = [
   ['Sit it in one go', 'Find a quiet stretch of time, just like exam day. The clock keeps running if you leave.'],
   ['Mark, don’t stall', 'Unsure? Mark for review and move on. Marked answers still count.'],
-  ['Review every wrong answer', 'The solutions and chapter-wise analysis show where your marks slipped.'],
+  ['Review every wrong answer', 'Your result shows each correct answer and the chapter-wise analysis, so you can see where your marks slipped.'],
 ]
 
 /* The batch a paid student holds. `full` adds what's included (Account page). */
@@ -33,6 +33,12 @@ export function BatchCard({ me, full }) {
           <div>
             <dt>Active since</dt>
             <dd>{longDay(sub.activatedAt)}</dd>
+          </div>
+        ) : null}
+        {sub.expiresAt ? (
+          <div>
+            <dt>Valid until</dt>
+            <dd>{longDay(sub.expiresAt)}</dd>
           </div>
         ) : null}
         <div>

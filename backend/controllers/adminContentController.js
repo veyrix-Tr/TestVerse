@@ -1,25 +1,11 @@
 const prisma = require('../lib/prisma');
-const { notifyMany } = require('../lib/notify');
-const { announcementAudienceIds } = require('../lib/announce');
+const { announceOnce } = require('../lib/announce');
 
 // Admin > Website info: the resources and announcements the site reads
 // (controllers/siteController.js), plus the admin's own notification inbox.
 
 // Is this row live right now (on, started, not past its end)?
 const isLive = (row, now = new Date()) => !!row.isActive && row.startsAt <= now && (!row.endsAt || row.endsAt >= now);
-
-// An announcement that goes live also fans out a personal notification to
-// every student who can see it (bell → Updates on /student/notifications),
-// instead of only bumping the announcements count. Callers await it (a Vercel
-// function can stop once it has answered); a failure is only logged.
-async function fanOutAnnouncement(row) {
-  try {
-    const ids = await announcementAudienceIds(row.audience || 'all');
-    await notifyMany(ids, { type: 'announcement', text: row.body, view: '/student/notifications' });
-  } catch (error) {
-    console.error('announce notify:', error.message);
-  }
-}
 
 const EXAMS = ['neet', 'jee-main', 'jee-advanced'];
 const AUDIENCES = ['all', 'students', 'paid', 'exam:neet', 'exam:jee-main', 'exam:jee-advanced'];
@@ -203,7 +189,9 @@ const createAnnouncement = async (req, res) => {
     const r = readAnnouncement(req.body);
     if (r.error) return res.status(400).json(r);
     const row = await prisma.announcement.create({ data: { ...r.data, createdById: req.user.id } });
-    if (isLive(row)) await fanOutAnnouncement(row);
+    // Live now: its bells go out (awaited: a Vercel function can stop once it has answered).
+    // One scheduled for later sends them when it starts (lib/upkeep.js).
+    if (isLive(row)) await announceOnce(row);
     res.status(201).json({ message: 'Announcement published', announcement: announcementOf(row) });
   } catch (error) {
     console.error(error);
@@ -220,9 +208,10 @@ const updateAnnouncement = async (req, res) => {
     const r = readAnnouncement({ ...existing, ...req.body });
     if (r.error) return res.status(400).json(r);
     const row = await prisma.announcement.update({ where: { id }, data: r.data });
-    // First time it goes live (a schedule starting, or being switched back on):
-    // fan out once. Edits to a live row don't re-notify anyone.
-    if (!isLive(existing) && isLive(row)) await fanOutAnnouncement(row);
+    // Live now and its bells never went out (say, its start was moved to now):
+    // send them. They go out once per announcement, so edits or switching it
+    // off and on again never repeat them.
+    if (isLive(row)) await announceOnce(row);
     res.json({ message: 'Announcement saved', announcement: announcementOf(row) });
   } catch (error) {
     console.error(error);
