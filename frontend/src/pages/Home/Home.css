@@ -291,6 +291,7 @@ a:hover { text-decoration: underline; text-underline-offset: 3px; }
 .why-num { display: block; font: 700 15px/1 var(--display); color: var(--blue); font-variant-numeric: tabular-nums; padding-bottom: 20px; margin-bottom: 24px; border-bottom: 1px solid var(--line); }
 .why-item h3 { font-size: clamp(18px, 1.3vw, 21px); line-height: 1.25; letter-spacing: -0.02em; font-weight: 700; }
 .why-item p { margin-top: 12px; color: var(--muted); font-size: 16px; line-height: 1.65; max-width: 42ch; }
+.why-link { display: inline-block; margin-top: 14px; font-size: 15px; font-weight: 600; }
 
 /* ---------- Test plan ---------- */
 .head-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; flex-wrap: wrap; }
