@@ -9,6 +9,7 @@ import CbtScreen from './sections/CbtScreen.jsx'
 import Faq from './sections/Faq.jsx'
 import FinalCta from './sections/FinalCta.jsx'
 import Hero from './sections/Hero.jsx'
+import LearnStudyverse from './sections/LearnStudyverse.jsx'
 import Resources from './sections/Resources.jsx'
 import HowItWorks from './sections/HowItWorks.jsx'
 import SiteFooter from './sections/SiteFooter.jsx'
@@ -107,6 +108,8 @@ export default function Home() {
         <Together />
 
         <Resources />
+
+        <LearnStudyverse />
 
         <Faq />
 

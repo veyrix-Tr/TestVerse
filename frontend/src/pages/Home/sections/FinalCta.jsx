@@ -19,15 +19,6 @@ export default function FinalCta({ signupHref }) {
             </AuthLink>
           </div>
         </div>
-        <div className="courses">
-          <div>
-            <h3>Want a teacher too?</h3>
-            <p>Studyverse courses add live classes and faculty who teach from your own test results.</p>
-          </div>
-          <a className="btn btn-ghost" href="https://studyverse.in" target="_blank" rel="noreferrer">
-            Explore Studyverse courses
-          </a>
-        </div>
       </div>
     </section>
   )

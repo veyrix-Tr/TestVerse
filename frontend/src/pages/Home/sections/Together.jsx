@@ -6,7 +6,7 @@ export default function Together() {
         <div className="section-head">
           <p className="eyebrow">For parents</p>
           <h2 id="parents-title">Progress you can see on WhatsApp</h2>
-          <p className="intro">Your child can send you a private progress link: tests taken, scores, all-India rank, and the subjects that need attention. In English or Hindi. They can switch the link off at any time.</p>
+          <p className="intro">Your child can send you a private progress link: tests taken, scores, predicted all-India rank, and the subjects that need attention. In English or Hindi. They can switch the link off at any time.</p>
         </div>
         <div className="msg" aria-label="Example progress message">
           <div className="msg-bubble">
@@ -15,8 +15,8 @@ export default function Together() {
             <div className="msg-rows">
               <span>Latest score</span>
               <em>459 / 720</em>
-              <span>All-India rank</span>
-              <em>1,284</em>
+              <span>Predicted AIR</span>
+              <em>1,200–1,400</em>
               <span>Needs attention</span>
               <em className="warn">Physics</em>
             </div>

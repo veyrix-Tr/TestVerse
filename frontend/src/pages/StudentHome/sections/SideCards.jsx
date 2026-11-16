@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import PendingLink from '../../../components/PendingLink.jsx'
 import { fmt } from '../../../lib/format.js'
+import { STUDYVERSE_URL } from '../../../lib/links.js'
 
 const longDay = (iso) => fmt(iso, { day: 'numeric', month: 'long', year: 'numeric' })
 
@@ -92,6 +93,27 @@ export function FreePlanCard({ free }) {
         Unlock your batch
       </PendingLink>
       <p className="hint">{left > 0 ? `${left} free mock${left === 1 ? '' : 's'} still waiting for you.` : 'You’ve taken every free mock. Retake them any time.'}</p>
+    </section>
+  )
+}
+
+/* Studyverse classes: the same card for every student, opening Studyverse in a new tab. */
+export function StudyverseCard() {
+  return (
+    <section className="card rail-card sv-card" aria-labelledby="sv-title">
+      <h2 id="sv-title" className="sv-title">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M22 10 12 5 2 10l10 5 10-5Z" />
+          <path d="M6 12v5c0 1.1 2.7 3 6 3s6-1.9 6-3v-5" />
+          <path d="M22 10v6" />
+        </svg>
+        Want to learn personally?
+      </h2>
+      <p className="rail-text sv-text">Get a Studyverse teacher who works from your own test results.</p>
+      <a className="btn btn-gold btn-block" href={STUDYVERSE_URL} target="_blank" rel="noopener">
+        Explore Studyverse <span aria-hidden="true">↗</span>
+        <span className="sr"> (opens in a new tab)</span>
+      </a>
     </section>
   )
 }

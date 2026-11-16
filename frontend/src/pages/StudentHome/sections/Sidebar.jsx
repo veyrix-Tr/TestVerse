@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import PendingLink from '../../../components/PendingLink.jsx'
 import StudentBell from './StudentBell.jsx'
+import { STUDYVERSE_URL } from '../../../lib/links.js'
 
 // The student pages (keyed by the URL segment after /student/) and pages that are coming soon.
 const NAV = [
@@ -140,6 +141,14 @@ export default function Sidebar({ me, active, sheetOpen, setSheetOpen, onLogout,
                 </Link>
               </li>
             ))}
+          </ul>
+          <ul className="nav-sv">
+            <li>
+              <a href={STUDYVERSE_URL} target="_blank" rel="noopener">
+                Studyverse classes <span aria-hidden="true">↗</span>
+                <span className="sr"> (opens in a new tab)</span>
+              </a>
+            </li>
           </ul>
         </nav>
 

@@ -5,6 +5,7 @@
   --ink: #0E1A2B; --ink-2: #26324A; --muted: #5B6577; --line: #E4E8EE; --field: #CDD3DE;
   --navy: #0B1B33; --navy-2: #13294A; --navy-line: #2A4166; --on-navy: #FFFFFF; --on-navy-muted: #B9C3D6;
   --gold: #E9B949; --gold-2: #D9A632; --gold-soft: #FBF4E2; --gold-line: #EEDDB0; --gold-ink: #7A5600;
+  --gold-text: #8F6300; /* gold text on the light page; plain gold is too faint to read there */
   --blue: #2450D6; --blue-ink: #1B3DAA; --blue-soft: #EEF2FD;
   --green: #15803D; --green-soft: #E8F5EC; --green-ink: #11602F;
   --amber: #B45309; --amber-soft: #FDF3E7;
@@ -29,7 +30,7 @@
     --bg: #0A1120; --soft: #111A2C; --card: #0F1828;
     --ink: #E9EDF5; --ink-2: #C9D1E0; --muted: #98A3B8; --line: #1F2B40; --field: #334159;
     --navy: #07111F; --navy-2: #0F1F38; --navy-line: #24395A; --on-navy-muted: #A9B5CB;
-    --gold-soft: #2A2312; --gold-line: #4A3D1C; --gold-ink: #F0D79A;
+    --gold-soft: #2A2312; --gold-line: #4A3D1C; --gold-ink: #F0D79A; --gold-text: #E9B949;
     --blue: #7F9BFF; --blue-ink: #A9BCFF; --blue-soft: #16224A;
     --green: #4CC27E; --green-soft: #10291B; --green-ink: #94E0B3;
     --amber: #F0A456; --amber-soft: #2D1E0E;
@@ -679,6 +680,22 @@ a.row-title:hover { color: var(--blue); }
 .upgrade-progress-top { display: flex; justify-content: space-between; gap: 12px; font-size: 13.5px; }
 .upgrade-progress-top b { color: #FFFFFF; font-variant-numeric: tabular-nums; }
 .upgrade-progress .plan-bar { margin: 0; }
+
+/* ---------- Studyverse classes: Overview card, sidebar link, footer link ---------- */
+.sv-card {
+  color: var(--on-navy-muted); border-color: rgba(233, 185, 73, 0.6);
+  background: linear-gradient(160deg, var(--hero-a), var(--hero-b));
+  box-shadow: var(--shadow-md);
+}
+.sv-card :focus-visible { outline-color: var(--gold); }
+.sv-title { display: flex; align-items: center; gap: 10px; color: #FFFFFF; }
+.sv-title svg { flex: none; color: var(--gold); }
+.sv-text { font-size: 14.5px; line-height: 1.6; color: #DCE3EF; }
+.sidenav .nav-sv { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--navy-line); }
+.sidenav .nav-sv a { gap: 6px; color: var(--gold); }
+.sidenav .nav-sv a:hover { color: #F3CF77; }
+.foot a.foot-sv { color: var(--gold-text); }
+.foot a.foot-sv:hover { color: var(--gold-text); text-decoration: underline; }
 
 .account-grid { display: grid; gap: 24px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); align-items: start; max-width: 1240px; }
 @container main (min-width: 1000px) {

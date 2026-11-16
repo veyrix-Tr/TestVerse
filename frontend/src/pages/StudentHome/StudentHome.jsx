@@ -3,6 +3,7 @@ import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 import './StudentHome.css'
 import LogoSprite from '../../components/LogoSprite.jsx'
 import { usePageMeta } from '../../lib/hooks.js'
+import { STUDYVERSE_URL } from '../../lib/links.js'
 import { clearSession, loadSession } from '../../lib/session.js'
 import ResultPage from '../Test/ResultPage.jsx'
 import AccountPage from './pages/AccountPage.jsx'
@@ -154,6 +155,10 @@ export default function StudentHome() {
           <footer className="foot">
             <span>© 2026 Studyverse</span>
             <nav aria-label="Legal">
+              <a className="foot-sv" href={STUDYVERSE_URL} target="_blank" rel="noopener">
+                Studyverse <span aria-hidden="true">↗</span>
+                <span className="sr"> (opens in a new tab)</span>
+              </a>
               <a href="/terms">Terms</a>
               <a href="/privacy">Privacy</a>
               <a href="/refunds">Refund policy</a>

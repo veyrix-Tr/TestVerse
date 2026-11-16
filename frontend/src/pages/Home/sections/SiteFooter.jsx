@@ -1,3 +1,5 @@
+import { STUDYVERSE_SITE, STUDYVERSE_URL } from '../../../lib/links.js'
+
 export default function SiteFooter() {
   return (
     <footer className="site-footer">
@@ -21,7 +23,14 @@ export default function SiteFooter() {
         </div>
         <div className="col">
           <strong>Studyverse</strong>
-          <a href="/courses">Courses</a>
+          <a href={STUDYVERSE_SITE} target="_blank" rel="noopener">
+            studyverse.in <span aria-hidden="true">↗</span>
+            <span className="sr"> (opens in a new tab)</span>
+          </a>
+          <a href={STUDYVERSE_URL} target="_blank" rel="noopener">
+            Studyverse courses <span aria-hidden="true">↗</span>
+            <span className="sr"> (opens in a new tab)</span>
+          </a>
           <a href="/contact">Contact</a>
           <a href="/privacy">Privacy</a>
           <a href="/terms">Terms</a>

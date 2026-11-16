@@ -61,6 +61,7 @@ a:hover { text-decoration: underline; text-underline-offset: 3px; }
 :focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 4px; }
 .on-navy :focus-visible, .site-header :focus-visible, .site-footer :focus-visible { outline-color: var(--gold); }
 [hidden] { display: none !important; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 .wrap { width: var(--container); margin-inline: auto; }
 #parents, #faq, #plan, #cbt, #analysis, #why, #resources { scroll-margin-top: 96px; }
@@ -464,21 +465,38 @@ a:hover { text-decoration: underline; text-underline-offset: 3px; }
   background:
     radial-gradient(1100px 560px at 50% 0%, rgba(36, 80, 214, 0.28), transparent 70%),
     var(--navy);
-  padding-top: clamp(96px, 10vw, 152px);
+  padding-block: clamp(96px, 10vw, 152px);
 }
 .final-main { text-align: center; }
 .final h2 { font-size: clamp(32px, 3.4vw, 52px); line-height: 1.1; letter-spacing: -0.025em; text-wrap: balance; max-width: 16ch; margin-inline: auto; }
 .final h2 span { color: var(--gold); }
 .final-main p { margin-top: 20px; font-size: clamp(16px, 1.1vw, 18px); color: var(--on-navy-muted); }
 .final-ctas { margin-top: 40px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
-.courses {
-  margin-top: clamp(80px, 8vw, 120px); padding-block: 40px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  display: flex; align-items: center; justify-content: space-between; gap: 24px 48px; flex-wrap: wrap;
+
+/* ---------- Learn with Studyverse ---------- */
+.s-navy.on-navy.learn {
+  background:
+    radial-gradient(760px 460px at 78% 50%, rgba(36, 80, 214, 0.30), transparent 65%),
+    var(--navy);
 }
-.courses > div { flex: 1 1 420px; display: flex; gap: 12px 40px; align-items: baseline; flex-wrap: wrap; }
-.courses h3 { font-size: 20px; letter-spacing: -0.01em; flex: none; }
-.courses p { color: var(--on-navy-muted); max-width: 62ch; flex: 1 1 320px; }
+.learn-grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: clamp(48px, 7vw, 120px); align-items: center; }
+.learn .eyebrow { color: #8FA8FF; }
+.learn h2 span { display: block; color: var(--gold); }
+.learn-cta { margin-top: 36px; display: grid; justify-items: start; gap: 12px; }
+.learn-cta .btn { gap: 8px; }
+.learn-cta small { font-size: 13px; color: var(--on-navy-muted); }
+.learn-card {
+  justify-self: end; width: 100%; max-width: 520px; padding: 24px 28px 12px;
+  border-radius: 20px; background: rgba(19, 41, 74, 0.72); border: 1px solid var(--navy-line);
+  box-shadow: var(--shadow-lg);
+}
+.learn-card-title { font-size: 13px; font-weight: 600; letter-spacing: 0.04em; color: var(--on-navy-muted); }
+.learn-card li { display: flex; align-items: center; gap: 16px; padding-block: 16px; }
+.learn-card li + li { border-top: 1px solid rgba(255, 255, 255, 0.08); }
+.learn-icon { flex: none; width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center; color: var(--gold); background: rgba(255, 255, 255, 0.06); }
+.learn-text { display: grid; gap: 2px; min-width: 0; }
+.learn-text b { font: 600 15.5px/1.35 var(--display); color: #fff; }
+.learn-text span { font-size: 14px; line-height: 1.45; color: var(--on-navy-muted); }
 
 /* ---------- Footer ---------- */
 .site-footer { background: var(--footer); color: var(--on-navy-muted); padding-top: 72px; }
@@ -514,6 +532,8 @@ a:hover { text-decoration: underline; text-underline-offset: 3px; }
   .cbt-side { border-left: 0; border-top: 1px solid var(--line); }
   .palette { grid-template-columns: repeat(10, 1fr); }
   .together { grid-template-columns: 1fr; row-gap: 48px; }
+  .learn-grid { grid-template-columns: 1fr; row-gap: 48px; }
+  .learn-card { justify-self: stretch; max-width: none; }
 }
 @media (max-width: 640px) {
   .hero-grid { padding-block: 48px 56px; gap: 48px; }
@@ -555,6 +575,8 @@ a:hover { text-decoration: underline; text-underline-offset: 3px; }
   .msg { padding: 18px; }
       .faq-list details p { padding-right: 0; }
   .final-ctas .btn { flex: 1 1 100%; }
+  .learn-cta { justify-items: stretch; text-align: center; }
+  .learn-card { padding-inline: 20px; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
 }
 

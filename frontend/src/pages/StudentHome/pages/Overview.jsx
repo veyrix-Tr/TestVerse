@@ -6,7 +6,7 @@ import SectionHead from '../SectionHead.jsx'
 import { TrendCard } from '../sections/Charts.jsx'
 import PageHeader, { Stats } from '../sections/PageHeader.jsx'
 import { RecentResults } from '../sections/ResultsSection.jsx'
-import { BatchCard, FreePlanCard, TipsCard } from '../sections/SideCards.jsx'
+import { BatchCard, FreePlanCard, StudyverseCard, TipsCard } from '../sections/SideCards.jsx'
 import { LoadError, SkeletonRows } from '../sections/States.jsx'
 import { subjectsOf, until, when } from '../fmt.js'
 import { TestHero } from '../sections/TestsSection.jsx'
@@ -126,7 +126,7 @@ export default function Overview({ me, data }) {
   )
 }
 
-/* Overview's right rail: the plan, then the score trend (or tips before the first result). */
+/* Overview's right rail: the plan, the score trend (or tips before the first result), then Studyverse classes. */
 export function OverviewRail({ me, data }) {
   const { status, rows, free } = data
   return (
@@ -143,6 +143,7 @@ export function OverviewRail({ me, data }) {
       ) : status === 'ready' ? (
         <TipsCard />
       ) : null}
+      <StudyverseCard />
     </>
   )
 }
