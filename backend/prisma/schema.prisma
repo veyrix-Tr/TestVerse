@@ -104,6 +104,10 @@ model Test {
   title         String
   subject       String    // e.g. "Physics" or "Physics, Chemistry, Maths"
   exam          String?   // "jee" | "neet" | null
+  // JEE tests only: the paper's pattern, "main" | "advanced" (null for NEET,
+  // no exam, or a JEE test from before patterns). It doesn't change who sees
+  // the test: every JEE student sees every JEE test.
+  pattern       String?
   durationMin   Int
   instructions  String    @default("")
   marking       Json      // default marks per question type

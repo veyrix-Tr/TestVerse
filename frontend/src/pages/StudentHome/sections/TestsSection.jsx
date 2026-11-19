@@ -1,4 +1,5 @@
 import PendingLink from '../../../components/PendingLink.jsx'
+import { testExamLabel } from '../../../lib/examLabel.js'
 import { fmt, hms, pad } from '../../../lib/format.js'
 import { subjectsOf, until, when } from '../fmt.js'
 import { pctOf } from '../useTests.js'
@@ -122,9 +123,6 @@ export function TestHero({ test, now, loading }) {
   )
 }
 
-const EXAM_LABEL = { neet: 'NEET', jee: 'JEE Main' }
-
-
 /* One test as a card: what it is, how big it is, and what the student can do with it now. */
 export function TestCard({ t, now }) {
   const href = '/test?test=' + encodeURIComponent(t.id)
@@ -179,7 +177,7 @@ export function TestCard({ t, now }) {
       <article className={'tcard is-' + s} aria-labelledby={'tc-' + t.id}>
         <div className="tc-badges">
           {t.isFree ? <span className="chip chip-gold">Free mock</span> : null}
-          {EXAM_LABEL[t.exam] ? <span className="chip chip-grey">{EXAM_LABEL[t.exam]}</span> : null}
+          {testExamLabel(t.exam, t.pattern) ? <span className="chip chip-grey">{testExamLabel(t.exam, t.pattern)}</span> : null}
           {t.seriesTitle ? <span className="chip chip-blue">{t.seriesTitle}</span> : null}
           {s === 'done' ? <span className="status status-green">Completed{tries > 1 ? ' · ' + tries + ' attempts' : ''}</span> : null}
         </div>

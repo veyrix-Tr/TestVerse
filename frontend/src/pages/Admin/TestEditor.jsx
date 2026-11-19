@@ -1,4 +1,5 @@
 import BackButton from '../../components/BackButton.jsx'
+import { PATTERNS } from '../../lib/examLabel.js'
 import { useEffect, useRef, useState } from 'react'
 import AudienceEditor from './AudienceEditor.jsx'
 import PaperPreview from './PaperPreview.jsx'
@@ -28,11 +29,9 @@ import {
              and no publishing yet (students don't see series tests).
 */
 
-const EXAMS = [
-  ['', 'None'],
-  ['jee', 'JEE'],
-  ['neet', 'NEET'],
-]
+/* [exam, pattern, label]. JEE Main and JEE Advanced are both exam "jee" (every
+   JEE student sees them); the pattern only says which paper format it follows. */
+const EXAMS = [['', '', 'None'], ...PATTERNS.map(([p, label]) => ['jee', p, label]), ['neet', '', 'NEET']]
 
 const markingToForm = (m) =>
   Object.fromEntries(
@@ -88,6 +87,7 @@ export default function TestEditor({ id, kind: newKind = 'live', seriesId, backT
   const [subject, setSubject] = useState('')
   const [scope, setScope] = useState('full') // 'full' | 'single' — the test type
   const [exam, setExam] = useState('')
+  const [pattern, setPattern] = useState('') // JEE only: 'main' | 'advanced'
   const [duration, setDuration] = useState('180')
   const [opensAt, setOpensAt] = useState('')
   const [closesAt, setClosesAt] = useState('')
@@ -127,6 +127,7 @@ export default function TestEditor({ id, kind: newKind = 'live', seriesId, backT
         setSubject(t.subject || '')
         setScope(isSingle(t.subject) ? 'single' : 'full')
         setExam(t.exam || '')
+        setPattern(t.pattern || '')
         setDuration(String(t.durationMin || ''))
         setOpensAt(toLocalInput(t.opensAt))
         setClosesAt(toLocalInput(t.closesAt))
@@ -199,6 +200,7 @@ export default function TestEditor({ id, kind: newKind = 'live', seriesId, backT
       title: title.trim(),
       subject: subject.trim(),
       exam,
+      pattern: exam === 'jee' ? pattern || null : null,
       kind: isSeries ? undefined : kind,
       seriesId: isSeries && !editing ? seriesId : undefined,
       durationMin: Number(duration),
@@ -433,14 +435,25 @@ export default function TestEditor({ id, kind: newKind = 'live', seriesId, backT
                 Exam
               </span>
               <div className="seg" role="group" aria-labelledby="ts-exam-l">
-                {EXAMS.map(([v, l]) => (
-                  <button key={v || 'none'} type="button" aria-pressed={exam === v ? 'true' : 'false'} onClick={() => setExam(v)}>
+                {EXAMS.map(([v, p, l]) => (
+                  <button
+                    key={l}
+                    type="button"
+                    aria-pressed={exam === v && pattern === p ? 'true' : 'false'}
+                    onClick={() => {
+                      setExam(v)
+                      setPattern(p)
+                      clearErr('exam')
+                    }}
+                  >
                     {l}
                   </button>
                 ))}
               </div>
               {err('exam') ||
-                (kind === 'free' ? (
+                (exam === 'jee' && !pattern ? (
+                  <p className="hint ts-exam-hint">Choose whether this paper follows the JEE Main or the JEE Advanced pattern. Every JEE student sees it either way.</p>
+                ) : kind === 'free' ? (
                   <p className="hint ts-exam-hint">Every {examWord(exam)}student can take it, with or without a batch.</p>
                 ) : isLive ? (
                   <p className="hint ts-exam-hint">{exam ? `Only ${examWord(exam)}students see it.` : 'Students of every exam can see it.'}</p>

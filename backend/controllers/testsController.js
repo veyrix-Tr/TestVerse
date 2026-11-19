@@ -30,6 +30,7 @@ const meta = (t) => ({
   title:         t.title,
   subject:       t.subject,
   exam:          t.exam,
+  pattern:       t.pattern,
   isFree:        t.isFree,
   kind:          t.kind,
   durationMin:   t.durationMin,

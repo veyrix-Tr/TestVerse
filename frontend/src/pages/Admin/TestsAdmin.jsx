@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from 'react'
+import { testExamLabel } from '../../lib/examLabel.js'
 import { useToast } from '../../lib/useToast.jsx'
 import TestEditor from './TestEditor.jsx'
 import TestResults from './TestResults.jsx'
 import { audienceText } from './studentsApi.js'
-import { EXAM_LABEL, deleteTest, listTests, setPublished, when } from './testsApi.js'
+import { deleteTest, listTests, setPublished, when } from './testsApi.js'
 import { cached, remember } from './cache.js'
 
 /*
@@ -217,7 +218,7 @@ function TestsList({ kind, onCount, toast, onCreate, onEdit, onResults }) {
                     <td>
                       <b>{t.title}</b>
                       <span className="sub">
-                        {EXAM_LABEL[t.exam] ? EXAM_LABEL[t.exam] + ' · ' : ''}
+                        {testExamLabel(t.exam, t.pattern) ? testExamLabel(t.exam, t.pattern) + ' · ' : ''}
                         {t.subject}
                       </span>
                     </td>

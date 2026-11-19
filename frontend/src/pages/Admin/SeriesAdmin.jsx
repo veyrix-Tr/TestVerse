@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import BackButton from '../../components/BackButton.jsx'
+import { testExamLabel } from '../../lib/examLabel.js'
 import { useToast } from '../../lib/useToast.jsx'
 import AudienceEditor from './AudienceEditor.jsx'
 import TestEditor from './TestEditor.jsx'
@@ -318,7 +319,7 @@ function TestNode({ t, pos, busy, moveBusy, onOpen, onResults, onDelete, onMove,
         <span className="tree-node-text">
           <b>{t.title}</b>
           <span className="sub">
-            {EXAM_LABEL[t.exam] ? EXAM_LABEL[t.exam] + ' · ' : ''}
+            {testExamLabel(t.exam, t.pattern) ? testExamLabel(t.exam, t.pattern) + ' · ' : ''}
             {t.durationMin} min
           </span>
         </span>

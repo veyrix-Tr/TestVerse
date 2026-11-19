@@ -11,6 +11,7 @@ const { rankedFirstAttempts, accuracyOf } = require('../lib/leaderboard');
 const WITH = { _count: { select: { attempts: { where: { attemptNo: 1 } } } }, ...AUDIENCE_INCLUDE };
 
 const EXAMS        = ['jee', 'neet'];
+const PATTERNS     = ['main', 'advanced']; // JEE tests only
 const MAX_DURATION = 600; // minutes
 const MAX_INSTR    = 5000;
 
@@ -54,6 +55,8 @@ const readDetails = (b, kind) => {
   if (!subject) return { field: 'subject', error: 'Enter the subject, like "Physics" or "Physics, Chemistry, Maths".' };
   const exam = b.exam ? String(b.exam) : null;
   if (exam && !EXAMS.includes(exam)) return { field: 'exam', error: 'Exam must be JEE or NEET (or leave it empty).' };
+  const pattern = exam === 'jee' ? (b.pattern ? String(b.pattern) : null) : null;
+  if (exam === 'jee' && !PATTERNS.includes(pattern)) return { field: 'exam', error: 'Choose whether this paper follows the JEE Main or the JEE Advanced pattern.' };
   const durationMin = Number(b.durationMin);
   if (!Number.isInteger(durationMin) || durationMin < 1 || durationMin > MAX_DURATION) {
     return { field: 'durationMin', error: `Duration must be a whole number of minutes from 1 to ${MAX_DURATION}.` };
@@ -69,7 +72,7 @@ const readDetails = (b, kind) => {
   const timing = kind === 'series' ? { opensAt: null, closesAt: null } : { opensAt, closesAt };
   // Question-paper watermark: kept as is when not sent (createTest fills the default)
   const watermark = typeof b.watermark === 'boolean' ? { watermark: b.watermark } : {};
-  return { data: { title, subject, exam, kind, isFree: kind === 'free', durationMin, instructions, ...timing, ...watermark } };
+  return { data: { title, subject, exam, pattern, kind, isFree: kind === 'free', durationMin, instructions, ...timing, ...watermark } };
 };
 
 // Kind for a new test: a series id makes it a series test; otherwise the body's
@@ -94,6 +97,7 @@ const summaryOf = (t) => ({
   title:         t.title,
   subject:       t.subject,
   exam:          t.exam,
+  pattern:       t.pattern,
   isFree:        t.isFree,
   kind:          t.kind,
   seriesId:      t.seriesId,
@@ -363,7 +367,7 @@ const getResults = async (req, res) => {
   try {
     const test = await prisma.test.findUnique({
       where:  { id: req.params.id },
-      select: { id: true, title: true, subject: true, exam: true, kind: true, status: true, durationMin: true, questionCount: true, totalMarks: true, opensAt: true, closesAt: true, series: { select: { title: true } } },
+      select: { id: true, title: true, subject: true, exam: true, pattern: true, kind: true, status: true, durationMin: true, questionCount: true, totalMarks: true, opensAt: true, closesAt: true, series: { select: { title: true } } },
     });
     if (!test) return res.status(404).json({ error: 'Test not found' });
     const [list, tries, inProgress] = await Promise.all([

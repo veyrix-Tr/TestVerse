@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { api } from '../../lib/api.js'
+import { testExamLabel } from '../../lib/examLabel.js'
 import { getToken, loadSession } from '../../lib/session.js'
 import LiveStamp from './LiveStamp.jsx'
 import { ago } from './studentsApi.js'
@@ -272,7 +273,7 @@ function TestsPanel({ tests, onGo, now }) {
               <span className="db-list-main">
                 <b>{t.title}</b>
                 <span>
-                  {[KIND[t.kind], EXAM[t.exam], t.questionCount ? t.questionCount + ' Qs' : ''].filter(Boolean).join(' · ')}
+                  {[KIND[t.kind], testExamLabel(t.exam, t.pattern), t.questionCount ? t.questionCount + ' Qs' : ''].filter(Boolean).join(' · ')}
                 </span>
               </span>
               <span className="db-list-side">

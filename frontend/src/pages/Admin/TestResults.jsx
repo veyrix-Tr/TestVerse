@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import BackButton from '../../components/BackButton.jsx'
+import { testExamLabel } from '../../lib/examLabel.js'
 import { downloadCsv } from './studentsApi.js'
-import { EXAM_LABEL, getTestResults, when } from './testsApi.js'
+import { getTestResults, when } from './testsApi.js'
 
 /*
   Admin › a test's Results: the leaderboard (first attempts only, as ranked
@@ -27,7 +28,6 @@ function duration(ms) {
 }
 
 const num = (n) => (n == null ? '–' : Number(n).toLocaleString('en-IN', { maximumFractionDigits: 1 }))
-const examText = (e) => (e ? EXAM_LABEL[e] || { 'jee-main': 'JEE Main', 'jee-advanced': 'JEE Advanced' }[e] || e.toUpperCase() : '')
 const fileSafe = (s) =>
   (s || 'test')
     .replace(/[\\/:*?"<>|]+/g, ' ')
@@ -122,7 +122,7 @@ export default function TestResults({ id, backText, onBack }) {
   }
 
   const meta = t
-    ? [KIND[t.kind] || 'Test', t.kind === 'series' && t.seriesTitle, examText(t.exam), t.subject, t.questionCount ? t.questionCount + ' questions' : null, max != null ? max + ' marks' : null]
+    ? [KIND[t.kind] || 'Test', t.kind === 'series' && t.seriesTitle, testExamLabel(t.exam, t.pattern), t.subject, t.questionCount ? t.questionCount + ' questions' : null, max != null ? max + ' marks' : null]
         .filter(Boolean)
         .join(' · ')
     : ''

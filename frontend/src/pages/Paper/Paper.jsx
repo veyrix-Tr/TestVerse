@@ -2,13 +2,13 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import './Paper.css'
 import { api } from '../../lib/api.js'
+import { testExamLabel } from '../../lib/examLabel.js'
 import { usePageMeta } from '../../lib/hooks.js'
 import MathText from '../../lib/MathText.jsx'
 import { esc } from '../../lib/esc.js'
 import { fmt } from '../../lib/format.js'
 import { getToken } from '../../lib/session.js'
 import { AR_OPTIONS } from '../Test/data/papers.js'
-import { examLabel } from '../Test/testData.js'
 
 /*
   "/paper?test=<id>": a submitted test's question paper (questions only, no
@@ -150,7 +150,7 @@ export default function Paper() {
   const { test, paper, watermark } = state
   const langs = paper.languages || ['en']
   const hasHi = langs.includes('hi')
-  const exam = examLabel(test.exam)
+  const exam = testExamLabel(test.exam, test.pattern)
   let n = 0
 
   return (

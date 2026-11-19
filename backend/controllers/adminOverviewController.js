@@ -18,7 +18,7 @@ const istMidnight = (now, n = 0) => {
 
 const avgPct = (rows) => avg(rows.map((a) => pct(a.score, a.maxScore)).filter((p) => p != null));
 
-const testRow = (t) => ({ id: t.id, title: t.title, kind: t.kind, exam: t.exam, isFree: t.isFree, opensAt: t.opensAt, closesAt: t.closesAt, questionCount: t.questionCount, durationMin: t.durationMin });
+const testRow = (t) => ({ id: t.id, title: t.title, kind: t.kind, exam: t.exam, pattern: t.pattern, isFree: t.isFree, opensAt: t.opensAt, closesAt: t.closesAt, questionCount: t.questionCount, durationMin: t.durationMin });
 
 // GET /api/admin/overview — everything the dashboard shows, from the database
 const getOverview = async (req, res) => {
@@ -59,7 +59,7 @@ const getOverview = async (req, res) => {
       prisma.user.findMany({ where: { ...student, createdAt: { gte: chartFrom } }, select: { createdAt: true } }),
       prisma.attempt.findMany({ where: { submittedAt: { gte: chartFrom } }, select: { submittedAt: true } }),
       prisma.test.findMany({
-        select: { id: true, title: true, kind: true, exam: true, isFree: true, status: true, opensAt: true, closesAt: true, questionCount: true, durationMin: true, createdAt: true, _count: { select: { attempts: true } } },
+        select: { id: true, title: true, kind: true, exam: true, pattern: true, isFree: true, status: true, opensAt: true, closesAt: true, questionCount: true, durationMin: true, createdAt: true, _count: { select: { attempts: true } } },
       }),
       prisma.attempt.groupBy({ by: ['testId'], where: { submittedAt: { gte: monthAgo } }, _count: { _all: true }, orderBy: { _count: { testId: 'desc' } }, take: 5 }),
       prisma.batch.findMany({

@@ -2,13 +2,8 @@
   Turns the test API's replies (backend/controllers/testsController.js) into
   the shapes the CBT views use.
 */
+import { testExamLabel } from '../../lib/examLabel.js'
 import { flatten } from './data/papers.js'
-
-const EXAM_LABELS = { jee: 'JEE', neet: 'NEET', 'jee-main': 'JEE Main', 'jee-advanced': 'JEE Advanced' }
-
-export function examLabel(exam) {
-  return EXAM_LABELS[exam] || (exam ? String(exam).toUpperCase() : '')
-}
 
 /* Test details + paper -> the `paper` object the views read
    (title, exam, durationMin, languages, sections …). Questions without a
@@ -22,7 +17,7 @@ export function paperOf(test) {
     id: test.id,
     title: test.title,
     subject: test.subject,
-    exam: examLabel(test.exam) || test.subject,
+    exam: testExamLabel(test.exam, test.pattern) || test.subject,
     durationMin: test.durationMin,
     opensAt: test.opensAt,
     closesAt: test.closesAt,

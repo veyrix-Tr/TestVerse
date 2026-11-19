@@ -25,7 +25,7 @@ const paperOf = (test) => {
 // The test's columns students' requests use: everything but the paper (from
 // paperOf) and the admin's original JSON (never needed here).
 const TEST_FIELDS = {
-  id: true, title: true, subject: true, exam: true, durationMin: true, instructions: true, marking: true,
+  id: true, title: true, subject: true, exam: true, pattern: true, durationMin: true, instructions: true, marking: true,
   languages: true, questionCount: true, totalMarks: true, status: true, isFree: true, kind: true,
   seriesId: true, opensAt: true, closesAt: true, watermark: true, updatedAt: true,
   series: { select: { title: true } },

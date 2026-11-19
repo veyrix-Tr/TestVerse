@@ -57,8 +57,8 @@ const JEE_SECTIONS  = [['Physics', 'physics'], ['Chemistry', 'chemistry'], ['Mat
 const TESTS = [
   { folder: 'neet-mock-1', title: 'NEET Free Mock Test 1', subject: 'Physics, Chemistry, Biology', exam: 'neet', sections: NEET_SECTIONS, marking: NEET_MARKING, instructions: NEET_INSTRUCTIONS },
   { folder: 'neet-mock-2', title: 'NEET Free Mock Test 2', subject: 'Physics, Chemistry, Biology', exam: 'neet', sections: NEET_SECTIONS, marking: NEET_MARKING, instructions: NEET_INSTRUCTIONS },
-  { folder: 'jee-mock-1',  title: 'JEE Main Free Mock Test 1', subject: 'Physics, Chemistry, Maths', exam: 'jee', sections: JEE_SECTIONS, marking: JEE_MARKING, instructions: JEE_INSTRUCTIONS },
-  { folder: 'jee-mock-2',  title: 'JEE Main Free Mock Test 2', subject: 'Physics, Chemistry, Maths', exam: 'jee', sections: JEE_SECTIONS, marking: JEE_MARKING, instructions: JEE_INSTRUCTIONS },
+  { folder: 'jee-mock-1',  title: 'JEE Main Free Mock Test 1', subject: 'Physics, Chemistry, Maths', exam: 'jee', pattern: 'main', sections: JEE_SECTIONS, marking: JEE_MARKING, instructions: JEE_INSTRUCTIONS },
+  { folder: 'jee-mock-2',  title: 'JEE Main Free Mock Test 2', subject: 'Physics, Chemistry, Maths', exam: 'jee', pattern: 'main', sections: JEE_SECTIONS, marking: JEE_MARKING, instructions: JEE_INSTRUCTIONS },
 ];
 
 const DURATION_MIN = 180;
@@ -90,6 +90,7 @@ async function main() {
       title:        t.title,
       subject:      t.subject,
       exam:         t.exam,
+      pattern:      t.pattern || null,
       isFree:       true,
       kind:         'free',
       audience:     'all',

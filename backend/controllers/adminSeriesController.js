@@ -91,7 +91,7 @@ const getSeries = async (req, res) => {
         ...AUDIENCE_INCLUDE,
         tests:  {
           orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }],
-          select:  { id: true, title: true, subject: true, exam: true, durationMin: true, questionCount: true, totalMarks: true, paper: true, status: true, sortOrder: true, createdAt: true, updatedAt: true },
+          select:  { id: true, title: true, subject: true, exam: true, pattern: true, durationMin: true, questionCount: true, totalMarks: true, paper: true, status: true, sortOrder: true, createdAt: true, updatedAt: true },
         },
       },
     });
