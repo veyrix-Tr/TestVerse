@@ -3,7 +3,7 @@ const QA = [
   ["What's in the test plan?", "6 part tests, 3 half-syllabus tests and 2 full-syllabus tests for your exam. You can take them whenever you're ready, in any order, though we suggest following the plan."],
   ["What's the difference between the test plan and live tests?", 'Test plan tests are available any time. Live tests happen at a fixed time for every student, and you get an all-India rank.'],
   ['What if I miss a live test?', "You can still take it afterwards. You'll get your score and analysis, but it won't count towards the all-India rank."],
-  ['How much does it cost?', 'All-India live tests are free for everyone. The 11-test series is [PRICE] per exam.'],
+  ['How much does it cost?', 'All-India live tests are free for everyone. The 11-test series is ₹1 per exam.'],
   ['I study in a Studyverse course. Do I need a new account?', 'Yes, for now. Testverse accounts are separate from Studyverse, so sign up once with your email. You get exactly the same tests and features.'],
   ['What if a question has a mistake?', 'Use "Report a problem" on that question in your result. Our team checks it, and if an answer key was wrong, your score is corrected automatically.'],
 ]

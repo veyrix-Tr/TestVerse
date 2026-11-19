@@ -50,7 +50,7 @@ export default function TestPlan({ exam, onChoose, signupHref }) {
           <div className="plan-buy">
             <div>
               <small>{ex ? ex.label + ' test series' : 'Test series, per exam'}</small>
-              <span className="plan-price">[PRICE]</span>
+              <span className="plan-price">₹1</span>
             </div>
             <Link className="btn btn-primary btn-lg" to={signupHref} data-signup>
               Get the test series
