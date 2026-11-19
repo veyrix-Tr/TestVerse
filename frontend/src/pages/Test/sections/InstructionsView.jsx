@@ -19,6 +19,13 @@ const HOW_IT_WORKS = [
   <>Switching to other apps or tabs is recorded.</>,
 ]
 
+// JEE Advanced tests only (paper.calculator)
+const CALC_RULE = (
+  <>
+    An on-screen basic calculator (+ − × ÷, √, %) is available, like in the real exam. Press <b>Calculator</b> at the top of the exam screen.
+  </>
+)
+
 const LEGEND = [
   ['nv', '1', 'Not visited', 'You have not opened it yet'],
   ['na', '2', 'Not answered', 'Opened, but no answer saved'],
@@ -211,7 +218,7 @@ export default function InstructionsView({ paper, flat, attempt, left, lang, set
               <p>Read these once. They are the same rules as the real exam.</p>
             </div>
             <ol className="rules">
-              {HOW_IT_WORKS.map((r, i) => (
+              {(paper.calculator ? [...HOW_IT_WORKS, CALC_RULE] : HOW_IT_WORKS).map((r, i) => (
                 <li key={i}>{r}</li>
               ))}
             </ol>

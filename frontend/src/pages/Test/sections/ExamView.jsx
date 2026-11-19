@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import Calculator from './Calculator.jsx'
 import { AR_OPTIONS, Q_TYPE_LABELS } from '../data/papers.js'
 import { esc } from '../../../lib/esc.js'
 import MathText from '../../../lib/MathText.jsx'
@@ -16,6 +17,12 @@ function letter(i) {
 */
 export default function ExamView({ paper, flat, attempt, candidate, lang, setLang, curIndex, left, save, sideOpen, setSideOpen, tabNote, onFontUp, onFontDn, api }) {
   const qbodyRef = useRef(null)
+  const calcBtnRef = useRef(null)
+  const [calcOpen, setCalcOpen] = useState(false)
+  function closeCalc() {
+    setCalcOpen(false)
+    calcBtnRef.current?.focus()
+  }
 
   // New question (or language) → scroll the question body back to the top,
   // like the design's body.scrollTop = 0 in renderQ().
@@ -157,6 +164,22 @@ export default function ExamView({ paper, flat, attempt, candidate, lang, setLan
                   </button>
                 ))}
               </div>
+            ) : null}
+            {paper.calculator ? (
+              <button
+                ref={calcBtnRef}
+                className={'tool calc-btn' + (calcOpen ? ' on' : '')}
+                type="button"
+                aria-pressed={calcOpen ? 'true' : 'false'}
+                aria-controls="calc"
+                onClick={() => (calcOpen ? closeCalc() : setCalcOpen(true))}
+              >
+                <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <rect x="5" y="2.5" width="14" height="19" rx="2.5" />
+                  <path d="M8.5 6.5h7M8.5 11h.01M12 11h.01M15.5 11h.01M8.5 14.5h.01M12 14.5h.01M15.5 14.5h.01M8.5 18h.01M12 18h.01M15.5 18h.01" />
+                </svg>
+                <span className="calc-btn-l">Calculator</span>
+              </button>
             ) : null}
             <div className="font-tools" role="group" aria-label="Text size">
               <button className="tool" type="button" id="font-dn" aria-label="Smaller text" onClick={onFontDn}>
@@ -343,6 +366,7 @@ export default function ExamView({ paper, flat, attempt, candidate, lang, setLan
           </div>
         </aside>
       </div>
+      {paper.calculator ? <Calculator open={calcOpen} onClose={closeCalc} /> : null}
     </section>
   )
 }

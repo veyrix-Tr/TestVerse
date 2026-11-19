@@ -18,6 +18,8 @@ export function paperOf(test) {
     title: test.title,
     subject: test.subject,
     exam: testExamLabel(test.exam, test.pattern) || test.subject,
+    // JEE Advanced gives an on-screen basic calculator (from 2027); JEE Main and NEET don't
+    calculator: test.exam === 'jee' && test.pattern === 'advanced',
     durationMin: test.durationMin,
     opensAt: test.opensAt,
     closesAt: test.closesAt,

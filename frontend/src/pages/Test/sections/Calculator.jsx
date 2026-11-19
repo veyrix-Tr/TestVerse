@@ -1,0 +1,134 @@
+import { useEffect, useReducer, useRef, useState } from 'react'
+import { calcReducer, initialCalc, keyOf } from '../calc.js'
+
+// Rows of a basic calculator; "=" spans two rows and "0" two columns (Test.css)
+const KEYS = [
+  ['MC', 'MR', 'M+', 'M−'],
+  ['C', 'CE', '⌫', '÷'],
+  ['√', '%', '±', '×'],
+  ['7', '8', '9', '−'],
+  ['4', '5', '6', '+'],
+  ['1', '2', '3', '='],
+  ['0', '.'],
+]
+const NAME = {
+  MC: 'Memory clear', MR: 'Memory recall', 'M+': 'Memory add', 'M−': 'Memory subtract',
+  C: 'Clear all', CE: 'Clear entry', '⌫': 'Backspace', '÷': 'Divide', '×': 'Multiply', '−': 'Minus', '+': 'Plus',
+  '=': 'Equals', '√': 'Square root', '%': 'Percent', '±': 'Change sign', '.': 'Decimal point',
+}
+const kind = (k) => (k === '=' ? ' k-eq' : '÷×−+'.includes(k) ? ' k-op' : k.startsWith('M') ? ' k-mem' : k === 'C' || k === 'CE' || k === '⌫' ? ' k-clr' : k === '0' ? ' k-0' : '')
+
+const SMALL = '(max-width: 640px)'
+const isSmall = () => typeof window !== 'undefined' && window.matchMedia(SMALL).matches
+
+/*
+  The on-screen basic calculator of JEE Advanced tests. On a laptop it floats
+  and can be dragged by its title bar; on a phone it opens from the bottom.
+  It stays mounted while closed, so the number on it is still there when the
+  student opens it again. Keys typed while it has focus never reach the exam
+  screen's shortcuts (Test.jsx ignores keys from inside .calc).
+*/
+export default function Calculator({ open, onClose }) {
+  const [s, press] = useReducer(calcReducer, initialCalc)
+  const [pos, setPos] = useState(null) // { x, y } once dragged; null = default corner
+  const [small, setSmall] = useState(isSmall)
+  const ref = useRef(null)
+  const drag = useRef(null)
+
+  useEffect(() => {
+    const mq = window.matchMedia(SMALL)
+    const on = () => setSmall(mq.matches)
+    mq.addEventListener('change', on)
+    return () => mq.removeEventListener('change', on)
+  }, [])
+
+  // Opening puts the keyboard on the calculator
+  useEffect(() => {
+    if (open) ref.current?.focus()
+  }, [open])
+
+  // Keep a dragged calculator on screen when the window shrinks
+  useEffect(() => {
+    if (!pos) return undefined
+    const fit = () => setPos((p) => (p ? clamp(p.x, p.y) : p))
+    window.addEventListener('resize', fit)
+    return () => window.removeEventListener('resize', fit)
+  }, [pos])
+
+  function clamp(x, y) {
+    const el = ref.current
+    const w = el ? el.offsetWidth : 300
+    const h = el ? el.offsetHeight : 440
+    return { x: Math.min(Math.max(8, x), window.innerWidth - w - 8), y: Math.min(Math.max(8, y), window.innerHeight - h - 8) }
+  }
+
+  function onKeyDown(e) {
+    if (e.ctrlKey || e.metaKey || e.altKey) return
+    if (e.key === 'Escape') {
+      e.preventDefault()
+      e.stopPropagation()
+      onClose()
+      return
+    }
+    const k = keyOf(e)
+    if (!k) return
+    e.preventDefault()
+    e.stopPropagation()
+    press(k)
+  }
+
+  function onPointerDown(e) {
+    if (small || e.button !== 0 || e.target.closest('button')) return
+    const r = ref.current.getBoundingClientRect()
+    drag.current = { dx: e.clientX - r.left, dy: e.clientY - r.top }
+    e.currentTarget.setPointerCapture(e.pointerId)
+  }
+  function onPointerMove(e) {
+    if (drag.current) setPos(clamp(e.clientX - drag.current.dx, e.clientY - drag.current.dy))
+  }
+  function onPointerUp() {
+    drag.current = null
+  }
+
+  const shown = s.entry.replace('-', '−')
+  return (
+    <div
+      ref={ref}
+      id="calc"
+      className={'calc' + (small ? ' docked' : '')}
+      role="dialog"
+      aria-label="Calculator"
+      tabIndex={-1}
+      hidden={!open}
+      style={!small && pos ? { left: pos.x, top: pos.y, right: 'auto' } : undefined}
+      onKeyDown={onKeyDown}
+    >
+      <div className="calc-head" onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerCancel={onPointerUp}>
+        <span className="calc-title">Calculator</span>
+        <button className="calc-x" type="button" aria-label="Close calculator" onClick={onClose}>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
+            <path d="M6 6l12 12M18 6 6 18" />
+          </svg>
+        </button>
+      </div>
+      <div className="calc-screen">
+        <div className="calc-expr">{s.error || s.expr.replace(/-/g, '−') || ' '}</div>
+        <output className={'calc-val' + (shown.length > 13 ? ' long' : '')} aria-live="polite">
+          {shown}
+        </output>
+        {s.memory !== 0 ? (
+          <span className="calc-m" title="A number is stored in memory">
+            M
+          </span>
+        ) : null}
+      </div>
+      <div className="calc-keys">
+        {KEYS.flat().map((k) => (
+          <button key={k} type="button" className={'calc-k' + kind(k)} aria-label={NAME[k]} onClick={() => press(k)}>
+            {k}
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
