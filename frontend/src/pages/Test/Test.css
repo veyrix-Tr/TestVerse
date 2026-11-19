@@ -333,7 +333,9 @@ button.chip:hover { box-shadow: 0 0 0 3px var(--blue-soft); }
 .calc-btn { display: inline-flex; align-items: center; gap: 7px; }
 .calc-btn.on { background: rgba(255, 255, 255, 0.14); border-color: rgba(255, 255, 255, 0.4); }
 .calc {
-  position: fixed; top: 78px; right: 24px; z-index: 45; width: 296px; max-width: calc(100vw - 16px);
+  /* below the palette sheet (39/40), which the student opens on top of it */
+  position: fixed; top: 78px; right: 24px; z-index: 38; width: 296px; max-width: calc(100vw - 16px);
+  max-height: calc(100vh - 86px); max-height: calc(100dvh - 86px); overflow-y: auto; overscroll-behavior: contain;
   background: var(--card); color: var(--ink); border: 1px solid var(--line); border-radius: 16px;
   box-shadow: var(--shadow-lg); padding: 0 12px 12px; display: grid; gap: 10px;
 }
@@ -347,7 +349,6 @@ button.chip:hover { box-shadow: 0 0 0 3px var(--blue-soft); }
 .calc-screen { position: relative; background: var(--soft); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px 12px; text-align: right; min-width: 0; }
 .calc-expr { font: 500 13px/1.3 var(--body); color: var(--muted); min-height: 17px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
 .calc-val { display: block; margin-top: 4px; font: 600 32px/1.15 var(--display); letter-spacing: -0.01em; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.calc-val.long { font-size: 22px; line-height: 1.7; }
 .calc-m { position: absolute; left: 12px; top: 10px; font: 700 11px/1 var(--body); color: var(--blue); background: var(--blue-soft); padding: 3px 6px; border-radius: 5px; }
 .calc-keys { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; }
 .calc-k {
@@ -374,6 +375,23 @@ button.chip:hover { box-shadow: 0 0 0 3px var(--blue-soft); }
 .calc.docked .calc-k { min-height: 42px; }
 .calc.docked .calc-k.k-mem { min-height: 32px; }
 .calc.docked .calc-val { font-size: 28px; }
+.calc.docked { max-height: 88vh; max-height: 88dvh; }
+/* Long numbers get smaller text (after the phone size, so they win there too) */
+.calc .calc-val.long { font-size: 22px; line-height: 1.7; }
+.calc .calc-val.longer { font-size: 18px; line-height: 2.1; }
+/* Short screens (small laptops, landscape phones): tighter keys */
+@media (max-height: 700px) {
+  .calc { gap: 7px; }
+  .calc-keys { gap: 5px; }
+  .calc .calc-k { min-height: 36px; }
+  .calc .calc-k.k-mem { min-height: 28px; }
+  .calc-screen { padding: 7px 12px 8px; }
+}
+/* With the question palette beside the question, open just left of it, so
+   it doesn't cover the question chips */
+@media (min-width: 961px) {
+  .calc { right: calc(var(--eg) + var(--prail) + 32px); }
+}
 @media (max-width: 640px) {
   .calc-btn-l { display: none; }
 }

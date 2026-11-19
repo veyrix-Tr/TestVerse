@@ -366,7 +366,7 @@ export default function ExamView({ paper, flat, attempt, candidate, lang, setLan
           </div>
         </aside>
       </div>
-      {paper.calculator ? <Calculator open={calcOpen} onClose={closeCalc} /> : null}
+      {paper.calculator ? <Calculator open={calcOpen} onClose={closeCalc} paused={sideOpen} /> : null}
     </section>
   )
 }

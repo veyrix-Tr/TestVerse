@@ -530,7 +530,7 @@ export default function Test() {
     function onKey(e) {
       if (view !== 'exam') return
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || document.querySelector('dialog[open]')) return
-      if (e.target.closest && e.target.closest('.calc')) return // typing into the calculator
+      if (document.querySelector('#calc:not([hidden])')) return // the calculator has the keyboard while open
       if (e.ctrlKey || e.metaKey || e.altKey) return
       const k = e.key.toLowerCase()
       let idx = '123456'.indexOf(k)

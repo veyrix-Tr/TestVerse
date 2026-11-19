@@ -25,15 +25,22 @@ const isSmall = () => typeof window !== 'undefined' && window.matchMedia(SMALL).
   The on-screen basic calculator of JEE Advanced tests. On a laptop it floats
   and can be dragged by its title bar; on a phone it opens from the bottom.
   It stays mounted while closed, so the number on it is still there when the
-  student opens it again. Keys typed while it has focus never reach the exam
-  screen's shortcuts (Test.jsx ignores keys from inside .calc).
+  student opens it again.
+
+  While it is open the keyboard belongs to it wherever the focus is (after
+  clicking "Save & next", say), so typing 2*3 Enter can never pick options or
+  press a focused button; Test.jsx turns its shortcuts off meanwhile. Only
+  the answer box (an input) and an open dialog keep their keys. `paused` (the
+  question palette sheet is open on top of it) hands the keyboard back too.
 */
-export default function Calculator({ open, onClose }) {
+export default function Calculator({ open, onClose, paused }) {
   const [s, press] = useReducer(calcReducer, initialCalc)
   const [pos, setPos] = useState(null) // { x, y } once dragged; null = default corner
   const [small, setSmall] = useState(isSmall)
   const ref = useRef(null)
   const drag = useRef(null)
+  const closeRef = useRef(onClose)
+  closeRef.current = onClose
 
   useEffect(() => {
     const mq = window.matchMedia(SMALL)
@@ -47,34 +54,48 @@ export default function Calculator({ open, onClose }) {
     if (open) ref.current?.focus()
   }, [open])
 
-  // Keep a dragged calculator on screen when the window shrinks
+  // Keep a dragged calculator on screen: on opening and when the window
+  // changes size. Only while it is open and floating, because a closed one
+  // measures 0 × 0 and the phone panel has a different size.
   useEffect(() => {
-    if (!pos) return undefined
+    if (small || !open) return undefined
     const fit = () => setPos((p) => (p ? clamp(p.x, p.y) : p))
+    fit()
     window.addEventListener('resize', fit)
     return () => window.removeEventListener('resize', fit)
-  }, [pos])
+  }, [small, open])
 
-  function clamp(x, y) {
-    const el = ref.current
-    const w = el ? el.offsetWidth : 300
-    const h = el ? el.offsetHeight : 440
-    return { x: Math.min(Math.max(8, x), window.innerWidth - w - 8), y: Math.min(Math.max(8, y), window.innerHeight - h - 8) }
-  }
-
-  function onKeyDown(e) {
-    if (e.ctrlKey || e.metaKey || e.altKey) return
-    if (e.key === 'Escape') {
+  // The keyboard (see the note above). Capture phase, so it runs before the
+  // exam's own key handling and before a focused button reacts to Enter.
+  useEffect(() => {
+    if (!open || paused) return undefined
+    function onKey(e) {
+      if (e.ctrlKey || e.metaKey || e.altKey) return
+      const t = e.target
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return
+      if (document.querySelector('dialog[open]')) return
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        e.stopPropagation()
+        closeRef.current()
+        return
+      }
+      const k = keyOf(e)
+      if (!k) return
       e.preventDefault()
       e.stopPropagation()
-      onClose()
-      return
+      press(k)
     }
-    const k = keyOf(e)
-    if (!k) return
-    e.preventDefault()
-    e.stopPropagation()
-    press(k)
+    document.addEventListener('keydown', onKey, true)
+    return () => document.removeEventListener('keydown', onKey, true)
+  }, [open, paused])
+
+  // Inside the window, title bar always reachable (even on a very short screen)
+  function clamp(x, y) {
+    const el = ref.current
+    const w = el.offsetWidth
+    const h = el.offsetHeight
+    return { x: Math.max(8, Math.min(x, window.innerWidth - w - 8)), y: Math.max(8, Math.min(y, window.innerHeight - h - 8)) }
   }
 
   function onPointerDown(e) {
@@ -90,7 +111,7 @@ export default function Calculator({ open, onClose }) {
     drag.current = null
   }
 
-  const shown = s.entry.replace('-', '−')
+  const shown = s.entry.replace(/-/g, '−')
   return (
     <div
       ref={ref}
@@ -101,7 +122,6 @@ export default function Calculator({ open, onClose }) {
       tabIndex={-1}
       hidden={!open}
       style={!small && pos ? { left: pos.x, top: pos.y, right: 'auto' } : undefined}
-      onKeyDown={onKeyDown}
     >
       <div className="calc-head" onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerCancel={onPointerUp}>
         <span className="calc-title">Calculator</span>
@@ -113,7 +133,7 @@ export default function Calculator({ open, onClose }) {
       </div>
       <div className="calc-screen">
         <div className="calc-expr">{s.error || s.expr.replace(/-/g, '−') || ' '}</div>
-        <output className={'calc-val' + (shown.length > 13 ? ' long' : '')} aria-live="polite">
+        <output className={'calc-val' + (shown.length > 15 ? ' longer' : shown.length > 11 ? ' long' : '')} aria-live="polite">
           {shown}
         </output>
         {s.memory !== 0 ? (
