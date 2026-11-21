@@ -6,6 +6,7 @@ const { DEFAULTS, resultSettings, analyse } = require('../lib/analysis');
 const { rankedFirstAttempts, wouldRank, accuracyOf, firstName, timeTaken } = require('../lib/leaderboard');
 const { withPaper, TEST_FIELDS } = require('../lib/paperCache');
 const storage = require('../lib/storage');
+const { withImageLinks } = require('../lib/testFiles');
 
 // Answers are still accepted this long after the deadline (slow networks,
 // the browser's own auto-submit). Past it, the attempt is submitted with
@@ -130,7 +131,7 @@ const resultPayload = async (test, attempt, latest, { paper = true } = {}) => {
     resultSettings(),
   ]);
   return {
-    test:       { ...meta(test), instructions: test.instructions, marking: test.marking, ...(paper ? { paper: paperLockedUntil(test) ? stripAnswers(test.paper) : stripSolutions(test.paper) } : {}) },
+    test:       { ...meta(test), instructions: test.instructions, marking: test.marking, ...(paper ? { paper: await withImageLinks(paperLockedUntil(test) ? stripAnswers(test.paper) : stripSolutions(test.paper)) } : {}) },
     attempt:    publicAttempt(attempt),
     history:    done.map((a) => summaryOf(a)),
     inProgress: !!(latest && !latest.submittedAt),
@@ -191,7 +192,7 @@ const getTest = async (req, res) => {
     // Before it opens, a student gets only the paper's outline; the exam screen loads the questions on Start
     const early = status === 'upcoming' && req.user.role !== 'admin';
     res.json({
-      test:      { ...meta(test), instructions: test.instructions, marking: test.marking, paper: early ? outlineOf(test.paper) : stripAnswers(test.paper) },
+      test:      { ...meta(test), instructions: test.instructions, marking: test.marking, paper: early ? outlineOf(test.paper) : await withImageLinks(stripAnswers(test.paper)) },
       status,
       canRetake: canRetake(test, attempt),
       attempt:   publicAttempt(attempt),
@@ -346,7 +347,7 @@ const getPaper = async (req, res) => {
     }
     res.json({
       test:      { ...meta(test), marking: test.marking },
-      paper:     stripAnswers(test.paper),
+      paper:     await withImageLinks(stripAnswers(test.paper)),
       watermark,
     });
   } catch (error) {

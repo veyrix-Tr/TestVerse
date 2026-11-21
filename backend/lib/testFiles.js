@@ -56,4 +56,26 @@ async function missingImages(newPaper, oldPaper) {
   return missing;
 }
 
-module.exports = { dropTestFiles, dropReplacedImages, missingImages };
+// A paper as it is sent out: every picture name swapped for a signed link
+// (lib/storage.js imageLink). The saved paper keeps the names.
+async function withImageLinks(paper) {
+  if (!paper || !Array.isArray(paper.sections) || !storage.imagesReady()) return paper;
+  const link = (v) => (storage.imageKeyOf(v) ? storage.imageLink(v) : v);
+  const sections = await Promise.all(
+    paper.sections.map(async (s) => ({
+      ...s,
+      questions: await Promise.all(
+        (s.questions || []).map(async (q) => {
+          if (!q.images && !(q.options || []).some((o) => o && o.image)) return q;
+          const out = { ...q };
+          if (q.images) out.images = await Promise.all(q.images.map(link));
+          if (q.options) out.options = await Promise.all(q.options.map(async (o) => (o && o.image ? { ...o, image: await link(o.image) } : o)));
+          return out;
+        }),
+      ),
+    })),
+  );
+  return { ...paper, sections };
+}
+
+module.exports = { dropTestFiles, dropReplacedImages, missingImages, withImageLinks };

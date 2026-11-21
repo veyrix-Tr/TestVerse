@@ -5,7 +5,7 @@ const { AUDIENCE_INCLUDE, publicAudience, readAudience, writeAudience } = requir
 const { audienceStudentIds } = require('../lib/access');
 const { notifyMany } = require('../lib/notify');
 const { rankedFirstAttempts, accuracyOf } = require('../lib/leaderboard');
-const { dropTestFiles, dropReplacedImages, missingImages } = require('../lib/testFiles');
+const { dropTestFiles, dropReplacedImages, missingImages, withImageLinks } = require('../lib/testFiles');
 
 // A paper may only link to pictures that are really uploaded
 const missingError = (n) => ({ field: 'paper', error: `${n} picture${n === 1 ? ' in this paper isn’t' : 's in this paper aren’t'} uploaded any more. Reload the page, or choose the diagrams zip again.` });
@@ -131,6 +131,10 @@ const fullOf = (t) => ({
   source:       t.source,
 });
 
+// The admin's copy with signed picture links for the preview; `source` (the
+// JSON in the editor) keeps the picture names so it can be saved again.
+const fullOut = async (t) => ({ ...fullOf(t), paper: await withImageLinks(t.paper) });
+
 // Validates paper + marking together. Returns { paper, summary, marking } or { status, body }.
 const checkPaper = (rawPaper, subject, rawMarking) => {
   const mk = normalizeMarking(rawMarking);
@@ -174,7 +178,7 @@ const validatePaper = async (req, res) => {
     const r = checkPaper(req.body.paper, clean(req.body.subject) || 'Questions', req.body.marking);
     if (r.status) return res.status(200).json({ ok: false, ...r.body });
     if (!r.paper) return res.json({ ok: false, error: 'Paste or upload the question paper.', errors: [] });
-    res.json({ ok: true, summary: r.summary, paper: r.paper });
+    res.json({ ok: true, summary: r.summary, paper: await withImageLinks(r.paper) });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Could not check the paper' });
@@ -228,7 +232,7 @@ const createTest = async (req, res) => {
     if (a.audience) await prisma.$transaction(writeAudience(prisma, created.id, audienceFor(k.kind, a.audience)));
     await tellSeriesOwners(created);
     const test = await prisma.test.findUnique({ where: { id: created.id }, include: WITH });
-    res.status(201).json({ message: publish ? 'Test published' : 'Draft saved', test: fullOf({ ...test, submitted: 0 }) });
+    res.status(201).json({ message: publish ? 'Test published' : 'Draft saved', test: await fullOut({ ...test, submitted: 0 }) });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Could not save the test' });
@@ -240,7 +244,7 @@ const getTest = async (req, res) => {
   try {
     const test = await prisma.test.findUnique({ where: { id: req.params.id }, include: WITH });
     if (!test) return res.status(404).json({ error: 'Test not found' });
-    res.json({ test: fullOf(test) });
+    res.json({ test: await fullOut(test) });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Something went wrong' });
@@ -309,7 +313,7 @@ const updateTest = async (req, res) => {
     // The audience can always change (who may take it), even once attempted
     if (a.audience) await prisma.$transaction(writeAudience(prisma, existing.id, audienceFor(existing.kind, a.audience)));
     const test = await prisma.test.findUnique({ where: { id: existing.id }, include: WITH });
-    res.json({ message: 'Test saved', test: fullOf(test) });
+    res.json({ message: 'Test saved', test: await fullOut(test) });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Could not save the test' });

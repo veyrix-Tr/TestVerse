@@ -13,8 +13,8 @@ const MAX_PDF     = 25 * 1024 * 1024;
 const NOT_SET_UP = "File uploads aren't set up yet: the Cloudflare R2 settings are missing on the server.";
 
 // POST /api/admin/uploads/images — Body: { files: [{ name, type, size }] }
-// -> { files: [{ name, url, putUrl }] } in the same order. The browser PUTs each
-// picture to its putUrl (valid 10 minutes) and puts `url` in the paper.
+// -> { files: [{ name, key, putUrl }] } in the same order. The browser PUTs each
+// picture to its putUrl (valid 10 minutes) and puts `key` in the paper.
 const imageUploads = async (req, res) => {
   try {
     if (!storage.imagesReady()) return res.status(503).json({ error: NOT_SET_UP });
@@ -31,7 +31,7 @@ const imageUploads = async (req, res) => {
     const out = await Promise.all(
       files.map(async (f) => {
         const key = `q/${month}/${storage.randomName()}.${IMAGE_TYPES[f.type]}`;
-        return { name: String(f.name).slice(0, 200), url: storage.imageUrlOf(key), putUrl: await storage.presignPut(c.images, key) };
+        return { name: String(f.name).slice(0, 200), key, putUrl: await storage.presignPut(c.images, key) };
       }),
     );
     res.json({ files: out });

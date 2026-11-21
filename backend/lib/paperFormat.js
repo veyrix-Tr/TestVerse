@@ -9,7 +9,7 @@
 // indexes. Every problem is reported, each with a readable place, so the admin
 // can fix them all in one go.
 
-const { imageKeyOf } = require('./storage');
+const { imageKeyOf, imagesReady } = require('./storage');
 
 const TYPES         = ['single', 'multiple', 'integer', 'numerical'];
 const OPTION_TYPES  = ['single', 'multiple'];
@@ -31,9 +31,10 @@ const YOUTUBE = /^https:\/\/(www\.|m\.)?(youtube\.com\/(watch\?v=|shorts\/|embed
 const isObj = (v) => v && typeof v === 'object' && !Array.isArray(v);
 
 // Diagrams: by the time a paper is saved, the admin's browser has uploaded
-// each picture from the zip and swapped its file name for our image link
-// (lib/storage.js). Anything else (a bare file name, another website) means
-// the zip wasn't chosen, or the picture isn't one of ours.
+// each picture from the zip and swapped its file name for the name it got in
+// our bucket (q/202611/<hex>.webp, lib/storage.js). Anything else (the zip's
+// own file name, a web address) means the zip wasn't chosen. Students get
+// signed links in place of these names (lib/testFiles.js withImageLinks).
 const MAX_IMAGES = 4; // per question
 const readImage = (v, where, errors) => {
   if (typeof v !== 'string' || !v.trim()) {
@@ -41,6 +42,10 @@ const readImage = (v, where, errors) => {
     return null;
   }
   const s = v.trim();
+  if (!imagesReady()) {
+    errors.push(`${where}: pictures can't be used yet: picture storage (Cloudflare R2) isn't set up on the server.`);
+    return null;
+  }
   if (!imageKeyOf(s)) {
     errors.push(`${where}: the picture "${s.slice(0, 80)}" isn't uploaded. Choose the diagrams zip together with the questions file.`);
     return null;

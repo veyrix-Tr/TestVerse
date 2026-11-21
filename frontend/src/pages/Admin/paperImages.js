@@ -9,13 +9,17 @@ import { prepareImageUploads } from './testsApi.js'
        (by file name, ignoring folders and upper/lower case);
     2. shrink each one (max 1400 px, WebP) so students load less;
     3. upload them straight to Cloudflare R2 with signed links from our server;
-    4. swap each file name in the JSON for the picture's link.
-  Links that are already ours (a paper saved earlier) are left as they are.
+    4. swap each file name in the JSON for the name the picture got in our
+       bucket (q/202611/<hex>.webp). The server turns those into signed links
+       whenever it sends the paper out.
+  Names that are already uploaded (a paper saved earlier) are left as they are.
 */
 
 const PICTURE = /\.(png|jpe?g|webp)$/i
 const MAX_SIDE = 1400
-const isLink = (s) => /^https?:\/\//i.test(s)
+// Already uploaded: our bucket's name for a picture (or a web address, which the server refuses)
+const UPLOADED = /^q\/\d{6}\/[0-9a-f]{32}\.(webp|png|jpg)$/
+const isLink = (s) => UPLOADED.test(s.trim()) || /^https?:\/\//i.test(s)
 const baseName = (p) => p.split(/[\\/]/).pop()
 const keyOf = (name) => baseName(String(name).trim()).toLowerCase()
 
@@ -122,7 +126,7 @@ async function pool(items, n, job) {
 
 /*
   The whole step for one paper. Returns { json, uploaded, unused } with the
-  file names swapped for links, or throws an Error whose message (and
+  file names swapped for uploaded names, or throws an Error whose message (and
   `.errors` list) says exactly what to fix. onStep({ phase, done, total }).
 */
 export async function attachPictures(json, zipFile, onStep = () => {}) {
@@ -183,8 +187,8 @@ export async function attachPictures(json, zipFile, onStep = () => {}) {
     onStep({ phase: 'upload', done: ++done, total: names.length })
   })
 
-  // 4. swap names for links
-  const link = new Map(names.map((k, i) => [k, files[i].url]))
+  // 4. swap the zip's file names for the names the pictures got in our bucket
+  const link = new Map(names.map((k, i) => [k, files[i].key]))
   const swap = (v) => (typeof v === 'string' && !isLink(v) && link.has(keyOf(v)) ? link.get(keyOf(v)) : v)
   const out = JSON.parse(JSON.stringify(json))
   for (const { q } of questionsOf(out)) {
