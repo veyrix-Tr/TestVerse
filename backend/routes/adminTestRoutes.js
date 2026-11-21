@@ -2,6 +2,7 @@ const express = require('express');
 const { requireAuth, requireAdmin } = require('../middleware/auth');
 const c = require('../controllers/adminTestsController');
 const series = require('../controllers/adminSeriesController');
+const files = require('../controllers/adminFilesController');
 
 const router = express.Router();
 router.use(requireAuth, requireAdmin);
@@ -15,6 +16,10 @@ router.put('/tests/:id', c.updateTest);
 router.post('/tests/:id/publish', c.publishTest);
 router.post('/tests/:id/unpublish', c.unpublishTest);
 router.delete('/tests/:id', c.deleteTest);
+router.post('/uploads/images', files.imageUploads);
+router.post('/tests/:id/solutions/upload', files.solutionsUpload);
+router.put('/tests/:id/solutions', files.saveSolutions);
+router.delete('/tests/:id/solutions', files.removeSolutions);
 
 router.get('/series', series.listSeries);
 router.post('/series', series.createSeries);

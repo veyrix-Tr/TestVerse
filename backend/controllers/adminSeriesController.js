@@ -1,4 +1,5 @@
 const prisma = require('../lib/prisma');
+const { dropTestFiles } = require('../lib/testFiles');
 const { AUDIENCE_INCLUDE, publicAudience, readAudience, writeSeriesAudience } = require('../lib/audience');
 const { seriesAudienceStudentIds } = require('../lib/access');
 const { notifyMany } = require('../lib/notify');
@@ -182,8 +183,10 @@ const deleteSeries = async (req, res) => {
     if (bought) {
       return res.status(409).json({ error: `${bought} student${bought === 1 ? ' has' : 's have'} bought this series, so it can't be deleted. Unpublish it to hide it from new students.` });
     }
+    const tests = await prisma.test.findMany({ where: { seriesId: req.params.id }, select: { paper: true, solutionsKey: true } });
     const r = await prisma.testSeries.deleteMany({ where: { id: req.params.id } });
     if (!r.count) return res.status(404).json({ error: 'Test series not found' });
+    await dropTestFiles(tests); // its tests went with it
     res.json({ message: 'Test series deleted' });
   } catch (error) {
     console.error(error);

@@ -5,6 +5,7 @@ const { visibleTo } = require('../lib/access');
 const { DEFAULTS, resultSettings, analyse } = require('../lib/analysis');
 const { rankedFirstAttempts, wouldRank, accuracyOf, firstName, timeTaken } = require('../lib/leaderboard');
 const { withPaper, TEST_FIELDS } = require('../lib/paperCache');
+const storage = require('../lib/storage');
 
 // Answers are still accepted this long after the deadline (slow networks,
 // the browser's own auto-submit). Past it, the attempt is submitted with
@@ -31,6 +32,7 @@ const meta = (t) => ({
   subject:       t.subject,
   exam:          t.exam,
   pattern:       t.pattern,
+  hasSolutions:  !!t.solutionsKey,
   isFree:        t.isFree,
   kind:          t.kind,
   durationMin:   t.durationMin,
@@ -403,4 +405,29 @@ const getLeaderboard = async (req, res) => {
   }
 };
 
-module.exports = { listTests, getTest, startTest, saveAttempt, submitTest, getResult, getPaper, getLeaderboard, testRow: rowOf };
+// GET /api/tests/:id/solutions[?download=1] — a link to the test's solutions
+// PDF that works for 10 minutes (shown in the browser, or downloaded), for a
+// student who has submitted the test; a live test's opens once it closes,
+// like its question paper. A copied link stops working after 10 minutes.
+const getSolutions = async (req, res) => {
+  try {
+    const test = await findTest(req);
+    if (!test) return res.status(404).json({ error: 'Test not found' });
+    if (!test.solutionsKey) return res.status(404).json({ error: 'No solutions have been uploaded for this test yet.' });
+    if (req.user.role !== 'admin') {
+      const done = await prisma.attempt.findFirst({ where: { testId: test.id, userId: req.user.id, submittedAt: { not: null } }, select: { id: true } });
+      if (!done) return res.status(409).json({ error: 'Submit the test to see its solutions.' });
+      const until = paperLockedUntil(test);
+      if (until) return res.status(403).json({ error: 'The solutions open when the test closes for everyone.', unlocksAt: until });
+    }
+    if (!storage.filesReady()) return res.status(503).json({ error: "The solutions can't be opened right now. Please try again later." });
+    const name = test.solutionsName || 'solutions.pdf';
+    const url = await storage.presignGet(storage.config().files, test.solutionsKey, { filename: name, download: req.query.download === '1' });
+    res.json({ url, name });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Something went wrong' });
+  }
+};
+
+module.exports = { listTests, getTest, startTest, saveAttempt, submitTest, getResult, getPaper, getLeaderboard, getSolutions, testRow: rowOf };

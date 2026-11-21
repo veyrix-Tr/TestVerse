@@ -5,6 +5,7 @@ const { AUDIENCE_INCLUDE, publicAudience, readAudience, writeAudience } = requir
 const { audienceStudentIds } = require('../lib/access');
 const { notifyMany } = require('../lib/notify');
 const { rankedFirstAttempts, accuracyOf } = require('../lib/leaderboard');
+const { dropTestFiles, dropReplacedImages } = require('../lib/testFiles');
 
 // What every admin test reply loads: how many students started it (first
 // attempts only, so retakes don't count twice) + who it's given to.
@@ -111,6 +112,7 @@ const summaryOf = (t) => ({
   closesAt:      t.closesAt,
   watermark:     t.watermark,
   hasPaper:      t.paper != null,
+  solutions:     t.solutionsKey ? { name: t.solutionsName, at: t.solutionsAt } : null,
   attempts:      t._count ? t._count.attempts : undefined,
   audience:      t.batches ? publicAudience(t) : { mode: t.audience, batches: [], groups: [], students: [] },
   submitted:     t.submitted,
@@ -290,6 +292,8 @@ const updateTest = async (req, res) => {
       });
     }
     await prisma.test.update({ where: { id: existing.id }, data });
+    // A replaced paper's pictures that the new one doesn't use
+    if (!locked && existing.paper) await dropReplacedImages(existing.paper, p.paper);
     // Its questions just arrived (saved without a paper before): tell the series' buyers
     if (!existing.questionCount && data.questionCount) await tellSeriesOwners({ ...existing, ...data });
     // The audience can always change (who may take it), even once attempted
@@ -352,6 +356,7 @@ const deleteTest = async (req, res) => {
     const last = await lastReadyOfPublishedSeries(test);
     if (last) return res.status(409).json({ error: last });
     await prisma.test.delete({ where: { id: test.id } });
+    await dropTestFiles([test]);
     res.json({ message: 'Test deleted' });
   } catch (error) {
     console.error(error);

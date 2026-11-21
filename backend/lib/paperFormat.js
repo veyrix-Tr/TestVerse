@@ -9,6 +9,8 @@
 // indexes. Every problem is reported, each with a readable place, so the admin
 // can fix them all in one go.
 
+const { imageKeyOf } = require('./storage');
+
 const TYPES         = ['single', 'multiple', 'integer', 'numerical'];
 const OPTION_TYPES  = ['single', 'multiple'];
 const LANGUAGES     = ['en', 'hi'];
@@ -27,6 +29,24 @@ const DEFAULT_MARKING = {
 const YOUTUBE = /^https:\/\/(www\.|m\.)?(youtube\.com\/(watch\?v=|shorts\/|embed\/|live\/)|youtu\.be\/)[\w-]{6,}/;
 
 const isObj = (v) => v && typeof v === 'object' && !Array.isArray(v);
+
+// Diagrams: by the time a paper is saved, the admin's browser has uploaded
+// each picture from the zip and swapped its file name for our image link
+// (lib/storage.js). Anything else (a bare file name, another website) means
+// the zip wasn't chosen, or the picture isn't one of ours.
+const MAX_IMAGES = 4; // per question
+const readImage = (v, where, errors) => {
+  if (typeof v !== 'string' || !v.trim()) {
+    errors.push(`${where}: "image" must be a picture's file name, like "phy-q1.png".`);
+    return null;
+  }
+  const s = v.trim();
+  if (!imageKeyOf(s)) {
+    errors.push(`${where}: the picture "${s.slice(0, 80)}" isn't uploaded. Choose the diagrams zip together with the questions file.`);
+    return null;
+  }
+  return s;
+};
 const num   = (v) => (typeof v === 'number' ? v : typeof v === 'string' && v.trim() !== '' ? Number(v) : NaN);
 
 // A text field: "…" or { en: "…", hi: "…" } -> { en, hi? }; returns null if unusable.
@@ -102,6 +122,13 @@ const readQuestion = (raw, n, where, marking, errors) => {
   else if (tooLong(text)) errors.push(`${where}: "text" is too long.`);
   q.text = text || { en: '' };
 
+  if (raw.image != null) {
+    const list = Array.isArray(raw.image) ? raw.image : [raw.image];
+    if (list.length > MAX_IMAGES) errors.push(`${where}: a question can have at most ${MAX_IMAGES} pictures.`);
+    const images = list.slice(0, MAX_IMAGES).map((v) => readImage(v, where, errors)).filter(Boolean);
+    if (images.length) q.images = images;
+  }
+
   if (raw.chapter != null) {
     if (typeof raw.chapter !== 'string') errors.push(`${where}: "chapter" must be text.`);
     else if (raw.chapter.trim()) q.chapter = raw.chapter.trim().slice(0, 120);
@@ -116,10 +143,13 @@ const readQuestion = (raw, n, where, marking, errors) => {
       q.options = [];
     } else {
       q.options = opts.map((o, i) => {
+        // An option is text, or { en, hi?, image? }; a picture alone is fine (structures, graphs)
+        const image = isObj(o) && o.image != null ? readImage(o.image, `${where} › option ${letterOf(i)}`, errors) : null;
         const t = readText(o);
-        if (!t) errors.push(`${where}: option ${letterOf(i)} is empty.`);
+        if (!t && !image && !(isObj(o) && o.image != null)) errors.push(`${where}: option ${letterOf(i)} is empty.`);
         else if (tooLong(t)) errors.push(`${where}: option ${letterOf(i)} is too long.`);
-        return t || { en: '' };
+        const opt = t || { en: '' };
+        return image ? { ...opt, image } : opt;
       });
     }
     const n = q.options.length;
@@ -163,7 +193,7 @@ const readQuestion = (raw, n, where, marking, errors) => {
     else q.video = raw.video.trim();
   }
 
-  const known = ['type', 'text', 'options', 'answer', 'tolerance', 'marks', 'chapter', 'solution', 'video', 'id', 'number'];
+  const known = ['type', 'text', 'image', 'options', 'answer', 'tolerance', 'marks', 'chapter', 'solution', 'video', 'id', 'number'];
   const extra = Object.keys(raw).filter((k) => !known.includes(k));
   if (extra.length) errors.push(`${where}: unknown field${extra.length > 1 ? 's' : ''} ${extra.map((k) => `"${k}"`).join(', ')}.`);
 
@@ -261,4 +291,10 @@ const outlineOf = (paper) => ({
   sections:  paper.sections.map((s) => ({ name: s.name, questions: s.questions.map((q) => ({ id: q.id, type: q.type, marks: q.marks })) })),
 });
 
-module.exports = { TYPES, DEFAULT_MARKING, normalizeMarking, normalizePaper, stripAnswers, stripSolutions, outlineOf };
+// Every diagram link in a saved paper (questions and options), for cleanup.
+const imagesOf = (paper) =>
+  paper && Array.isArray(paper.sections)
+    ? paper.sections.flatMap((s) => (s.questions || []).flatMap((q) => [...(q.images || []), ...(q.options || []).map((o) => o && o.image).filter(Boolean)]))
+    : [];
+
+module.exports = { TYPES, DEFAULT_MARKING, normalizeMarking, normalizePaper, stripAnswers, stripSolutions, outlineOf, imagesOf };

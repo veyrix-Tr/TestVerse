@@ -108,6 +108,12 @@ model Test {
   // no exam, or a JEE test from before patterns). It doesn't change who sees
   // the test: every JEE student sees every JEE test.
   pattern       String?
+  // The solutions PDF (one per test) in the private R2 bucket: its object
+  // name, the file name students download it as, and when it was uploaded.
+  // Students can open it once they've submitted (a live test's, once it closes).
+  solutionsKey  String?
+  solutionsName String?
+  solutionsAt   DateTime?
   durationMin   Int
   instructions  String    @default("")
   marking       Json      // default marks per question type

@@ -13,5 +13,6 @@ router.post('/:id/submit', c.submitTest);
 router.get('/:id/result', c.getResult);
 router.get('/:id/paper', c.getPaper);
 router.get('/:id/leaderboard', c.getLeaderboard);
+router.get('/:id/solutions', c.getSolutions);
 
 module.exports = router;
