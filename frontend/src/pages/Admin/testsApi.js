@@ -26,6 +26,12 @@ export const deleteTest = (id) => call('/tests/' + encodeURIComponent(id), { met
 /* Leaderboard (first attempts) + every student's result: { test, total, inProgress, rows } */
 export const getTestResults = (id) => call('/tests/' + encodeURIComponent(id) + '/results')
 
+// Files go straight from the browser to Cloudflare R2 with signed links (backend/lib/storage.js)
+export const prepareImageUploads = (files) => call('/uploads/images', { body: { files } }) // { files: [{ name, url, putUrl }] }
+export const solutionsUploadLink = (id, body) => call('/tests/' + encodeURIComponent(id) + '/solutions/upload', { body }) // { key, putUrl }
+export const saveSolutions = (id, body) => call('/tests/' + encodeURIComponent(id) + '/solutions', { body, method: 'PUT' }).then((r) => r.solutions)
+export const removeSolutions = (id) => call('/tests/' + encodeURIComponent(id) + '/solutions', { method: 'DELETE' })
+
 /* Test series (backend/controllers/adminSeriesController.js) */
 export const listSeries = () => call('/series').then((r) => r.series)
 export const getSeries = (id) => call('/series/' + encodeURIComponent(id)) // { series, tests }

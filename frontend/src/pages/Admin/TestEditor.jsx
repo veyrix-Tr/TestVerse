@@ -10,12 +10,19 @@ import {
   createTest,
   fromLocalInput,
   getTest,
+  removeSolutions,
+  saveSolutions,
   setPublished,
   signed,
+  solutionsUploadLink,
   toLocalInput,
   updateTest,
   validatePaper,
 } from './testsApi.js'
+import { attachPictures, picturesNeeded } from './paperImages.js'
+import { CLAUDE_PROMPT } from './claudePrompt.js'
+import { api } from '../../lib/api.js'
+import { getToken } from '../../lib/session.js'
 
 /*
   Create / edit a test: details, marking scheme, instructions, question paper
@@ -99,6 +106,10 @@ export default function TestEditor({ id, kind: newKind = 'live', seriesId, backT
   const [paperText, setPaperText] = useState('')
   const [mode, setMode] = useState('paste')
   const [fileName, setFileName] = useState('')
+  // Diagrams zip: the file itself, and how attaching its pictures is going
+  const zipRef = useRef(null)
+  const [zipName, setZipName] = useState('')
+  const [pics, setPics] = useState(null) // { state: 'need' | 'working' | 'done' | 'error', text, errors? }
   const [dragging, setDragging] = useState(false)
 
   const [result, setResult] = useState(null) // last paper check: { key, state: ok | bad | failed, … }
@@ -187,12 +198,61 @@ export default function TestEditor({ id, kind: newKind = 'live', seriesId, backT
     }
     const reader = new FileReader()
     reader.onload = () => {
-      setPaperText(String(reader.result || ''))
+      const text = String(reader.result || '')
+      setPaperText(text)
       setFileName(file.name)
       clearErr('paper')
+      afterJson(text)
     }
     reader.onerror = () => setFieldErr({ field: 'paper', message: "Couldn't read that file. Try again or paste the JSON instead." })
     reader.readAsText(file)
+  }
+
+  /* A new questions file: attach its pictures from the zip already chosen,
+     or say that it needs one. */
+  function afterJson(text) {
+    let json
+    try {
+      json = JSON.parse(text)
+    } catch {
+      return setPics(null) // the paper check shows the JSON error
+    }
+    const need = picturesNeeded(json)
+    if (!need.length) return setPics(null)
+    if (zipRef.current) return attach(text, zipRef.current)
+    setPics({ state: 'need', text: `This paper uses ${need.length} picture${need.length === 1 ? '' : 's'}. Choose the diagrams zip below.` })
+  }
+
+  function chooseZip(file) {
+    if (!file) return
+    if (!/\.zip$/i.test(file.name)) return setPics({ state: 'error', text: `"${file.name}" isn't a .zip file.` })
+    zipRef.current = file
+    setZipName(file.name)
+    if (!paperText.trim()) return setPics({ state: 'need', text: 'Zip chosen. Now add the questions JSON: its pictures are taken from this zip.' })
+    attach(paperText, file)
+  }
+
+  /* Upload the pictures the paper names and put their links in the JSON. */
+  async function attach(text, zip) {
+    let json
+    try {
+      json = JSON.parse(text)
+    } catch {
+      return setPics({ state: 'error', text: 'The questions JSON has a mistake, so its pictures can’t be matched yet. Fix the JSON first.' })
+    }
+    if (!picturesNeeded(json).length) return setPics({ state: 'done', text: 'This paper has no pictures to upload (or they are already uploaded).' })
+    setPics({ state: 'working', text: 'Opening the zip…' })
+    try {
+      const r = await attachPictures(json, zip, ({ phase, done, total }) =>
+        setPics({ state: 'working', text: `${phase === 'shrink' ? 'Preparing' : 'Uploading'} pictures: ${done} of ${total}…`, done, total }),
+      )
+      setPaperText(JSON.stringify(r.json, null, 2))
+      clearErr('paper')
+      const extra = r.unused.length ? ` ${r.unused.length} picture${r.unused.length === 1 ? ' in the zip isn’t' : 's in the zip aren’t'} used: ${r.unused.slice(0, 5).join(', ')}${r.unused.length > 5 ? '…' : ''}` : ''
+      setPics({ state: 'done', text: `${r.uploaded} picture${r.uploaded === 1 ? '' : 's'} uploaded and added to the questions.${extra}` })
+    } catch (e) {
+      setPics({ state: 'error', text: e.message, errors: e.errors || [] })
+    }
   }
 
   function body() {
@@ -282,7 +342,7 @@ export default function TestEditor({ id, kind: newKind = 'live', seriesId, backT
   const canPublish = paperOk && !saving
   const noStart = isLive && editing && !original.opensAt // older tests were made before live tests needed a start time
   // section numbers: the audience section only exists for live tests
-  const num = (name) => String(['details', isLive && 'audience', 'marking', 'instructions', 'paper', 'preview'].filter(Boolean).indexOf(name) + 1)
+  const num = (name) => String(['details', isLive && 'audience', 'marking', 'instructions', 'paper', shownOk && 'preview', 'solutions'].filter(Boolean).indexOf(name) + 1)
   const noun = { free: 'free test', live: 'live test', series: 'test' }[kind]
 
   return (
@@ -666,7 +726,7 @@ export default function TestEditor({ id, kind: newKind = 'live', seriesId, backT
         <SectHead
           n={num('paper')}
           title="Question paper"
-          text="Paste the paper as JSON or upload a .json file. It is checked as you type."
+          text="Paste the paper as JSON or upload a .json file. A paper with diagrams also needs its diagrams zip. It is checked as you type."
           action={
             <div className="ts-links">
               <a href="/sample-test.json" download="sample-test.json">
@@ -675,6 +735,7 @@ export default function TestEditor({ id, kind: newKind = 'live', seriesId, backT
             </div>
           }
         />
+        <ClaudeHelp />
         <div className="ts-paper">
           <div className="card ts-paper-input">
             <div className="ts-paper-bar">
@@ -758,6 +819,23 @@ export default function TestEditor({ id, kind: newKind = 'live', seriesId, backT
                 />
               </label>
             )}
+            <label className={'ts-zip' + (locked ? ' off' : '')}>
+              <span className="ts-zip-l">
+                <b>Diagrams zip</b>
+                <span className="hint">{zipName ? zipName : 'Only for papers with pictures: the zip of the pictures the JSON names.'}</span>
+              </span>
+              <span className="btn btn-outline btn-sm">{zipName ? 'Choose another zip' : 'Choose zip'}</span>
+              <input
+                type="file"
+                accept=".zip,application/zip,application/x-zip-compressed"
+                disabled={locked || (pics && pics.state === 'working')}
+                onChange={(e) => {
+                  chooseZip(e.target.files && e.target.files[0])
+                  e.target.value = ''
+                }}
+              />
+            </label>
+            {pics ? <ZipStatus pics={pics} /> : null}
             {err('paper')}
 
             <details className="ts-guide">
@@ -785,6 +863,10 @@ export default function TestEditor({ id, kind: newKind = 'live', seriesId, backT
                     <code>video</code> link.
                   </li>
                   <li>
+                    Diagrams: <code>{'"image": "phy-q1.png"'}</code> on a question (a list for several), or an option like{' '}
+                    <code>{'{"en": "", "image": "chem-q4-a.png"}'}</code>. Choose the zip with those pictures too; they are uploaded and linked for you.
+                  </li>
+                  <li>
                     Write maths in LaTeX between dollar signs, <code>{'"$x^2 - 5x + 6 = 0$"'}</code>, and double every backslash in JSON:{' '}
                     <code>{'"$\\\\sqrt{3}$"'}</code>.
                   </li>
@@ -805,6 +887,20 @@ export default function TestEditor({ id, kind: newKind = 'live', seriesId, backT
           <PaperPreview paper={shownOk.paper} />
         </section>
       )}
+
+      {/* 7. Solutions PDF (once the test exists) */}
+      <section className="ts-sect">
+        <SectHead
+          n={num('solutions')}
+          title="Solutions PDF"
+          text="Students can view and download it from their result: after submitting, or for a live test once it closes."
+        />
+        {editing && original ? (
+          <SolutionsPdf testId={original.id} initial={original.solutions} />
+        ) : (
+          <p className="hint">Save the test first, then add its solutions PDF here.</p>
+        )}
+      </section>
 
       {/* Actions */}
       <div className="ts-bar">
@@ -867,6 +963,211 @@ export default function TestEditor({ id, kind: newKind = 'live', seriesId, backT
 
 function BackLink({ onBack, text }) {
   return <BackButton onClick={onBack}>{text}</BackButton>
+}
+
+/* How to turn a question paper PDF into our two files with Claude, and the prompt to copy. */
+function ClaudeHelp() {
+  const [copied, setCopied] = useState(false)
+  const preRef = useRef(null)
+  function copy() {
+    const selectIt = () => {
+      const r = document.createRange()
+      r.selectNodeContents(preRef.current)
+      const sel = window.getSelection()
+      sel.removeAllRanges()
+      sel.addRange(r)
+    }
+    if (!navigator.clipboard) return selectIt()
+    navigator.clipboard
+      .writeText(CLAUDE_PROMPT)
+      .then(() => {
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2000)
+      })
+      .catch(selectIt)
+  }
+  return (
+    <details className="card ts-claude">
+      <summary>
+        <b>Make the files with Claude</b>
+        <span className="hint">Turn a question paper PDF into the questions JSON and the diagrams zip.</span>
+      </summary>
+      <div className="ts-claude-body">
+        <ol>
+          <li>
+            Open{' '}
+            <a href="https://claude.ai/new" target="_blank" rel="noopener noreferrer">
+              claude.ai
+            </a>{' '}
+            and start a new chat.
+          </li>
+          <li>Attach the question paper PDF and its answer key.</li>
+          <li>Copy the prompt below, paste it into the chat and send it.</li>
+          <li>
+            Download <b>questions.json</b> and <b>diagrams.zip</b> from Claude’s reply.
+          </li>
+          <li>Choose both files below, then check every question and diagram in the preview before publishing.</li>
+        </ol>
+        <div className="ts-claude-prompt">
+          <div className="ts-claude-top">
+            <span className="hint">Prompt for Claude</span>
+            <button className="btn btn-primary btn-sm" type="button" onClick={copy}>
+              {copied ? 'Copied' : 'Copy prompt'}
+            </button>
+          </div>
+          <pre ref={preRef} tabIndex={0}>
+            {CLAUDE_PROMPT}
+          </pre>
+        </div>
+      </div>
+    </details>
+  )
+}
+
+/* Progress and problems while the zip's pictures are attached. */
+function ZipStatus({ pics }) {
+  const pct = pics.total ? Math.round((pics.done / pics.total) * 100) : null
+  return (
+    <div className={'ts-zip-status is-' + pics.state} role="status" aria-live="polite">
+      <p>{pics.text}</p>
+      {pics.state === 'working' && pct != null ? (
+        <span className="ts-zip-bar" aria-hidden="true">
+          <i style={{ width: pct + '%' }} />
+        </span>
+      ) : null}
+      {pics.errors && pics.errors.length ? (
+        <ul>
+          {pics.errors.slice(0, 12).map((e) => (
+            <li key={e}>{e}</li>
+          ))}
+          {pics.errors.length > 12 ? <li>…and {pics.errors.length - 12} more</li> : null}
+        </ul>
+      ) : null}
+    </div>
+  )
+}
+
+/* PUT a file to a signed link, reporting progress (0–100). */
+function putWithProgress(url, file, onPct) {
+  return new Promise((resolve, reject) => {
+    const x = new XMLHttpRequest()
+    x.open('PUT', url)
+    x.setRequestHeader('Content-Type', 'application/pdf')
+    x.upload.onprogress = (e) => e.lengthComputable && onPct(Math.round((e.loaded / e.total) * 100))
+    x.onload = () => (x.status >= 200 && x.status < 300 ? resolve() : reject(new Error('The PDF couldn’t be uploaded. Please try again.')))
+    x.onerror = () => reject(new Error('The PDF couldn’t be uploaded. Check your internet connection and try again.'))
+    x.send(file)
+  })
+}
+
+/* The test's solutions PDF: add, open, replace or remove. */
+function SolutionsPdf({ testId, initial }) {
+  const [sol, setSol] = useState(initial || null)
+  const [pct, setPct] = useState(null) // upload progress while uploading
+  const [msg, setMsg] = useState(null) // { ok, text }
+  const [asking, setAsking] = useState(false)
+  const busy = pct != null
+
+  async function upload(file) {
+    if (!file) return
+    if (!/\.pdf$/i.test(file.name)) return setMsg({ ok: false, text: `"${file.name}" isn’t a PDF.` })
+    if (file.size > 25 * 1024 * 1024) return setMsg({ ok: false, text: 'The PDF can be at most 25 MB.' })
+    setMsg(null)
+    setPct(0)
+    try {
+      const { key, putUrl } = await solutionsUploadLink(testId, { name: file.name, size: file.size })
+      await putWithProgress(putUrl, file, setPct)
+      const had = !!sol
+      setSol(await saveSolutions(testId, { key, name: file.name }))
+      setMsg({ ok: true, text: had ? 'Solutions PDF replaced.' : 'Solutions PDF added. Students can open it from their result.' })
+    } catch (e) {
+      setMsg({ ok: false, text: e.message })
+    } finally {
+      setPct(null)
+    }
+  }
+
+  async function open() {
+    const w = window.open('', '_blank')
+    try {
+      const r = await api('/tests/' + encodeURIComponent(testId) + '/solutions', { token: getToken() })
+      if (w) w.location.href = r.url
+      else window.location.href = r.url
+    } catch (e) {
+      if (w) w.close()
+      setMsg({ ok: false, text: e.message })
+    }
+  }
+
+  async function remove() {
+    setAsking(false)
+    try {
+      await removeSolutions(testId)
+      setSol(null)
+      setMsg({ ok: true, text: 'Solutions PDF removed.' })
+    } catch (e) {
+      setMsg({ ok: false, text: e.message })
+    }
+  }
+
+  return (
+    <div className="card ts-sol">
+      <div className="ts-sol-row">
+        <div className="ts-sol-file">
+          <b>{sol ? sol.name : 'No solutions PDF yet'}</b>
+          <span className="hint">
+            {busy ? `Uploading… ${pct}%` : sol && sol.at ? 'Added ' + new Date(sol.at).toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }) : 'PDF, at most 25 MB.'}
+          </span>
+        </div>
+        <div className="ts-sol-actions">
+          {sol && !busy ? (
+            <button className="btn btn-outline btn-sm" type="button" onClick={open}>
+              Open
+            </button>
+          ) : null}
+          <label className={'btn btn-sm ' + (sol ? 'btn-outline' : 'btn-primary') + (busy ? ' is-busy' : '')}>
+            {sol ? 'Replace' : 'Upload PDF'}
+            <input
+              className="sr"
+              type="file"
+              accept=".pdf,application/pdf"
+              disabled={busy}
+              onChange={(e) => {
+                upload(e.target.files && e.target.files[0])
+                e.target.value = ''
+              }}
+            />
+          </label>
+          {sol && !busy ? (
+            asking ? (
+              <>
+                <button className="btn btn-danger btn-sm" type="button" onClick={remove}>
+                  Yes, remove
+                </button>
+                <button className="btn btn-outline btn-sm" type="button" onClick={() => setAsking(false)}>
+                  Keep
+                </button>
+              </>
+            ) : (
+              <button className="btn btn-outline btn-sm" type="button" onClick={() => setAsking(true)}>
+                Remove
+              </button>
+            )
+          ) : null}
+        </div>
+      </div>
+      {busy ? (
+        <span className="ts-zip-bar" aria-hidden="true">
+          <i style={{ width: pct + '%' }} />
+        </span>
+      ) : null}
+      {msg ? (
+        <p className={'ts-sol-msg' + (msg.ok ? ' ok' : ' bad')} role="status">
+          {msg.text}
+        </p>
+      ) : null}
+    </div>
+  )
 }
 
 function SectHead({ n, title, text, action }) {
