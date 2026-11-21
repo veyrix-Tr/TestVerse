@@ -122,8 +122,8 @@ const readQuestion = (raw, n, where, marking, errors) => {
   else if (tooLong(text)) errors.push(`${where}: "text" is too long.`);
   q.text = text || { en: '' };
 
-  if (raw.image != null) {
-    const list = Array.isArray(raw.image) ? raw.image : [raw.image];
+  if (raw.image != null && raw.image !== '') {
+    const list = (Array.isArray(raw.image) ? raw.image : [raw.image]).filter((v) => v !== '');
     if (list.length > MAX_IMAGES) errors.push(`${where}: a question can have at most ${MAX_IMAGES} pictures.`);
     const images = list.slice(0, MAX_IMAGES).map((v) => readImage(v, where, errors)).filter(Boolean);
     if (images.length) q.images = images;
@@ -144,9 +144,10 @@ const readQuestion = (raw, n, where, marking, errors) => {
     } else {
       q.options = opts.map((o, i) => {
         // An option is text, or { en, hi?, image? }; a picture alone is fine (structures, graphs)
-        const image = isObj(o) && o.image != null ? readImage(o.image, `${where} › option ${letterOf(i)}`, errors) : null;
+        const hasImage = isObj(o) && o.image != null && o.image !== '';
+        const image = hasImage ? readImage(o.image, `${where} › option ${letterOf(i)}`, errors) : null;
         const t = readText(o);
-        if (!t && !image && !(isObj(o) && o.image != null)) errors.push(`${where}: option ${letterOf(i)} is empty.`);
+        if (!t && !image && !hasImage) errors.push(`${where}: option ${letterOf(i)} is empty.`);
         else if (tooLong(t)) errors.push(`${where}: option ${letterOf(i)} is too long.`);
         const opt = t || { en: '' };
         return image ? { ...opt, image } : opt;

@@ -5,7 +5,10 @@ const { AUDIENCE_INCLUDE, publicAudience, readAudience, writeAudience } = requir
 const { audienceStudentIds } = require('../lib/access');
 const { notifyMany } = require('../lib/notify');
 const { rankedFirstAttempts, accuracyOf } = require('../lib/leaderboard');
-const { dropTestFiles, dropReplacedImages } = require('../lib/testFiles');
+const { dropTestFiles, dropReplacedImages, missingImages } = require('../lib/testFiles');
+
+// A paper may only link to pictures that are really uploaded
+const missingError = (n) => ({ field: 'paper', error: `${n} picture${n === 1 ? ' in this paper isn’t' : 's in this paper aren’t'} uploaded any more. Reload the page, or choose the diagrams zip again.` });
 
 // What every admin test reply loads: how many students started it (first
 // attempts only, so retakes don't count twice) + who it's given to.
@@ -194,6 +197,8 @@ const createTest = async (req, res) => {
     const publish = req.body.publish === true;
     if (publish && k.kind === 'series') return res.status(400).json({ error: 'Tests in a test series are stored only, so they can’t be published yet.' });
     if (publish && !p.paper) return res.status(400).json({ field: 'paper', error: 'Add the question paper before publishing.' });
+    const gone = await missingImages(p.paper, null);
+    if (gone.length) return res.status(400).json(missingError(gone.length));
 
     // Inside a series the test is appended to the end of the tree; the admin
     // moves it with Move up / Move down (PUT /admin/series/:id/order).
@@ -277,6 +282,11 @@ const updateTest = async (req, res) => {
     if (!p.paper) {
       const last = await lastReadyOfPublishedSeries(existing);
       if (last) return res.status(400).json({ field: 'paper', error: last });
+    }
+
+    if (!locked) {
+      const gone = await missingImages(p.paper, existing.paper);
+      if (gone.length) return res.status(400).json(missingError(gone.length));
     }
 
     const data = { ...d.data };

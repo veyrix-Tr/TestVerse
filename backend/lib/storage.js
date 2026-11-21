@@ -28,7 +28,8 @@ const config = () => ({
 });
 
 const ready = (c = config()) => !!(c.endpoint && c.key && c.secret);
-const imagesReady = () => { const c = config(); return ready(c) && !!(c.images && c.imageUrl); };
+// The image address must be a full link ("https://img.testverse.in"), or saved papers would hold broken ones
+const imagesReady = () => { const c = config(); return ready(c) && !!c.images && /^https?:\/\/\S+$/.test(c.imageUrl); };
 const filesReady = () => { const c = config(); return ready(c) && !!c.files; };
 
 let client = null;
@@ -63,7 +64,8 @@ const presignPut = (bucket, key) => presign(bucket, key, 'PUT', 600);
 const presignGet = (bucket, key, { filename = 'file.pdf', download = false, type = 'application/pdf' } = {}) =>
   presign(bucket, key, 'GET', 600, {
     'response-content-type': type,
-    'response-content-disposition': `${download ? 'attachment' : 'inline'}; filename="${filename.replace(/["\\\r\n]/g, '')}"`,
+    // ASCII fallback for old browsers, plus the real (e.g. Hindi) name for the rest
+    'response-content-disposition': `${download ? 'attachment' : 'inline'}; filename="${filename.replace(/[^\x20-\x7E]|["\\]/g, '_')}"; filename*=UTF-8''${encodeURIComponent(filename)}`,
   });
 
 // Size (bytes) of an uploaded object, or null when it isn't there.
@@ -82,14 +84,17 @@ const removeAll = async (bucket, keys) => {
 
 const imageUrlOf = (key) => `${config().imageUrl}/${key}`;
 // The object name behind one of our public image links (current or earlier
-// address), or null for any other address.
+// address), or null for any other address. Only names our uploads create
+// count (q/202611/<32 hex>.webp), so a link can't point anywhere else.
+const IMAGE_KEY = /^q\/\d{6}\/[0-9a-f]{32}\.(webp|png|jpg)$/;
 const imageKeyOf = (url) => {
   if (typeof url !== 'string') return null;
   const c = config();
   const base = [c.imageUrl, ...c.oldImageUrls].find((b) => b && url.startsWith(b + '/'));
-  return base ? decodeURIComponent(url.slice(base.length + 1)) : null;
+  const key = base ? url.slice(base.length + 1) : '';
+  return IMAGE_KEY.test(key) ? key : null;
 };
 
 module.exports = {
-  config, imagesReady, filesReady, randomName, presignPut, presignGet, sizeOf, removeAll, imageUrlOf, imageKeyOf,
+  config, imagesReady, filesReady, randomName, presignPut, presignGet, sizeOf, removeAll, imageUrlOf, imageKeyOf, IMAGE_KEY,
 };

@@ -99,17 +99,25 @@ async function shrink({ name, bytes }) {
   return original
 }
 
-/* Runs `job` over items, `n` at a time. */
+/* Runs `job` over items, `n` at a time. After the first failure no new job
+   starts; the ones already running finish, then that first error is thrown
+   (so nothing reports progress after the error is shown). */
 async function pool(items, n, job) {
   let next = 0
+  let failed = null
   await Promise.all(
     Array.from({ length: Math.min(n, items.length) }, async () => {
-      while (next < items.length) {
+      while (next < items.length && !failed) {
         const i = next++
-        await job(items[i], i)
+        try {
+          await job(items[i], i)
+        } catch (e) {
+          failed = failed || e
+        }
       }
     }),
   )
+  if (failed) throw failed
 }
 
 /*

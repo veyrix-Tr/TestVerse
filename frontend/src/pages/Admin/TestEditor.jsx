@@ -110,6 +110,8 @@ export default function TestEditor({ id, kind: newKind = 'live', seriesId, backT
   const zipRef = useRef(null)
   const [zipName, setZipName] = useState('')
   const [pics, setPics] = useState(null) // { state: 'need' | 'working' | 'done' | 'error', text, errors? }
+  const attachRun = useRef(0) // only the latest attach may change the form
+  const attaching = !!pics && pics.state === 'working' // the paper is locked meanwhile
   const [dragging, setDragging] = useState(false)
 
   const [result, setResult] = useState(null) // last paper check: { key, state: ok | bad | failed, … }
@@ -241,17 +243,19 @@ export default function TestEditor({ id, kind: newKind = 'live', seriesId, backT
       return setPics({ state: 'error', text: 'The questions JSON has a mistake, so its pictures can’t be matched yet. Fix the JSON first.' })
     }
     if (!picturesNeeded(json).length) return setPics({ state: 'done', text: 'This paper has no pictures to upload (or they are already uploaded).' })
+    const run = ++attachRun.current
     setPics({ state: 'working', text: 'Opening the zip…' })
     try {
-      const r = await attachPictures(json, zip, ({ phase, done, total }) =>
-        setPics({ state: 'working', text: `${phase === 'shrink' ? 'Preparing' : 'Uploading'} pictures: ${done} of ${total}…`, done, total }),
-      )
+      const r = await attachPictures(json, zip, ({ phase, done, total }) => {
+        if (run === attachRun.current) setPics({ state: 'working', text: `${phase === 'shrink' ? 'Preparing' : 'Uploading'} pictures: ${done} of ${total}…`, done, total })
+      })
+      if (run !== attachRun.current) return
       setPaperText(JSON.stringify(r.json, null, 2))
       clearErr('paper')
       const extra = r.unused.length ? ` ${r.unused.length} picture${r.unused.length === 1 ? ' in the zip isn’t' : 's in the zip aren’t'} used: ${r.unused.slice(0, 5).join(', ')}${r.unused.length > 5 ? '…' : ''}` : ''
       setPics({ state: 'done', text: `${r.uploaded} picture${r.uploaded === 1 ? '' : 's'} uploaded and added to the questions.${extra}` })
     } catch (e) {
-      setPics({ state: 'error', text: e.message, errors: e.errors || [] })
+      if (run === attachRun.current) setPics({ state: 'error', text: e.message, errors: e.errors || [] })
     }
   }
 
@@ -747,7 +751,7 @@ export default function TestEditor({ id, kind: newKind = 'live', seriesId, backT
                   Upload .json file
                 </button>
               </div>
-              {paperText && !locked && (
+              {paperText && !locked && !attaching && (
                 <button
                   className="btn btn-outline btn-sm"
                   type="button"
@@ -773,14 +777,25 @@ export default function TestEditor({ id, kind: newKind = 'live', seriesId, backT
                   autoCapitalize="off"
                   autoComplete="off"
                   wrap="off"
-                  readOnly={locked}
+                  readOnly={locked || attaching}
                   placeholder={'{\n  "languages": ["en"],\n  "sections": [\n    { "name": "Physics", "questions": [ … ] }\n  ]\n}'}
                   value={paperText}
                   aria-invalid={invalid('paper')}
                   onChange={(e) => {
-                    setPaperText(e.target.value)
+                    const text = e.target.value
+                    setPaperText(text)
                     setFileName('')
                     clearErr('paper')
+                    // The zip was chosen first: attach its pictures once the pasted JSON is complete
+                    if (zipRef.current && pics && pics.state === 'need') {
+                      let json = null
+                      try {
+                        json = JSON.parse(text)
+                      } catch {
+                        /* still typing */
+                      }
+                      if (json && picturesNeeded(json).length) attach(text, zipRef.current)
+                    }
                   }}
                 />
               </>
@@ -794,7 +809,7 @@ export default function TestEditor({ id, kind: newKind = 'live', seriesId, backT
                 }}
                 onDragLeave={() => setDragging(false)}
                 onDrop={(e) => {
-                  if (locked) return
+                  if (locked || attaching) return
                   e.preventDefault()
                   setDragging(false)
                   readFile(e.dataTransfer.files && e.dataTransfer.files[0])
@@ -811,7 +826,7 @@ export default function TestEditor({ id, kind: newKind = 'live', seriesId, backT
                 <input
                   type="file"
                   accept=".json,application/json"
-                  disabled={locked}
+                  disabled={locked || attaching}
                   onChange={(e) => {
                     readFile(e.target.files && e.target.files[0])
                     e.target.value = ''
