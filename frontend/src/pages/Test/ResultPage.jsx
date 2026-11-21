@@ -58,6 +58,7 @@ export default function ResultPage({ testId, attemptNo }) {
             attemptNo: d.attempt.attemptNo || 1,
             settings: d.settings || null,
             paperAt: d.paperAt || null,
+            hasSolutions: !!d.test.hasSolutions,
           },
         })
       })
@@ -129,7 +130,7 @@ export default function ResultPage({ testId, attemptNo }) {
               auto={submitted.auto}
               testId={testId}
               paperAt={state.meta.paperAt}
-              reportNotice={!state.meta.settings || state.meta.settings.reportNotice !== false}
+              reportNotice={(!state.meta.settings || state.meta.settings.reportNotice !== false) && !state.meta.hasSolutions}
             />
           ) : null}
         </div>

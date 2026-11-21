@@ -1,0 +1,28 @@
+/*
+  Question and option diagrams (QImage.jsx) on the exam, result, question
+  paper and admin preview. Global (not page-scoped), so every class starts
+  with .qimg. The picture always sits on white: most diagrams are black lines
+  on a transparent background. Loading, loaded-small and failed all keep the
+  same minimum box, so a failure doesn't make the page jump.
+*/
+.qimg-list { display: grid; gap: 12px; justify-items: start; min-width: 0; }
+.qimg {
+  display: block; width: fit-content; max-width: 100%; min-width: 96px; min-height: 48px;
+  padding: 8px; border-radius: 10px; background: #FFFFFF; border: 1px solid rgba(14, 26, 43, 0.12);
+}
+.qimg img { display: block; margin: 0 auto; max-width: 100%; height: auto; max-height: min(360px, 50vh); }
+.qimg.is-small img { max-height: 180px; }
+.qimg-fail {
+  display: flex; align-items: center; width: fit-content; max-width: 100%; min-height: 48px; padding: 8px 14px;
+  border: 1px dashed var(--field, #CDD3DE); border-radius: 10px;
+  font: 500 13px/1.4 var(--body, system-ui, sans-serif); color: var(--muted, #5B6577);
+}
+/* After an option's text (a list of diagrams spaces itself with its gap) */
+.qimg:not(:first-child), .qimg-fail:not(:first-child) { margin-top: 8px; }
+.qimg-list > .qimg, .qimg-list > .qimg-fail { margin-top: 0; }
+
+@media print {
+  .qimg { border: 0; padding: 0; min-width: 0; min-height: 0; break-inside: avoid; }
+  .qimg img { max-height: 80mm; }
+  .qimg.is-small img { max-height: 45mm; }
+}

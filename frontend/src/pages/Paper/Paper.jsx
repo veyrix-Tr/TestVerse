@@ -4,6 +4,7 @@ import './Paper.css'
 import { api } from '../../lib/api.js'
 import { testExamLabel } from '../../lib/examLabel.js'
 import { usePageMeta } from '../../lib/hooks.js'
+import QImage, { QImages } from '../../components/QImage.jsx'
 import MathText from '../../lib/MathText.jsx'
 import { esc } from '../../lib/esc.js'
 import { fmt } from '../../lib/format.js'
@@ -64,6 +65,29 @@ function useKatexReady() {
   return ready
 }
 
+/* Diagrams must finish loading before the print dialog opens, or they come out blank (waits up to ~10 s). */
+function useImagesLoaded(active) {
+  const [loaded, setLoaded] = useState(false)
+  useEffect(() => {
+    if (!active) return undefined
+    let live = true
+    const waits = [...document.querySelectorAll('.pp-sheet img')]
+      .filter((img) => !img.complete)
+      .map(
+        (img) =>
+          new Promise((done) => {
+            img.addEventListener('load', done, { once: true })
+            img.addEventListener('error', done, { once: true })
+          }),
+      )
+    Promise.race([Promise.all(waits), new Promise((done) => setTimeout(done, 10000))]).then(() => live && setLoaded(true))
+    return () => {
+      live = false
+    }
+  }, [active])
+  return loaded
+}
+
 export default function Paper() {
   const [params] = useSearchParams()
   const testId = params.get('test') || ''
@@ -95,7 +119,8 @@ export default function Paper() {
     }
   }, [testId])
 
-  const ready = state.status === 'ready' && katex
+  const images = useImagesLoaded(state.status === 'ready')
+  const ready = state.status === 'ready' && katex && images
   // Opened from "Download question paper": go straight to the print dialog once, when everything is drawn
   useEffect(() => {
     if (!ready || printed.current) return undefined
@@ -259,6 +284,7 @@ export default function Paper() {
                           <div className="pp-q-text">
                             <Txt value={q.text} lang={lang} as="div" />
                           </div>
+                          <QImages urls={q.images} eager />
                           {q.type === 'ar' ? (
                             <div className="pp-ar">
                               <div>
@@ -292,6 +318,7 @@ export default function Paper() {
                                   <span className="pp-opt-l">({letter(i)})</span>
                                   <span>
                                     <Txt value={o} lang={lang} />
+                                    {o.image ? <QImage src={o.image} alt={'Option ' + letter(i) + ' diagram'} small eager /> : null}
                                   </span>
                                 </li>
                               ))}

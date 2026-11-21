@@ -83,6 +83,8 @@
 .pp-opts { list-style: none; margin: 10px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 6px 24px; font-family: var(--qfont); font-size: 14.5px; line-height: 1.55; }
 .pp-opts li { display: flex; gap: 8px; min-width: 0; }
 .pp-opt-l { font-weight: 600; flex: none; }
+.pp-opts li > span + span { min-width: 0; }
+.pp-q > .qimg-list { margin-top: 10px; }
 .pp-ar { display: grid; gap: 6px; margin-top: 8px; font-size: 14.5px; line-height: 1.6; }
 .pp-match { margin-top: 8px; border-collapse: collapse; font-size: 14px; }
 .pp-match td { border: 1px solid var(--line); padding: 6px 12px; vertical-align: top; }

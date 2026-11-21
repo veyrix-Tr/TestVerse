@@ -1,4 +1,5 @@
 import MathText from '../../../lib/MathText.jsx'
+import { api } from '../../../lib/api.js'
 import { esc } from '../../../lib/esc.js'
 import { mmss } from '../../../lib/format.js'
 import { AR_OPTIONS } from '../data/papers.js'
@@ -7,6 +8,9 @@ import { hasAnswer } from '../answers.js'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import BackButton from '../../../components/BackButton.jsx'
+import QImage, { QImages } from '../../../components/QImage.jsx'
+import { getToken } from '../../../lib/session.js'
+import { useToast } from '../../../lib/useToast.jsx'
 import { DownloadIcon, LockIcon, paperHref, unlockText } from './afterTest.jsx'
 import Leaderboard from './Leaderboard.jsx'
 
@@ -54,8 +58,21 @@ function answerText(q, a, lang) {
   if (q.type === 'integer' || q.type === 'numerical') return String(a)
   const opts = q.type === 'ar' ? AR_OPTIONS : q.options
   const idx = Array.isArray(a) ? a : [a]
-  return idx.map((i) => '(' + letter(i) + ') ' + tx(opts[i], lang)).join(', ')
+  return idx
+    .map((i) => {
+      const t = tx(opts[i], lang)
+      return '(' + letter(i) + ')' + (t ? ' ' + t : '')
+    })
+    .join(', ')
 }
+
+const DocIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
+    <path d="M14 3v5h5" />
+    <path d="M9 13h6M9 17h6" />
+  </svg>
+)
 
 /*
   design/test.html renderResult() + renderReview() — KPIs, section bars,
@@ -63,6 +80,8 @@ function answerText(q, a, lang) {
 */
 export default function ResultView({ paper, flat, attempt, meta, reviewFilter, setReviewFilter, embedded }) {
   const [allChapters, setAllChapters] = useState(false)
+  const [solBusy, setSolBusy] = useState(false)
+  const { toast } = useToast()
   // A live test still running for others: the server sends no answers, so only the score shows until it closes
   const locked = !!(meta && meta.paperAt)
   const R = computeResult(locked ? [] : flat, attempt)
@@ -113,6 +132,32 @@ export default function ResultView({ paper, flat, attempt, meta, reviewFilter, s
     marked: R.items.filter((it) => it.r && it.r.marked).length,
   }
   const verdict = pct >= 75 ? 'Excellent work' : pct >= 50 ? 'Solid attempt' : pct >= 25 ? 'Room to grow' : 'A starting point'
+
+  /* The solutions PDF: GET /tests/:id/solutions gives a short-lived link. */
+  async function solutions(download) {
+    // Popup blockers only allow a new tab straight from the click, so View opens it now and fills it in when the link arrives
+    const tab = download ? null : window.open('', '_blank')
+    if (tab) {
+      tab.opener = null
+      try {
+        tab.document.body.textContent = 'Opening the solutions…'
+      } catch {
+        /* just a blank tab until the PDF arrives */
+      }
+    }
+    setSolBusy(true)
+    try {
+      const d = await api('/tests/' + encodeURIComponent(paper.id) + '/solutions' + (download ? '?download=1' : ''), { token: getToken() })
+      // The download link saves the file without leaving the page; a blocked tab opens the PDF here instead
+      if (tab) tab.location.href = d.url
+      else window.location.href = d.url
+    } catch (e) {
+      if (tab) tab.close()
+      toast(e.status === 403 && e.data.unlocksAt ? 'Solutions unlock at ' + unlockText(e.data.unlocksAt) + ', once the test closes for everyone.' : e.message, 4000)
+    } finally {
+      setSolBusy(false)
+    }
+  }
 
   function jump(n) {
     if (reviewFilter !== 'all') setReviewFilter('all')
@@ -176,10 +221,24 @@ export default function ResultView({ paper, flat, attempt, meta, reviewFilter, s
                     Retake test
                   </Link>
                 ) : null}
+                {meta.hasSolutions && !meta.paperAt ? (
+                  <span className="res-sol" role="group" aria-label="Solutions PDF">
+                    <button className="btn btn-outline-light" type="button" disabled={solBusy} onClick={() => solutions(false)}>
+                      <DocIcon />
+                      View solutions
+                      <span className="sr"> (opens in a new tab)</span>
+                    </button>
+                    <button className="btn btn-outline-light" type="button" disabled={solBusy} onClick={() => solutions(true)}>
+                      <DownloadIcon />
+                      Download
+                      <span className="sr"> solutions</span>
+                    </button>
+                  </span>
+                ) : null}
                 {meta.paperAt ? (
                   <span className="res-lock">
                     <LockIcon />
-                    Question paper unlocks at {unlockText(meta.paperAt)}
+                    {meta.hasSolutions ? 'Question paper and solutions unlock' : 'Question paper unlocks'} at {unlockText(meta.paperAt)}
                   </span>
                 ) : (
                   <a className="btn btn-outline-light" href={paperHref(paper.id)} target="_blank" rel="noopener">
@@ -505,6 +564,7 @@ export default function ResultView({ paper, flat, attempt, meta, reviewFilter, s
                     <div className="rq-text">
                       <MathText html={esc(tx(q.text, lang))} />
                     </div>
+                    <QImages urls={q.images} />
                     {q.type === 'ar' ? (
                       <div className="ar" style={{ fontSize: '15px' }}>
                         <div>
@@ -528,6 +588,20 @@ export default function ResultView({ paper, flat, attempt, meta, reviewFilter, s
                           </tbody>
                         </table>
                       </div>
+                    ) : null}
+                    {/* Picture options: the answers below only name their letters, so show the options */}
+                    {q.options && q.options.some((o) => o && o.image) ? (
+                      <ol className="rq-opts">
+                        {q.options.map((o, i) => (
+                          <li key={i}>
+                            <b>{letter(i)}</b>
+                            <span>
+                              {tx(o, lang) ? <MathText html={esc(tx(o, lang))} /> : null}
+                              {o.image ? <QImage src={o.image} alt={'Option ' + letter(i) + ' diagram'} small /> : null}
+                            </span>
+                          </li>
+                        ))}
+                      </ol>
                     ) : null}
                     <div className="ans">
                       <div className={'yours' + (it.sc.status === 'wrong' ? ' bad' : it.sc.status === 'correct' ? ' good' : '')}>

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import QImage, { QImages } from '../../components/QImage.jsx'
 import MathText from '../../lib/MathText.jsx'
 import { esc } from '../../lib/esc.js'
 import { signed, typeLabel } from './testsApi.js'
@@ -6,7 +7,7 @@ import { signed, typeLabel } from './testsApi.js'
 /*
   Read-only preview of a normalized paper (the `paper` returned by
   POST /admin/tests/validate): sections, questions, options lettered A, B, C…
-  with the correct ones highlighted, numeric answers and videos.
+  with the correct ones highlighted, diagrams, numeric answers and videos.
 */
 const FIRST = 10
 const letter = (i) => String.fromCharCode(65 + i)
@@ -79,6 +80,7 @@ function Question({ q, n }) {
         {q.chapter && <span className="ts-q-ch">{q.chapter}</span>}
       </div>
       <Bi value={q.text} className="ts-q-text" />
+      <QImages urls={q.images} />
       {q.options && q.options.length > 0 && (
         <ul className="ts-opts">
           {q.options.map((o, i) => {
@@ -87,7 +89,8 @@ function Question({ q, n }) {
               <li key={i} className={ok ? 'ok' : undefined}>
                 <span className="ts-opt-l">{letter(i)}</span>
                 <div className="ts-opt-t">
-                  <Bi value={o} />
+                  {txt(o).en || txt(o).hi ? <Bi value={o} /> : null}
+                  {o.image ? <QImage src={o.image} alt={'Option ' + letter(i) + ' diagram'} small /> : null}
                 </div>
                 {ok && <span className="ts-opt-ok">Correct</span>}
               </li>

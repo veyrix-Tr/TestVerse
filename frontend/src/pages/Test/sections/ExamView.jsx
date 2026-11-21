@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import Calculator from './Calculator.jsx'
+import QImage, { QImages } from '../../../components/QImage.jsx'
 import { AR_OPTIONS, Q_TYPE_LABELS } from '../data/papers.js'
 import { esc } from '../../../lib/esc.js'
 import MathText from '../../../lib/MathText.jsx'
@@ -8,6 +9,18 @@ import { STATUS_LABEL, countsOf, statusOf } from '../status.js'
 
 function letter(i) {
   return String.fromCharCode(65 + i)
+}
+
+/* Every diagram in the paper: question images, then option images. */
+function paperImages(paper) {
+  const urls = []
+  paper.sections.forEach((s) =>
+    s.questions.forEach((q) => {
+      if (Array.isArray(q.images)) urls.push(...q.images)
+      if (Array.isArray(q.options)) q.options.forEach((o) => o && o.image && urls.push(o.image))
+    }),
+  )
+  return urls
 }
 
 /*
@@ -23,6 +36,18 @@ export default function ExamView({ paper, flat, attempt, candidate, lang, setLan
     setCalcOpen(false)
     calcBtnRef.current?.focus()
   }
+
+  // Fetch all of the paper's diagrams once the exam is on screen, so a later
+  // internet drop doesn't hide them. The Image objects are kept so the
+  // browser holds on to the pictures while the exam is open.
+  const preloaded = useRef([])
+  useEffect(() => {
+    preloaded.current = paperImages(paper).map((src) => {
+      const img = new Image()
+      img.src = src
+      return img
+    })
+  }, [paper])
 
   // New question (or language) → scroll the question body back to the top,
   // like the design's body.scrollTop = 0 in renderQ().
@@ -43,6 +68,7 @@ export default function ExamView({ paper, flat, attempt, candidate, lang, setLan
       <MathText html={esc(q.text ? (lang === 'hi' && q.text.hi ? q.text.hi : q.text.en) : '')} />
     </div>,
   )
+  if (q.images && q.images.length) body.push(<QImages urls={q.images} key="qi" />)
   if (q.type === 'ar')
     body.push(
       <div className="ar" key="ar">
@@ -88,8 +114,9 @@ export default function ExamView({ paper, flat, attempt, candidate, lang, setLan
           return (
             <button key={i} type="button" className={'opt' + (multi ? ' multi' : '')} role={multi ? 'checkbox' : 'radio'} aria-checked={on ? 'true' : 'false'} onClick={() => api.chooseOption(i)}>
               <span className="k">{letter(i)}</span>
-              <span>
-                <MathText html={esc(text)} />
+              <span className="opt-t">
+                {text ? <MathText html={esc(text)} /> : null}
+                {o.image ? <QImage src={o.image} alt={'Option ' + letter(i) + ' diagram'} small /> : null}
               </span>
             </button>
           )
