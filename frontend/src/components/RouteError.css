@@ -1,0 +1,25 @@
+/* RouteError: works before any page stylesheet has loaded, so it carries its own colours. */
+.route-error {
+  --re-bg: #F7F8FA; --re-card: #FFFFFF; --re-ink: #0E1A2B; --re-muted: #5B6577; --re-line: #E4E8EE; --re-blue: #2450D6; --re-on-blue: #FFFFFF;
+  min-height: 100vh; min-height: 100dvh; display: grid; place-items: center;
+  padding: 24px max(16px, env(safe-area-inset-right, 0px)) 24px max(16px, env(safe-area-inset-left, 0px));
+  background: var(--re-bg); color: var(--re-ink); font: 400 16px/1.6 "Inter", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  .route-error { --re-bg: #0A1120; --re-card: #0F1828; --re-ink: #E9EDF5; --re-muted: #98A3B8; --re-line: #1F2B40; --re-blue: #7F9BFF; --re-on-blue: #0B1B33; }
+}
+.route-error-msg { margin: 0; color: var(--re-muted); }
+.route-error-card {
+  width: 100%; max-width: 440px; padding: 28px; border-radius: 16px;
+  background: var(--re-card); border: 1px solid var(--re-line); display: grid; gap: 12px;
+}
+.route-error-card h1 { margin: 0; font: 700 22px/1.3 "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif; letter-spacing: -0.01em; }
+.route-error-card p { margin: 0; color: var(--re-muted); }
+.route-error-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+.route-error-btn {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 18px;
+  border-radius: 10px; border: 1px solid var(--re-line); background: transparent; color: var(--re-ink);
+  font: 600 15px/1 "Inter", "Segoe UI", system-ui, sans-serif; text-decoration: none; cursor: pointer;
+}
+.route-error-btn.primary { background: var(--re-blue); border-color: var(--re-blue); color: var(--re-on-blue); }
+.route-error-btn:focus-visible { outline: 2px solid var(--re-blue); outline-offset: 2px; }

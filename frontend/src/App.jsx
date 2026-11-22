@@ -1,6 +1,7 @@
 import { Navigate, RouterProvider, createBrowserRouter, redirect, useLocation } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import LegalHost from './components/legal/LegalHost.jsx'
+import RouteError from './components/RouteError.jsx'
 import { checkSession } from './lib/session.js'
 
 /*
@@ -72,7 +73,8 @@ const home = page(() => import('./pages/Home/Home.jsx'))
 
 // LegalHost wraps every page: /terms, /privacy, /refunds and /contact open as a
 // card over the current page (or over the homepage when visited directly).
-const router = createBrowserRouter([{ element: <LegalHost />, children: [
+// RouteError catches any page that fails to open (e.g. a tab left open across a deploy).
+const router = createBrowserRouter([{ element: <LegalHost />, errorElement: <RouteError />, children: [
   { path: '/', ...home },
   { path: '/terms', ...home },
   { path: '/privacy', ...home },
