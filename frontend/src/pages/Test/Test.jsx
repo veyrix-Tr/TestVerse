@@ -210,7 +210,7 @@ export default function Test() {
     inflightRef.current = true
     const ver = verRef.current
     try {
-      const d = await api(PATH + '/attempt', { method: 'PUT', body: { responses: a.responses }, token: getToken() })
+      const d = await api(PATH + '/attempt', { method: 'PUT', body: { responses: a.responses }, token: getToken(), quiet: true }) // the save badge shows offline
       syncClock(d.serverNow)
       syncedVerRef.current = Math.max(syncedVerRef.current, ver)
       if (syncedVerRef.current >= verRef.current) {

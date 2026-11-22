@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { quietly } from '../../lib/api.js'
 import { cached, remember } from './cache.js'
 
 export const LIVE_MS = 20000
@@ -36,12 +37,13 @@ export function useLive(fetcher, key, cacheKey) {
     cacheRef.current = cacheKey
   })
 
-  const refresh = useCallback(() => {
+  // `quiet`: the automatic refreshes don't pop the "can't reach" toast (lib/api.js)
+  const load = useCallback((quiet) => {
     const n = ++seq.current
     lastRun.current = Date.now()
     setLoading(true)
     return Promise.resolve()
-      .then(() => fetchRef.current())
+      .then(() => (quiet ? quietly(fetchRef.current) : fetchRef.current()))
       .then(
         (d) => {
           if (n !== seq.current) return
@@ -59,6 +61,7 @@ export function useLive(fetcher, key, cacheKey) {
         if (n === seq.current) setLoading(false)
       })
   }, [])
+  const refresh = useCallback(() => load(false), [load])
 
   useEffect(() => {
     const t = setTimeout(refresh, 0)
@@ -68,7 +71,7 @@ export function useLive(fetcher, key, cacheKey) {
   useEffect(() => {
     const auto = () => {
       if (document.hidden || typing()) return
-      refresh()
+      load(true)
     }
     const timer = setInterval(auto, LIVE_MS)
     const soon = () => {
@@ -81,7 +84,7 @@ export function useLive(fetcher, key, cacheKey) {
       window.removeEventListener('focus', soon)
       document.removeEventListener('visibilitychange', soon)
     }
-  }, [refresh])
+  }, [load])
 
   return { data, error, at, loading, refresh, setData }
 }

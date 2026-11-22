@@ -24,8 +24,10 @@ export const siteResources = () => {
   })
   return p
 }
-export const siteAnnouncement = () => api('/announcements').then((r) => r.announcement)
-export const siteAnnouncements = () => api('/announcements').then((r) => r.announcements || [])
+// Announcements and notifications are polled in the background, so they're `quiet`:
+// no "can't reach" toast every poll while offline (lib/api.js).
+export const siteAnnouncement = () => api('/announcements', { quiet: true }).then((r) => r.announcement)
+export const siteAnnouncements = () => api('/announcements', { quiet: true }).then((r) => r.announcements || [])
 
 /* ---- the signed-in student ---- */
 export const myResources = () => api('/resources/mine', { token: getToken() }).then((r) => r.resources || [])
@@ -34,13 +36,13 @@ export const myResources = () => api('/resources/mine', { token: getToken() }).t
 // so anonymous visitors don't carry a permanent badge.
 export const myAnnouncements = () =>
   getToken()
-    ? api('/announcements/mine', { token: getToken() }).then((r) => r.announcements)
+    ? api('/announcements/mine', { token: getToken(), quiet: true }).then((r) => r.announcements)
     : siteAnnouncements().then((rows) => rows.map((a) => ({ ...a, read: true })))
 export const markAnnouncementRead = (id) => api('/announcements/' + encodeURIComponent(id) + '/read', { method: 'POST', body: {}, token: getToken() })
 export const readAllAnnouncements = () => api('/announcements/read', { method: 'POST', body: {}, token: getToken() })
 
 /* ---- the student's own bell ---- */
-export const myNotifications = () => api('/notifications/mine', { token: getToken() })
+export const myNotifications = () => api('/notifications/mine', { token: getToken(), quiet: true })
 export const readNotification = (id) => api('/notifications/' + encodeURIComponent(id) + '/read', { method: 'POST', body: {}, token: getToken() })
 export const readAllNotifications = () => api('/notifications/read', { method: 'POST', body: {}, token: getToken() })
 
@@ -57,7 +59,7 @@ export const updateAnnouncement = (id, body) => admin('/announcements/' + encode
 export const deleteAnnouncement = (id) => admin('/announcements/' + encodeURIComponent(id), { method: 'DELETE' })
 
 /* ---- admin: the bell ---- */
-export const listNotifications = () => admin('/notifications')
+export const listNotifications = () => admin('/notifications', { quiet: true })
 export const markAllNotificationsRead = () => admin('/notifications/read', { body: {} })
 export const markNotificationRead = (id) => admin('/notifications/' + encodeURIComponent(id) + '/read', { body: {} })
 
