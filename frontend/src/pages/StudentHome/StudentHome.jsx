@@ -153,12 +153,13 @@ export default function StudentHome() {
           </main>
 
           <footer className="foot">
-            <span>© 2026 Studyverse</span>
+            <span>© 2026 VINAY RAJ PARETA (MINDSPACE)</span>
             <nav aria-label="Legal">
               <a className="foot-sv" href={STUDYVERSE_URL} target="_blank" rel="noopener">
                 Studyverse <span aria-hidden="true">↗</span>
                 <span className="sr"> (opens in a new tab)</span>
               </a>
+              <a href="/legal">Legal info</a>
               <a href="/terms">Terms</a>
               <a href="/privacy">Privacy</a>
               <a href="/refunds">Refund policy</a>

@@ -32,12 +32,15 @@ export default function SiteFooter() {
             <span className="sr"> (opens in a new tab)</span>
           </a>
           <a href="/contact">Contact</a>
+          <a href="/legal">Legal info</a>
           <a href="/privacy">Privacy</a>
           <a href="/terms">Terms</a>
           <a href="/refunds">Refund policy</a>
         </div>
       </div>
-      <div className="wrap copyright">© 2026 Studyverse. All rights reserved.</div>
+      <div className="wrap copyright">
+        © 2026 VINAY RAJ PARETA (MINDSPACE), the legal entity behind Testverse. All rights reserved.
+      </div>
     </footer>
   )
 }

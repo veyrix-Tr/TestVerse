@@ -2,12 +2,13 @@ import { useEffect, useRef, useState } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import './legal.css'
 import { LEGAL, LEGAL_PATHS } from './legalText.js'
+import { usePageMeta } from '../../lib/hooks.js'
 
 /*
-  Wraps every route. Links to /terms, /privacy, /refunds and /contact anywhere
-  on the site open their text in a card on top of the current page instead of
-  leaving it. Visiting one of those URLs directly (e.g. from the payment
-  gateway) shows the homepage with the card open; closing it goes to "/".
+  Wraps every route. Links to /terms, /privacy, /refunds, /contact and /legal
+  anywhere on the site open their text in a card on top of the current page
+  instead of leaving it. Visiting one of those URLs directly (e.g. from the
+  payment gateway) shows the homepage with the card open; closing it goes to "/".
 */
 export default function LegalHost() {
   const { pathname } = useLocation()
@@ -47,6 +48,9 @@ export default function LegalHost() {
   }
 
   const doc = open ? LEGAL[open] : null
+  // The card is the page when someone opens its URL directly (e.g. /legal),
+  // so the tab title says what the link is about.
+  usePageMeta({ title: doc ? `${doc.title} — Testverse by Studyverse` : undefined })
 
   return (
     <>

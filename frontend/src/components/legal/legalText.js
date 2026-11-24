@@ -43,6 +43,17 @@ export const LEGAL = {
     ],
     link: { href: 'https://studyverse.in', label: 'Visit studyverse.in' },
   },
+  // The registered business behind Testverse — kept short on purpose.
+  legal: {
+    title: 'Legal & business info',
+    intro: 'The registered business that runs this website.',
+    sections: [
+      ['Legal name', 'VINAY RAJ PARETA (also trading as MINDSPACE).'],
+      ['Registration', 'Udyam Registration Number UDYAM-RJ-24-0070218 — Micro enterprise, Services, registered 18/09/2024.'],
+      ['Address', 'Flat C 102, Sadashivam, Vardhaman Royal City, Balita Road, Kota, Rajasthan 324008, India.'],
+      ['Contact', 'vinayraj.pareta@gmail.com · +91 72219 53532'],
+    ],
+  },
 }
 
-export const LEGAL_PATHS = { '/terms': 'terms', '/privacy': 'privacy', '/refunds': 'refunds', '/contact': 'contact' }
+export const LEGAL_PATHS = { '/terms': 'terms', '/privacy': 'privacy', '/refunds': 'refunds', '/contact': 'contact', '/legal': 'legal' }

@@ -71,8 +71,9 @@ const testPage = {
 
 const home = page(() => import('./pages/Home/Home.jsx'))
 
-// LegalHost wraps every page: /terms, /privacy, /refunds and /contact open as a
-// card over the current page (or over the homepage when visited directly).
+// LegalHost wraps every page: /terms, /privacy, /refunds, /contact and /legal
+// (the business's legal name) open as a card over the current page (or over the
+// homepage when visited directly).
 // RouteError catches any page that fails to open (e.g. a tab left open across a deploy).
 const router = createBrowserRouter([{ element: <LegalHost />, errorElement: <RouteError />, children: [
   { path: '/', ...home },
@@ -80,6 +81,7 @@ const router = createBrowserRouter([{ element: <LegalHost />, errorElement: <Rou
   { path: '/privacy', ...home },
   { path: '/refunds', ...home },
   { path: '/contact', ...home },
+  { path: '/legal', ...home },
   { path: '/login', ...page(() => import('./pages/Login/Login.jsx')) },
   { path: '/signup', ...page(() => import('./pages/Signup/Signup.jsx')) },
   { path: '/subscribe', loader: requireNoSubscription, ...page(() => import('./pages/Subscribe/Subscribe.jsx')) },
